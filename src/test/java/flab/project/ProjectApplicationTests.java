@@ -1,4 +1,4 @@
-package flab.hellospring;
+package flab.project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
