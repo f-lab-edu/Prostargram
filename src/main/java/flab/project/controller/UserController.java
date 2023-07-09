@@ -2,8 +2,8 @@ package flab.project.controller;
 
 import flab.project.data.dto.common.ProfileInfo;
 import flab.project.data.dto.response.GetFollowDto;
-import flab.project.data.enums.GetFollowsType;
-import flab.project.data.enums.GetProfileRequestType;
+import flab.project.data.enums.requestparam.GetFollowsType;
+import flab.project.data.enums.requestparam.GetProfileRequestType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
