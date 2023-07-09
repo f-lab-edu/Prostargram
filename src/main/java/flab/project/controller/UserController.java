@@ -2,6 +2,7 @@ package flab.project.controller;
 
 import flab.project.data.dto.common.ProfileInfo;
 import flab.project.data.dto.response.GetFollowDto;
+import flab.project.data.dto.response.GetOptionsDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,5 +57,18 @@ public class UserController {
         return null;
     }
 
-
+    @Operation(
+            summary = "개인 설정 상태 확인하기 API"
+    )
+    @Parameters(
+            value = {
+                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
+            }
+    )
+    @GetMapping(value = "/users/{userId}/options")
+    public GetOptionsDto getPersonalSettingOptions(
+            @PathVariable("userId") Long userId
+    ) {
+        return null;
+    }
 }
