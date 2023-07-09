@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.data.dto.common.ProfileInfo;
+import flab.project.data.dto.request.UpdateProfileDto;
 import flab.project.data.dto.response.GetFollowDto;
 import flab.project.data.dto.response.GetOptionsDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,5 +72,15 @@ public class UserController {
             @PathVariable("userId") Long userId
     ) {
         return null;
+    }
+
+    @Operation(
+        summary = "프로필 수정하기 API"
+    )
+    @PatchMapping(value = "/users/profile-info")
+    public String updateProfile(
+        UpdateProfileDto updateProfileDto
+    ) {
+        return "test";
     }
 }
