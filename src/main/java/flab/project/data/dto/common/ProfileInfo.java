@@ -7,19 +7,7 @@ import java.util.List;
 
 @Getter
 @Schema(description = "프로필 페이지와 프로필 수정 페이지의 공통 Schema")
-public abstract class ProfileInfo {
-
-    @Schema(example = "1")
-    private Long userId;
-
-    @Schema(example = "정민욱")
-    private String userName;
-
-    @Schema(example = "https://profileImg.url")
-    private String profileImgUrl;
-
-    @Schema(example = "카카오")
-    private String departmentName;
+public abstract class ProfileInfo extends UserBasicInfo{
 
     @Schema(example = "백엔드 엔지니어 정민욱입니다.")
     private String selfIntroduction;
