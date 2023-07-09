@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public abstract class UserBasicInfo {
+public abstract class BasicUserInfo {
     @Schema(example = "1")
     private Long userId;
 
@@ -14,6 +14,4 @@ public abstract class UserBasicInfo {
     @Schema(example = "https://profileImg.url")
     private String profileImgUrl;
 
-    @Schema(example = "카카오")
-    private String departmentName;
 }
