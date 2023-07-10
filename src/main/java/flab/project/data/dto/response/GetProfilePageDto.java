@@ -1,6 +1,6 @@
 package flab.project.data.dto.response;
 
-import flab.project.data.dto.common.ProfileInfo;
+import flab.project.data.dto.model.ProfileInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package flab.project.controller;
 
-import flab.project.data.dto.common.ProfileInfo;
+import flab.project.data.dto.model.ProfileInfo;
 import flab.project.data.dto.request.CreateFollowDto;
 import flab.project.data.dto.request.DeleteFollowDto;
 import flab.project.data.dto.request.UpdateOptionsDto;

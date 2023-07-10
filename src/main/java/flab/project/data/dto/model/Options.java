@@ -1,4 +1,4 @@
-package flab.project.data.dto.common;
+package flab.project.data.dto.model;
 
 import flab.project.data.enums.PublicScope;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,8 +1,7 @@
 package flab.project.data.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import flab.project.data.dto.common.BasicUserInfo;
-import flab.project.data.dto.common.UserInfo;
+import flab.project.data.dto.model.UserInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
