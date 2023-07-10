@@ -8,5 +8,5 @@ import lombok.Getter;
 public abstract class UpdatePage extends ProfileInfo {
 
     @Schema(example = "[\"#aws\",\"#java\"]")
-    private List<HashTag> hashTagList;
+    private List<HashTag> hashTags;
 }

@@ -13,5 +13,5 @@ public abstract class ProfileInfo extends UserInfo {
     private String selfIntroduction;
 
     @Schema(example = "[\"http://github.com\",\"http://blog.com]\"")
-    private List<String> associatedLinkList;
+    private List<String> associatedLinks;
 }
