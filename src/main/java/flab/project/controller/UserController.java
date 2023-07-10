@@ -3,6 +3,7 @@ package flab.project.controller;
 import flab.project.data.dto.common.ProfileInfo;
 import flab.project.data.dto.request.CreateFollowDto;
 import flab.project.data.dto.request.DeleteFollowDto;
+import flab.project.data.dto.request.UpdateOptionsDto;
 import flab.project.data.dto.request.UpdateProfileDto;
 import flab.project.data.dto.response.GetFollowDto;
 import flab.project.data.dto.response.GetOptionsDto;
@@ -68,14 +69,30 @@ public class UserController {
     )
     @Parameters(
             value = {
-                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
+                @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
             }
     )
     @GetMapping(value = "/users/{userId}/options")
     public GetOptionsDto getPersonalSettingOptions(
-            @PathVariable("userId") Long userId
+        @PathVariable("userId") Long userId
     ) {
         return null;
+    }
+
+    @Operation(
+        summary = "옵션을 수정하는 API"
+    )
+    @Parameters(
+        value = {
+            @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
+        }
+    )
+    @PatchMapping(value = "/users/{userId}/options")
+    public String updatePersonalSettingOptions(
+        @PathVariable("userId") Long userId,
+        UpdateOptionsDto updateOptionsDto
+    ) {
+        return "test";
     }
 
     @Operation(
