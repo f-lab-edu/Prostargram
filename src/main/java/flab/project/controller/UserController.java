@@ -2,6 +2,7 @@ package flab.project.controller;
 
 import flab.project.data.dto.common.ProfileInfo;
 import flab.project.data.dto.request.CreateFollowDto;
+import flab.project.data.dto.request.DeleteFollowDto;
 import flab.project.data.dto.request.UpdateProfileDto;
 import flab.project.data.dto.response.GetFollowDto;
 import flab.project.data.dto.response.GetOptionsDto;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,6 +99,21 @@ public class UserController {
     @PostMapping(value = "/users/{userId}/follows")
     public String createFollows(
         CreateFollowDto createFollowDto
+    ) {
+        return "test";
+    }
+
+    @Operation(
+        summary = "팔로우/팔로잉 삭제 API"
+    )
+    @Parameters(
+        value = {
+            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+        }
+    )
+    @DeleteMapping(value = "/users/{userId}/follows")
+    public String deleteFollows(
+        DeleteFollowDto deleteFollowDto
     ) {
         return "test";
     }
