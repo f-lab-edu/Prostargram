@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public abstract class BasicUserInfo {
     @Schema(example = "1")
-    private Long userId;
+    private long userId;
 
     @Schema(example = "정민욱")
     private String userName;

@@ -9,11 +9,11 @@ import lombok.Getter;
 public class GetProfilePageDto extends ProfileInfo {
 
     @Schema(example = "100")
-    private Long postCount;
+    private long postCount;
 
     @Schema(example = "100")
-    private Long follwerCount;
+    private long follwerCount;
 
     @Schema(example = "100")
-    private Long followingCount;
+    private long followingCount;
 }
