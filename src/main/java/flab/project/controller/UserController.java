@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.data.dto.common.ProfileInfo;
+import flab.project.data.dto.request.CreateFollowDto;
 import flab.project.data.dto.request.UpdateProfileDto;
 import flab.project.data.dto.response.GetFollowDto;
 import flab.project.data.dto.response.GetOptionsDto;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,6 +82,21 @@ public class UserController {
     @PatchMapping(value = "/users/profile-info")
     public String updateProfile(
         UpdateProfileDto updateProfileDto
+    ) {
+        return "test";
+    }
+
+    @Operation(
+        summary = "팔로우/팔로잉 추가 API"
+    )
+    @Parameters(
+        value = {
+            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+        }
+    )
+    @PostMapping(value = "/users/{userId}/follows")
+    public String createFollows(
+        CreateFollowDto createFollowDto
     ) {
         return "test";
     }

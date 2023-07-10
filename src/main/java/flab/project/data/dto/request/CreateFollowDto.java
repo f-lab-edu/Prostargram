@@ -1,6 +1,6 @@
 package flab.project.data.dto.request;
 
-public class CreateFollow {
+public class CreateFollowDto {
     private long fromUserId;
     private long toUserId;
 }
