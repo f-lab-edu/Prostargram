@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "팔로워/팔로잉 추가 DTO")
-public class CreateFollowDto {
+public class CreateFollowRequestDto {
 
     @Schema(example = "10")
     private long fromUserId;

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @JsonPropertyOrder({"followId", "userId", "userName", "profileImgUrl", "departmentName" })
 @Schema(description = "팔로워/팔로잉 정보를 담는 Dto")
-public class GetFollowDto extends UserInfo {
+public class GetFollowResponseDto extends UserInfo {
     @Schema(description = "FOLLOW 테이블의 followId를 의미함.")
     private long followId;
 }

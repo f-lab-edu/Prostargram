@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "프로필 페이지 요청때 반환되는 Schema")
-public class GetProfileUpdatePageDto extends UpdatePage {
+public class GetProfileUpdatePageResponseDto extends UpdatePage {
 
 }

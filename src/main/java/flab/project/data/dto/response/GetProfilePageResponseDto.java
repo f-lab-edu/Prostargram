@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "프로필 페이지 요청때 반환되는 Schema")
-public class GetProfilePageDto extends ProfileInfo {
+public class GetProfilePageResponseDto extends ProfileInfo {
 
     @Schema(example = "100")
     private long postCount;

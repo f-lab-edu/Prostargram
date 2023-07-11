@@ -1,12 +1,12 @@
 package flab.project.controller;
 
 import flab.project.data.dto.model.ProfileInfo;
-import flab.project.data.dto.request.CreateFollowDto;
-import flab.project.data.dto.request.DeleteFollowDto;
-import flab.project.data.dto.request.UpdateOptionsDto;
-import flab.project.data.dto.request.UpdateProfileDto;
-import flab.project.data.dto.response.GetFollowDto;
-import flab.project.data.dto.response.GetOptionsDto;
+import flab.project.data.dto.request.CreateFollowRequestDto;
+import flab.project.data.dto.request.DeleteFollowRequestDto;
+import flab.project.data.dto.request.UpdateOptionsRequestDto;
+import flab.project.data.dto.request.UpdateProfileRequestDto;
+import flab.project.data.dto.response.GetFollowResponseDto;
+import flab.project.data.dto.response.GetOptionsResponseDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +60,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/follows")
-    public List<GetFollowDto> getFollows(
+    public List<GetFollowResponseDto> getFollows(
             @PathVariable("userId") Long userId,
             @RequestParam("type") GetFollowsType type
     ) {
@@ -76,7 +76,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/options")
-    public GetOptionsDto getPersonalSettingOptions(
+    public GetOptionsResponseDto getPersonalSettingOptions(
         @PathVariable("userId") Long userId
     ) {
         return null;
@@ -93,7 +93,7 @@ public class UserController {
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettingOptions(
         @PathVariable("userId") Long userId,
-        UpdateOptionsDto updateOptionsDto
+        UpdateOptionsRequestDto updateOptionsRequestDto
     ) {
         return "test";
     }
@@ -103,7 +103,7 @@ public class UserController {
     )
     @PatchMapping(value = "/users/profile-info")
     public String updateProfile(
-        UpdateProfileDto updateProfileDto
+        UpdateProfileRequestDto updateProfileRequestDto
     ) {
         return "test";
     }
@@ -118,7 +118,7 @@ public class UserController {
     )
     @PostMapping(value = "/users/{userId}/follows")
     public String createFollows(
-        CreateFollowDto createFollowDto
+        CreateFollowRequestDto createFollowRequestDto
     ) {
         return "test";
     }
@@ -133,7 +133,7 @@ public class UserController {
     )
     @DeleteMapping(value = "/users/{userId}/follows")
     public String deleteFollows(
-        DeleteFollowDto deleteFollowDto
+        DeleteFollowRequestDto deleteFollowRequestDto
     ) {
         return "test";
     }
