@@ -43,7 +43,10 @@ public class UserController {
             @ApiResponse(description = "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
                     + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
     @GetMapping(value = "/users/{userId}")
-    public ProfileInfo getProfileInfo(@PathVariable("userId") Long userId, @RequestParam("type") GetProfileRequestType type) {
+    public ProfileInfo getProfileInfo(
+        @PathVariable("userId") Long userId,
+        @RequestParam("type") GetProfileRequestType type
+    ) {
         return null;
     }
 
@@ -106,7 +109,7 @@ public class UserController {
     }
 
     @Operation(
-        summary = "팔로우/팔로잉 추가 API"
+        summary = "팔로워/팔로잉 추가 API"
     )
     @Parameters(
         value = {
@@ -121,7 +124,7 @@ public class UserController {
     }
 
     @Operation(
-        summary = "팔로우/팔로잉 삭제 API"
+        summary = "팔로워/팔로잉 삭제 API"
     )
     @Parameters(
         value = {
