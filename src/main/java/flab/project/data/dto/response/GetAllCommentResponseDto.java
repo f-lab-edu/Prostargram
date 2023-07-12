@@ -3,8 +3,6 @@ package flab.project.data.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Schema(description = "댓글을 가져오는 응답 Dto")
 public class GetAllCommentResponseDto {
