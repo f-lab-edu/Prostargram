@@ -7,7 +7,7 @@ import lombok.Getter;
 @Schema(description = "댓글을 작성하는 Dto")
 public class CreateCommentRequestDto {
 
-    // PostAuthor 추가 시, 수정 예정
+    // Todo userId, userName, profileImgUrl이 왜 필요 없을 지 멘토님과 이야기 해볼 것
     @Schema(example = "1")
     private String postId;
 
@@ -19,9 +19,6 @@ public class CreateCommentRequestDto {
 
     @Schema(example = "https://profileImg.url")
     private String profileImgUrl;
-
-    @Schema(example = "방금 전")
-    private String createdAt;
 
     @Schema(example = "요즘도 열심히 알고리즘 풀이를 진행하시네요.", maxLength = 100)
     private String content;
