@@ -1,8 +1,7 @@
 package flab.project.controller;
 
 import flab.project.data.dto.Profile;
-import flab.project.data.dto.CreateFollowRequestDto;
-import flab.project.data.dto.DeleteFollowRequestDto;
+import flab.project.data.dto.PutFollowRequestDto;
 import flab.project.data.dto.UpdateOptionsRequestDto;
 import flab.project.data.dto.GetFollowResponseDto;
 import flab.project.data.dto.GetOptionsResponseDto;
@@ -117,7 +116,7 @@ public class UserController {
     )
     @PostMapping(value = "/users/{userId}/follows")
     public String createFollows(
-        CreateFollowRequestDto createFollowRequestDto
+        PutFollowRequestDto putFollowRequestDto
     ) {
         return "test";
     }
@@ -132,7 +131,7 @@ public class UserController {
     )
     @DeleteMapping(value = "/users/{userId}/follows")
     public String deleteFollows(
-        DeleteFollowRequestDto deleteFollowRequestDto
+        PutFollowRequestDto deleteFollowRequestDto
     ) {
         return "test";
     }
