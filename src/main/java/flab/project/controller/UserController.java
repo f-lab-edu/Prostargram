@@ -4,7 +4,6 @@ import flab.project.data.dto.model.Profile;
 import flab.project.data.dto.request.CreateFollowRequestDto;
 import flab.project.data.dto.request.DeleteFollowRequestDto;
 import flab.project.data.dto.request.UpdateOptionsRequestDto;
-import flab.project.data.dto.request.UpdateProfileRequestDto;
 import flab.project.data.dto.response.GetFollowResponseDto;
 import flab.project.data.dto.response.GetOptionsResponseDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -103,7 +102,7 @@ public class UserController {
     )
     @PatchMapping(value = "/users/profile-info")
     public String updateProfile(
-        UpdateProfileRequestDto updateProfileRequestDto
+        Profile updateProfileRequestDto
     ) {
         return "test";
     }
