@@ -70,7 +70,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/options")
-    public GetOptionsResponseDto getPersonalSettingOptions(
+    public GetOptionsResponseDto getPersonalSettings(
         @PathVariable("userId") Long userId
     ) {
         return null;
@@ -85,7 +85,7 @@ public class UserController {
         }
     )
     @PatchMapping(value = "/users/{userId}/options")
-    public String updatePersonalSettingOptions(
+    public String updatePersonalSettings(
         @PathVariable("userId") Long userId,
         PatchOptionsRequestDto updateOptionsRequestDto
     ) {
@@ -103,7 +103,7 @@ public class UserController {
     }
 
     @Operation(
-        summary = "팔로워/팔로잉 추가 API"
+        summary = "팔로워/팔로잉 생성/삭제 API"
     )
     @Parameters(
         value = {
@@ -111,24 +111,10 @@ public class UserController {
         }
     )
     @PostMapping(value = "/users/{userId}/follows")
-    public String createFollows(
+    public String putFollows(
         PutFollowRequestDto putFollowRequestDto
     ) {
         return "test";
     }
 
-    @Operation(
-        summary = "팔로워/팔로잉 삭제 API"
-    )
-    @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-        }
-    )
-    @DeleteMapping(value = "/users/{userId}/follows")
-    public String deleteFollows(
-        PutFollowRequestDto deleteFollowRequestDto
-    ) {
-        return "test";
-    }
 }
