@@ -1,10 +1,6 @@
 package flab.project.controller;
 
-import flab.project.data.dto.Profile;
-import flab.project.data.dto.PutFollowRequestDto;
-import flab.project.data.dto.PatchOptionsRequestDto;
-import flab.project.data.dto.GetFollowResponseDto;
-import flab.project.data.dto.GetOptionsResponseDto;
+import flab.project.data.dto.*;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +54,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/follows")
-    public List<GetFollowResponseDto> getFollows(
+    public List<User> getFollows(
             @PathVariable("userId") Long userId,
             @RequestParam("type") GetFollowsType type
     ) {
