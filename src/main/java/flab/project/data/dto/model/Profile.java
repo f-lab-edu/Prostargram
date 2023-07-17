@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Schema(description = "프로필 페이지와 프로필 수정 페이지의 공통 Schema")
-public abstract class ProfileInfo extends UserInfo {
+public class Profile extends User {
 
     @Schema(example = "백엔드 엔지니어 정민욱입니다.")
     private String selfIntroduction;
