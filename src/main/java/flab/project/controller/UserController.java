@@ -2,7 +2,7 @@ package flab.project.controller;
 
 import flab.project.data.dto.Profile;
 import flab.project.data.dto.PutFollowRequestDto;
-import flab.project.data.dto.UpdateOptionsRequestDto;
+import flab.project.data.dto.PatchOptionsRequestDto;
 import flab.project.data.dto.GetFollowResponseDto;
 import flab.project.data.dto.GetOptionsResponseDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -91,7 +91,7 @@ public class UserController {
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettingOptions(
         @PathVariable("userId") Long userId,
-        UpdateOptionsRequestDto updateOptionsRequestDto
+        PatchOptionsRequestDto updateOptionsRequestDto
     ) {
         return "test";
     }
