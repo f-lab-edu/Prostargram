@@ -1,4 +1,4 @@
-package flab.project.data.dto.request;
+package flab.project.data.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

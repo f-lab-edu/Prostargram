@@ -1,4 +1,4 @@
-package flab.project.data.dto.response;
+package flab.project.data.dto;
 
 import flab.project.data.dto.model.Options;
 

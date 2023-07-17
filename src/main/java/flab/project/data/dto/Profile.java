@@ -1,5 +1,6 @@
-package flab.project.data.dto.model;
+package flab.project.data.dto;
 
+import flab.project.data.dto.model.HashTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

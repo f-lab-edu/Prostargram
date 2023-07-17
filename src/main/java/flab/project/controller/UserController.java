@@ -1,11 +1,11 @@
 package flab.project.controller;
 
-import flab.project.data.dto.model.Profile;
-import flab.project.data.dto.request.CreateFollowRequestDto;
-import flab.project.data.dto.request.DeleteFollowRequestDto;
-import flab.project.data.dto.request.UpdateOptionsRequestDto;
-import flab.project.data.dto.response.GetFollowResponseDto;
-import flab.project.data.dto.response.GetOptionsResponseDto;
+import flab.project.data.dto.Profile;
+import flab.project.data.dto.CreateFollowRequestDto;
+import flab.project.data.dto.DeleteFollowRequestDto;
+import flab.project.data.dto.UpdateOptionsRequestDto;
+import flab.project.data.dto.GetFollowResponseDto;
+import flab.project.data.dto.GetOptionsResponseDto;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import io.swagger.v3.oas.annotations.Operation;
