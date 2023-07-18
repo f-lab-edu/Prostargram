@@ -9,6 +9,9 @@ import lombok.Getter;
 public class PatchPostLikeRequestDto {
 
     @Schema(example = "UPDATE_LIKE_REQUEST")
-    private UpdateLikeType updateLikeType;
+    private final UpdateLikeType updateLikeType;
 
+    public PatchPostLikeRequestDto(UpdateLikeType updateLikeType) {
+        this.updateLikeType = updateLikeType;
+    }
 }
