@@ -11,7 +11,7 @@ import static flab.project.config.baseresponse.BaseResponseStatus.SUCCESS;
 
 @Getter
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
-public class BaseResponse<T> {
+public abstract class BaseResponse {
 
     @Schema(name = "성공 여부", example = "true")
     @JsonProperty("isSuccess")
@@ -23,18 +23,6 @@ public class BaseResponse<T> {
     @Schema(name = "요청에 대한 결과 코드", example = "1000")
     private final int code;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T result;
-
-    // 요청에 성공한 경우
-    public BaseResponse(T result) {
-        this.isSuccess = SUCCESS.isSuccess();
-        this.message = SUCCESS.getMessage();
-        this.code = SUCCESS.getCode();
-        this.result = result;
-    }
-
-    // 요청에 실패한 경우
     public BaseResponse(BaseResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();
