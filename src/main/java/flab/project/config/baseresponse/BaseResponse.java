@@ -19,7 +19,7 @@ public abstract class BaseResponse {
     @Schema(name = "요청에 대한 결과 코드", example = "1000")
     private final int code;
 
-    public BaseResponse(BaseResponseEnum status) {
+    public BaseResponse(ResponseEnum status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();
         this.code = status.getCode();
