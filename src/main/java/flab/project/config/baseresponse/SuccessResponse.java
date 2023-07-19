@@ -2,7 +2,7 @@ package flab.project.config.baseresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import static flab.project.config.baseresponse.BaseResponseStatus.SUCCESS;
+import static flab.project.config.baseresponse.BaseResponseEnum.SUCCESS;
 
 public class SuccessResponse<T> extends BaseResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)

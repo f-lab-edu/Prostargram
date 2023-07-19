@@ -6,7 +6,7 @@ import lombok.Getter;
  * 에러 코드 관리
  */
 @Getter
-public enum BaseResponseStatus {
+public enum BaseResponseEnum {
     /**
      * 1000 : 요청 성공
      */
@@ -17,7 +17,7 @@ public enum BaseResponseStatus {
     private final int code;
     private final String message;
 
-    private BaseResponseStatus(boolean isSuccess, int code, String message) {
+    private BaseResponseEnum(boolean isSuccess, int code, String message) {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
