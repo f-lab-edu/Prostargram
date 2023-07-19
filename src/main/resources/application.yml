@@ -1,0 +1,26 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: e7d512d085d0f7602962
+            client-secret: aba306e906b20169462018b5c36da8216786ec56
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://db-hh8dn.pub-cdb.ntruss.com:3306/prostargram
+    username: pay0011aansk9902
+    password: Pro22Fls*tara!
+#  ?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+mybatis:
+  type-aliases-package: flab.project.data.dto, flab.project.data.model, flab.project.data.entity;
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+logging:
+  level:
+    flab:
+      project:
+        mapper: trace
