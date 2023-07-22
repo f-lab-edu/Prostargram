@@ -31,7 +31,7 @@ public class UserController {
     public List<User> getFollowers(
             @PathVariable("userId") Long userId
     ) {
-        return userService.getFollows(userId,GetFollowsType.GET_FOLLOWERS_REQUEST);
+        return userService.getFollows(userId,GetFollowsType.FOLLOWER);
     }
 
     @Operation(
@@ -47,6 +47,6 @@ public class UserController {
             @PathVariable("userId") Long userId
     ) {
 
-        return userService.getFollows(userId,GetFollowsType.GET_FOLLOWINGS_REQUEST);
+        return userService.getFollows(userId,GetFollowsType.FOLLOWING);
     }
 }
