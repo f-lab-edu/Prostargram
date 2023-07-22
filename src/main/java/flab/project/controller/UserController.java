@@ -20,19 +20,33 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-            summary = "팔로워/팔로잉 목록 확인하기 API"
+            summary = "팔로워 목록 확인하기 API"
     )
     @Parameters(
             value = {
-                    @Parameter(name = "userId", description = "프로필을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
-                    @Parameter(name = "type", description = "팔로워/팔로잉 페이지에 따라 파라미터를 다르게 전달해야함.", required = true)
+                    @Parameter(name = "userId", description = "팔로워목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
             }
     )
     @GetMapping(value = "/users/{userId}/follows")
-    public List<User> getFollows(
-            @PathVariable("userId") Long userId,
-            @RequestParam("type") GetFollowsType type
+    public List<User> getFollowers(
+            @PathVariable("userId") Long userId
     ) {
-        return userService.getFollows(userId,type);
+        return userService.getFollows(userId,GetFollowsType.GET_FOLLOWERS_REQUEST);
+    }
+
+    @Operation(
+            summary = "팔로잉 목록 확인하기 API"
+    )
+    @Parameters(
+            value = {
+                    @Parameter(name = "userId", description = "팔로워목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
+            }
+    )
+    @GetMapping(value = "/users/{userId}/followings")
+    public List<User> getFollowings(
+            @PathVariable("userId") Long userId
+    ) {
+
+        return userService.getFollows(userId,GetFollowsType.GET_FOLLOWINGS_REQUEST);
     }
 }
