@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.UserMapper">
+
+    <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType" resultType="User">
+        SELECT
+            U.user_id,
+            U.user_name,
+            U.profile_img_url,
+            O.name
+        FROM USERS AS U
+        JOIN ORGANIZATION O on U.organization_id = O.organization_id
+        <choose>
+            <when test='requestType.name().equals("FOLLOWERS")'>
+                WHERE user_id IN (
+                    SELECT
+                        from_user_id
+                    FROM FOLLOWS
+                    WHERE to_user_id=#{userId}
+                );
+            </when>
+            <when test='requestType.name().equals("FOLLOWINGS")'>
+                WHERE user_id IN (
+                    SELECT
+                        to_user_id
+                    FROM FOLLOWS
+                    WHERE from_user_id=#{userId}
+                );
+            </when>
+        </choose>
+    </select>
+
+</mapper>
