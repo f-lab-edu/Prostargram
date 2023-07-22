@@ -2,14 +2,9 @@ package flab.project.config.baseresponse;
 
 import lombok.Getter;
 
-/**
- * 에러 코드 관리
- */
 @Getter
 public enum ResponseEnum {
-    /**
-     * 1000 : 요청 성공
-     */
+
     SUCCESS(true, 1000, "요청에 성공하였습니다.");
 
 

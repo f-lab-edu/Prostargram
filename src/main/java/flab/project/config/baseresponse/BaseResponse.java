@@ -1,6 +1,5 @@
 package flab.project.config.baseresponse;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Getter;
 public abstract class BaseResponse {
 
     @Schema(name = "성공 여부", example = "true")
-    @JsonProperty("isSuccess")
     private final Boolean isSuccess;
 
     @Schema(name = "요청에 대한 결과 메세지", example = "요청에 성공하였습니다.")

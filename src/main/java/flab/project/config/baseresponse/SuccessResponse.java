@@ -10,7 +10,7 @@ public class SuccessResponse<T> extends BaseResponse {
 
     public SuccessResponse(T result) {
         super(SUCCESS);
-        this.result=result;
+        this.result = result;
     }
 
     public SuccessResponse() {
