@@ -10,10 +10,4 @@ public class User extends BasicUser {
     @Schema(example = "카카오")
     private String departmentName;
 
-    @Override
-    public String toString() {
-        return super.toString()+
-                "departmentName='" + departmentName + '\'' +
-                '}';
-    }
 }

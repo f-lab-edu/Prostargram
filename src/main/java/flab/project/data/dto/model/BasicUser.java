@@ -14,11 +14,4 @@ public class BasicUser {
     @Schema(example = "https://profileImg.url")
     private String profileImgUrl;
 
-    @Override
-    public String toString() {
-        return "BasicUser{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", profileImgUrl='" + profileImgUrl + '\'';
-    }
 }

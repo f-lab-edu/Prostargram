@@ -13,20 +13,20 @@
         FROM USERS AS U
         JOIN ORGANIZATION O on U.organization_id = O.organization_id
         <choose>
-            <when test='requestType.name().equals("GET_FOLLOWERS_REQUEST")'>
+            <when test='requestType.name().equals("FOLLOWERS")'>
                 WHERE user_id IN (
                     SELECT
                         from_user_id
                     FROM FOLLOWS
-                    WHERE to_user_id=#{loginedId}
+                    WHERE to_user_id=#{userId}
                 );
             </when>
-            <when test='requestType.name().equals("GET_FOLLOWINGS_REQUEST")'>
+            <when test='requestType.name().equals("FOLLOWINGS")'>
                 WHERE user_id IN (
                     SELECT
                         to_user_id
                     FROM FOLLOWS
-                    WHERE from_user_id=#{loginedId}
+                    WHERE from_user_id=#{userId}
                 );
             </when>
         </choose>
