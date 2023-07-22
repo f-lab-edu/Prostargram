@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserMapper userMapper;
-    public List<User> getFollows(Long loginedId, GetFollowsType requestType) {
-        List<User> result = userMapper.findAll(requestType,loginedId);
+    public List<User> getFollows(Long userId, GetFollowsType requestType) {
+        List<User> result = userMapper.findAll(requestType,userId);
 
         return result;
     }
