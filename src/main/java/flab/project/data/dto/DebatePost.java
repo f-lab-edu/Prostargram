@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "토론 피드 Dto")
-public class DebatePost extends BasicPost {
+public class DebatePost extends BasePost {
 
     @Schema(example = "1")
     private long optionId;
