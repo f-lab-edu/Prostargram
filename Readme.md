@@ -8,7 +8,7 @@
 - Language
   - JDK 17
 - Spring Framework
-  - Spring 
+  - Spring 6.0.9
   - Spring boot 3.1.0
   - Gradle 7.6.1
 - Database
