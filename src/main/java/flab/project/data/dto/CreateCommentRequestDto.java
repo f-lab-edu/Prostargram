@@ -5,6 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "댓글 작성 Dto")
-public class CreateCommentRequestDto extends Comment {
+public class CreateCommentRequestDto {
 
+    private final Comment comment;
+
+    public CreateCommentRequestDto(Comment comment) {
+        this.comment = comment;
+    }
 }
