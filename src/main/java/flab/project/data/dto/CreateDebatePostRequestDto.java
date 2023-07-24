@@ -5,6 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "토론 피드 작성 Dto")
-public class CreateDebatePostRequestDto extends DebatePost {
+public class CreateDebatePostRequestDto {
 
+    private final DebatePost debatePost;
+
+    public CreateDebatePostRequestDto(DebatePost debatePost) {
+        this.debatePost = debatePost;
+    }
 }
