@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "회원 가입 - 필수 정보 Dto")
-public class CreateRequiredInfoRequestDto {
+public class CreateUser1RequestDto {
 
     @Schema(example = "example@example.com", nullable = false)
     private final String email;
@@ -16,7 +16,7 @@ public class CreateRequiredInfoRequestDto {
     @Schema(example = "이은비")
     private final String userName;
 
-    public CreateRequiredInfoRequestDto(String email, String password, String userName) {
+    public CreateUser1RequestDto(String email, String password, String userName) {
         this.email = email;
         this.password = password;
         this.userName = userName;
