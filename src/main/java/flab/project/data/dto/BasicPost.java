@@ -11,6 +11,10 @@ import java.util.List;
 public class BasicPost extends BasePost {
 
     @Schema(example = "https://imageUrl.url", nullable = false)
-    private List<String> contentImgUrls;
+    private final List<String> contentImgUrls;
 
+    public BasicPost(long userId, long postId, String content, List<String> hashTags, PostType postType, long likeCount, long commentCount, String createTime, List<String> contentImgUrls) {
+        super(userId, postId, content, hashTags, postType, likeCount, commentCount, createTime);
+        this.contentImgUrls = contentImgUrls;
+    }
 }
