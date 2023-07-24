@@ -10,15 +10,15 @@ import java.util.List;
 public class GetAllPostResponseDto {
 
     @Schema(example = "[피드 1, 피드2, 피드3, 피드4, 피드5]")
-    private final List<CreateBasicPostResponseDto> basicPosts;
+    private final List<BasicPost> basicPosts;
 
     @Schema(example = "[피드 1, 피드2, 피드3, 피드4, 피드5]")
-    private final List<CreateDebatePostResponseDto> debatePosts;
+    private final List<DebatePost> debatePosts;
 
     @Schema(example = "[피드 1, 피드2, 피드3, 피드4, 피드5]")
-    private final List<CreatePollPostResponseDto> pollPosts;
+    private final List<PollPost> pollPosts;
 
-    public GetAllPostResponseDto(List<CreateBasicPostResponseDto> basicPosts, List<CreateDebatePostResponseDto> debatePosts, List<CreatePollPostResponseDto> pollPosts) {
+    public GetAllPostResponseDto(List<BasicPost> basicPosts, List<DebatePost> debatePosts, List<PollPost> pollPosts) {
         this.basicPosts = basicPosts;
         this.debatePosts = debatePosts;
         this.pollPosts = pollPosts;
