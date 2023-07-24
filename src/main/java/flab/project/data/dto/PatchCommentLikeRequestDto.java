@@ -1,7 +1,6 @@
 package flab.project.data.dto;
 
 import flab.project.data.enums.LikeType;
-import flab.project.data.enums.requestparam.UpdateLikeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
