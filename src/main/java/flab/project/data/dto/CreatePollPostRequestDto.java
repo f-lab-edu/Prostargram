@@ -5,6 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "통계 피드 작성 Dto")
-public class CreatePollPostRequestDto extends PollPost {
+public class CreatePollPostRequestDto {
 
+    private final PollPost pollPost;
+
+    public CreatePollPostRequestDto(PollPost pollPost) {
+        this.pollPost = pollPost;
+    }
 }
