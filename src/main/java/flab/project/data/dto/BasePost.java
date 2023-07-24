@@ -12,18 +12,37 @@ import java.util.List;
 public class BasePost {
 
     @Schema(example = "1")
-    private long userId;
+    protected final long userId;
+
+    @Schema(example = "1")
+    protected final long postId;
 
     @Schema(example = "오늘 깃허브에 알고리즘 관련 내용을 정리했습니다.", maxLength = 100)
-    private String content;
-
-    @Schema(example = "좋아요 또는 좋아요 취소 enum")
-    private LikeType likeType;
+    protected final String content;
 
     @Schema(example = "#java")
-    private List<String> hashTags;
+    protected final List<String> hashTags;
 
     @Schema(description = "Post 종류 enum")
-    private PostType postType;
+    protected final PostType postType;
 
+    @Schema(example = "1400", defaultValue = "0")
+    protected final long likeCount;
+
+    @Schema(example = "14", defaultValue = "0")
+    protected final long commentCount;
+
+    @Schema(example = "방금 전")
+    protected final String createTime;
+
+    public BasePost(long userId, long postId, String content, List<String> hashTags, PostType postType, long likeCount, long commentCount, String createTime) {
+        this.userId = userId;
+        this.postId = postId;
+        this.content = content;
+        this.hashTags = hashTags;
+        this.postType = postType;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+        this.createTime = createTime;
+    }
 }
