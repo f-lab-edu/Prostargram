@@ -24,7 +24,14 @@ public class FollowService {
 
     public BaseResponse postFollow(FollowRequestDto followRequestDto) {
         try {
+            if (followRequestDto.isEqaulFromUserIdAndToUserId()) {
+                throw new IllegalArgumentException();
+            }
+
             followMapper.postFollow(followRequestDto);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("DB 에러 입니다.");
@@ -32,4 +39,5 @@ public class FollowService {
 
         return new SuccessResponse();
     }
+
 }

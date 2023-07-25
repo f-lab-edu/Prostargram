@@ -2,10 +2,8 @@ package flab.project.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
 import flab.project.config.baseresponse.BaseResponse;
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -96,5 +94,6 @@ class FollowServiceTest {
         //then
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
     }
+
 
 }

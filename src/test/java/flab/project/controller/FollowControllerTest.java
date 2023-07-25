@@ -18,7 +18,6 @@ import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.service.FollowService;
 import java.util.List;
-import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

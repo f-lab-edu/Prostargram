@@ -12,10 +12,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
+    //todo sout지우고 올리기.
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public FailResponse bindException(BindException e) {
         System.out.println("ApiControllerAdvice.bindException");
+        return new FailResponse(ResponseEnum.IllegalArgument);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public FailResponse IllegalArgumentException(IllegalArgumentException e) {
+        System.out.println("ApiControllerAdvice.IllegalArgumentException");
         return new FailResponse(ResponseEnum.IllegalArgument);
     }
 

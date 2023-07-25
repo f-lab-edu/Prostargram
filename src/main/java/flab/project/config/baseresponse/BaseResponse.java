@@ -23,7 +23,7 @@ public abstract class BaseResponse<T> {
         this.code = status.getCode();
     }
 
-    public T getResult(){//Todo 테스트 필요
+    public T getResult(){
 
         if(!(this instanceof SuccessResponse)){
             throw new RuntimeException();
