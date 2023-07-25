@@ -1,5 +1,6 @@
-package flab.project.data.dto;
+package flab.project.data.dto.domain;
 
+import flab.project.data.dto.Option;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -11,8 +12,7 @@ import java.util.List;
 @Schema(description = "통계 피드 Dto")
 public class PollPost extends BasePost {
 
-    @Schema(example = "[2, 3, 4, 5]")
-    private final List<Long> options;
+    private final List<Option> options;
 
     @Schema(example = "2023-07-01")
     private final LocalDate startDate;
@@ -20,7 +20,7 @@ public class PollPost extends BasePost {
     @Schema(example = "2023-07-14")
     private final LocalDate endDate;
 
-    public PollPost(long userId, long postId, String content, List<String> hashTags, PostType postType, long likeCount, long commentCount, String createTime, List<Long> options, LocalDate startDate, LocalDate endDate) {
+    public PollPost(long userId, long postId, String content, List<String> hashTags, PostType postType, long likeCount, long commentCount, String createTime, List<Option> options, LocalDate startDate, LocalDate endDate) {
         super(userId, postId, content, hashTags, postType, likeCount, commentCount, createTime);
         this.options = options;
         this.startDate = startDate;
