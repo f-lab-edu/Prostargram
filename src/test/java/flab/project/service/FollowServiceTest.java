@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 import flab.project.config.baseresponse.BaseResponse;
+import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -42,7 +43,7 @@ class FollowServiceTest {
         followService.postFollow(followRequestDto3);
 
         //when
-        List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWINGS);
+        List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWINGS).getResult();
 
         //then
         assertThat(follows).hasSize(3)
@@ -75,7 +76,7 @@ class FollowServiceTest {
         followService.postFollow(followRequestDto3);
 
         //when
-        List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWERS);
+        List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWERS).getResult();
 
         //then
         assertThat(follows).hasSize(3)

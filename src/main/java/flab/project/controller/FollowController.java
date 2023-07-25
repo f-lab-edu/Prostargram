@@ -32,7 +32,7 @@ public class FollowController {
         }
     )
     @GetMapping(value = "/users/{userId}/follows")
-    public List<User> getFollowers(
+    public BaseResponse<List<User>> getFollowers(
         @PathVariable("userId") Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWERS);
@@ -47,7 +47,7 @@ public class FollowController {
         }
     )
     @GetMapping(value = "/users/{userId}/followings")
-    public List<User> getFollowings(
+    public BaseResponse<List<User>> getFollowings(
         @PathVariable("userId") Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWINGS);

@@ -16,10 +16,10 @@ public class FollowService {
 
     private final FollowMapper followMapper;
 
-    public List<User> getFollows(Long userId, GetFollowsType requestType) {
+    public BaseResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
         List<User> result = followMapper.findAll(requestType, userId);
 
-        return result;
+        return new SuccessResponse<>(result);
     }
 
     public BaseResponse postFollow(FollowRequestDto followRequestDto) {
