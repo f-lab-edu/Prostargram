@@ -1,6 +1,8 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.BaseResponse;
+import flab.project.config.baseresponse.FailResponse;
+import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -8,6 +10,10 @@ import flab.project.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -62,10 +68,40 @@ public class FollowController {
             @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
         }
     )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = SuccessResponse.class)
+                )
+            }
+        ),
+//        @ApiResponse(
+//            responseCode = "400",
+//            content = {
+//                @Content(
+//                    mediaType = "application/json",
+//                    schema = @Schema(implementation = FailResponse.class)
+//                )
+//            }
+//        ),
+//        @ApiResponse(
+//            responseCode = "500",
+//            content = {
+//                @Content(
+//                    mediaType = "application/json",
+//                    schema = @Schema(implementation = FailResponse.class)
+//                )
+//            }
+//        )
+    })
     @PostMapping(value = "/users/{userId}/follows")
     public BaseResponse postFollow(
         @Valid @RequestBody FollowRequestDto followRequestDto
     ) {
+
         return followService.postFollow(followRequestDto);
     }
 

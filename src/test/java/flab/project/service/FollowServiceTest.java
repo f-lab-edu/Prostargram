@@ -127,8 +127,8 @@ class FollowServiceTest {
     @Test
     public void ifFollowNonExistUserThrowDataIntegrityViolationException() {
         //given
-        long nonExistUserId1=9999L;
-        long nonExistUserId2=10000L;
+        long nonExistUserId1 = 9999L;
+        long nonExistUserId2 = 10000L;
 
         FollowRequestDto followRequestDto = new FollowRequestDto(nonExistUserId1, nonExistUserId2);
 
