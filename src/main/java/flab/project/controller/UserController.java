@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +57,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/options")
-    public GetOptionsResponseDto getPersonalSettings(
+    public GetSettingsResponseDto getPersonalSettings(
         @PathVariable("userId") Long userId
     ) {
         return null;
@@ -105,7 +104,7 @@ public class UserController {
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettings(
         @PathVariable("userId") Long userId,
-        PatchOptionsRequestDto updateOptionsRequestDto
+        PatchSettingsRequestDto updateOptionsRequestDto
     ) {
         return "test";
     }
