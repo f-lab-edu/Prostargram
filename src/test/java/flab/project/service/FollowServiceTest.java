@@ -2,6 +2,7 @@ package flab.project.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import flab.project.config.baseresponse.BaseResponse;
 import flab.project.data.dto.FollowRequestDto;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,5 +97,45 @@ class FollowServiceTest {
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
     }
 
+    @DisplayName("팔로워/팔로잉 목록을 가져온 결과가 빈 배열일 경우 result에 빈배열이 들어간 채로 반환된다.")
+    @Test
+    public void whenFollowMapperReturnEmptyServiceReturnEmptyList() {
+        //when
+        List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWERS).getResult();
 
+        System.out.println("follows = " + follows);
+        //then
+        assertThat(follows).isEmpty();
+    }
+
+    @DisplayName("이미 팔로우가 되어있는 상태에서 팔로우 요청이 올 경우 DuplicateKeyException이 발생한다.")
+    @Test
+    public void ifFollowRequestWhenFollowingThrowDuplicateKeyException() {
+        //given
+        FollowRequestDto followRequestDto1 = new FollowRequestDto(2L, 1L);
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(2L, 1L);
+
+        //when then
+        followService.postFollow(followRequestDto1);
+        assertThatThrownBy(() -> followService.postFollow(followRequestDto2))
+            .isInstanceOf(RuntimeException.class);
+
+
+    }
+
+    @DisplayName("존재하지 않는 유저에게 팔로우 요청을 보낼 경우 DataIntegrityViolationException이 발생한다.")
+    @Test
+    public void ifFollowNonExistUserThrowDataIntegrityViolationException() {
+        //given
+        long nonExistUserId1=9999L;
+        long nonExistUserId2=10000L;
+
+        FollowRequestDto followRequestDto = new FollowRequestDto(nonExistUserId1, nonExistUserId2);
+
+        //when then
+        assertThatThrownBy(() -> followService.postFollow(followRequestDto))
+            .isInstanceOf(DataIntegrityViolationException.class);
+
+
+    }
 }

@@ -118,7 +118,7 @@ class FollowControllerTest {
         FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, -2L);
         FollowRequestDto followRequestDto3 = new FollowRequestDto(-1L, -2L);
 
-        FailResponse failResponse = new FailResponse(ResponseEnum.IllegalArgument);
+        FailResponse failResponse = new FailResponse(ResponseEnum.ILLEGAL_ARGUMENT);
         //when then
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
@@ -126,9 +126,9 @@ class FollowControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
-            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
-            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.ILLEGAL_ARGUMENT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.ILLEGAL_ARGUMENT.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.ILLEGAL_ARGUMENT.getMessage()));
 
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
@@ -136,9 +136,9 @@ class FollowControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
-            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
-            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.ILLEGAL_ARGUMENT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.ILLEGAL_ARGUMENT.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.ILLEGAL_ARGUMENT.getMessage()));
 
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
@@ -146,9 +146,9 @@ class FollowControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
-            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
-            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.ILLEGAL_ARGUMENT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.ILLEGAL_ARGUMENT.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.ILLEGAL_ARGUMENT.getMessage()));
     }
 
     //todo fromUserId나 toUserId중에 하나 이상이 전달되지 않았을 때는 어떻게 테스트하지?
