@@ -10,8 +10,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,15 +54,32 @@ public class FollowController {
     }
 
     @Operation(
-        summary = "팔로워/팔로잉 생성/삭제 API"
+        summary = "팔로워/팔로잉 생성 API"
     )
     @Parameters(
         value = {
             @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
         }
     )
-    @PutMapping(value = "/users/{userId}/follows")
-    public String putFollows(
+    @PostMapping(value = "/users/{userId}/follows")
+    public String postFollow(
+        PutFollowRequestDto putFollowRequestDto,
+        PutFollowType putFollowRequestType
+    ) {
+        return "test";
+    }
+
+
+    @Operation(
+        summary = "팔로워/팔로잉 삭제 API"
+    )
+    @Parameters(
+        value = {
+            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+        }
+    )
+    @DeleteMapping(value = "/users/{userId}/follows")
+    public String deleteFollow(
         PutFollowRequestDto putFollowRequestDto,
         PutFollowType putFollowRequestType
     ) {
