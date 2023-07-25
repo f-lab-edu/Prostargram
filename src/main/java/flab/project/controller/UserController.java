@@ -1,9 +1,7 @@
 package flab.project.controller;
 
 import flab.project.data.dto.*;
-import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
-import flab.project.data.enums.requestparam.PutFollowType;
 
 import flab.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +11,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

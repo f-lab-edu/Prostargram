@@ -1,9 +1,9 @@
 package flab.project.controller;
 
-import flab.project.data.dto.PutFollowRequestDto;
+import flab.project.config.baseresponse.BaseResponse;
+import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
-import flab.project.data.enums.requestparam.PutFollowType;
 import flab.project.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class FollowController {
     public List<User> getFollowers(
         @PathVariable("userId") Long userId
     ) {
-        return followService.getFollows(userId, GetFollowsType.FOLLOWER);
+        return followService.getFollows(userId, GetFollowsType.FOLLOWERS);
     }
 
     @Operation(
@@ -50,7 +50,7 @@ public class FollowController {
     public List<User> getFollowings(
         @PathVariable("userId") Long userId
     ) {
-        return followService.getFollows(userId, GetFollowsType.FOLLOWING);
+        return followService.getFollows(userId, GetFollowsType.FOLLOWINGS);
     }
 
     @Operation(
@@ -62,11 +62,10 @@ public class FollowController {
         }
     )
     @PostMapping(value = "/users/{userId}/follows")
-    public String postFollow(
-        PutFollowRequestDto putFollowRequestDto,
-        PutFollowType putFollowRequestType
+    public BaseResponse postFollow(
+        @RequestBody FollowRequestDto followRequestDto
     ) {
-        return "test";
+        return followService.postFollow(followRequestDto);
     }
 
 
@@ -80,8 +79,7 @@ public class FollowController {
     )
     @DeleteMapping(value = "/users/{userId}/follows")
     public String deleteFollow(
-        PutFollowRequestDto putFollowRequestDto,
-        PutFollowType putFollowRequestType
+        FollowRequestDto followRequestDto
     ) {
         return "test";
     }

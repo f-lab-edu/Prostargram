@@ -18,6 +18,7 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
 
 	implementation 'com.mysql:mysql-connector-j'
+	testImplementation 'org.projectlombok:lombok:1.18.22'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

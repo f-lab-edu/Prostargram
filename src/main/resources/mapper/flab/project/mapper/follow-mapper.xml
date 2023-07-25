@@ -32,4 +32,8 @@
         </choose>
     </select>
 
+    <insert id="postFollow" parameterType="FollowRequestDto">
+        INSERT INTO FOLLOWS(from_user_id, to_user_id)
+        VALUES (#{followRequestDto.fromUserId},#{followRequestDto.toUserId});
+    </insert>
 </mapper>

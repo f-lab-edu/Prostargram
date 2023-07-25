@@ -2,14 +2,18 @@ package flab.project.data.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 @Schema(description = "팔로워/팔로잉 추가 DTO")
-public class PutFollowRequestDto {
+public class FollowRequestDto {
 
     @Schema(example = "10")
-    private long fromUserId;
+    private final long fromUserId;
 
     @Schema(example = "20")
-    private long toUserId;
+    private final long toUserId;
+
+
 }
