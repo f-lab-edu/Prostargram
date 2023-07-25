@@ -5,8 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ResponseEnum {
 
-    SUCCESS(true, 1000, "요청에 성공하였습니다.");
+    SUCCESS(true, 1000, "요청에 성공하였습니다."),
 
+    IllegalArgument(false,2000,"잘못된 요청입니다.");
 
     private final boolean isSuccess;
     private final int code;

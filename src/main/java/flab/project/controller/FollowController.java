@@ -8,6 +8,7 @@ import flab.project.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,7 +64,7 @@ public class FollowController {
     )
     @PostMapping(value = "/users/{userId}/follows")
     public BaseResponse postFollow(
-        @RequestBody FollowRequestDto followRequestDto
+        @Valid @RequestBody FollowRequestDto followRequestDto
     ) {
         return followService.postFollow(followRequestDto);
     }

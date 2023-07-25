@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.BaseResponse;
+import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FollowRequestDto;
@@ -17,6 +18,7 @@ import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.service.FollowService;
 import java.util.List;
+import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +100,7 @@ class FollowControllerTest {
         //when then
 
         mockMvc.perform(
-                post("/users/{userId}/follows","1")
+                post("/users/{userId}/follows", "1")
                     .content(objectMapper.writeValueAsString(followRequestDto))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
@@ -108,4 +110,48 @@ class FollowControllerTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
 
     }
+
+    @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
+    @Test
+    void parameterIsPositiveOfFollowRequestDto() throws Exception {
+        //given
+        FollowRequestDto followRequestDto1 = new FollowRequestDto(-1L, 2L);
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, -2L);
+        FollowRequestDto followRequestDto3 = new FollowRequestDto(-1L, -2L);
+
+        FailResponse failResponse = new FailResponse(ResponseEnum.IllegalArgument);
+        //when then
+        mockMvc.perform(
+                post("/users/{userId}/follows", "1")
+                    .content(objectMapper.writeValueAsString(followRequestDto1))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+
+        mockMvc.perform(
+                post("/users/{userId}/follows", "1")
+                    .content(objectMapper.writeValueAsString(followRequestDto2))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+
+        mockMvc.perform(
+                post("/users/{userId}/follows", "1")
+                    .content(objectMapper.writeValueAsString(followRequestDto3))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.IllegalArgument.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.IllegalArgument.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.IllegalArgument.getMessage()));
+    }
+
+    //todo fromUserId나 toUserId중에 하나 이상이 전달되지 않았을 때는 어떻게 테스트하지?
+
 }
