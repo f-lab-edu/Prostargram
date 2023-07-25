@@ -24,9 +24,7 @@ public class FollowService {
 
     public BaseResponse postFollow(FollowRequestDto followRequestDto) {
         try {
-            if (followRequestDto.isEqaulFromUserIdAndToUserId()) {
-                throw new IllegalArgumentException();
-            }
+            followRequestDto.checkFromUserIdAndToUserIdSame();
 
             followMapper.postFollow(followRequestDto);
         } catch (IllegalArgumentException e) {
