@@ -15,7 +15,6 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
-import flab.project.mapper.FollowMapper;
 import flab.project.service.FollowService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
