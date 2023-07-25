@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Param;
 public interface FollowMapper {
     List<User> findAll(@Param("requestType") GetFollowsType requestType, @Param("userId") long userId);
 
-    void postFollow(@Param("followRequestDto") FollowRequestDto followRequestDto);
+    int postFollow(@Param("followRequestDto") FollowRequestDto followRequestDto);
 }
