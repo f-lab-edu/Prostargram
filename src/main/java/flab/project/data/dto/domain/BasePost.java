@@ -1,6 +1,5 @@
-package flab.project.data.dto;
+package flab.project.data.dto.domain;
 
-import flab.project.data.enums.LikeType;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
