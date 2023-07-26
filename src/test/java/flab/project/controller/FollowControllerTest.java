@@ -110,6 +110,28 @@ class FollowControllerTest {
 
     }
 
+    @DisplayName("팔로워/팔로잉 목록을 한번에 가져올 수 있다.")
+    @Test
+    void getAllFollows() throws Exception {
+        //given
+        List<User> result = List.of(new User(), new User());
+        SuccessResponse<List<User>> response = new SuccessResponse<>(result);
+
+        when(followService.getFollows(1L, GetFollowsType.ALL))
+            .thenReturn(response);
+
+        //when then
+        mockMvc.perform(
+                get("/users/{userId}/follows/all","1")
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.SUCCESS.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()))
+            .andExpect(jsonPath("$.result").isArray());
+    }
+
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
     @Test
     void parameterIsPositiveOfFollowRequestDto() throws Exception {

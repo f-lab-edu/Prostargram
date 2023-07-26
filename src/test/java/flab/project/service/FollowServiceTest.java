@@ -97,6 +97,28 @@ class FollowServiceTest {
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
     }
 
+    @DisplayName("팔로워/팔로잉 목록을 모두 한번에 가져올 수 있다")
+    @Test
+    public void getAllFollows() {
+        //given
+        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
+        FollowRequestDto followRequestDto3 = new FollowRequestDto(3L, 1L);
+        FollowRequestDto followRequestDto4 = new FollowRequestDto(4L, 1L);
+        followService.postFollow(followRequestDto1);
+        followService.postFollow(followRequestDto2);
+        followService.postFollow(followRequestDto3);
+        followService.postFollow(followRequestDto4);
+
+        //when
+        List<User> follows = followService.getFollows(1L, GetFollowsType.ALL).getResult();
+
+        //then
+        assertThat(follows).hasSize(3)
+            .extracting("userId")
+            .containsExactlyInAnyOrder(2L, 3L, 4L);
+    }
+
     @DisplayName("팔로워/팔로잉 목록을 가져온 결과가 빈 배열일 경우 result에 빈배열이 들어간 채로 반환된다.")
     @Test
     public void whenFollowMapperReturnEmptyServiceReturnEmptyList() {
