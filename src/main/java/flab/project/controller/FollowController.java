@@ -61,6 +61,22 @@ public class FollowController {
     }
 
     @Operation(
+        summary = "팔로워/팔로잉 한번에 불러오는 API",
+        description = "메인페이지의 피드위 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
+    )
+    @Parameters(
+        value = {
+            @Parameter(name = "userId", description = "팔로워목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
+        }
+    )
+    @GetMapping(value = "/users/{userId}/follows/all")
+    public BaseResponse<List<User>> getAllFollows(
+        @PathVariable("userId") Long userId
+    ) {
+        return followService.getFollows(userId, GetFollowsType.ALL);
+    }
+
+    @Operation(
         summary = "팔로워/팔로잉 생성 API"
     )
     @Parameters(
