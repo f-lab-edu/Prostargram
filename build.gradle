@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.0'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
 }
 
 group = 'flab'
@@ -30,4 +31,31 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+	reports {
+		html.enabled true
+		xml.enabled false
+		csv.enabled false
+	}
+}
+
+jacocoTestCoverageVerification {
+	// 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
+	violationRules {
+		rule {
+			element = 'CLASS'
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.00
+			}
+		}
+	}
 }
