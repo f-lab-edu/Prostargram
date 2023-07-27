@@ -51,7 +51,7 @@ class FollowControllerTest {
 
         //when
         mockMvc.perform(
-                get("/users/{userId}/follows","1")
+                get("/users/{userId}/followers","1")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isOk())

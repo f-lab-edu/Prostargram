@@ -38,7 +38,7 @@ public class FollowController {
             @Parameter(name = "userId", description = "팔로워목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
         }
     )
-    @GetMapping(value = "/users/{userId}/follows")
+    @GetMapping(value = "/users/{userId}/followers")
     public BaseResponse<List<User>> getFollowers(
         @PathVariable("userId") Long userId
     ) {
