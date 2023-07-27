@@ -1,4 +1,4 @@
-package flab.project.data.dto;
+package flab.project.data.dto.domain;
 
 public class Option {
 
