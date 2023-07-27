@@ -1,6 +1,5 @@
-package flab.project.data.dto;
+package flab.project.data.dto.domain;
 
-import flab.project.data.enums.LikeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -22,9 +21,6 @@ public class Comment {
 
     @Schema(example = "화이팅 합시다!")
     protected String content;
-
-    @Schema(example = "좋아요 또는 좋아요 취소 enum")
-    protected LikeType likeType;
 
     @Schema(example = "방금 전")
     protected String createTime;
