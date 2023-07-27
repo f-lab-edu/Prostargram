@@ -3,6 +3,7 @@ package flab.project.data.dto;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+import flab.project.config.exception.InvalidUserInput;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class FollowRequestDtoTest {
 
         //when then
         assertThatThrownBy(() -> followRequestDto.checkFromUserIdAndToUserIdSame())
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InvalidUserInput.class);
 
     }
 

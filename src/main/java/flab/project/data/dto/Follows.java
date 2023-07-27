@@ -1,4 +1,4 @@
-package flab.project.data.entity;
+package flab.project.data.dto;
 
 import lombok.Getter;
 import lombok.Setter;

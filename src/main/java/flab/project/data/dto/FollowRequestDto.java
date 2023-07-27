@@ -1,5 +1,6 @@
 package flab.project.data.dto;
 
+import flab.project.config.exception.InvalidUserInput;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class FollowRequestDto {
     //todo fromUserId와 toUserId가 서로 다른 값인지를 확인하는 로직이 Service단의 private메서드에 안들어가고 DTO에 들어가는게 맞을까?
     public void checkFromUserIdAndToUserIdSame() {
         if (getFromUserId() == getToUserId()) {
-            throw new IllegalArgumentException();
+            throw new InvalidUserInput();
         }
     }
 }

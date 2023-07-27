@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import flab.project.config.baseresponse.BaseResponse;
+import flab.project.config.exception.InvalidUserInput;
 import flab.project.data.dto.FollowRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -145,7 +146,7 @@ class FollowServiceTest {
 
     }
 
-    @DisplayName("존재하지 않는 유저에게 팔로우 요청을 보낼 경우 DataIntegrityViolationException이 발생한다.")
+    @DisplayName("존재하지 않는 유저에게 팔로우 요청을 보낼 경우 InvalidUserInput Exception이 발생한다.")
     @Test
     public void ifFollowNonExistUserThrowDataIntegrityViolationException() {
         //given
@@ -156,7 +157,7 @@ class FollowServiceTest {
 
         //when then
         assertThatThrownBy(() -> followService.postFollow(followRequestDto))
-            .isInstanceOf(DataIntegrityViolationException.class);
+            .isInstanceOf(InvalidUserInput.class);
 
 
     }
