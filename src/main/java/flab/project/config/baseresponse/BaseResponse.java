@@ -22,15 +22,4 @@ public abstract class BaseResponse<T> {
         this.message = status.getMessage();
         this.code = status.getCode();
     }
-
-    public T getResult(){
-
-        if(!(this instanceof SuccessResponse)){
-            throw new RuntimeException();
-        }
-
-        SuccessResponse<T> successResponse = (SuccessResponse<T>) this;
-        return successResponse.getResult();
-    }
-
 }

@@ -18,13 +18,13 @@ public class FollowService {
 
     private final FollowMapper followMapper;
 
-    public BaseResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
+    public SuccessResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
         List<User> result = followMapper.findAll(requestType, userId);
 
         return new SuccessResponse<>(result);
     }
 
-    public BaseResponse postFollow(FollowRequestDto followRequestDto) {
+    public SuccessResponse postFollow(FollowRequestDto followRequestDto) {
         try {
             followRequestDto.checkFromUserIdAndToUserIdSame();
 

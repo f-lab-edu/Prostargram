@@ -44,7 +44,7 @@ class FollowControllerTest {
     void getFollowers() throws Exception {
         //given
         List<User> result = List.of(new User(), new User());
-        BaseResponse<List<User>> response = new SuccessResponse<>(result);
+        SuccessResponse<List<User>> response = new SuccessResponse<>(result);
 
         when(followService.getFollows(1L, GetFollowsType.FOLLOWERS))
             .thenReturn(response);
@@ -94,10 +94,8 @@ class FollowControllerTest {
 //        when(followService.postFollow(followRequestDto)) //이렇게 하면 왜 안되지..?
         when(followService.postFollow(any(FollowRequestDto.class)))
             .thenReturn(response);
-        System.out.println("followRequestDto = " + followRequestDto);
-        System.out.println("response = " + response);
-        //when then
 
+        //when then
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
                     .content(objectMapper.writeValueAsString(followRequestDto))

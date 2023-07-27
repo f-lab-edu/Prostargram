@@ -39,7 +39,7 @@ public class FollowController {
         }
     )
     @GetMapping(value = "/users/{userId}/followers")
-    public BaseResponse<List<User>> getFollowers(
+    public SuccessResponse<List<User>> getFollowers(
         @PathVariable("userId") Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWERS);
@@ -54,7 +54,7 @@ public class FollowController {
         }
     )
     @GetMapping(value = "/users/{userId}/followings")
-    public BaseResponse<List<User>> getFollowings(
+    public SuccessResponse<List<User>> getFollowings(
         @PathVariable("userId") Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWINGS);
@@ -70,7 +70,7 @@ public class FollowController {
         }
     )
     @GetMapping(value = "/users/{userId}/follows/all")
-    public BaseResponse<List<User>> getAllFollows(
+    public SuccessResponse<List<User>> getAllFollows(
         @PathVariable("userId") Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.ALL);
@@ -94,30 +94,11 @@ public class FollowController {
                 )
             }
         ),
-//        @ApiResponse(
-//            responseCode = "400",
-//            content = {
-//                @Content(
-//                    mediaType = "application/json",
-//                    schema = @Schema(implementation = FailResponse.class)
-//                )
-//            }
-//        ),
-//        @ApiResponse(
-//            responseCode = "500",
-//            content = {
-//                @Content(
-//                    mediaType = "application/json",
-//                    schema = @Schema(implementation = FailResponse.class)
-//                )
-//            }
-//        )
     })
     @PostMapping(value = "/users/{userId}/follows")
-    public BaseResponse postFollow(
+    public SuccessResponse postFollow(
         @Valid @RequestBody FollowRequestDto followRequestDto
     ) {
-
         return followService.postFollow(followRequestDto);
     }
 
