@@ -7,7 +7,7 @@ public enum LikeType {
     private final String requestType;
 
 
-    private LikeType(String requestType) {
+    LikeType(String requestType) {
         this.requestType = requestType;
     }
 }
