@@ -54,7 +54,7 @@ public class UserController {
             }
     )
     @GetMapping(value = "/users/{userId}/options")
-    public GetOptionsResponseDto getPersonalSettings(
+    public Settings getPersonalSettings(
         @PathVariable("userId") Long userId
     ) {
         return null;
@@ -72,7 +72,7 @@ public class UserController {
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettings(
         @PathVariable("userId") Long userId,
-        PatchOptionsRequestDto updateOptionsRequestDto
+        Settings updateOptionsRequestDto
     ) {
         return "test";
     }
