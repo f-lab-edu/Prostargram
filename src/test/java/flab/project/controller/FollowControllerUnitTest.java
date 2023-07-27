@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.FollowRequestDto;
-import flab.project.data.dto.User;
+import flab.project.data.dto.model.Follows;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.service.FollowService;
 import java.util.List;
@@ -222,17 +222,17 @@ class FollowControllerUnitTest {
     @Test
     void postFollow() throws Exception {
         //given
-        FollowRequestDto followRequestDto = new FollowRequestDto(1L, 2L);
+        Follows follows = new Follows(1L, 2L);
         SuccessResponse response = new SuccessResponse();
 
 //        when(followService.postFollow(followRequestDto)) //이렇게 하면 왜 안되지..?
-        when(followService.postFollow(any(FollowRequestDto.class)))
+        when(followService.postFollow(any(Follows.class)))
             .thenReturn(response);
 
         //when then
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto))
+                    .content(objectMapper.writeValueAsString(follows))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isOk())
@@ -247,15 +247,15 @@ class FollowControllerUnitTest {
     @Test
     void parameterOfFollowRequestDtoIsPositive() throws Exception {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(-1L, 2L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, -2L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(-1L, -2L);
-        FollowRequestDto followRequestDto4 = new FollowRequestDto(0, 1L);
+        Follows follows1 = new Follows(-1L, 2L);
+        Follows follows2 = new Follows(1L, -2L);
+        Follows follows3 = new Follows(-1L, -2L);
+        Follows follows4 = new Follows(0, 1L);
 
         //when then
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto1))
+                    .content(objectMapper.writeValueAsString(follows1))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -265,7 +265,7 @@ class FollowControllerUnitTest {
 
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto2))
+                    .content(objectMapper.writeValueAsString(follows2))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -275,7 +275,7 @@ class FollowControllerUnitTest {
 
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto3))
+                    .content(objectMapper.writeValueAsString(follows3))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -285,7 +285,7 @@ class FollowControllerUnitTest {
 
         mockMvc.perform(
                 post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto4))
+                    .content(objectMapper.writeValueAsString(follows4))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())

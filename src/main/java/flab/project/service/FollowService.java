@@ -1,10 +1,9 @@
 package flab.project.service;
 
-import flab.project.config.baseresponse.BaseResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInput;
-import flab.project.data.dto.FollowRequestDto;
-import flab.project.data.dto.User;
+import flab.project.data.dto.model.Follows;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.mapper.FollowMapper;
 import java.util.List;
@@ -25,11 +24,11 @@ public class FollowService {
         return new SuccessResponse<>(result);
     }
 
-    public SuccessResponse postFollow(FollowRequestDto followRequestDto) {
+    public SuccessResponse postFollow(Follows follows) {
         try {
-            checkFromUserIdAndToUserIdSame(followRequestDto);
+            checkFromUserIdAndToUserIdSame(follows);
 
-            followMapper.postFollow(followRequestDto);
+            followMapper.postFollow(follows);
 
             return new SuccessResponse();
         } catch (InvalidUserInput e) {
@@ -49,8 +48,8 @@ public class FollowService {
             throw new RuntimeException("SEVER 에러 입니다.");
         }
     }
-    private void checkFromUserIdAndToUserIdSame(FollowRequestDto followRequestDto) {
-        if (followRequestDto.getFromUserId() == followRequestDto.getToUserId()) {
+    private void checkFromUserIdAndToUserIdSame(Follows follows) {
+        if (follows.getFromUserId() == follows.getToUserId()) {
             throw new InvalidUserInput();
         }
     }

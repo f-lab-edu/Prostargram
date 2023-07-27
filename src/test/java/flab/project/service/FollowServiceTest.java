@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import flab.project.config.baseresponse.BaseResponse;
 import flab.project.config.exception.InvalidUserInput;
-import flab.project.data.dto.FollowRequestDto;
-import flab.project.data.dto.User;
+import flab.project.data.dto.model.Follows;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.mapper.FollowMapper;
 import java.util.List;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +35,12 @@ class FollowServiceTest {
     @Test
     public void createFollowing() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(1L, 4L);
-        followService.postFollow(followRequestDto1);
-        followService.postFollow(followRequestDto2);
-        followService.postFollow(followRequestDto3);
+        Follows follows1 = new Follows(1L, 2L);
+        Follows follows2 = new Follows(1L, 3L);
+        Follows follows3 = new Follows(1L, 4L);
+        followService.postFollow(follows1);
+        followService.postFollow(follows2);
+        followService.postFollow(follows3);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWINGS).getResult();
@@ -56,10 +55,10 @@ class FollowServiceTest {
     @Test
     public void createFollowing2() {
         //given
-        FollowRequestDto followRequestDto = new FollowRequestDto(1L, 2L);
+        Follows follows = new Follows(1L, 2L);
 
         //when
-        BaseResponse baseResponse = followService.postFollow(followRequestDto);
+        BaseResponse baseResponse = followService.postFollow(follows);
 
         //then
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
@@ -69,12 +68,12 @@ class FollowServiceTest {
     @Test
     public void createFollowers() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(2L, 1L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(3L, 1L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(4L, 1L);
-        followService.postFollow(followRequestDto1);
-        followService.postFollow(followRequestDto2);
-        followService.postFollow(followRequestDto3);
+        Follows follows1 = new Follows(2L, 1L);
+        Follows follows2 = new Follows(3L, 1L);
+        Follows follows3 = new Follows(4L, 1L);
+        followService.postFollow(follows1);
+        followService.postFollow(follows2);
+        followService.postFollow(follows3);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWERS).getResult();
@@ -89,10 +88,10 @@ class FollowServiceTest {
     @Test
     public void createFollower() {
         //given
-        FollowRequestDto followRequestDto = new FollowRequestDto(2L, 1L);
+        Follows follows = new Follows(2L, 1L);
 
         //when
-        BaseResponse baseResponse = followService.postFollow(followRequestDto);
+        BaseResponse baseResponse = followService.postFollow(follows);
 
         //then
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
@@ -102,14 +101,14 @@ class FollowServiceTest {
     @Test
     public void getAllFollows() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(3L, 1L);
-        FollowRequestDto followRequestDto4 = new FollowRequestDto(4L, 1L);
-        followService.postFollow(followRequestDto1);
-        followService.postFollow(followRequestDto2);
-        followService.postFollow(followRequestDto3);
-        followService.postFollow(followRequestDto4);
+        Follows follows1 = new Follows(1L, 2L);
+        Follows follows2 = new Follows(1L, 3L);
+        Follows follows3 = new Follows(3L, 1L);
+        Follows follows4 = new Follows(4L, 1L);
+        followService.postFollow(follows1);
+        followService.postFollow(follows2);
+        followService.postFollow(follows3);
+        followService.postFollow(follows4);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.ALL).getResult();
@@ -135,12 +134,12 @@ class FollowServiceTest {
     @Test
     public void ifFollowRequestWhenFollowingThrowDuplicateKeyException() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(2L, 1L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(2L, 1L);
+        Follows follows1 = new Follows(2L, 1L);
+        Follows follows2 = new Follows(2L, 1L);
 
         //when then
-        followService.postFollow(followRequestDto1);
-        assertThatThrownBy(() -> followService.postFollow(followRequestDto2))
+        followService.postFollow(follows1);
+        assertThatThrownBy(() -> followService.postFollow(follows2))
             .isInstanceOf(RuntimeException.class);
 
 
@@ -153,10 +152,10 @@ class FollowServiceTest {
         long nonExistUserId1 = 9999L;
         long nonExistUserId2 = 10000L;
 
-        FollowRequestDto followRequestDto = new FollowRequestDto(nonExistUserId1, nonExistUserId2);
+        Follows follows = new Follows(nonExistUserId1, nonExistUserId2);
 
         //when then
-        assertThatThrownBy(() -> followService.postFollow(followRequestDto))
+        assertThatThrownBy(() -> followService.postFollow(follows))
             .isInstanceOf(InvalidUserInput.class);
 
 

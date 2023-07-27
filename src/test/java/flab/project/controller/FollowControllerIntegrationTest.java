@@ -1,7 +1,6 @@
 package flab.project.controller;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -9,10 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.exception.InvalidUserInput;
-import flab.project.data.dto.FollowRequestDto;
+import flab.project.data.dto.model.Follows;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +39,12 @@ public class FollowControllerIntegrationTest {
     @Test
     void parameterUserIdOfFollowRequestDtoIsPositive() throws Exception {
         //given
-        FollowRequestDto followRequestDto = new FollowRequestDto(1L, 1L);
+        Follows follows = new Follows(1L, 1L);
 
         //when, Then
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto))
+                    .content(objectMapper.writeValueAsString(follows))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -64,12 +61,12 @@ public class FollowControllerIntegrationTest {
         long nonExistUserId1 = 99;
         long nonExistUserId2 = 100;
 
-        FollowRequestDto followRequestDto = new FollowRequestDto(nonExistUserId1, nonExistUserId2);
+        Follows follows = new Follows(nonExistUserId1, nonExistUserId2);
 
         //when, Then
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto))
+                    .content(objectMapper.writeValueAsString(follows))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -82,13 +79,13 @@ public class FollowControllerIntegrationTest {
     @Test
     void CanNotDuplicateRequest() throws Exception {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
+        Follows follows1 = new Follows(1L, 2L);
 
-        followController.postFollow(followRequestDto1);
+        followController.postFollow(follows1);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(followRequestDto1))
+                    .content(objectMapper.writeValueAsString(follows1))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isInternalServerError())

@@ -1,8 +1,8 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.FollowRequestDto;
-import flab.project.data.dto.User;
+import flab.project.data.dto.model.Follows;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,8 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -100,9 +98,9 @@ public class FollowController {
     })
     @PostMapping(value = "/users/{userId}/follows")
     public SuccessResponse postFollow(
-        @Valid @RequestBody FollowRequestDto followRequestDto
+        @Valid @RequestBody Follows follows
     ) {
-        return followService.postFollow(followRequestDto);
+        return followService.postFollow(follows);
     }
 
 
@@ -116,7 +114,7 @@ public class FollowController {
     )
     @DeleteMapping(value = "/users/{userId}/follows")
     public String deleteFollow(
-        FollowRequestDto followRequestDto
+        Follows follows
     ) {
         return "test";
     }

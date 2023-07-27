@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.data.dto.*;
+import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 
 import flab.project.service.UserService;

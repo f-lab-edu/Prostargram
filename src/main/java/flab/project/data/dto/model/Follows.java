@@ -1,4 +1,4 @@
-package flab.project.data.dto;
+package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Positive;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @Schema(description = "팔로워/팔로잉 추가 DTO")
-public class FollowRequestDto {
+public class Follows {
 
     @Positive
     @Schema(example = "10")

@@ -1,10 +1,9 @@
 package flab.project.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-import flab.project.data.dto.FollowRequestDto;
-import flab.project.data.dto.User;
+import flab.project.data.dto.model.Follows;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -26,12 +25,12 @@ class FollowMapperTest {
     @Test
     public void findFollowings() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(1L, 4L);
-        followMapper.postFollow(followRequestDto1);
-        followMapper.postFollow(followRequestDto2);
-        followMapper.postFollow(followRequestDto3);
+        Follows follows1 = new Follows(1L, 2L);
+        Follows follows2 = new Follows(1L, 3L);
+        Follows follows3 = new Follows(1L, 4L);
+        followMapper.postFollow(follows1);
+        followMapper.postFollow(follows2);
+        followMapper.postFollow(follows3);
 
         //when
         List<User> followings = followMapper.findAll(GetFollowsType.FOLLOWINGS, 1L);
@@ -46,12 +45,12 @@ class FollowMapperTest {
     @Test
     public void findFollowers() {
         //given
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(2L, 1L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(3L, 1L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(4L, 1L);
-        followMapper.postFollow(followRequestDto1);
-        followMapper.postFollow(followRequestDto2);
-        followMapper.postFollow(followRequestDto3);
+        Follows follows1 = new Follows(2L, 1L);
+        Follows follows2 = new Follows(3L, 1L);
+        Follows follows3 = new Follows(4L, 1L);
+        followMapper.postFollow(follows1);
+        followMapper.postFollow(follows2);
+        followMapper.postFollow(follows3);
 
         //when
         List<User> followings = followMapper.findAll(GetFollowsType.FOLLOWERS, 1L);
@@ -66,14 +65,14 @@ class FollowMapperTest {
     @Test
     public void findAllFollows() {
 
-        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 2L);
-        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
-        FollowRequestDto followRequestDto3 = new FollowRequestDto(3L, 1L);
-        FollowRequestDto followRequestDto4 = new FollowRequestDto(4L, 1L);
-        followMapper.postFollow(followRequestDto1);
-        followMapper.postFollow(followRequestDto2);
-        followMapper.postFollow(followRequestDto3);
-        followMapper.postFollow(followRequestDto4);
+        Follows follows1 = new Follows(1L, 2L);
+        Follows follows2 = new Follows(1L, 3L);
+        Follows follows3 = new Follows(3L, 1L);
+        Follows follows4 = new Follows(4L, 1L);
+        followMapper.postFollow(follows1);
+        followMapper.postFollow(follows2);
+        followMapper.postFollow(follows3);
+        followMapper.postFollow(follows4);
 
         //when
         List<User> follows = followMapper.findAll(GetFollowsType.ALL,1L);

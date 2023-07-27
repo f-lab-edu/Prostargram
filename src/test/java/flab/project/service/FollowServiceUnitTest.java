@@ -4,14 +4,13 @@ package flab.project.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import flab.project.config.exception.InvalidUserInput;
-import flab.project.data.dto.FollowRequestDto;
+import flab.project.data.dto.model.Follows;
 import flab.project.mapper.FollowMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 
 @WebMvcTest(controllers = FollowService.class)
 class FollowServiceUnitTest {
@@ -26,9 +25,9 @@ class FollowServiceUnitTest {
     @Test
     void followRequestDtoParameterIsNotSame(){
         //given
-        FollowRequestDto followRequestDto = new FollowRequestDto(1L, 1L);
+        Follows follows = new Follows(1L, 1L);
         // when then
-        assertThatThrownBy(() -> followService.postFollow(followRequestDto))
+        assertThatThrownBy(() -> followService.postFollow(follows))
             .isInstanceOf(InvalidUserInput.class);
     }
 }
