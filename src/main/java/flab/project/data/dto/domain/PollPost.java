@@ -1,6 +1,5 @@
 package flab.project.data.dto.domain;
 
-import flab.project.data.dto.Option;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@Schema(description = "통계 피드 Dto")
+@Schema(description = "통계 게시물 Dto")
 public class PollPost extends BasePost {
 
     private final List<Option> options;
