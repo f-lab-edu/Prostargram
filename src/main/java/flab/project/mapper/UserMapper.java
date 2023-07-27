@@ -1,6 +1,6 @@
 package flab.project.mapper;
 
-import flab.project.data.dto.User;
+import flab.project.data.dto.domain.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
