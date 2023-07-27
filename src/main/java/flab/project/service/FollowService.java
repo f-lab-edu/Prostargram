@@ -27,9 +27,11 @@ public class FollowService {
 
     public SuccessResponse postFollow(FollowRequestDto followRequestDto) {
         try {
-            followRequestDto.checkFromUserIdAndToUserIdSame();
+            checkFromUserIdAndToUserIdSame(followRequestDto);
 
             followMapper.postFollow(followRequestDto);
+
+            return new SuccessResponse();
         } catch (InvalidUserInput e) {
             e.printStackTrace();
             throw new InvalidUserInput("fromUserId와 toUserId는 같을 수 없습니다.");
@@ -46,8 +48,10 @@ public class FollowService {
             e.printStackTrace();
             throw new RuntimeException("SEVER 에러 입니다.");
         }
-
-        return new SuccessResponse();
     }
-
+    private void checkFromUserIdAndToUserIdSame(FollowRequestDto followRequestDto) {
+        if (followRequestDto.getFromUserId() == followRequestDto.getToUserId()) {
+            throw new InvalidUserInput();
+        }
+    }
 }
