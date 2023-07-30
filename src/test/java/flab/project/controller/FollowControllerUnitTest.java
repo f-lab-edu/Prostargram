@@ -226,7 +226,7 @@ class FollowControllerUnitTest {
         SuccessResponse response = new SuccessResponse();
 
 //        when(followService.postFollow(followRequestDto)) //이렇게 하면 왜 안되지..?
-        when(followService.postFollow(any(Follows.class)))
+        when(followService.addFollow(any(Follows.class)))
             .thenReturn(response);
 
         //when then

@@ -97,10 +97,10 @@ public class FollowController {
         ),
     })
     @PostMapping(value = "/users/{userId}/follows")
-    public SuccessResponse postFollow(
+    public SuccessResponse addFollow(
         @Valid @RequestBody Follows follows
     ) {
-        return followService.postFollow(follows);
+        return followService.addFollow(follows);
     }
 
 

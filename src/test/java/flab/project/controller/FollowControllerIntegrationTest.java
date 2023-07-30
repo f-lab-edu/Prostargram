@@ -81,7 +81,7 @@ public class FollowControllerIntegrationTest {
         //given
         Follows follows1 = new Follows(1L, 2L);
 
-        followController.postFollow(follows1);
+        followController.addFollow(follows1);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users/{userId}/follows", "1")

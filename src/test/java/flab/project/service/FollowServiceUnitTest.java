@@ -3,7 +3,7 @@ package flab.project.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import flab.project.config.exception.InvalidUserInput;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.Follows;
 import flab.project.mapper.FollowMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ class FollowServiceUnitTest {
         //given
         Follows follows = new Follows(1L, 1L);
         // when then
-        assertThatThrownBy(() -> followService.postFollow(follows))
-            .isInstanceOf(InvalidUserInput.class);
+        assertThatThrownBy(() -> followService.addFollow(follows))
+            .isInstanceOf(InvalidUserInputException.class);
     }
 }

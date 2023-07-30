@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import flab.project.config.baseresponse.BaseResponse;
-import flab.project.config.exception.InvalidUserInput;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.Follows;
 import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -38,9 +38,9 @@ class FollowServiceTest {
         Follows follows1 = new Follows(1L, 2L);
         Follows follows2 = new Follows(1L, 3L);
         Follows follows3 = new Follows(1L, 4L);
-        followService.postFollow(follows1);
-        followService.postFollow(follows2);
-        followService.postFollow(follows3);
+        followService.addFollow(follows1);
+        followService.addFollow(follows2);
+        followService.addFollow(follows3);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWINGS).getResult();
@@ -58,7 +58,7 @@ class FollowServiceTest {
         Follows follows = new Follows(1L, 2L);
 
         //when
-        BaseResponse baseResponse = followService.postFollow(follows);
+        BaseResponse baseResponse = followService.addFollow(follows);
 
         //then
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
@@ -71,9 +71,9 @@ class FollowServiceTest {
         Follows follows1 = new Follows(2L, 1L);
         Follows follows2 = new Follows(3L, 1L);
         Follows follows3 = new Follows(4L, 1L);
-        followService.postFollow(follows1);
-        followService.postFollow(follows2);
-        followService.postFollow(follows3);
+        followService.addFollow(follows1);
+        followService.addFollow(follows2);
+        followService.addFollow(follows3);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.FOLLOWERS).getResult();
@@ -91,7 +91,7 @@ class FollowServiceTest {
         Follows follows = new Follows(2L, 1L);
 
         //when
-        BaseResponse baseResponse = followService.postFollow(follows);
+        BaseResponse baseResponse = followService.addFollow(follows);
 
         //then
         assertThat(baseResponse).extracting("isSuccess").isEqualTo(true);
@@ -105,10 +105,10 @@ class FollowServiceTest {
         Follows follows2 = new Follows(1L, 3L);
         Follows follows3 = new Follows(3L, 1L);
         Follows follows4 = new Follows(4L, 1L);
-        followService.postFollow(follows1);
-        followService.postFollow(follows2);
-        followService.postFollow(follows3);
-        followService.postFollow(follows4);
+        followService.addFollow(follows1);
+        followService.addFollow(follows2);
+        followService.addFollow(follows3);
+        followService.addFollow(follows4);
 
         //when
         List<User> follows = followService.getFollows(1L, GetFollowsType.ALL).getResult();
@@ -138,8 +138,8 @@ class FollowServiceTest {
         Follows follows2 = new Follows(2L, 1L);
 
         //when then
-        followService.postFollow(follows1);
-        assertThatThrownBy(() -> followService.postFollow(follows2))
+        followService.addFollow(follows1);
+        assertThatThrownBy(() -> followService.addFollow(follows2))
             .isInstanceOf(RuntimeException.class);
 
 
@@ -155,8 +155,8 @@ class FollowServiceTest {
         Follows follows = new Follows(nonExistUserId1, nonExistUserId2);
 
         //when then
-        assertThatThrownBy(() -> followService.postFollow(follows))
-            .isInstanceOf(InvalidUserInput.class);
+        assertThatThrownBy(() -> followService.addFollow(follows))
+            .isInstanceOf(InvalidUserInputException.class);
 
 
     }
