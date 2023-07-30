@@ -28,9 +28,9 @@ class FollowMapperTest {
         Follows follows1 = new Follows(1L, 2L);
         Follows follows2 = new Follows(1L, 3L);
         Follows follows3 = new Follows(1L, 4L);
-        followMapper.postFollow(follows1);
-        followMapper.postFollow(follows2);
-        followMapper.postFollow(follows3);
+        followMapper.addFollow(follows1);
+        followMapper.addFollow(follows2);
+        followMapper.addFollow(follows3);
 
         //when
         List<User> followings = followMapper.findAll(GetFollowsType.FOLLOWINGS, 1L);
@@ -48,9 +48,9 @@ class FollowMapperTest {
         Follows follows1 = new Follows(2L, 1L);
         Follows follows2 = new Follows(3L, 1L);
         Follows follows3 = new Follows(4L, 1L);
-        followMapper.postFollow(follows1);
-        followMapper.postFollow(follows2);
-        followMapper.postFollow(follows3);
+        followMapper.addFollow(follows1);
+        followMapper.addFollow(follows2);
+        followMapper.addFollow(follows3);
 
         //when
         List<User> followings = followMapper.findAll(GetFollowsType.FOLLOWERS, 1L);
@@ -69,10 +69,10 @@ class FollowMapperTest {
         Follows follows2 = new Follows(1L, 3L);
         Follows follows3 = new Follows(3L, 1L);
         Follows follows4 = new Follows(4L, 1L);
-        followMapper.postFollow(follows1);
-        followMapper.postFollow(follows2);
-        followMapper.postFollow(follows3);
-        followMapper.postFollow(follows4);
+        followMapper.addFollow(follows1);
+        followMapper.addFollow(follows2);
+        followMapper.addFollow(follows3);
+        followMapper.addFollow(follows4);
 
         //when
         List<User> follows = followMapper.findAll(GetFollowsType.ALL,1L);

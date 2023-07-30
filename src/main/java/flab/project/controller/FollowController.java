@@ -113,9 +113,9 @@ public class FollowController {
         }
     )
     @DeleteMapping(value = "/users/{userId}/follows")
-    public String deleteFollow(
-        Follows follows
+    public SuccessResponse deleteFollow(
+        @Valid @RequestBody Follows follows
     ) {
-        return "test";
+        return followService.deleteFollow(follows);
     }
 }

@@ -45,8 +45,13 @@
         </choose>
     </select>
 
-    <insert id="postFollow" parameterType="FollowRequestDto">
+    <insert id="addFollow" parameterType="Follows">
         INSERT INTO FOLLOWS(from_user_id, to_user_id)
         VALUES (#{followRequestDto.fromUserId},#{followRequestDto.toUserId});
+    </insert>
+
+    <insert id="deleteFollow" parameterType="Follows">
+        DELETE FROM FOLLOWS
+        WHERE from_user_id=#{followRequestDto.fromUserId} and to_user_id=#{followRequestDto.toUserId};
     </insert>
 </mapper>

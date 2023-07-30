@@ -37,7 +37,7 @@ public class FollowControllerIntegrationTest {
 
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId에는 같은 값이 올 수 없다.")
     @Test
-    void parameterUserIdOfFollowRequestDtoIsPositive() throws Exception {
+    void parameterUserIdOfFollowRequestDtoIsPositiveInAddFollow() throws Exception {
         //given
         Follows follows = new Follows(1L, 1L);
 
@@ -56,7 +56,7 @@ public class FollowControllerIntegrationTest {
 
     @DisplayName("팔로워/팔로잉을 생성할 때, 존재하지 않는 userId가 입력될 수 없다.")
     @Test
-    void parameterUserIdOfFollowRequestDtoMustExist() throws Exception {
+    void parameterUserIdOfFollowRequestDtoMustExistInAddFollow() throws Exception {
         //given
         long nonExistUserId1 = 99;
         long nonExistUserId2 = 100;
@@ -66,6 +66,46 @@ public class FollowControllerIntegrationTest {
         //when, Then
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/users/{userId}/follows", "1")
+                    .content(objectMapper.writeValueAsString(follows))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("팔로워/팔로잉을 삭제할 때, fromUserId와 toUserId에는 같은 값이 올 수 없다.")
+    @Test
+    void parameterUserIdOfFollowRequestDtoIsPositiveInRemoveFollow() throws Exception {
+        //given
+        Follows follows = new Follows(1L, 1L);
+
+        //when, Then
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/users/{userId}/follows", "1")
+                    .content(objectMapper.writeValueAsString(follows))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+    }
+
+    @DisplayName("팔로워/팔로잉을 삭제할 때, 존재하지 않는 userId가 입력될 수 없다.")
+    @Test
+    void parameterUserIdOfFollowRequestDtoMustExistInRemoveFollow() throws Exception {
+        //given
+        long nonExistUserId1 = 99;
+        long nonExistUserId2 = 100;
+
+        Follows follows = new Follows(nonExistUserId1, nonExistUserId2);
+
+        //when, Then
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/users/{userId}/follows", "1")
                     .content(objectMapper.writeValueAsString(follows))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())

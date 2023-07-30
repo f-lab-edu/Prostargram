@@ -24,7 +24,7 @@ public class ApiControllerAdvice {
         ConstraintViolationException.class,
         MethodArgumentTypeMismatchException.class
     })
-    public FailResponse exceptionResolveToInvalidUserInput(BindException e) {
+    public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         System.out.println("ApiControllerAdvice.exceptionResolveToInvalidUserInput");
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }

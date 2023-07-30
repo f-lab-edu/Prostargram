@@ -28,7 +28,7 @@ public class FollowService {
         try {
             checkFromUserIdAndToUserIdSame(follows);
 
-            followMapper.postFollow(follows);
+            followMapper.addFollow(follows);
 
             return new SuccessResponse();
         } catch (InvalidUserInputException e) {
@@ -48,9 +48,25 @@ public class FollowService {
             throw new RuntimeException("SERVER 에러 입니다.");
         }
     }
+
     private void checkFromUserIdAndToUserIdSame(Follows follows) {
         if (follows.getFromUserId() == follows.getToUserId()) {
             throw new InvalidUserInputException();
+        }
+    }
+
+    public SuccessResponse deleteFollow(Follows follows) {
+        try {
+            checkFromUserIdAndToUserIdSame(follows);
+
+            followMapper.deleteFollow(follows);
+
+            return new SuccessResponse<>();
+        } catch (InvalidUserInputException e) {
+            e.printStackTrace();
+            throw new InvalidUserInputException("fromUserId와 toUserId는 같을 수 없습니다.");
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 }
