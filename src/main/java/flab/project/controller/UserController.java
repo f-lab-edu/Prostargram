@@ -1,5 +1,6 @@
 package flab.project.controller;
 
+import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.*;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -116,11 +118,11 @@ public class UserController {
         summary = "프로필 수정하기 API"
     )
     @PatchMapping(value = "/users/{userId}/profile-info")
-    public String updateProfile(
-        @Positive long userId,
-        @RequestBody Profile updateProfileRequestDto
+    public SuccessResponse updateProfile(
+        @Validated @Positive @PathVariable long userId,
+        @RequestBody Profile updateProfileDto
     ) {
-        return "test";
+        return userService.updateProfile(updateProfileDto);
     }
 
     @Operation(
