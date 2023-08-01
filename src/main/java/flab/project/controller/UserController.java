@@ -6,6 +6,7 @@ import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.enums.requestparam.PutFollowType;
 
 import flab.project.service.UserService;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -113,9 +115,10 @@ public class UserController {
     @Operation(
         summary = "프로필 수정하기 API"
     )
-    @PatchMapping(value = "/users/profile-info")
+    @PatchMapping(value = "/users/{userId}/profile-info")
     public String updateProfile(
-        Profile updateProfileRequestDto
+        @Positive long userId,
+        @RequestBody Profile updateProfileRequestDto
     ) {
         return "test";
     }
