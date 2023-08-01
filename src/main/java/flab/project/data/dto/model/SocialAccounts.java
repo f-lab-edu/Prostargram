@@ -1,5 +1,6 @@
 package flab.project.data.dto.model;
 
+import flab.project.config.exception.InvalidUserInputException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class SocialAccounts {
     }
 
     //todo 얘는 Converter? Formatter? 그쪽 강의 들으면 더 좋은 방법이 나올듯?
+    //todo 이것도 프론트에서 한 번 Filtering을 해주는게 좋겠지?
     public String getDomain() {
         String linkUrl = getLinkUrl();
         String regex = "(?:https?://)?(?:www\\.)?([^/.]+)";
@@ -26,8 +28,7 @@ public class SocialAccounts {
             String group = matcher.group(1);
             return group;
         }else{
-            System.out.println("어이가 없네");
-            throw new RuntimeException();
+            throw new InvalidUserInputException();
         }
     }
 

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface HashtagMapper {
-    List<String> retrieveHashtagsIn(@Param("interests") List<String> interests);
+    List<String> retrieveHashtagsIn(@Param("hashtags") List<String> hashtags);
 
     void insertAll(@Param("hashtags") List<String> hashtags);
 }

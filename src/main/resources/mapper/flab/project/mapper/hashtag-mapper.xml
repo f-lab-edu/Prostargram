@@ -8,8 +8,8 @@
     SELECT name FROM HASHTAGS
     <where>
       name IN
-      <foreach item="interestName" collection="interests" open="(" separator="," close=")">
-        #{interestName}
+      <foreach item="hashtag" collection="hashtags" open="(" separator="," close=")">
+        #{hashtag}
       </foreach>
     </where>
   </select>

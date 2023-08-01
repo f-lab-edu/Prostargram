@@ -9,7 +9,7 @@ public interface InterestMapper {
 
     List<String> findAllByUserId(@Param("userId") long userId);
 
-    void insertAllIn(@Param("userId") long userId, @Param("userId") List<String> interests);
+    void insertAllIn(@Param("userId") long userId, @Param("interests") List<String> interests);
 
-    void deleteAllIn(@Param("userId") long userId, @Param("userId") List<String> toDeleteInterests);
+    void deleteAllIn(@Param("userId") long userId, @Param("interests") List<String> interests);
 }
