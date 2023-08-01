@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.HyperLinkMapper">
+
+  <select id="findAllByUserId" resultType="string">
+    SELECT
+      HL.link
+    FROM HYPER_LINK AS HL
+    WHERE user_id = #{userId};
+
+  </select>
+
+  <insert id="insertAll">
+    INSERT INTO HYPER_LINK(icon_id, user_id, link)
+    <foreach item="account" collection="toAddSocialAccounts" separator=",">
+      VALUES(#{account.iconId},#{userId},#{account.linkUrl})
+    </foreach>
+  </insert>
+
+  <delete id="deleteAll">
+    DELETE FROM HYPER_LINK
+    <where>
+      link IN
+      <foreach item="account" collection="toDeleteSocialAccounts" open="(" separator="," close=")">
+        #{account.linkUrl}
+      </foreach>
+      AND user_id=#{userId}
+    </where>
+  </delete>
+</mapper>

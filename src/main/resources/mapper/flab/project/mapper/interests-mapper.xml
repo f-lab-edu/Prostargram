@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.InterestMapper">
+
+  <select id="findAllByUserId" resultType="string">
+    SELECT H.name
+    FROM INTERESTS
+           JOIN HASHTAGS H on INTERESTS.name = H.name
+    WHERE INTERESTS.user_id = #{userId};
+  </select>
+
+  <insert id="insertAllIn">
+    INSERT INTO INTERESTS(user_id,name)
+    <foreach item="interest" collection="interests" separator=",">
+      VALUES(#{userId},#{interest})
+    </foreach>
+  </insert>
+
+  <delete id="deleteAllIn">
+    DELETE FROM INTERESTS
+    <where>
+      name IN
+      <foreach item="interest" collection="interests" open="(" separator="," close=")">
+        #{interest}
+      </foreach>
+      AND user_id=#{userId}
+    </where>
+  </delete>
+</mapper>

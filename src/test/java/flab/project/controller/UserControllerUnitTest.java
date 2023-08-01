@@ -1,8 +1,8 @@
 package flab.project.controller;
 
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.Profile;
+import flab.project.data.dto.model.Profile;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ class UserControllerUnitTest {
     @Test
     public void userIdIsPositiveWhenUpdateProfile() throws Exception {
         //given
-        long userId=1;
+        long userId = 1;
         Profile profile = new Profile();
 
-        when(userService.updateProfile(any(Profile.class)))
+        when(userService.updateProfile(eq(userId), any(Profile.class)))
             .thenReturn(new SuccessResponse<>());
 
         //when then
@@ -61,10 +61,10 @@ class UserControllerUnitTest {
     @Test
     public void userIdCannotNegativeWhenUpdateProfile() throws Exception {
         //given
-        long userId=-100;
+        long userId = -100;
         Profile profile = new Profile();
 
-        when(userService.updateProfile(any(Profile.class)))
+        when(userService.updateProfile(eq(userId), any(Profile.class)))
             .thenReturn(new SuccessResponse<>());
 
         //when then

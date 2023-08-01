@@ -31,5 +31,15 @@
             </when>
         </choose>
     </select>
-
+<!--    todo 이거 쉼표 때문에 버그 날 수도 있을듯?-->
+    <update id="updateProfile" parameterType="flab.project.data.dto.model.Profile">
+        UPDATE USERS
+        <set>
+            <if test="updateProfileDto.userName != null">user_name=#{updateProfileDto.userName},</if>
+            <if test="updateProfileDto.profileImgUrl!= null">profile_img_url=#{updateProfileDto.profileImgUrl},</if>
+            <if test="updateProfileDto.selfIntroduction!= null">self_introduction=#{updateProfileDto.selfIntroduction},</if>
+            <if test="updateProfileDto.department!= null">department=#{updateProfileDto.department},</if>
+        </set>
+        WHERE user_id=#{userId}
+    </update>
 </mapper>
