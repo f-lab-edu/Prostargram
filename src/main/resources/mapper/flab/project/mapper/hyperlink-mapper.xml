@@ -5,17 +5,16 @@
 <mapper namespace="flab.project.mapper.HyperLinkMapper">
 
   <select id="findAllByUserId" resultType="string">
-    SELECT
-      HL.link
+    SELECT HL.link
     FROM HYPER_LINK AS HL
     WHERE user_id = #{userId};
 
   </select>
 
   <insert id="insertAll">
-    INSERT INTO HYPER_LINK(icon_id, user_id, link)
+    INSERT INTO HYPER_LINK(icon_id, user_id, link) VALUES
     <foreach item="account" collection="toAddSocialAccounts" separator=",">
-      VALUES(#{account.iconId},#{userId},#{account.linkUrl})
+      (#{account.iconId},#{userId},#{account.linkUrl})
     </foreach>
   </insert>
 

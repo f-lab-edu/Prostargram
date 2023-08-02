@@ -1,15 +1,11 @@
 package flab.project.data.dto.model;
 
-import flab.project.data.dto.User;
-import flab.project.data.dto.model.HashTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
-import java.util.Set;
 import lombok.Getter;
 
 import java.util.List;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 @Getter

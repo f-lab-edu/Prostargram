@@ -12,9 +12,9 @@
   </select>
 
   <insert id="insertAllIn">
-    INSERT INTO INTERESTS(user_id,name)
+    INSERT INTO INTERESTS(user_id,name)VALUES
     <foreach item="interest" collection="interests" separator=",">
-      VALUES(#{userId},#{interest})
+      (#{userId},#{interest})
     </foreach>
   </insert>
 

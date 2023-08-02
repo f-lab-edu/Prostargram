@@ -3,11 +3,13 @@ package flab.project.controller;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.*;
 import flab.project.data.dto.model.Profile;
+import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.enums.requestparam.PutFollowType;
 
 import flab.project.service.UserService;
+import flab.project.userfacade.UserFacade;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +31,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserFacade userFacade;
 
 
     @Operation(
@@ -124,7 +127,7 @@ public class UserController {
         @Validated @RequestBody Profile updateProfileDto
         //todo interests에는 #을 붙여서 전송해줘야 한다는 내용을 Swagger에 추가해줘야함.
     ) {
-        return userService.updateProfile(userId, updateProfileDto);
+        return userFacade.updateProfile(userId, updateProfileDto);
     }
 
     @Operation(

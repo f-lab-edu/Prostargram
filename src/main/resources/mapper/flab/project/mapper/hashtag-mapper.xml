@@ -15,9 +15,9 @@
   </select>
 
   <insert id="insertAll">
-    INSERT INTO HASHTAGS(name)
+    INSERT INTO HASHTAGS(name) VALUES
     <foreach item="hashtag" collection="hashtags" separator=",">
-      VALUES(#{hashtag})
+      (#{hashtag})
     </foreach>
   </insert>
 </mapper>
