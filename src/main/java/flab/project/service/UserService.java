@@ -31,26 +31,6 @@ public class UserService {
 
         return result;
     }
-    //todo 이친구들이 Validatoion을 하는 하나의 클래스가 되는건 어떨까?
-    private void checkValidation(Profile updateProfileDto) {
-        checkValidInterestFormat(updateProfileDto.getInterests());
-    }
-
-    private void checkValidInterestFormat(List<String> interests) {
-        if (ObjectUtils.isEmpty(interests)) {
-            return;
-        }
-
-        boolean isValid = interests.stream()
-            .allMatch(
-                interest
-                    -> StringUtils.startsWith(interest, "#")
-            );
-
-        if (!isValid) {
-            throw new InvalidUserInputException("모든 해시태그는 #이 붙은 채로 서버로 전송되어야 한다.");
-        }
-    }
 
     public void updateUserTable(long userId, Profile updateProfileDto) {
         if (updateProfileDto.hasProfileFiled()) {

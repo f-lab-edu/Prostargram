@@ -22,7 +22,6 @@ public class InterestsDelta {
         this.existingInterests = existingInterests;
         this.toAddInterests = extractToAddInterests(receivedInterests);
         this.toDeleteInterests = extractToDeleteInterests(receivedInterests);
-//        this.nonExistingInterestsInHashTag = nonExistingInterestsInHashTag; // todo 이건 좀 생각을 해봐야징..
     }
 
     private List<String> extractToAddInterests(List<String> receivedInterests) {
