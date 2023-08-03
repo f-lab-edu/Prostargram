@@ -8,5 +8,4 @@ public class User extends BasicUser {
 
     @Schema(example = "카카오")
     private String departmentName;
-
 }

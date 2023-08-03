@@ -30,5 +30,4 @@ public class Comment {
 
     @Schema(example = "14", defaultValue = "0")
     protected long commentCount;
-
 }

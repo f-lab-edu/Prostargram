@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Schema(description = "기본 게시물 Dto")
-public class BasePost {
+public abstract class BasePost {
 
     @Schema(example = "1")
     protected final long userId;
