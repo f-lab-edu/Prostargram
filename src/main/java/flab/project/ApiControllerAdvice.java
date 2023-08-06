@@ -2,6 +2,7 @@ package flab.project;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
+import flab.project.config.exception.InputBadWordException;
 import flab.project.config.exception.InvalidUserInputException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +29,12 @@ public class ApiControllerAdvice {
         System.out.println("ApiControllerAdvice.exceptionResolveToInvalidUserInput");
         e.printStackTrace();
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InputBadWordException.class)
+    public FailResponse exceptionResolveInputBadWordException(InputBadWordException e) {
+        System.out.println("ApiControllerAdvice.exceptionResolveInputBadWordException");
+        return new FailResponse(ResponseEnum.BAD_WORD_INPUT);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

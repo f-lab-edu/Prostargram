@@ -8,6 +8,6 @@ import lombok.Getter;
 public class User extends BasicUser {
 
     @Schema(example = "카카오")
-    private String departmentName;
+    protected String departmentName;
 
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 public class Profile extends User {
     private final int TOTAL_SOCIAL_ACCOUNT_MAX_SIZE = 3;
     private final int TOTAL_INTEREST_MAX_SIZE = 10;
+    private final int TARGET_OF_BAD_WORD_FILTER_MAX_SIZE =16;
     private final int INTEREST_MAX_LENGTH=15;
     @Schema(example = "백엔드 엔지니어 정민욱입니다.")
     private String selfIntroduction;
@@ -39,5 +41,19 @@ public class Profile extends User {
 
     public boolean hasSocialAccounts() {
         return !CollectionUtils.isEmpty(getSocialAccounts());
+    }
+
+    public List<String> getTargetBadWordFilter() {
+
+        List<String> targets = new ArrayList<>(TARGET_OF_BAD_WORD_FILTER_MAX_SIZE);
+
+        targets.add(selfIntroduction);
+        targets.add(departmentName);
+        targets.add(userName);
+
+        targets.addAll(socialAccounts);
+        targets.addAll(interests);
+
+        return targets;
     }
 }
