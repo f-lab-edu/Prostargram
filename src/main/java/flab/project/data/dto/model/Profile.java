@@ -33,7 +33,7 @@ public class Profile extends User {
     @Schema(example = "[\"#aws\",\"#java\"]")
     private List<@Pattern(regexp = "^#.*") @Length(max = INTEREST_MAX_LENGTH) @NotBlank String> interests;
 
-    public boolean hasProfileFiled() {
+    public boolean hasProfileField() {
         return StringUtils.hasText(getSelfIntroduction())
             || StringUtils.hasText(getUserName())
             || StringUtils.hasText(getProfileImgUrl());

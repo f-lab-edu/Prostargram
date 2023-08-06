@@ -44,7 +44,7 @@ public class InterestsDelta {
         return !CollectionUtils.isEmpty(toAddInterests);
     }
 
-    public boolean hasToDelteInterests() {
+    public boolean hasToDeleteInterests() {
         return !CollectionUtils.isEmpty(toDeleteInterests);
     }
     // toAddInterest - 실제 존재하는 놈(select existingHashtag where in (toAddInterests))
