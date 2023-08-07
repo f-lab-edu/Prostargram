@@ -9,7 +9,7 @@ import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.enums.requestparam.PutFollowType;
 
 import flab.project.service.UserService;
-import flab.project.userfacade.UserFacade;
+import flab.project.facade.UserFacade;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 

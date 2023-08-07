@@ -1,4 +1,4 @@
-package flab.project.userfacade;
+package flab.project.facade;
 
 import flab.project.config.Filtering.BadWordChecker;
 import flab.project.config.baseresponse.SuccessResponse;
@@ -11,6 +11,8 @@ import flab.project.service.InterestService;
 import flab.project.service.SocialAccountService;
 import flab.project.service.UserService;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,20 +41,43 @@ public class UserFacade {
         //todo 해시태그, 관심사는 소문자만 가능하므로 Dto에 들어올 때,
         // 대문자 있으면 변환과정 or InvalidUserInput반환해야함.
 
-        userService.updateUserTable(userId, updateProfileDto);
+        // Todo 매번 threadPool을 생성하는게 옳을까..?
+        // 해당 API를 위한 Thread Pool을 따로 할당해놓는게 과연 옳을까?
 
-        SocialAccountsDelta socialAccountsDelta
-            = soicalAccountService.getSocialAccountsDelta(userId,
-            updateProfileDto.getSocialAccounts());
-        soicalAccountService.updateSocialAccounts(userId, socialAccountsDelta);
+        List<Runnable> updateProfileTasks = getUpdateProfileTasks(userId,updateProfileDto);
 
-        InterestsDelta interestsDelta
-            = interestService.getInterestDelta(userId, updateProfileDto.getInterests());
-        hashtagService.insertNonExistHashtag(interestsDelta);
-        interestService.updateInterests(userId, interestsDelta);
+        ExecutorService updateProfileService = Executors.newFixedThreadPool(3);
+
+        for (Runnable updateProfileTask : updateProfileTasks) {
+            updateProfileService.submit(updateProfileTask);
+        }
 
         return new SuccessResponse();
     }
+
+    private List<Runnable> getUpdateProfileTasks(long userId, Profile updateProfileDto) {
+        Runnable updateUserTableTask = () -> {
+                userService.updateUserTable(userId, updateProfileDto);
+        };
+
+        Runnable updateSocialAccountsTask = () -> {
+            SocialAccountsDelta socialAccountsDelta
+                = soicalAccountService.getSocialAccountsDelta(userId,
+                updateProfileDto.getSocialAccounts());
+            soicalAccountService.updateSocialAccounts(userId, socialAccountsDelta);
+        };
+
+        Runnable updateInterestsTask = () -> {
+            InterestsDelta interestsDelta
+                = interestService.getInterestDelta(userId, updateProfileDto.getInterests());
+            hashtagService.insertNonExistHashtag(interestsDelta);
+            interestService.updateInterests(userId, interestsDelta);
+        };
+
+        return List.of(updateUserTableTask, updateSocialAccountsTask,
+            updateInterestsTask);
+    }
+
 
     private void doFilter(Profile updateProfileDto) {
         filterBadWord(updateProfileDto);

@@ -33,7 +33,7 @@ public class InterestService {
             interestMapper.insertAllIn(userId, toAddInterests);
         }
 
-        if (interestsDelta.hasToDelteInterests()) {
+        if (interestsDelta.hasToDeleteInterests()) {
             List<String> toDeleteInterests = interestsDelta.getToDeleteInterests();
             interestMapper.deleteAllIn(userId, toDeleteInterests);
         }
