@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface LikeMapper {
-    int addPostLike(@Param("postId") long postId, @Param("userId") long userId);
+    int addPostLike(@Param("post_id") long postId, @Param("user_id") long userId);
 }

@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,15 @@ public class LikeService {
 
     private final LikeMapper likeMapper;
 
-    public SuccessResponse addPostLike(long postId, long userId) {
-        try {
-            likeMapper.addPostLike(postId, userId);
-            return new SuccessResponse();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("서버 런타임 에러 입니다.");
+    private void checkPostIdAndUserId(long postId, long userId) {
+        if (postId <= 0 || userId <= 0) {
+            throw new InvalidUserInputException("Invalid postId or userId");
         }
+    }
+
+    public SuccessResponse addPostLike(long postId, long userId) {
+        checkPostIdAndUserId(postId, userId);
+        likeMapper.addPostLike(postId, userId);
+        return new SuccessResponse();
     }
 }
