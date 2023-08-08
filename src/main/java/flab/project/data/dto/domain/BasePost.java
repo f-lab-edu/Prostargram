@@ -3,9 +3,11 @@ package flab.project.data.dto.domain;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+@SuperBuilder
 @Getter
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {
@@ -33,15 +35,4 @@ public abstract class BasePost {
 
     @Schema(example = "방금 전")
     protected final String createTime;
-
-    public BasePost(long userId, long postId, String content, List<String> hashTags, PostType postType, long likeCount, long commentCount, String createTime) {
-        this.userId = userId;
-        this.postId = postId;
-        this.content = content;
-        this.hashTags = hashTags;
-        this.postType = postType;
-        this.likeCount = likeCount;
-        this.commentCount = commentCount;
-        this.createTime = createTime;
-    }
 }
