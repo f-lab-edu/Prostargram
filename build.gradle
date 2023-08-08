@@ -21,6 +21,9 @@ dependencies {
 
 	implementation 'com.mysql:mysql-connector-j'
 
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.238'
+	implementation 'javax.xml.bind:jaxb-api:2.3.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 

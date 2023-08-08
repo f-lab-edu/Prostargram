@@ -56,4 +56,8 @@ public class Profile extends User {
 
         return targets;
     }
+
+    public void setProfileImg(String imageUrl) {
+        super.profileImgUrl = imageUrl;
+    }
 }

@@ -1,11 +1,15 @@
 package flab.project.facade;
 
+import static flab.project.data.enums.FileType.PROFILE_IMAGE;
+
+import flab.project.ObjectStorage;
 import flab.project.config.Filtering.BadWordChecker;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InputBadWordException;
 import flab.project.data.InterestsDelta;
 import flab.project.data.SocialAccountsDelta;
 import flab.project.data.dto.model.Profile;
+import flab.project.data.enums.FileType;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
 import flab.project.service.SocialAccountService;
@@ -16,6 +20,7 @@ import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -26,13 +31,19 @@ public class UserFacade {
     private final InterestService interestService;
     private final HashtagService hashtagService;
 
+    private final ObjectStorage objectStorage;
     private final BadWordChecker badWordChecker;
 
     @Transactional
-    public SuccessResponse updateProfile(long userId, Profile updateProfileDto) {
-//         todo profileImgUrl이 아니라 S3(Naver)에 File Upload하는 형식으로 수정 필요.
-        // Command를 만들고 Command에
-        // Profile, SocialAccountDelta, InterestDelta 이런게 있어도 좋을거같긴한데..
+    public SuccessResponse updateProfile(
+        long userId,
+        Profile updateProfileDto,
+        MultipartFile profileImg
+    ) {
+
+        // todo 기존 img는 삭제하는 로직 필요함.
+        String imgUrl = objectStorage.uploadFile(userId, List.of(profileImg), PROFILE_IMAGE);
+        updateProfileDto.setProfileImg(imgUrl);
 
         // todo selfIntroduction같은 경우는 실제로는 악성 코드가 없는지 검사 로직 돌려야함.
         // todo 전체적으로 쿼리가 굉장히 많이 필요함. 이거 비동기로 ok 반환하고 싶은데 가능한가?
@@ -44,7 +55,7 @@ public class UserFacade {
         // Todo 매번 threadPool을 생성하는게 옳을까..?
         // 해당 API를 위한 Thread Pool을 따로 할당해놓는게 과연 옳을까?
 
-        List<Runnable> updateProfileTasks = getUpdateProfileTasks(userId,updateProfileDto);
+        List<Runnable> updateProfileTasks = getUpdateProfileTasks(userId, updateProfileDto);
 
         ExecutorService updateProfileService = Executors.newFixedThreadPool(3);
 
@@ -57,7 +68,7 @@ public class UserFacade {
 
     private List<Runnable> getUpdateProfileTasks(long userId, Profile updateProfileDto) {
         Runnable updateUserTableTask = () -> {
-                userService.updateUserTable(userId, updateProfileDto);
+            userService.updateUserTable(userId, updateProfileDto);
         };
 
         Runnable updateSocialAccountsTask = () -> {
