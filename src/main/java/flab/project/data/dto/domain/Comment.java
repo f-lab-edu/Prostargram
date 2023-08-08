@@ -2,7 +2,9 @@ package flab.project.data.dto.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
 @Getter
 @Schema(description = "댓글 Dto")
 public class Comment {
