@@ -14,7 +14,6 @@ public class BadWordChecker {
     private final BadwordMapper badwordMapper;
 
     public BadWordChecker(BadwordMapper badwordMapper) {
-        // Todo badword를 DB로 부터 받아오는게 나을까? FILE로 관리하는게 나을까?
         this.badwordMapper = badwordMapper;
         // todo 생성자가 Mapper랑 의존하는 상태가 찜찜함.
         // 특히 test코드에서 when()메서드가 작동하기 전에 초기화 부터 진행되면서

@@ -127,7 +127,6 @@ public class UserController {
         @Validated @Positive @PathVariable long userId,
         @Validated @RequestPart(value = "updateProfileDto") Profile updateProfileDto,
         @RequestPart(value = "file", required = false) MultipartFile profileImg
-        //todo interests에는 #을 붙여서 전송해줘야 한다는 내용을 Swagger에 추가해줘야함.
     ) {
         return userFacade.updateProfile(userId, updateProfileDto, profileImg);
     }

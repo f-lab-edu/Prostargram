@@ -84,7 +84,7 @@ public class SocialAccountService {
         return icons.stream()
             .collect(Collectors.toMap(
                 Icon::getDomain,
-                Function.identity() //todo Function.identity()사용이 좋을까?
+                Function.identity()
             ));
     }
 
