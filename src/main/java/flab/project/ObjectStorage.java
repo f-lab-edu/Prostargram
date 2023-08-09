@@ -20,22 +20,20 @@ public class ObjectStorage implements FileUploader {
     private final AmazonS3 amazonS3;
     private final FileFactory fileFactory;
 
-    public String uploadFile(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
+    public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
 
         try {
-            UploadingFile fileInfo = fileFactory.getFileInfo(userId, multipartFiles, fileType);
+            UploadingFile fileInfo = fileFactory.getFileInfo(userId, multipartFile, fileType);
             String bucketName = fileInfo.getBucketName();
             String fileName = fileInfo.getFileName();
             ObjectMetadata objectMetadata = fileInfo.getObjectMetadata();
 
-            for (MultipartFile multipartFile : multipartFiles) {
-                amazonS3.putObject(
-                    bucketName,
-                    fileName,
-                    multipartFile.getInputStream(),
-                    objectMetadata
-                );
-            }
+            amazonS3.putObject(
+                bucketName,
+                fileName,
+                multipartFile.getInputStream(),
+                objectMetadata
+            );
 
             return amazonS3.getUrl(bucketName, fileName).toString();
         } catch (AmazonS3Exception e) {

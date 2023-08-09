@@ -13,9 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileFactory {
 
-    public UploadingFile getFileInfo(long userId, List<MultipartFile> file, FileType fileType) {
+    public UploadingFile getFileInfo(long userId, MultipartFile file, FileType fileType) {
         if (fileType.equals(PROFILE_IMAGE)) {
-            return new ProfileImgage(userId, file.get(0));
+            return new ProfileImgage(userId, file);
         }else if (fileType.equals(POST_IMAGE)){
             return null;
         }else{

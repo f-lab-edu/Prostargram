@@ -9,18 +9,19 @@ import flab.project.config.exception.InputBadWordException;
 import flab.project.data.InterestsDelta;
 import flab.project.data.SocialAccountsDelta;
 import flab.project.data.dto.model.Profile;
-import flab.project.data.enums.FileType;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
 import flab.project.service.SocialAccountService;
 import flab.project.service.UserService;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 @RequiredArgsConstructor
 @Service
@@ -41,16 +42,16 @@ public class UserFacade {
         MultipartFile profileImg
     ) {
 
+        convertHtmlEscape(updateProfileDto);
+        updateProfileDto.convertInterestsToLowerCase();
+
+        filterBadWord(updateProfileDto);
+
         // todo 기존 img는 삭제하는 로직 필요함.
-        String imgUrl = objectStorage.uploadFile(userId, List.of(profileImg), PROFILE_IMAGE);
-        updateProfileDto.setProfileImg(imgUrl);
-
-        // todo selfIntroduction같은 경우는 실제로는 악성 코드가 없는지 검사 로직 돌려야함.
-        // todo 전체적으로 쿼리가 굉장히 많이 필요함. 이거 비동기로 ok 반환하고 싶은데 가능한가?
-        doFilter(updateProfileDto);
-
-        //todo 해시태그, 관심사는 소문자만 가능하므로 Dto에 들어올 때,
-        // 대문자 있으면 변환과정 or InvalidUserInput반환해야함.
+        if (Objects.nonNull(profileImg)) {
+            String imgUrl = objectStorage.uploadFile(userId, profileImg, PROFILE_IMAGE);
+            updateProfileDto.setProfileImg(imgUrl);
+        }
 
         // Todo 매번 threadPool을 생성하는게 옳을까..?
         // 해당 API를 위한 Thread Pool을 따로 할당해놓는게 과연 옳을까?
@@ -64,6 +65,12 @@ public class UserFacade {
         }
 
         return new SuccessResponse();
+    }
+
+    private void convertHtmlEscape(Profile updateProfile) {
+        List<String> stringFields = updateProfile.getStringFields();
+
+        stringFields.forEach(HtmlUtils::htmlEscape);
     }
 
     private List<Runnable> getUpdateProfileTasks(long userId, Profile updateProfileDto) {
@@ -89,13 +96,8 @@ public class UserFacade {
             updateInterestsTask);
     }
 
-
-    private void doFilter(Profile updateProfileDto) {
-        filterBadWord(updateProfileDto);
-    }
-
     private void filterBadWord(Profile updateProfileDto) {
-        List<String> targetBadWordFilter = updateProfileDto.getTargetBadWordFilter();
+        List<String> targetBadWordFilter = updateProfileDto.getStringFields();
         boolean hasBadWord = badWordChecker.hasBadWord(targetBadWordFilter);
 
         if (hasBadWord) {

@@ -15,16 +15,13 @@ import org.springframework.util.StringUtils;
 @Getter
 @Schema(description = "프로필 페이지와 프로필 수정 페이지의 공통 Schema")
 public class Profile extends User {
-    private final int TOTAL_SOCIAL_ACCOUNT_MAX_SIZE = 3;
-    private final int TOTAL_INTEREST_MAX_SIZE = 10;
-    private final int TARGET_OF_BAD_WORD_FILTER_MAX_SIZE =16;
-    private final int INTEREST_MAX_LENGTH=15;
+    private static final int TOTAL_SOCIAL_ACCOUNT_MAX_SIZE = 3;
+    private static final int TOTAL_INTEREST_MAX_SIZE = 10;
+    private static final int TARGET_OF_BAD_WORD_FILTER_MAX_SIZE =16;
+    private static final int INTEREST_MAX_LENGTH=15;
     @Schema(example = "백엔드 엔지니어 정민욱입니다.")
     private String selfIntroduction;
 
-    //TODO 주소 형식인지를 @Pattern으로 확인하기.
-    // 이게 어떻게 가능하지? http://google.com, https://google.com처럼 프로토콜이 적혀있을 수도 있지만
-    // www.google.com 이 될 수도 있고, google.com이 될 수도 있을텐데..
     @Size(max = TOTAL_SOCIAL_ACCOUNT_MAX_SIZE)
     @Schema(example = "[\"http://github.com\",\"http://blog.com\"]")
     private List<String> socialAccounts;
@@ -43,7 +40,7 @@ public class Profile extends User {
         return !CollectionUtils.isEmpty(getSocialAccounts());
     }
 
-    public List<String> getTargetBadWordFilter() {
+    public List<String> getStringFields() {
 
         List<String> targets = new ArrayList<>(TARGET_OF_BAD_WORD_FILTER_MAX_SIZE);
 
@@ -59,5 +56,13 @@ public class Profile extends User {
 
     public void setProfileImg(String imageUrl) {
         super.profileImgUrl = imageUrl;
+    }
+
+    public void convertInterestsToLowerCase() {
+        if (CollectionUtils.isEmpty(interests)) {
+            return ;
+        }
+
+        interests.forEach(String::toLowerCase);
     }
 }
