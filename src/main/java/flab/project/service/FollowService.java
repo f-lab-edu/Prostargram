@@ -19,7 +19,7 @@ public class FollowService {
     private final FollowMapper followMapper;
 
     public SuccessResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
-        List<User> result = followMapper.findAll(requestType, userId);
+        List<User> result = followMapper.findAll(userId,requestType);
 
         return new SuccessResponse<>(result);
     }
