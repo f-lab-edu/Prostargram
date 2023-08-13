@@ -16,7 +16,6 @@ public class ObjectStorageConfig {
     private String endPoint;
     @Value("${ncp.accessKey}")
     private String accessKey;
-
     @Value("${ncp.secretKey}")
     private String secretKey;
     @Value("${ncp.region}")

@@ -9,6 +9,7 @@ import flab.project.config.exception.InputBadWordException;
 import flab.project.data.InterestsDelta;
 import flab.project.data.SocialAccountsDelta;
 import flab.project.data.dto.model.Profile;
+import flab.project.data.file.ProfileImgage;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
 import flab.project.service.SocialAccountService;
@@ -49,6 +50,8 @@ public class UserFacade {
 
         // todo 기존 img는 삭제하는 로직 필요함.
         if (Objects.nonNull(profileImg)) {
+            String profileImageFileName = objectStorage.getFileNamesInBucket(userId).get(0);
+            objectStorage.deleteProfileImage(profileImageFileName);
             String imgUrl = objectStorage.uploadFile(userId, profileImg, PROFILE_IMAGE);
             updateProfileDto.setProfileImg(imgUrl);
         }

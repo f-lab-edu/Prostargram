@@ -6,7 +6,6 @@ import static flab.project.data.enums.FileType.PROFILE_IMAGE;
 import flab.project.data.enums.FileType;
 import flab.project.data.file.ProfileImgage;
 import flab.project.data.file.UploadingFile;
-import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
