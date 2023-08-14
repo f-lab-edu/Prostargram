@@ -19,10 +19,6 @@ public class UpdateInterest {
     @Length(min = 1, max = 15)
     private String interestName;
 
-    public long getUserId() {
-        return userId;
-    }
-
     //todo getInterestName대신 getInterestNameWithSharp를 사용하게 강제하고 싶은데 방법이 없겠지..?
     public String findInterestNameWithSharp() {
         return "#"+interestName;
