@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.HashtagMapper">
+
+    <select id="getHashtagIdByHashtagName" resultType="long">
+        SELECT hashtag_id
+        FROM Hashtags
+        WHERE name = #{hashtagName};
+    </select>
+
+    <insert id="save" parameterType="hashtag" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
+        INSERT INTO Hashtags(name)
+        VALUES (#{hashtag.hashTagName})
+    </insert>
+</mapper>
