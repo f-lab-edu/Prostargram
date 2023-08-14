@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.data.dto.AddInterest;
 import flab.project.mapper.InterestMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,5 +16,9 @@ public class InterestService {
 
     public void addInterest(long userId, long hashtagId) {
         interestMapper.save(userId, hashtagId);
+    }
+
+    public void deleteInterest(long userId, Long hashtagId) {
+        interestMapper.delete(userId, hashtagId);
     }
 }

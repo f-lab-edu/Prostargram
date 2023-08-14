@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddInterest {
+public class UpdateInterest {
     @Positive
     private long userId;
 

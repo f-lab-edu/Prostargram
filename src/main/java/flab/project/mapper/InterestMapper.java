@@ -9,4 +9,7 @@ public interface InterestMapper {
     int getNumberOfExistingInterests(@Param("userId") long userId);
 
     void save(@Param("userId") long userId, @Param("hashtagId") long hashtagId);
+
+    void delete(@Param("userId") long userId, @Param("hashtagId") Long hashtagId);
+
 }

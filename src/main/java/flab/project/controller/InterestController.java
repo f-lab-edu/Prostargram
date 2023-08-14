@@ -1,18 +1,12 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.AddInterest;
+import flab.project.data.dto.UpdateInterest;
 import flab.project.facade.InterestFacade;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RequiredArgsConstructor
@@ -23,8 +17,16 @@ public class InterestController {
     @PostMapping("/users/{userId}/interests")
     public SuccessResponse addInterest(
             @PathVariable("userId") @Positive long userId,
-            @Validated @RequestBody AddInterest addInterestDto
+            @Validated @RequestBody UpdateInterest updateInterestDto
     ) {
-        return interestFacade.addInterest(addInterestDto);
+        return interestFacade.addInterest(updateInterestDto);
+    }
+
+    @DeleteMapping("/users/{userId}/interests")
+    public SuccessResponse deleteInterest(
+            @PathVariable("userId") @Positive long userId,
+            @Validated @RequestBody UpdateInterest updateInterestDto
+    ) {
+        return interestFacade.deleteInterest(updateInterestDto);
     }
 }

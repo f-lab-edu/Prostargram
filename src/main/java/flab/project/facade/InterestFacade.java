@@ -2,8 +2,9 @@ package flab.project.facade;
 
 import flab.project.common.BadWordChecker;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
-import flab.project.data.dto.AddInterest;
+import flab.project.data.dto.UpdateInterest;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +22,26 @@ public class InterestFacade {
     private final HashtagService hashtagService;
 
     @Transactional
-    public SuccessResponse addInterest(AddInterest addInterestDto) {
+    public SuccessResponse addInterest(UpdateInterest updateInterestDto) {
         //TODO 해당 로직들이 AOP로 삽입되게 할 수는 없을까?
-        badWordChecker.hasBadWord(addInterestDto.getStringFields());
-        addInterestDto.convertEscapeCharacter();
+        badWordChecker.hasBadWord(updateInterestDto.getStringFields());
+        updateInterestDto.convertEscapeCharacter();
 
-        checkNumberLimitOfInterest(addInterestDto);
+        checkNumberLimitOfInterest(updateInterestDto);
 
         //todo reassigned local variable은 안좋은 걸까?
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
+        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
 
         if (isNotExistHashtag(hashtagId)) {
-            hashtagId = hashtagService.addHashtag(addInterestDto.getInterestNameWithSharp());
+            hashtagId = hashtagService.addHashtag(updateInterestDto.getInterestNameWithSharp());
         }
 
-        interestService.addInterest(addInterestDto.getUserId(), hashtagId);
+        interestService.addInterest(updateInterestDto.getUserId(), hashtagId);
         return new SuccessResponse();
     }
 
-    private void checkNumberLimitOfInterest(AddInterest addInterestDto) {
-        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
+    private void checkNumberLimitOfInterest(UpdateInterest updateInterestDto) {
+        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(updateInterestDto.getUserId());
 
         if (numberOfExistingInterests >= NUMBER_LIMIT_OF_INTEREST) { //todo Constraint라는 클래스를 관리하는게 좋은 선택일까? Enum vs Static fields
             throw new NumberLimitOfInterestExceededException();
@@ -49,5 +50,19 @@ public class InterestFacade {
 
     private boolean isNotExistHashtag(Long hashtagId) {
         return hashtagId == null;
+    }
+
+    // Todo 아래 삭제 로직이 Facade에 있는게 바람직 할까?
+    // Interest Service에서 hashtagService 메서드를 호출하고 그러는 것 보다는 Facade에서 이뤄지는게 자연스러운거 같긴 한데...
+    public SuccessResponse deleteInterest(UpdateInterest updateInterestDto) {
+        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
+
+        if (isNotExistHashtag(hashtagId)){
+            throw new InvalidUserInputException();
+        }
+
+        interestService.deleteInterest(updateInterestDto.getUserId(), hashtagId);
+
+        return new SuccessResponse();
     }
 }
