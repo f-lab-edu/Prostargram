@@ -26,26 +26,25 @@ public class InterestFacade {
         badWordChecker.hasBadWord(addInterestDto.getStringFields());
         addInterestDto.convertEscapeCharacter();
 
-        // 관심사 테이블에서 기존 관심사 개수 가져오기.
-        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
-
-        // 기존 관심사 개수가 이미 3이면 throw Exception
-        if (numberOfExistingInterests >= NUMBER_LIMIT_OF_INTEREST) { //todo Constraint라는 클래스를 관리하는게 좋은 선택일까? Enum vs Static fields
-            throw new NumberLimitOfInterestExceededException();
-        }
+        checkNumberLimitOfInterest(addInterestDto);
 
         //todo reassigned local variable은 안좋은 걸까?
-        //해시 태그에 존재 하는 관심사 인지 확인 하기
         Long hashtagId = hashtagService.getHashtagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
 
-        // 해시태그에 존재하지 않는 관심사 라면 해시태그 테이블에 추가하기.
         if (isNotExistHashtag(hashtagId)) {
             hashtagId = hashtagService.addHashtag(addInterestDto.getInterestNameWithSharp());
         }
 
-        // 관심사 테이블에 추가하기
         interestService.addInterest(addInterestDto.getUserId(), hashtagId);
         return new SuccessResponse();
+    }
+
+    private void checkNumberLimitOfInterest(AddInterest addInterestDto) {
+        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
+
+        if (numberOfExistingInterests >= NUMBER_LIMIT_OF_INTEREST) { //todo Constraint라는 클래스를 관리하는게 좋은 선택일까? Enum vs Static fields
+            throw new NumberLimitOfInterestExceededException();
+        }
     }
 
     private boolean isNotExistHashtag(Long hashtagId) {

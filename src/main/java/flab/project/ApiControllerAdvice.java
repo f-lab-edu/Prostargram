@@ -45,7 +45,6 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.DUPLICATE_REQUEST);
     }
 
-    //todo DataIntegrityViolationException은 자식 예외들도 있는거 같고.. 이런걸 어떻게 핸들링해야할까..? 보통 DB에서 나타나는 에러는 어느정도 핸들링해줄까?
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public FailResponse exceptionResolveToNonExistUser(DataIntegrityViolationException e) {

@@ -13,7 +13,6 @@ public enum ResponseEnum {
 
     DUPLICATE_REQUEST(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요.");
-    //todo 메시지 어떻게 던져야할까..?
     private final boolean isSuccess;
     private final int code;
     private final String message;
