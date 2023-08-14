@@ -17,7 +17,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
-    //todo sout지우고 올리기.
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             BindException.class,
@@ -26,29 +25,24 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
-        e.printStackTrace();
-        System.out.println("ApiControllerAdvice.exceptionResolveToInvalidUserInput");
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NumberLimitOfInterestExceededException.class)
     public FailResponse exceptionResolveToDuplicateRequest(NumberLimitOfInterestExceededException e) {
-        System.out.println("ApiControllerAdvice.exceptionResolveToDuplicateRequest");
         return new FailResponse(ResponseEnum.NUMBER_LIMIT_OF_INTEREST_EXCEEDED);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DuplicateKeyException.class)
     public FailResponse exceptionResolveToDuplicateRequest(DuplicateKeyException e) {
-        System.out.println("ApiControllerAdvice.exceptionResolveToDuplicateRequest");
         return new FailResponse(ResponseEnum.DUPLICATE_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public FailResponse exceptionResolveToNonExistUser(DataIntegrityViolationException e) {
-        System.out.println("ApiControllerAdvice.exceptionResolveToNonExistUser");
         return new FailResponse(ResponseEnum.NON_EXIST_USER);
     }
 
@@ -56,8 +50,6 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
-        e.printStackTrace();
-        System.out.println("ApiControllerAdvice.exceptionResolveToServerError");
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 
