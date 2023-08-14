@@ -24,16 +24,16 @@ public class InterestFacade {
     @Transactional
     public SuccessResponse addInterest(UpdateInterest updateInterestDto) {
         //TODO 해당 로직들이 AOP로 삽입되게 할 수는 없을까?
-        badWordChecker.hasBadWord(updateInterestDto.getStringFields());
+        badWordChecker.hasBadWord(updateInterestDto.findStringFields());
         updateInterestDto.convertEscapeCharacter();
 
         checkNumberLimitOfInterest(updateInterestDto);
 
         //todo reassigned local variable은 안좋은 걸까?
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
+        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.findInterestNameWithSharp());
 
         if (isNotExistHashtag(hashtagId)) {
-            hashtagId = hashtagService.addHashtag(updateInterestDto.getInterestNameWithSharp());
+            hashtagId = hashtagService.addHashtag(updateInterestDto.findInterestNameWithSharp());
         }
 
         interestService.addInterest(updateInterestDto.getUserId(), hashtagId);
@@ -55,7 +55,7 @@ public class InterestFacade {
     // Todo 아래 삭제 로직이 Facade에 있는게 바람직 할까?
     // Interest Service에서 hashtagService 메서드를 호출하고 그러는 것 보다는 Facade에서 이뤄지는게 자연스러운거 같긴 한데...
     public SuccessResponse deleteInterest(UpdateInterest updateInterestDto) {
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
+        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.findInterestNameWithSharp());
 
         if (isNotExistHashtag(hashtagId)){
             throw new InvalidUserInputException();

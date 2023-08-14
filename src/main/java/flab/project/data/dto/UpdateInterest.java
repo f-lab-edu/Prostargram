@@ -24,12 +24,12 @@ public class UpdateInterest {
     }
 
     //todo getInterestName대신 getInterestNameWithSharp를 사용하게 강제하고 싶은데 방법이 없겠지..?
-    public String getInterestNameWithSharp() {
+    public String findInterestNameWithSharp() {
         return "#"+interestName;
     }
 
     // todo 이거 annotation을 직접 만들어서 어노테이션 지정해놓으면 만들어지게 하면 어떨까?
-    public List<String> getStringFields() {
+    public List<String> findStringFields() {
         return List.of(interestName);
     }
 

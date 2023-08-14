@@ -14,7 +14,7 @@ class UpdateInterestTest {
     void getInterestNameWithSharp(){
         UpdateInterest updateInterest = new UpdateInterest(1L, "test");
 
-        String interestNameWithSharp = updateInterest.getInterestNameWithSharp();
+        String interestNameWithSharp = updateInterest.findInterestNameWithSharp();
 
         assertThat(interestNameWithSharp).isEqualTo("#test");
     }
@@ -24,7 +24,7 @@ class UpdateInterestTest {
     void getStringFields(){
         UpdateInterest updateInterest = new UpdateInterest(1L, "test");
 
-        List<String> stringFields = updateInterest.getStringFields();
+        List<String> stringFields = updateInterest.findStringFields();
 
         assertThat(stringFields).hasSize(1)
                 .containsExactly("test");
@@ -37,6 +37,6 @@ class UpdateInterestTest {
 
         updateInterest.convertEscapeCharacter();
 
-        assertThat(updateInterest.getInterestNameWithSharp()).isEqualTo("#&lt;&lt;test&gt;&gt;");
+        assertThat(updateInterest.findInterestNameWithSharp()).isEqualTo("#&lt;&lt;test&gt;&gt;");
     }
 }

@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.common.BadWordChecker;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import flab.project.data.dto.UpdateInterest;
@@ -29,6 +30,9 @@ class InterestFacadeTest {
     private InterestService interestService;
     @Mock
     private HashtagService hashtagService;
+    @Mock
+    private BadWordChecker badWordChecker;
+
 
     @DisplayName("관심사는 최대 3개 까지 설정할 수 있다.")
     @Test
@@ -56,7 +60,7 @@ class InterestFacadeTest {
 
         interestFacade.addInterest(updateInterest);
 
-        verify(hashtagService).addHashtag("#test");
+        then(hashtagService).should().addHashtag("#test");
     }
 
     @DisplayName("생성 하려는 관심사가 해시 태그 테이블에 존재 하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
@@ -68,7 +72,7 @@ class InterestFacadeTest {
 
         interestFacade.addInterest(updateInterest);
 
-        verify(hashtagService, never()).addHashtag("#test");
+        then(hashtagService).should(never()).addHashtag("#test");
     }
 
     @DisplayName("삭제하려는 관심사가 존재하지 않는 해시태그라면 InvalidUserInputException을 던진다.")
