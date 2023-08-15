@@ -1,0 +1,30 @@
+package flab.project.service;
+
+import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NumberLimitOfSocialAccountsExceededException;
+import flab.project.data.dto.UpdateSocialAccountRequestDto;
+import flab.project.data.dto.model.SocialAccount;
+import flab.project.mapper.SocialAccountMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import static flab.project.common.Constraints.NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS;
+
+@RequiredArgsConstructor
+@Service
+public class SocialAccountService {
+
+    private final SocialAccountMapper socialAccountMapper;
+
+    public void addSocialAccount(SocialAccount socialAccount) {
+        socialAccountMapper.save(socialAccount);
+    }
+
+    public void checkNumberLimitOfSocialAccount(long userId) {
+        int numberOfExistingSocialAccounts = socialAccountMapper.getNumberOfExistingSocialAccounts(userId);
+
+        if (numberOfExistingSocialAccounts >= NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS.getValue()) { //todo Constraint라는 클래스를 관리하는게 좋은 선택일까? Enum vs Static fields
+            throw new NumberLimitOfSocialAccountsExceededException();
+        }
+    }
+}
