@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public class Option {
 
-    protected final long optionId;
+    private final long optionId;
 
-    protected final String optionContent;
+    private final String optionContent;
 }
