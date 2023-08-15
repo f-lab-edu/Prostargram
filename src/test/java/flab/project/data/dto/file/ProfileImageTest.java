@@ -12,7 +12,7 @@ class ProfileImageTest {
 
     @DisplayName("ProfileImage 생성자는 bucketName,fileName,objectMetadata를 초기화 하는 로직을 가지고 있다.")
     @Test
-    void test() {
+    void profileImageConstructorInitializeFields() {
         MultipartFile multipartFile = new MockMultipartFile("profileImage", "test.txt",
                 "text/plain", "test file".getBytes());
 
