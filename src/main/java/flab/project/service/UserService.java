@@ -1,10 +1,9 @@
 package flab.project.service;
 
+import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
 import flab.project.data.dto.User;
-import flab.project.data.entity.Follows;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.mapper.UserMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +18,15 @@ public class UserService {
         List<User> result = userMapper.findAll(requestType, userId);
 
         return result;
+    }
+
+    public boolean updateProfileImage(long userId, String profileImgUrl) {
+        int refelctedRowNum = userMapper.updateProfileImage(userId, profileImgUrl);
+
+        if (refelctedRowNum > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

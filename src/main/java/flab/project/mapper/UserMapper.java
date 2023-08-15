@@ -11,4 +11,6 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> findAll(@Param("requestType") GetFollowsType requestType, @Param("userId") long userId);
+
+    int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
 }

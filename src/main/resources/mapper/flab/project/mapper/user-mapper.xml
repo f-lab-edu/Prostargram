@@ -32,4 +32,9 @@
         </choose>
     </select>
 
+    <insert id="updateProfileImage">
+        UPDATE Users
+        SET profile_img_url=#{profileImgUrl}
+        where user_id=#{userId};
+    </insert>
 </mapper>
