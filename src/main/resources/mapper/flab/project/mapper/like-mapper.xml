@@ -8,4 +8,5 @@
         INSERT INTO POST_LIKE(post_id, user_id)
         VALUES (#{post_id}, #{user_id});
     </insert>
+
 </mapper>
