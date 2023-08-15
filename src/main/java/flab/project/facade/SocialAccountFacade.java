@@ -17,14 +17,14 @@ public class SocialAccountFacade {
 
     @Transactional
     public SuccessResponse addSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
-        // Domain에 해당하는 Icon 찾기
+        //todo 추후 feat/#26 브랜치 머지되면 BadwordCheck 로직 추가 예정.
+        updateSocialAccount.convertEscapeCharacter();
+
         SocialAccount socialAccount = new SocialAccount(updateSocialAccount);
         iconService.setIconId(socialAccount);
 
-        // 소셜 계정 개수 제한 정책 확인
         socialAccountService.checkNumberLimitOfSocialAccount(updateSocialAccount.getUserId());
 
-        // 소셜 계정 추가
         socialAccountService.addSocialAccount(socialAccount);
 
         return new SuccessResponse();
