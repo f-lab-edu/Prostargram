@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class LikeController {
     @Operation(summary = "게시물 좋아요 API")
     @Parameters({@Parameter(name = "postId", description = "게시물의 id", required = true)})
     @PostMapping(value = "/posts/{postId}/likes")
-    public SuccessResponse addPostLike(@PathVariable("postId") @Positive long postId, @PathVariable("userId") @Positive long userId) {
+    public SuccessResponse addPostLike(@PathVariable("postId") @Positive long postId, @RequestParam("userId") @Positive long userId) {
         return likeService.addPostLike(postId, userId);
     }
 }
