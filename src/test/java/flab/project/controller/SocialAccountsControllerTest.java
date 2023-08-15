@@ -17,6 +17,7 @@ import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = SocialAccountController.class)
 class SocialAccountsControllerTest {
-    private static final String ADD_SOCIAL_ACCOUNT_API_URL = "/users/{userId}/social-accounts";
+    private static final String UPDATE_SOCIAL_ACCOUNT_API_URL = "/users/{userId}/social-accounts";
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,6 +34,8 @@ class SocialAccountsControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private SocialAccountFacade socialAccountFacade;
+    @MockBean
+    private SocialAccountService socialAccountService;
 
     @DisplayName("소셜 계정을 추가할 수 있다.")
     @Test
@@ -42,7 +45,7 @@ class SocialAccountsControllerTest {
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 
         mockMvc.perform(
-                        post(ADD_SOCIAL_ACCOUNT_API_URL, 1)
+                        post(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -55,14 +58,14 @@ class SocialAccountsControllerTest {
 
     @DisplayName("소셜 계정 추가 API에서 userId는 양수여야 한다.")
     @Test
-    void userIdMustBePositiveWhenAddInterest() throws Exception {
+    void userIdMustBePositiveWhenAddSocialAccount() throws Exception {
         given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
 
         mockMvc.perform(
-                        post(ADD_SOCIAL_ACCOUNT_API_URL, -1)
+                        post(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -74,7 +77,7 @@ class SocialAccountsControllerTest {
 
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto2 = new UpdateSocialAccountRequestDto(0, "https://github.com");
         mockMvc.perform(
-                        post(ADD_SOCIAL_ACCOUNT_API_URL, 0)
+                        post(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -85,4 +88,54 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @DisplayName("소셜 계정을 삭제할 수 있다.")
+    @Test
+    void deleteSocialAccount() throws Exception {
+        given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
+                .willReturn(new SuccessResponse());
+        UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
+
+        mockMvc.perform(
+                        delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
+                                .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+    }
+
+    @DisplayName("소셜 계정 삭제 API에서 userId는 양수여야 한다.")
+    @Test
+    void userIdMustBePositiveWhenDeleteSocialAccount() throws Exception {
+        given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
+                .willReturn(new SuccessResponse());
+        UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
+
+
+        mockMvc.perform(
+                        delete(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
+                                .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+
+        UpdateSocialAccountRequestDto updateSocialAccountRequestDto2 = new UpdateSocialAccountRequestDto(0, "https://github.com");
+        mockMvc.perform(
+                        delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
+                                .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
 }

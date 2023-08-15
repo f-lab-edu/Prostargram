@@ -15,4 +15,11 @@
         where user_id = #{userId};
     </select>
 
+    <delete id="remove" parameterType="socialAccount">
+        DELETE
+        FROM SOCIAL_ACCOUNTS
+        WHERE user_id = #{socialAccount.userId}
+          and social_account_url = #{socialAccount.socialAccountUrl};
+    </delete>
+
 </mapper>

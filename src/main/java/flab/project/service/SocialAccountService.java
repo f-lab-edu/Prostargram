@@ -27,4 +27,11 @@ public class SocialAccountService {
             throw new NumberLimitOfSocialAccountsExceededException();
         }
     }
+
+    public SuccessResponse deleteSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
+        SocialAccount socialAccount = new SocialAccount(updateSocialAccount);
+
+        socialAccountMapper.remove(socialAccount);
+        return new SuccessResponse();
+    }
 }
