@@ -1,4 +1,4 @@
-package flab.project.ApiControllerAdvice;
+package flab.project;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
