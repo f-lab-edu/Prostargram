@@ -27,9 +27,6 @@ public class BadWordChecker {
             return false;
         }
         return badwords.stream()
-                .anyMatch(
-                        badword
-                                -> inputString.trim().contains(badword)
-                );
+                .anyMatch(badword -> inputString.trim().contains(badword));
     }
 }

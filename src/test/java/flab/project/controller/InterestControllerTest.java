@@ -40,7 +40,7 @@ class InterestControllerTest {
     void addInterest() throws Exception {
         given(interestFacade.addInterest(any(UpdateInterest.class)))
                 .willReturn(new SuccessResponse());
-        UpdateInterest updateInterest = new UpdateInterest(1L, "test");
+        UpdateInterest updateInterest = new UpdateInterest(1L, "test-interest");
 
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
