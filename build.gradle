@@ -28,36 +28,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.rest-assured:rest-assured:5.3.1'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-jacoco {
-	toolVersion = "0.8.7"
-}
-
-jacocoTestReport {
-	reports {
-		html.enabled true
-		xml.enabled false
-		csv.enabled false
-	}
-}
-
-jacocoTestCoverageVerification {
-	// 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
-	violationRules {
-		rule {
-			element = 'CLASS'
-
-			limit {
-				counter = 'CLASS'
-				value = 'COVEREDRATIO'
-				minimum = 0.00
-			}
-		}
-	}
 }
