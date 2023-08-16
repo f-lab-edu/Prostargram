@@ -63,7 +63,7 @@ public class FollowController {
 
     @Operation(
         summary = "팔로워/팔로잉 한번에 불러오는 API",
-        description = "메인페이지의 피드위 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
+        description = "메인페이지의 피드의 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
     )
     @Parameters(
         value = {
