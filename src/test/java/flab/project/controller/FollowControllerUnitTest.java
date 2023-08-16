@@ -2,8 +2,7 @@ package flab.project.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,19 +29,21 @@ class FollowControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-    @Mock
+    @MockBean
     private FollowService followService;
 
-
-    //todo 이거 rest assured로?
+    private static final String GET_FOLLOWERS_REQUEST_URL = "/users/{userId}/followers";
+    private static final String GET_FOLLOWINGS_REQUEST_URL = "/users/{userId}/followings";
+    private static final String GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL = "/users/{userId}/follows/all";
+    private static final String ADD_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
+    private static final String DELETE_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
     @DisplayName("팔로워를 가져올 때, userId는 양수여야 한다.")
     @Test
     void getFollowersWithNonPositiveId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/followers",-1)
+                get(GET_FOLLOWERS_REQUEST_URL,-1)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -51,7 +52,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                get("/users/{userId}/followers",0)
+                get(GET_FOLLOWERS_REQUEST_URL,0)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -64,7 +65,7 @@ class FollowControllerUnitTest {
     @Test
     void getFollowersWithNotLongId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/followers","a")
+                get(GET_FOLLOWERS_REQUEST_URL,"a")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -77,7 +78,7 @@ class FollowControllerUnitTest {
     @Test
     void getFollowingsWithNonPositiveId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/followings",-1)
+                get(GET_FOLLOWINGS_REQUEST_URL,-1)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -86,7 +87,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                get("/users/{userId}/followings",0)
+                get(GET_FOLLOWINGS_REQUEST_URL,0)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -99,7 +100,7 @@ class FollowControllerUnitTest {
     @Test
     void getFollowingsWithNotLongId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/followers","a")
+                get(GET_FOLLOWINGS_REQUEST_URL,"a")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -112,7 +113,7 @@ class FollowControllerUnitTest {
     @Test
     void getAllFollowsWithNonPositiveId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/follows/all",-1)
+                get(GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL,-1)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -121,7 +122,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                get("/users/{userId}/follows/all",0)
+                get(GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL,0)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -134,7 +135,7 @@ class FollowControllerUnitTest {
     @Test
     void getAllFollowsWithNotLongId() throws Exception {
         mockMvc.perform(
-                get("/users/{userId}/follows/all","a")
+                get(GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL,"a")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -145,17 +146,17 @@ class FollowControllerUnitTest {
 
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
     @Test
-    void parameterOfFollowRequestDtoIsPositive() throws Exception {
+    void parameterOfAddFollowRequestDtoIsPositive() throws Exception {
         //given
-        Follows follows1 = new Follows(-1L, 2L);
-        Follows follows2 = new Follows(1L, -2L);
-        Follows follows3 = new Follows(-1L, -2L);
-        Follows follows4 = new Follows(0, 1L);
+        Follows invalidFollowDto1 = new Follows(-1L, 2L);
+        Follows invalidFollowDto2 = new Follows(1L, -2L);
+        Follows invalidFollowDto3 = new Follows(-1L, -2L);
+        Follows invalidFollowDto4 = new Follows(0, 1L);
 
         //when then
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(follows1))
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
+                    .content(objectMapper.writeValueAsString(invalidFollowDto1))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -164,8 +165,8 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(follows2))
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
+                    .content(objectMapper.writeValueAsString(invalidFollowDto2))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -174,8 +175,8 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(follows3))
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
+                    .content(objectMapper.writeValueAsString(invalidFollowDto3))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -184,8 +185,8 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
-                    .content(objectMapper.writeValueAsString(follows4))
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
+                    .content(objectMapper.writeValueAsString(invalidFollowDto4))
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isBadRequest())
@@ -196,9 +197,9 @@ class FollowControllerUnitTest {
 
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId는 필수 값이다.")
     @Test
-    void AllParameterOfFollowRequestDtoIsRequired() throws Exception {
+    void AllParameterOfAddFollowRequestDtoIsRequired() throws Exception {
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
                     .content("{\"fromUserId\":1}")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
@@ -208,7 +209,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                post("/users/{userId}/follows", "1")
+                post(ADD_FOLLOWS_REQUEST_URL, "1")
                     .content("{\"toUserId\":1}")
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
@@ -216,5 +217,80 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
             .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("팔로워/팔로잉을 삭제할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
+    @Test
+    void parameterOfDeleteFollowRequestDtoIsPositive() throws Exception {
+        //given
+        Follows invalidFollowDto1 = new Follows(-1L, 2L);
+        Follows invalidFollowDto2 = new Follows(1L, -2L);
+        Follows invalidFollowDto3 = new Follows(-1L, -2L);
+        Follows invalidFollowDto4 = new Follows(0, 1L);
+
+        //when then
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content(objectMapper.writeValueAsString(invalidFollowDto1))
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content(objectMapper.writeValueAsString(invalidFollowDto2))
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content(objectMapper.writeValueAsString(invalidFollowDto3))
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content(objectMapper.writeValueAsString(invalidFollowDto4))
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("팔로워/팔로잉을 삭제할 때, fromUserId와 toUserId는 필수 값이다.")
+    @Test
+    void AllParameterOfDeleteFollowRequestDtoIsRequired() throws Exception {
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content("{\"fromUserId\":1}")
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        delete(DELETE_FOLLOWS_REQUEST_URL, "1")
+                                .content("{\"toUserId\":1}")
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 }

@@ -43,12 +43,10 @@ public class FollowService {
         } catch (InvalidUserInputException e) {
             throw new InvalidUserInputException("fromUserId와 toUserId는 같을 수 없습니다.");
         } catch (DuplicateKeyException e) {
-            e.printStackTrace();
             throw new DuplicateKeyException("중복 요청으로 인해 나타난 에러입니다.");
         } catch (DataIntegrityViolationException e) {
-            throw new InvalidUserInputException("Foreign Key 문제로 발생한 에러입니다.");
+            throw new DataIntegrityViolationException("Foreign Key 문제로 발생한 에러입니다.");
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("SERVER 에러 입니다.");
         }
     }
@@ -67,7 +65,6 @@ public class FollowService {
 
             return new SuccessResponse<>();
         } catch (InvalidUserInputException e) {
-            e.printStackTrace();
             throw new InvalidUserInputException("fromUserId와 toUserId는 같을 수 없습니다.");
         } catch (Exception e) {
             throw new RuntimeException();
