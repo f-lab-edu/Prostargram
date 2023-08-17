@@ -14,10 +14,9 @@ public class HashtagService {
         return hashtagMapper.getHashtagIdByHashtagName(interestName);
     }
 
-    public long addHashtag(String interestName) {
-        HashTag hashTag = new HashTag(interestName);
-        hashtagMapper.save(hashTag);
+    public long addHashtag(HashTag hashtag) {
+        hashtagMapper.save(hashtag);
 
-        return hashTag.getHashTagId();
+        return hashtag.getHashTagId();
     }
 }

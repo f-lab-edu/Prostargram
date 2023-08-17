@@ -5,6 +5,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import flab.project.data.dto.UpdateInterest;
+import flab.project.data.dto.model.HashTag;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,10 @@ public class InterestFacade {
 
         Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
 
-        if (isNotExistHashtag(hashtagId)) {
-            hashtagId = hashtagService.addHashtag(updateInterestDto.getInterestNameWithSharp());
+        if (hashtagId == null) {
+            String interestNameWithSharp = updateInterestDto.getInterestNameWithSharp();
+            HashTag hashTag = new HashTag(interestNameWithSharp);
+            hashtagId = hashtagService.addHashtag(hashTag);
         }
 
         interestService.addInterest(updateInterestDto.getUserId(), hashtagId);
@@ -47,14 +50,10 @@ public class InterestFacade {
         }
     }
 
-    private boolean isNotExistHashtag(Long hashtagId) {
-        return hashtagId == null;
-    }
-
     public SuccessResponse deleteInterest(UpdateInterest updateInterestDto) {
         Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
 
-        if (isNotExistHashtag(hashtagId)){
+        if (hashtagId == null) {
             throw new InvalidUserInputException();
         }
 
