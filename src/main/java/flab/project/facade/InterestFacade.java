@@ -26,8 +26,7 @@ public class InterestFacade {
     public SuccessResponse addInterest(AddInterest addInterestDto) {
         //TODO 추후 해당 로직들을 AOP로 삽입 예정.
         badWordChecker.hasBadWord(addInterestDto.getStringFields());
-//        addInterestDto.convertEscapeCharacter();
-//todo
+
         checkNumberLimitOfInterest(addInterestDto);
 
         Long hashtagId = hashtagService.getHashtagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
