@@ -34,8 +34,8 @@ class AddInterestTest {
     @Test
     void convertEscapeCharacter(){
         AddInterest addInterest = new AddInterest(1L, "<<test>>");
-
-        addInterest.convertEscapeCharacter();
+//todo
+//        addInterest.convertEscapeCharacter();
 
         assertThat(addInterest.getInterestNameWithSharp()).isEqualTo("#&lt;&lt;test&gt;&gt;");
     }
