@@ -1,7 +1,6 @@
 package flab.project.service;
 
 import flab.project.data.dto.model.HashTag;
-import flab.project.facade.InterestFacade;
 import flab.project.mapper.HashtagMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)

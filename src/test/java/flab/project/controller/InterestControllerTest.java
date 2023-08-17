@@ -2,7 +2,7 @@ package flab.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.UpdateInterest;
+import flab.project.data.dto.AddInterest;
 import flab.project.facade.InterestFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,13 +40,13 @@ class InterestControllerTest {
     @DisplayName("괌심사를 설정할 수 있다.")
     @Test
     void addInterest() throws Exception {
-        UpdateInterest updateInterest = new UpdateInterest(1L, "test-interest");
-        given(interestFacade.addInterest(any(UpdateInterest.class)))
+        AddInterest addInterest = new AddInterest(1L, "test-interest");
+        given(interestFacade.addInterest(any(AddInterest.class)))
                 .willReturn(new SuccessResponse());
 
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterest))
+                                .content(objectMapper.writeValueAsString(addInterest))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -60,13 +60,13 @@ class InterestControllerTest {
     @DisplayName("관심사 추가 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenAddInterest() throws Exception {
-        given(interestFacade.addInterest(any(UpdateInterest.class)))
+        given(interestFacade.addInterest(any(AddInterest.class)))
                 .willReturn(new SuccessResponse());
 
-        UpdateInterest UpdateInterestWithinvalidUserId1 = new UpdateInterest(-1L, "test");
+        AddInterest addInterestWithinvalidUserId1 = new AddInterest(-1L, "test");
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, -1)
-                                .content(objectMapper.writeValueAsString(UpdateInterestWithinvalidUserId1))
+                                .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId1))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -76,10 +76,10 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
 
-        UpdateInterest UpdateInterestWithinvalidUserId2 = new UpdateInterest(0L, "test");
+        AddInterest addInterestWithinvalidUserId2 = new AddInterest(0L, "test");
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 0, "test")
-                                .content(objectMapper.writeValueAsString(UpdateInterestWithinvalidUserId2))
+                                .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId2))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -95,17 +95,17 @@ class InterestControllerTest {
         final String STRING_LENGTH_15 = "ABCDEFGHIJKLMNO";
         final String STRING_LENGTH_16 = "ABCDEFGHIJKLMNOP";
 
-        given(interestFacade.addInterest(any(UpdateInterest.class)))
+        given(interestFacade.addInterest(any(AddInterest.class)))
                 .willReturn(new SuccessResponse());
 
         assertThat(STRING_LENGTH_15.length()).isEqualTo(15);
         assertThat(STRING_LENGTH_16.length()).isEqualTo(16);
 
 
-        UpdateInterest updateInterestWith15LengthString = new UpdateInterest(1L, STRING_LENGTH_15);
+        AddInterest addInterestWith15LengthString = new AddInterest(1L, STRING_LENGTH_15);
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterestWith15LengthString))
+                                .content(objectMapper.writeValueAsString(addInterestWith15LengthString))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -114,10 +114,10 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
-        UpdateInterest updateInterestWith16LengthString = new UpdateInterest(1L, STRING_LENGTH_16);
+        AddInterest addInterestWith16LengthString = new AddInterest(1L, STRING_LENGTH_16);
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterestWith16LengthString))
+                                .content(objectMapper.writeValueAsString(addInterestWith16LengthString))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -131,13 +131,12 @@ class InterestControllerTest {
     @DisplayName("괌심사를 제거 수 있다.")
     @Test
     void deleteInterest() throws Exception {
-        UpdateInterest updateInterest = new UpdateInterest(1L, "test-interest");
-        given(interestFacade.deleteInterest(any(UpdateInterest.class)))
+        given(interestFacade.deleteInterest(anyLong(), anyLong()))
                 .willReturn(new SuccessResponse());
 
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterest))
+                                .param("hashtagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -151,13 +150,9 @@ class InterestControllerTest {
     @DisplayName("관심사 제거 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenDeleteInterest() throws Exception {
-        given(interestFacade.deleteInterest(any(UpdateInterest.class)))
-                .willReturn(new SuccessResponse());
-
-        UpdateInterest UpdateInterestWithInvalidUserId1 = new UpdateInterest(-1L, "test");
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, -1)
-                                .content(objectMapper.writeValueAsString(UpdateInterestWithInvalidUserId1))
+                                .param("hashtagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -167,48 +162,9 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
 
-        UpdateInterest UpdateInterestWithInvalidUserId2 = new UpdateInterest(0L, "test");
         mockMvc.perform(
-                        delete(DELETE_INTEREST_API_URL, 0, "test")
-                                .content(objectMapper.writeValueAsString(UpdateInterestWithInvalidUserId2))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-    }
-
-    @DisplayName("관심사 추가 API에서 interestName은 최대 15글자 까지만 허용된다.")
-    @Test
-    void interestNameCanHaveMax15LenthStringWhenDeleteInterest() throws Exception {
-        final String STRING_LENGTH_15 = "ABCDEFGHIJKLMNO";
-        final String STRING_LENGTH_16 = "ABCDEFGHIJKLMNOP";
-
-        given(interestFacade.deleteInterest(any(UpdateInterest.class)))
-                .willReturn(new SuccessResponse());
-
-        assertThat(STRING_LENGTH_15.length()).isEqualTo(15);
-        assertThat(STRING_LENGTH_16.length()).isEqualTo(16);
-
-
-        UpdateInterest updateInterestWith15LengthString = new UpdateInterest(1L, STRING_LENGTH_15);
-        mockMvc.perform(
-                        delete(DELETE_INTEREST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterestWith15LengthString))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
-        UpdateInterest updateInterestWith16LengthString = new UpdateInterest(1L, STRING_LENGTH_16);
-        mockMvc.perform(
-                        delete(DELETE_INTEREST_API_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateInterestWith16LengthString))
+                        delete(DELETE_INTEREST_API_URL, 0)
+                                .param("hashtagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())

@@ -1,7 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.UpdateInterest;
+import flab.project.data.dto.AddInterest;
 import flab.project.facade.InterestFacade;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +17,17 @@ public class InterestController {
     @PostMapping("/users/{userId}/interests")
     public SuccessResponse addInterest(
             @PathVariable("userId") @Positive long userId,
-            @Validated @RequestBody UpdateInterest updateInterestDto
+            @Validated @RequestBody AddInterest addInterestDto
     ) {
-        return interestFacade.addInterest(updateInterestDto);
+        return interestFacade.addInterest(addInterestDto);
     }
 
     @DeleteMapping("/users/{userId}/interests")
     public SuccessResponse deleteInterest(
             @PathVariable("userId") @Positive long userId,
-            @Validated @RequestBody UpdateInterest updateInterestDto
+            @RequestParam @Positive long hashtagId
     ) {
-        return interestFacade.deleteInterest(updateInterestDto);
+        return interestFacade.deleteInterest(userId, hashtagId);
     }
+
 }

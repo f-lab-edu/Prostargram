@@ -4,7 +4,7 @@ import flab.project.common.BadWordChecker;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
-import flab.project.data.dto.UpdateInterest;
+import flab.project.data.dto.AddInterest;
 import flab.project.data.dto.model.HashTag;
 import flab.project.service.HashtagService;
 import flab.project.service.InterestService;
@@ -23,42 +23,45 @@ public class InterestFacade {
     private final HashtagService hashtagService;
 
     @Transactional
-    public SuccessResponse addInterest(UpdateInterest updateInterestDto) {
+    public SuccessResponse addInterest(AddInterest addInterestDto) {
         //TODO 추후 해당 로직들을 AOP로 삽입 예정.
-        badWordChecker.hasBadWord(updateInterestDto.getStringFields());
-        updateInterestDto.convertEscapeCharacter();
+        badWordChecker.hasBadWord(addInterestDto.getStringFields());
+        addInterestDto.convertEscapeCharacter();
 
-        checkNumberLimitOfInterest(updateInterestDto);
+        checkNumberLimitOfInterest(addInterestDto);
 
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
+        Long hashtagId = hashtagService.getHashtagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
 
         if (hashtagId == null) {
-            String interestNameWithSharp = updateInterestDto.getInterestNameWithSharp();
+            String interestNameWithSharp = addInterestDto.getInterestNameWithSharp();
             HashTag hashTag = new HashTag(interestNameWithSharp);
             hashtagId = hashtagService.addHashtag(hashTag);
         }
 
-        interestService.addInterest(updateInterestDto.getUserId(), hashtagId);
+        interestService.addInterest(addInterestDto.getUserId(), hashtagId);
         return new SuccessResponse();
     }
 
-    private void checkNumberLimitOfInterest(UpdateInterest updateInterestDto) {
-        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(updateInterestDto.getUserId());
+    private void checkNumberLimitOfInterest(AddInterest addInterestDto) {
+        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
 
         if (numberOfExistingInterests >= NUMBER_LIMIT_OF_INTEREST) {
             throw new NumberLimitOfInterestExceededException();
         }
     }
 
-    public SuccessResponse deleteInterest(UpdateInterest updateInterestDto) {
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(updateInterestDto.getInterestNameWithSharp());
+    public SuccessResponse deleteInterest(long userId, long hashtagId) {
 
-        if (hashtagId == null) {
-            throw new InvalidUserInputException();
-        }
+        checkValidation(userId, hashtagId);
 
-        interestService.deleteInterest(updateInterestDto.getUserId(), hashtagId);
+        interestService.deleteInterest(userId, hashtagId);
 
         return new SuccessResponse();
+    }
+
+    private void checkValidation(long userId, long hashtagId) {
+        if (userId <= 0 || hashtagId <= 0) {
+            throw new InvalidUserInputException();
+        }
     }
 }
