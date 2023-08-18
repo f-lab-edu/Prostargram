@@ -66,5 +66,4 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.updateProfile(userId, updateProfileRequestDto))
                 .isInstanceOf(RuntimeException.class);
     }
-
 }
