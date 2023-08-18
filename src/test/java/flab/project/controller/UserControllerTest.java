@@ -30,7 +30,6 @@ class UserControllerTest {
 
     private static final String UPDATE_PROFILE_INFO_URL = "/users/{userId}/profile-info";
 
-
     @Autowired
     private MockMvc mockMvc;
 

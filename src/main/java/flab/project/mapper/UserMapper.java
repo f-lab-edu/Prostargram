@@ -1,5 +1,6 @@
 package flab.project.mapper;
 
+import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,4 +12,6 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> findAll(@Param("requestType") GetFollowsType requestType, @Param("userId") long userId);
+
+    int updateProfile(@Param("userId") long userId, @Param("updateProfileRequestDto") UpdateProfileRequestDto updateProfileRequestDto);
 }

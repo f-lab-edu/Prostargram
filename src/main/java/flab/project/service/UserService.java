@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -22,6 +23,20 @@ public class UserService {
     }
 
     public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
+        checkValidation(userId);
+
+        int NumberOfreflectedRow = userMapper.updateProfile(userId, updateProfileRequestDto);
+
+        if (NumberOfreflectedRow == 0) {
+            throw new RuntimeException();
+        }
+
         return new SuccessResponse();
+    }
+
+    private void checkValidation(long userId) {
+        if (userId <= 0) {
+            throw new InvalidUserInputException();
+        }
     }
 }

@@ -32,4 +32,13 @@
         </choose>
     </select>
 
+    <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
+        UPDATE Users
+        <set>
+            <if test="updateProfileRequestDto.userName !=null">user_name=#{updateProfileRequestDto.userName},</if>
+            <if test="updateProfileRequestDto.departmentName !=null">department_name=#{updateProfileRequestDto.departmentName},</if>
+            <if test="updateProfileRequestDto.selfIntroduction !=null">self_introduction=#{updateProfileRequestDto.selfIntroduction}</if>
+        </set>
+        WHERE user_id=#{userId};
+    </update>
 </mapper>
