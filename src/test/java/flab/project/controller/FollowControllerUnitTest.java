@@ -1,6 +1,9 @@
 package flab.project.controller;
 
+import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
+import static flab.project.data.enums.requestparam.GetFollowsType.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -10,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.Follows;
 import flab.project.data.dto.model.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
@@ -39,6 +43,24 @@ class FollowControllerUnitTest {
     private static final String GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL = "/users/{userId}/follows/all";
     private static final String ADD_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
     private static final String DELETE_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
+
+    @DisplayName("팔로워를 가져올 수 있다.")
+    @Test
+    void getFollowers() throws Exception {
+        long userId = 1;
+        given(followService.getFollows(userId, FOLLOWERS))
+                .willReturn(new SuccessResponse<>());
+
+        mockMvc.perform(
+                        get(GET_FOLLOWERS_REQUEST_URL, 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+    }
+
     @DisplayName("팔로워를 가져올 때, userId는 양수여야 한다.")
     @Test
     void getFollowersWithNonPositiveId() throws Exception {
@@ -74,6 +96,24 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
+    @DisplayName("팔로잉을 가져올 수 있다.")
+    @Test
+    void getFollowings() throws Exception {
+        long userId = 1;
+        given(followService.getFollows(userId, FOLLOWINGS))
+                .willReturn(new SuccessResponse<>());
+
+        mockMvc.perform(
+                        get(GET_FOLLOWINGS_REQUEST_URL, 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+    }
+
     @DisplayName("팔로잉을 가져올 때, userId는 양수여야 한다.")
     @Test
     void getFollowingsWithNonPositiveId() throws Exception {
@@ -107,6 +147,23 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
             .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("팔로워/팔로잉을 한번에 가져올 수 있다.")
+    @Test
+    void getFollowersAndFollowings() throws Exception {
+        long userId = 1;
+        given(followService.getFollows(userId, ALL))
+                .willReturn(new SuccessResponse<>());
+
+        mockMvc.perform(
+                        get(GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL, 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
     @DisplayName("팔로워/팔로잉 모두를 가져올 때, userId는 양수여야한다.")
