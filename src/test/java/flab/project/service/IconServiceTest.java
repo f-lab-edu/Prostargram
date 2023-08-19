@@ -31,7 +31,20 @@ class IconServiceTest {
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
         SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
         given(iconMapper.findByDomain(socialAccount.getDomain()))
-                .willReturn(1L);
+                .willReturn(10L);
+
+        iconService.setIconId(socialAccount);
+
+        assertThat(socialAccount.getIconId()).isEqualTo(10L);
+    }
+
+    @DisplayName("지정된 Domain이 아닌 경우, findByDomain은 null을 반환하고 이때 socialAccount의 iconId는 DEFAULT_ICON_ID로 초기화 된다.")
+    @Test
+    void setIconIdByDEFAULT_ICON_IDWhenFindByDomainReturnNull(){
+        UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
+        SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
+        given(iconMapper.findByDomain(socialAccount.getDomain()))
+                .willReturn(null);
 
         iconService.setIconId(socialAccount);
 
@@ -48,4 +61,5 @@ class IconServiceTest {
 
         then(iconMapper).should().findByDomain(socialAccount.getDomain());
     }
+
 }

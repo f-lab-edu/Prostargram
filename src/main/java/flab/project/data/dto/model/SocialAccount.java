@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 @Getter
 public class SocialAccount {
-    private static final long DEFAULT_ICON_ID = 1L;
 
     private long socialAccountId;
     private Long iconId;
@@ -39,10 +38,6 @@ public class SocialAccount {
     }
 
     public void setIconId(Long iconId) {
-        if (iconId == null) {
-            this.iconId = DEFAULT_ICON_ID;
-            return;
-        }
         this.iconId = iconId;
     }
 }
