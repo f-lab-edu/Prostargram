@@ -22,16 +22,11 @@ public class ApiControllerAdvice {
             BindException.class,
             InvalidUserInputException.class,
             ConstraintViolationException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberLimitOfInterestExceededException.class)
-    public FailResponse exceptionResolveToDuplicateRequest(NumberLimitOfInterestExceededException e) {
-        return new FailResponse(ResponseEnum.NUMBER_LIMIT_OF_INTEREST_EXCEEDED);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
