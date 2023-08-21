@@ -21,7 +21,6 @@ public class ApiControllerAdvice {
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         e.printStackTrace();
-        System.out.println("ApiControllerAdvice.exceptionResolveToInvalidUserInput");
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
@@ -31,7 +30,6 @@ public class ApiControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
         e.printStackTrace();
-        System.out.println("ApiControllerAdvice.exceptionResolveToServerError");
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 }
