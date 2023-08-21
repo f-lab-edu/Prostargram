@@ -11,8 +11,7 @@ public enum ResponseEnum {
     NON_EXIST_USER(false, 4001, "존재하지 않는 유저입니다."),
 
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
-    //todo 메시지 어떻게 던져야할까..?
-    DUPLICATE_REQUEST(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요.");
+    DUPLICATE_REQUEST(false, 5001, "서버 오류입니다. 잠시후 다시 시도하세요.");
     private final boolean isSuccess;
     private final int code;
     private final String message;
