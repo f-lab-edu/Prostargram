@@ -32,4 +32,48 @@
         </choose>
     </select>
 
+    <select id="getProfilePageInfo" parameterType="flab.project.data.enums.requestparam.GetProfileRequestType" resultMap="profileResult">
+        SELECT u.user_id,
+        u.user_name,
+        u.profile_img_url,
+        u.department_name,
+        u.self_introduction,
+        <if test="getProfileRequestType.name().equals('GET')">u.post_count,</if>
+        <if test="getProfileRequestType.name().equals('GET')">u.follower_count,</if>
+        <if test="getProfileRequestType.name().equals('GET')">u.following_count,</if>
+        s.social_account_id,
+        s.social_account_url,
+        l.icon_url,
+        h.hashtag_id,
+        h.name
+        FROM users u
+        left join social_accounts s on u.user_id = s.user_id
+        left join link_icon l on s.icon_id = l.icon_id
+        left join interests i on u.user_id = i.user_id
+        left join hashtags h on i.hashtag_id = h.hashtag_id
+        where u.user_id = #{userId};
+    </select>
+
+    <resultMap id="profileResult" type="Profile">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="profileImgUrl" column="profile_img_url"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="selfIntroduction" column="self_introduction"/>
+        <result property="postCount" column="post_count"/>
+        <result property="followerCount" column="follower_count"/>
+        <result property="followingCount" column="following_count"/>
+        <association property="socialAccounts" resultMap="socialAccountResult"/>
+        <association property="interests" resultMap="hashtagResult"/>
+    </resultMap>
+
+    <resultMap id="socialAccountResult" type="SocialAccountResponse">
+        <id property="socialAccountId" column="social_account_id"/>
+        <result property="iconUrl" column="icon_url"/>
+        <result property="socialAccountUrl" column="social_account_url"/>
+    </resultMap>
+    <resultMap id="hashtagResult" type="HashTag">
+        <id property="hashTagId" column="hashtag_id"/>
+        <result property="hashTagName" column="name"/>
+    </resultMap>
 </mapper>
