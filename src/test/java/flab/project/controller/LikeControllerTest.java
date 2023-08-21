@@ -56,6 +56,7 @@ public class LikeControllerTest {
     @Test
     void parameterOfLikeIsNonPositive() throws Exception {
         // given
+        // Todo postId2 -> invalidPostId로 변수명 변경하기
         long postId2 = -1L;
         long userId2 = -2L;
 
