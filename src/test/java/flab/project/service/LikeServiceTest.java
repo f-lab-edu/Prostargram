@@ -53,10 +53,17 @@ public class LikeServiceTest {
         assertThatThrownBy(() -> likeService.addPostLike(postId, invalidUserId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
-        long anotherInvalidPostId = -2L;
-        long anotherInvalidUserId = -2L;
+        long invalidNegativePostId = -2L;
+        long invalidNegativeUserId = -2L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(anotherInvalidPostId, anotherInvalidUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> likeService.addPostLike(invalidNegativePostId, invalidNegativeUserId)).isInstanceOf(InvalidUserInputException.class);
+
+        // given
+        long invalidZeroPostId = 0L;
+        long invalidZeroUserId = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> likeService.addPostLike(invalidZeroPostId, invalidZeroUserId)).isInstanceOf(InvalidUserInputException.class);
     }
 }
