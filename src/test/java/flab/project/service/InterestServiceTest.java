@@ -16,6 +16,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class InterestServiceTest {
+
     @InjectMocks
     private InterestService interestService;
     @Mock

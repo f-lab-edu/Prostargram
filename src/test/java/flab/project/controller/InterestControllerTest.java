@@ -37,7 +37,7 @@ class InterestControllerTest {
     @MockBean
     private InterestFacade interestFacade;
 
-    @DisplayName("괌심사를 설정할 수 있다.")
+    @DisplayName("관심사를 설정할 수 있다.")
     @Test
     void addInterest() throws Exception {
         AddInterest addInterest = new AddInterest(1L, "test-interest");
@@ -60,9 +60,6 @@ class InterestControllerTest {
     @DisplayName("관심사 추가 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenAddInterest() throws Exception {
-        given(interestFacade.addInterest(any(AddInterest.class)))
-                .willReturn(new SuccessResponse());
-
         AddInterest addInterestWithinvalidUserId1 = new AddInterest(-1L, "test");
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, -1)
@@ -89,7 +86,7 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("관심사 추가 API에서 interestName은 최대 15글자 까지만 허용된다.")
+    @DisplayName("관심사 추가 API에서 interestName은 최대 15글자까지만 허용된다.")
     @Test
     void interestNameCanHaveMax15LenthStringWhenAddInterest() throws Exception {
         final String STRING_LENGTH_15 = "ABCDEFGHIJKLMNO";
@@ -128,7 +125,7 @@ class InterestControllerTest {
     }
 
 
-    @DisplayName("괌심사를 제거 수 있다.")
+    @DisplayName("관심사를 제거할 수 있다.")
     @Test
     void deleteInterest() throws Exception {
         given(interestFacade.deleteInterest(anyLong(), anyLong()))

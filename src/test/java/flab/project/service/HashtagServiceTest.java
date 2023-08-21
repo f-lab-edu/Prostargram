@@ -13,6 +13,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class HashtagServiceTest {
+
     @InjectMocks
     private HashtagService hashtagService;
     @Mock

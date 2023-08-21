@@ -35,24 +35,24 @@ class InterestFacadeTest {
     private BadWordChecker badWordChecker;
 
 
-    @DisplayName("관심사는 최대 3개 까지 설정할 수 있다.")
+    @DisplayName("관심사는 최대 10개까지 설정할 수 있다.")
     @Test
     void InterestMaxNumberLimitIsThree() {
         AddInterest addInterest = new AddInterest(1, "test");
         given(interestService.getNumberOfExistingInterests(anyLong()))
-                .willReturn(2);
+                .willReturn(10);
 
         assertThatCode(() -> interestFacade.addInterest(addInterest))
                 .doesNotThrowAnyException();
 
         given(interestService.getNumberOfExistingInterests(anyLong()))
-                .willReturn(4);
+                .willReturn(11);
 
         assertThatThrownBy(() -> interestFacade.addInterest(addInterest))
                 .isInstanceOf(NumberLimitOfInterestExceededException.class);
     }
 
-    @DisplayName("생성 하려는 관심사가 해시 태그 테이블에 존재 하지 않는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출된다.")
+    @DisplayName("생성하려는 관심사가 해시 태그 테이블에 존재하지 않는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출된다.")
     @Test
     void receivedInterestNameDoesNotExistInHashtagThenAddToHashtagTable() {
         AddInterest addInterest = new AddInterest(1L, "test");
@@ -64,13 +64,13 @@ class InterestFacadeTest {
         interestFacade.addInterest(addInterest);
 
         ArgumentCaptor<HashTag> captor = ArgumentCaptor.forClass(HashTag.class);
-        verify(hashtagService).addHashtag(captor.capture());
+        then(hashtagService).should().addHashtag(captor.capture());
 
         HashTag captoredHashtag = captor.getValue();
         assertThat(captoredHashtag.getHashTagName()).isEqualTo(hashTag.getHashTagName());
     }
 
-    @DisplayName("생성 하려는 관심사가 해시 태그 테이블에 존재 하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
+    @DisplayName("생성하려는 관심사가 해시 태그 테이블에 존재 하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
     @Test
     void receivedInterestNameExistInHashtagThenMethodToAddHashtagTableDoesNotCalled() {
         AddInterest addInterest = new AddInterest(1L, "test");
