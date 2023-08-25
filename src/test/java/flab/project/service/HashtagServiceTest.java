@@ -23,6 +23,7 @@ class HashtagServiceTest {
     @Test
     void getHashtagIdByHashtagName() {
         String interestName = "testInterestName";
+
         hashtagService.getHashtagIdByHashtagName(interestName);
 
         then(hashtagMapper).should().getHashtagIdByHashtagName(interestName);
