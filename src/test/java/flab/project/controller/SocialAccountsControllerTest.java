@@ -40,10 +40,13 @@ class SocialAccountsControllerTest {
     @DisplayName("소셜 계정을 추가할 수 있다.")
     @Test
     void addSocialAccount() throws Exception {
+        // given
         given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
+
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 
+        // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
@@ -59,10 +62,13 @@ class SocialAccountsControllerTest {
     @DisplayName("소셜 계정 추가 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenAddSocialAccount() throws Exception {
+        // given
         given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
+
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
+        // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
@@ -74,7 +80,10 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
+        // given
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto2 = new UpdateSocialAccountRequestDto(0, "https://github.com");
+
+        // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
@@ -90,10 +99,13 @@ class SocialAccountsControllerTest {
     @DisplayName("소셜 계정을 삭제할 수 있다.")
     @Test
     void deleteSocialAccount() throws Exception {
+        // given
         given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
+
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 
+        // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
@@ -109,10 +121,13 @@ class SocialAccountsControllerTest {
     @DisplayName("소셜 계정 삭제 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenDeleteSocialAccount() throws Exception {
+        //given
         given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
+
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
+        // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
@@ -124,8 +139,10 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
+        // given
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto2 = new UpdateSocialAccountRequestDto(0, "https://github.com");
 
+        // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
