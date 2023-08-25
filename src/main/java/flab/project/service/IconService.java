@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class IconService {
+
     private static final long DEFAULT_ICON_ID = 1L;
 
     private final IconMapper iconMapper;

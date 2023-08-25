@@ -5,5 +5,6 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface IconMapper {
+
     Long findByDomain(@Param("domain") String domain);
 }

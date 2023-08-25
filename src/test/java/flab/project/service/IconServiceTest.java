@@ -41,14 +41,18 @@ class IconServiceTest {
     @DisplayName("지정된 Domain이 아닌 경우, findByDomain은 null을 반환하고 이때 socialAccount의 iconId는 DEFAULT_ICON_ID로 초기화 된다.")
     @Test
     void setIconIdByDEFAULT_ICON_IDWhenFindByDomainReturnNull(){
-        UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
+        long userId = 1L;
+        final long DEFAULT_ICON_ID = 1L;
+
+        UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(userId, "https://no-reserved-domain.com");
         SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
+
         given(iconMapper.findByDomain(socialAccount.getDomain()))
                 .willReturn(null);
 
         iconService.setIconId(socialAccount);
 
-        assertThat(socialAccount.getIconId()).isEqualTo(1);
+        assertThat(socialAccount.getIconId()).isEqualTo(DEFAULT_ICON_ID);
     }
 
     @DisplayName("매개변수로 넘어온 socialAccount객체의 domain을 이용해 iconMapper의 findByDomain()메서드를 호출한다.")

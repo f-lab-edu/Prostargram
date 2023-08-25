@@ -9,7 +9,6 @@ public enum ResponseEnum {
 
     INVALID_USER_INPUT(false, 4000, "잘못된 요청입니다."),
     NON_EXIST_USER(false, 4001, "존재하지 않는 유저입니다."),
-    NUMBER_LIMIT_OF_INTEREST_EXCEEDED(false, 4002, "관심사는 최대 3개 까지 설정할 수 있습니다."),
 
     DUPLICATE_REQUEST(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요.");

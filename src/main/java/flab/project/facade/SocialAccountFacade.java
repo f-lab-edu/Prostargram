@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class SocialAccountFacade {
+
     private final SocialAccountService socialAccountService;
     private final IconService iconService;
 

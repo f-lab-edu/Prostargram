@@ -10,7 +10,7 @@
     </insert>
 
     <select id="getNumberOfExistingSocialAccounts" resultType="integer">
-        select count(social_account_id)
+        SELECT COUNT(social_account_id)
         from SOCIAL_ACCOUNTS
         where user_id = #{userId};
     </select>

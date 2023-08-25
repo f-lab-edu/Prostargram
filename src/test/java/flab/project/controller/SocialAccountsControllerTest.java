@@ -25,11 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = SocialAccountController.class)
 class SocialAccountsControllerTest {
+
     private static final String UPDATE_SOCIAL_ACCOUNT_API_URL = "/users/{userId}/social-accounts";
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
@@ -62,7 +62,6 @@ class SocialAccountsControllerTest {
         given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
                 .willReturn(new SuccessResponse());
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
-
 
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
@@ -114,7 +113,6 @@ class SocialAccountsControllerTest {
                 .willReturn(new SuccessResponse());
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
-
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
@@ -127,6 +125,7 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto2 = new UpdateSocialAccountRequestDto(0, "https://github.com");
+
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
