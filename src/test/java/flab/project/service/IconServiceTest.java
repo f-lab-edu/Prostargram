@@ -30,6 +30,7 @@ class IconServiceTest {
     void setIconId(){
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
         SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
+
         given(iconMapper.findByDomain(socialAccount.getDomain()))
                 .willReturn(10L);
 
@@ -65,5 +66,4 @@ class IconServiceTest {
 
         then(iconMapper).should().findByDomain(socialAccount.getDomain());
     }
-
 }

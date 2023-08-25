@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface SocialAccountMapper {
+
     int getNumberOfExistingSocialAccounts(@Param("userId") long userId);
 
     void save(@Param("socialAccount") SocialAccount socialAccount);

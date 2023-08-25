@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SocialAccountTest {
+
     @DisplayName("socialAccountUrl에서 domain을 가져올 수 있다.")
     @Test
     void getDomain(){

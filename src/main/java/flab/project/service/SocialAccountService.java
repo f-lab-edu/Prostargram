@@ -23,7 +23,7 @@ public class SocialAccountService {
     public void checkNumberLimitOfSocialAccount(long userId) {
         int numberOfExistingSocialAccounts = socialAccountMapper.getNumberOfExistingSocialAccounts(userId);
 
-        if (numberOfExistingSocialAccounts >= NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS.getValue()) { //todo Constraint라는 클래스를 관리하는게 좋은 선택일까? Enum vs Static fields
+        if (numberOfExistingSocialAccounts >= NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS.getValue()) {
             throw new NumberLimitOfSocialAccountsExceededException();
         }
     }

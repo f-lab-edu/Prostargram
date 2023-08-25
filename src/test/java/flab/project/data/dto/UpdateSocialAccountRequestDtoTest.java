@@ -17,5 +17,4 @@ class UpdateSocialAccountRequestDtoTest {
 
         assertThat(updateSocialAccountRequestDto.getSocialAccountUrl()).isEqualTo("&lt;&lt;test&gt;&gt;");
     }
-
 }
