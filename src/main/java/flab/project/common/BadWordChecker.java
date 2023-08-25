@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Component
 public class BadWordChecker {
+
     private Set<String> badwords;
     private final BadWordMapper badWordMapper;
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class HashtagService {
+
     private final HashtagMapper hashtagMapper;
 
     public Long getHashtagIdByHashtagName(String interestName) {

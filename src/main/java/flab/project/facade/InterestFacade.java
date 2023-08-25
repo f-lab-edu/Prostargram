@@ -41,13 +41,7 @@ public class InterestFacade {
         return new SuccessResponse();
     }
 
-    private void checkNumberLimitOfInterest(AddInterest addInterestDto) {
-        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
 
-        if (numberOfExistingInterests > NUMBER_LIMIT_OF_INTEREST) {
-            throw new NumberLimitOfInterestExceededException();
-        }
-    }
 
     public SuccessResponse deleteInterest(long userId, long hashtagId) {
 
@@ -56,6 +50,14 @@ public class InterestFacade {
         interestService.deleteInterest(userId, hashtagId);
 
         return new SuccessResponse();
+    }
+
+    private void checkNumberLimitOfInterest(AddInterest addInterestDto) {
+        int numberOfExistingInterests = interestService.getNumberOfExistingInterests(addInterestDto.getUserId());
+
+        if (numberOfExistingInterests > NUMBER_LIMIT_OF_INTEREST) {
+            throw new NumberLimitOfInterestExceededException();
+        }
     }
 
     private void checkValidation(long userId, long hashtagId) {

@@ -6,5 +6,6 @@ import java.util.Set;
 
 @Mapper
 public interface BadWordMapper {
+
     public Set<String> getAll();
 }

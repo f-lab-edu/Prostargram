@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class InterestController {
+
     private final InterestFacade interestFacade;
 
     @PostMapping("/users/{userId}/interests")
