@@ -30,5 +30,4 @@ public class SocialAccountFacade {
 
         return new SuccessResponse();
     }
-
 }
