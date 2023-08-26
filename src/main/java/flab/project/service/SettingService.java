@@ -16,7 +16,7 @@ public class SettingService {
 
         int numberOfAffectedRow = settingMapper.updateUserPublicScope(userId, publicScope);
 
-        if (numberOfAffectedRow != 1) {
+        if (numberOfAffectedRow == 0) {
             throw new RuntimeException();
         }
 
