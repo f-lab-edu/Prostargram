@@ -41,11 +41,13 @@ class SettingControllerTest {
     @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정할 수 있다.")
     @Test
     void updateUserPublicScopeToPublic() throws Exception {
+        // given
         long userId=1;
 
         given(settingService.updateUserPublicScope(userId, PUBLIC))
                 .willReturn(new SuccessResponse());
 
+        // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, userId)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -62,9 +64,11 @@ class SettingControllerTest {
     @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정 할 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateUserPublicScope() throws Exception {
+        // given
         long ZeroUserId=0;
         long NegativeUserId=-1;
 
+        // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, ZeroUserId)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -89,11 +93,13 @@ class SettingControllerTest {
     @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정할 수 있다.")
     @Test
     void updateUserPublicScopeToPrivate() throws Exception {
+        // given
         long userId=1;
 
         given(settingService.updateUserPublicScope(userId, PRIVATE))
                 .willReturn(new SuccessResponse());
 
+        // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, userId)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -110,9 +116,11 @@ class SettingControllerTest {
     @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정 할 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateUserPrivateScope() throws Exception {
+        // given
         long ZeroUserId=0;
         long NegativeUserId=-1;
 
+        // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, ZeroUserId)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)

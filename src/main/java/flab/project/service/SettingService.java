@@ -14,9 +14,9 @@ public class SettingService {
 
     public SuccessResponse updateUserPublicScope(long userId, PublicScope publicScope) {
 
-        int reflectedRowCount = settingMapper.updateUserPublicScope(userId, publicScope);
+        int numberOfAffectedRow = settingMapper.updateUserPublicScope(userId, publicScope);
 
-        if (reflectedRowCount != 1) {
+        if (numberOfAffectedRow != 1) {
             throw new RuntimeException();
         }
 

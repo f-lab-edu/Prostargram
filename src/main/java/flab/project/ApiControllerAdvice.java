@@ -15,6 +15,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class ApiControllerAdvice {
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             BindException.class,
@@ -31,13 +32,6 @@ public class ApiControllerAdvice {
     public FailResponse exceptionResolveToDuplicateRequest(DuplicateKeyException e) {
         return new FailResponse(ResponseEnum.DUPLICATE_REQUEST);
     }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public FailResponse exceptionResolveToNonExistUser(DataIntegrityViolationException e) {
-        return new FailResponse(ResponseEnum.NON_EXIST_USER);
-    }
-
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)

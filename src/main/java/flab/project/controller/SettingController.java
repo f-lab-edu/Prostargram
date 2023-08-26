@@ -28,7 +28,7 @@ public class SettingController {
     @PatchMapping("/users/{userId}/settings/public-scope/private")
     public SuccessResponse updateUserPublicScopeToPrivate(
             @PathVariable("userId") @Positive long userId
-            ) {
+    ) {
         return settingService.updateUserPublicScope(userId, PRIVATE);
     }
 }
