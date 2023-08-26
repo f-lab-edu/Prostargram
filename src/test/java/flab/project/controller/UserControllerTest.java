@@ -57,12 +57,11 @@ class UserControllerTest {
     @DisplayName("프로필 페이지 정보를 가져올 때, userId는 항상 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenGetProfilePageInfo() throws Exception {
+        // given
         long zeroUserId = 0;
         long negativeUserId = -1;
 
-        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
-                .willReturn(new SuccessResponse());
-
+        // when & then
         mockMvc.perform(
                         get(GET_PROFILE_PAGE_INFO_URL, negativeUserId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -86,11 +85,13 @@ class UserControllerTest {
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
     @Test
     void getUpdateProfilePageInfo() throws Exception {
+        // given
         long userId = 1;
 
         given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
                 .willReturn(new SuccessResponse());
 
+        // when & then
         mockMvc.perform(
                         get(GET_PROFILE_UPDATE_PAGE_INFO_URL, userId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,12 +105,11 @@ class UserControllerTest {
     @DisplayName("프로필 수정 페이지 정보를 가져올 때, userId는 양수여야 한다..")
     @Test
     void userIdMustBePositiveWhenGetUpdateProfilePageInfo() throws Exception {
+        // given
         long zeroUserId = 0;
         long negativeUserId = -1;
 
-        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
-                .willReturn(new SuccessResponse());
-
+        // when & then
         mockMvc.perform(
                         get(GET_PROFILE_UPDATE_PAGE_INFO_URL, negativeUserId)
                                 .contentType(MediaType.APPLICATION_JSON)

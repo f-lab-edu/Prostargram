@@ -23,7 +23,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     @Operation(
             summary = "프로필 수정 페이지 정보 확인하기 API"
     )

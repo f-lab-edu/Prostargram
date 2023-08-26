@@ -29,12 +29,16 @@ class UserServiceTest {
     @DisplayName("프로필 페이지 정보를 가져올 수 있다.")
     @Test
     void getProfilePageInfo() {
+        // given
         Profile profile = new Profile();
+
         given(userMapper.getProfileInfo(1L, GetProfileRequestType.GET))
                 .willReturn(profile);
 
+        // when
         SuccessResponse<Profile> profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.GET);
 
+        // then
         assertThat(profileInfo.getResult()).isEqualTo(profile);
         then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.GET);
     }
@@ -42,12 +46,16 @@ class UserServiceTest {
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
     @Test
     void getProfileUpdatePageInfo() {
+        // given
         Profile profile = new Profile();
+
         given(userMapper.getProfileInfo(1L, GetProfileRequestType.UPDATE))
                 .willReturn(profile);
 
+        // when
         SuccessResponse<Profile> profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.UPDATE);
 
+        // then
         assertThat(profileInfo.getResult()).isEqualTo(profile);
         then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.UPDATE);
     }
@@ -57,6 +65,7 @@ class UserServiceTest {
     void throwNotExistUserExceptionWhenUserIdNotExist(){
         // given
         long notExistUserId=99L;
+
         given(userMapper.getProfileInfo(notExistUserId,GetProfileRequestType.GET))
                 .willReturn(null);
 
