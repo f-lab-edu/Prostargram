@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import static flab.project.common.Constraints.NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS;
 
+
 @RequiredArgsConstructor
 @Service
 public class SocialAccountService {
@@ -23,7 +24,7 @@ public class SocialAccountService {
     public void checkNumberLimitOfSocialAccount(long userId) {
         int numberOfExistingSocialAccounts = socialAccountMapper.getNumberOfExistingSocialAccounts(userId);
 
-        if (numberOfExistingSocialAccounts >= NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS.getValue()) {
+        if (numberOfExistingSocialAccounts >= NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS) {
             throw new NumberLimitOfSocialAccountsExceededException();
         }
     }

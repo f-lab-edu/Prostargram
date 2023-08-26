@@ -24,7 +24,6 @@ public class SocialAccount {
     }
 
     //todo 얘는 Converter? Formatter? 그쪽 강의 들으면 더 좋은 방법이 나올듯?
-    //todo 이것도 프론트에서 한 번 Filtering을 해주는게 좋겠지?
     public String getDomain() {
         String linkUrl = getSocialAccountUrl();
         Matcher matcher = urlPatten.matcher(linkUrl);
