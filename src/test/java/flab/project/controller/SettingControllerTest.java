@@ -1,9 +1,7 @@
 package flab.project.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.enums.PublicScope;
 import flab.project.service.SettingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,6 @@ import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static flab.project.data.enums.PublicScope.PRIVATE;
 import static flab.project.data.enums.PublicScope.PUBLIC;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -27,14 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = SettingController.class)
 class SettingControllerTest {
+
     private static final String UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL = "/users/{userId}/settings/public-scope/public";
     private static final String UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL = "/users/{userId}/settings/public-scope/private";
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockBean
     private SettingService settingService;
 
