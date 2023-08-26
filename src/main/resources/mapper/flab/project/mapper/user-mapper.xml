@@ -76,4 +76,5 @@
         <id property="hashTagId" column="hashtag_id"/>
         <result property="hashTagName" column="name"/>
     </resultMap>
+
 </mapper>
