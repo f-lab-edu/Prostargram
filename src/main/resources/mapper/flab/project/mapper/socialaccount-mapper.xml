@@ -11,7 +11,7 @@
 
     <select id="getNumberOfExistingSocialAccounts" resultType="integer">
         SELECT COUNT(social_account_id)
-        from SOCIAL_ACCOUNTS
+        FROM SOCIAL_ACCOUNTS
         where user_id = #{userId};
     </select>
 
@@ -19,7 +19,7 @@
         DELETE
         FROM SOCIAL_ACCOUNTS
         WHERE user_id = #{socialAccount.userId}
-          and social_account_url = #{socialAccount.socialAccountUrl};
+          AND social_account_url = #{socialAccount.socialAccountUrl};
     </delete>
 
 </mapper>

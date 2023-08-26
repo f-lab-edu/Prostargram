@@ -14,7 +14,7 @@ import org.springframework.web.util.HtmlUtils;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateSocialAccountRequestDto {
-    
+
     @Positive
     private long userId;
 
@@ -22,6 +22,6 @@ public class UpdateSocialAccountRequestDto {
     private String socialAccountUrl;
 
     public void convertEscapeCharacter() {
-        this.socialAccountUrl= HtmlUtils.htmlEscape(socialAccountUrl);
+        this.socialAccountUrl = HtmlUtils.htmlEscape(socialAccountUrl);
     }
 }

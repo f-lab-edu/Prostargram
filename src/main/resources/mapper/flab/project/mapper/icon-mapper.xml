@@ -5,10 +5,9 @@
 <mapper namespace="flab.project.mapper.IconMapper">
 
     <select id="findByDomain" resultType="long">
-        SELECT
-            ICON.icon_id
+        SELECT ICON.icon_id
         FROM LINK_ICON ICON
-        WHERE domain=#{domain}
+        WHERE domain =#{domain}
     </select>
 
 </mapper>

@@ -27,7 +27,7 @@ class IconServiceTest {
 
     @DisplayName("setIconId는 매개변수로 넘어온 socialAccount객체의 iconId를 초기화한다.")
     @Test
-    void setIconId(){
+    void setIconId() {
         // given
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
         SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
@@ -44,7 +44,7 @@ class IconServiceTest {
 
     @DisplayName("지정된 Domain이 아닌 경우, findByDomain은 null을 반환하고 이때 socialAccount의 iconId는 DEFAULT_ICON_ID로 초기화 된다.")
     @Test
-    void setIconIdByDEFAULT_ICON_IDWhenFindByDomainReturnNull(){
+    void setIconIdByDEFAULT_ICON_IDWhenFindByDomainReturnNull() {
         // given
         long userId = 1L;
         final long DEFAULT_ICON_ID = 1L;
