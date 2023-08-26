@@ -32,7 +32,7 @@
         </choose>
     </select>
 
-    <select id="getProfilePageInfo" parameterType="flab.project.data.enums.requestparam.GetProfileRequestType" resultMap="profileResult">
+    <select id="getProfileInfo" parameterType="flab.project.data.enums.requestparam.GetProfileRequestType" resultMap="profileResult">
         SELECT U.user_id,
         U.user_name,
         U.profile_img_url,
