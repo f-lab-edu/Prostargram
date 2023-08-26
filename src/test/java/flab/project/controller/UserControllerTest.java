@@ -92,7 +92,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("유저 닉네임은 최대 16글자 까지 허용된다.")
+    @DisplayName("유저 닉네임은 최대 16글자까지 허용된다.")
     @Test
     void userNameMaxLengthIs16() throws Exception {
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
@@ -132,7 +132,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("유저 닉네임에는 영어/한글/숫자/_(언더바) .(온점)을 사용할 수 있다.")
+    @DisplayName("유저 닉네임에는 영어/한글/숫자/_(언더바)/.(온점)을 사용할 수 있다.")
     @Test
     void OnlyAFewCharactersAreAllowedInNickName() throws Exception {
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
@@ -170,7 +170,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("학교/회사정보는 최대 18글자 까지 허용된다.")
+    @DisplayName("학교/회사정보는 최대 18글자까지 허용된다.")
     @Test
     void departmentNameMaxLengthIs18() throws Exception {
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))

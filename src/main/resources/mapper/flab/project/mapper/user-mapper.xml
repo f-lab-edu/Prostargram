@@ -33,7 +33,7 @@
     </select>
 
     <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
-        UPDATE Users
+        UPDATE USERS
         <set>
             <if test="updateProfileRequestDto.userName !=null">user_name=#{updateProfileRequestDto.userName},</if>
             <if test="updateProfileRequestDto.departmentName !=null">department_name=#{updateProfileRequestDto.departmentName},</if>

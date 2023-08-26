@@ -23,18 +23,18 @@ public class UserService {
     }
 
     public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
-        checkValidation(userId);
+        checkUserId(userId);
 
-        int NumberOfreflectedRow = userMapper.updateProfile(userId, updateProfileRequestDto);
+        int numberOfAffectedRow = userMapper.updateProfile(userId, updateProfileRequestDto);
 
-        if (NumberOfreflectedRow == 0) {
+        if (numberOfAffectedRow == 0) {
             throw new RuntimeException();
         }
 
         return new SuccessResponse();
     }
 
-    private void checkValidation(long userId) {
+    private void checkUserId(long userId) {
         if (userId <= 0) {
             throw new InvalidUserInputException();
         }
