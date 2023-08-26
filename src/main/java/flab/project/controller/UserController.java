@@ -23,16 +23,15 @@ public class UserController {
 
     private final UserService userService;
 
-  
-    
+
     @Operation(
             summary = "프로필 수정 페이지 정보 확인하기 API"
     )
     @GetMapping(value = "/users/{userId}/profile_update_page")
     public SuccessResponse getProfilePageInfo(
-        @PathVariable("userId") long userId
+            @PathVariable("userId") long userId
     ) {
-        return userService.getProfileInfo(userId,GetProfileRequestType.UPDATE);
+        return userService.getProfileInfo(userId, GetProfileRequestType.UPDATE);
     }
 
     @Operation(
@@ -44,18 +43,18 @@ public class UserController {
     ) {
         return userService.getProfileInfo(userId, GetProfileRequestType.GET);
     }
-    
+
     @Operation(
             summary = "개인 설정 상태 확인하기 API"
     )
     @Parameters(
             value = {
-                @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
+                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
             }
     )
     @GetMapping(value = "/users/{userId}/options")
     public GetOptionsResponseDto getPersonalSettings(
-        @PathVariable("userId") Long userId
+            @PathVariable("userId") Long userId
     ) {
         return null;
     }
@@ -89,45 +88,45 @@ public class UserController {
     ) {
         return userService.getFollows(userId, GetFollowsType.FOLLOWING);
     }
-  
+
     @Operation(
-        summary = "옵션을 수정하는 API"
+            summary = "옵션을 수정하는 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
+            }
     )
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettings(
-        @PathVariable("userId") Long userId,
-        PatchOptionsRequestDto updateOptionsRequestDto
+            @PathVariable("userId") Long userId,
+            PatchOptionsRequestDto updateOptionsRequestDto
     ) {
         return "test";
     }
 
     @Operation(
-        summary = "프로필 수정하기 API"
+            summary = "프로필 수정하기 API"
     )
     @PatchMapping(value = "/users/profile-info")
     public String updateProfile(
-        Profile updateProfileRequestDto
+            Profile updateProfileRequestDto
     ) {
         return "test";
     }
 
     @Operation(
-        summary = "팔로워/팔로잉 생성/삭제 API"
+            summary = "팔로워/팔로잉 생성/삭제 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+            }
     )
     @PutMapping(value = "/users/{userId}/follows")
     public String putFollows(
-        PutFollowRequestDto putFollowRequestDto,
-        PutFollowType putFollowRequestType
+            PutFollowRequestDto putFollowRequestDto,
+            PutFollowType putFollowRequestType
     ) {
         return "test";
     }
