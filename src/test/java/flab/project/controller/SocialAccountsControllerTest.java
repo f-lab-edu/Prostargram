@@ -63,9 +63,6 @@ class SocialAccountsControllerTest {
     @Test
     void userIdMustBePositiveWhenAddSocialAccount() throws Exception {
         // given
-        given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
-                .willReturn(new SuccessResponse());
-
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
         // when & then
@@ -122,9 +119,6 @@ class SocialAccountsControllerTest {
     @Test
     void userIdMustBePositiveWhenDeleteSocialAccount() throws Exception {
         //given
-        given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
-                .willReturn(new SuccessResponse());
-
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto1 = new UpdateSocialAccountRequestDto(-1L, "https://github.com");
 
         // when & then
