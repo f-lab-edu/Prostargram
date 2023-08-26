@@ -11,5 +11,4 @@ public interface InterestMapper {
     void save(@Param("userId") long userId, @Param("hashtagId") long hashtagId);
 
     int delete(@Param("userId") long userId, @Param("hashtagId") Long hashtagId);
-
 }

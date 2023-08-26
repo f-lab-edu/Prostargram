@@ -30,5 +30,4 @@ public class InterestController {
     ) {
         return interestFacade.deleteInterest(userId, hashtagId);
     }
-
 }

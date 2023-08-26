@@ -7,4 +7,5 @@
     <select id="getAll" resultType="string">
         SELECT name FROM BADWORDS
     </select>
+
 </mapper>

@@ -47,5 +47,4 @@ public class ApiControllerAdvice {
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
-
 }

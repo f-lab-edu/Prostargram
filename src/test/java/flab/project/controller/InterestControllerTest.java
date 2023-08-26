@@ -31,7 +31,6 @@ class InterestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
