@@ -3,12 +3,8 @@ package flab.project.common;
 import lombok.Getter;
 
 @Getter
-public enum Constraints {
-    NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS(3);
+public class Constraints {
 
-    private int value;
+    private static int NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS = 3;
 
-    Constraints(int value) {
-        this.value = value;
-    }
 }
