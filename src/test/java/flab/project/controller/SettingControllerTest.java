@@ -37,7 +37,7 @@ class SettingControllerTest {
     @Test
     void updateUserPublicScopeToPublic() throws Exception {
         // given
-        long userId=1;
+        long userId = 1;
 
         given(settingService.updateUserPublicScope(userId, PUBLIC))
                 .willReturn(new SuccessResponse());
@@ -60,8 +60,8 @@ class SettingControllerTest {
     @Test
     void userIdMustBePositiveWhenUpdateUserPublicScope() throws Exception {
         // given
-        long ZeroUserId=0;
-        long NegativeUserId=-1;
+        long ZeroUserId = 0;
+        long NegativeUserId = -1;
 
         // when & then
         mockMvc.perform(
@@ -89,7 +89,7 @@ class SettingControllerTest {
     @Test
     void updateUserPublicScopeToPrivate() throws Exception {
         // given
-        long userId=1;
+        long userId = 1;
 
         given(settingService.updateUserPublicScope(userId, PRIVATE))
                 .willReturn(new SuccessResponse());
@@ -112,8 +112,8 @@ class SettingControllerTest {
     @Test
     void userIdMustBePositiveWhenUpdateUserPrivateScope() throws Exception {
         // given
-        long ZeroUserId=0;
-        long NegativeUserId=-1;
+        long ZeroUserId = 0;
+        long NegativeUserId = -1;
 
         // when & then
         mockMvc.perform(

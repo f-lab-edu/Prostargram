@@ -5,9 +5,9 @@
 <mapper namespace="flab.project.mapper.SettingMapper">
 
     <update id="updateUserPublicScope">
-        UPDATE Users
+        UPDATE USERS
         SET public_scope=#{publicScope}
-        WHERE user_id=#{userId};
+        WHERE user_id = #{userId};
     </update>
 
 </mapper>

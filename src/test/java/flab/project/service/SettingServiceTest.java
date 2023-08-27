@@ -29,11 +29,11 @@ class SettingServiceTest {
 
     @DisplayName("계정 공개 여부를 PUBLIC으로 수정할 수 있다.")
     @Test
-    void updateUserPublicScopeToPublic(){
+    void updateUserPublicScopeToPublic() {
         // given
-        long userId=1;
+        long userId = 1;
 
-        given(settingMapper.updateUserPublicScope(userId,PUBLIC))
+        given(settingMapper.updateUserPublicScope(userId, PUBLIC))
                 .willReturn(1);
 
         // when
@@ -41,17 +41,17 @@ class SettingServiceTest {
 
         // then
         assertThat(successResponse)
-                .extracting("isSuccess","message","code")
-                .containsExactly(SUCCESS.isSuccess(),SUCCESS.getMessage(),SUCCESS.getCode());
+                .extracting("isSuccess", "message", "code")
+                .containsExactly(SUCCESS.isSuccess(), SUCCESS.getMessage(), SUCCESS.getCode());
     }
 
     @DisplayName("계정 공개 여부를 PRIVATE으로 수정할 수 있다.")
     @Test
-    void updateUserPublicScopeToPrivate(){
+    void updateUserPublicScopeToPrivate() {
         // given
-        long userId=1;
+        long userId = 1;
 
-        given(settingMapper.updateUserPublicScope(userId,PRIVATE))
+        given(settingMapper.updateUserPublicScope(userId, PRIVATE))
                 .willReturn(1);
 
         // when
@@ -59,21 +59,21 @@ class SettingServiceTest {
 
         // then
         assertThat(successResponse)
-                .extracting("isSuccess","message","code")
-                .containsExactly(SUCCESS.isSuccess(),SUCCESS.getMessage(),SUCCESS.getCode());
+                .extracting("isSuccess", "message", "code")
+                .containsExactly(SUCCESS.isSuccess(), SUCCESS.getMessage(), SUCCESS.getCode());
     }
 
     @DisplayName("계정 공개 여부 수정 메서드를 통해 아무런 row도 수정되지 않으면 RuntimeException을 던진다.")
     @Test
-    void throwRuntimeExceptionWhenUpdateUserPublicScope(){
+    void throwRuntimeExceptionWhenUpdateUserPublicScope() {
         // given
-        long userId=1;
+        long userId = 1;
 
-        given(settingMapper.updateUserPublicScope(userId,PRIVATE))
+        given(settingMapper.updateUserPublicScope(userId, PRIVATE))
                 .willReturn(0);
 
         // when & then
-        assertThatThrownBy(()->settingService.updateUserPublicScope(userId,PUBLIC))
+        assertThatThrownBy(() -> settingService.updateUserPublicScope(userId, PUBLIC))
                 .isInstanceOf(RuntimeException.class);
     }
 }
