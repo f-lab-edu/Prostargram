@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class InterestControllerTest {
 
     private static final String ADD_INTERST_API_URL = "/users/{userId}/interests";
-    private static final String DELETE_INTEREST_API_URL="/users/{userId}/interests";
+    private static final String DELETE_INTEREST_API_URL = "/users/{userId}/interests";
 
     @Autowired
     private MockMvc mockMvc;

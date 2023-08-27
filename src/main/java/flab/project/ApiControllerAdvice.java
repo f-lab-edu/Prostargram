@@ -41,7 +41,6 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.NON_EXIST_USER);
     }
 
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {

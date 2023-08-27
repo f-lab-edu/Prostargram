@@ -10,12 +10,12 @@ import java.util.Set;
 @Component
 public class BadWordChecker {
 
-    private Set<String> badwords;
+    private Set<String> badWords;
     private final BadWordMapper badWordMapper;
 
-    public BadWordChecker(BadWordMapper badwordMapper) {
-        this.badWordMapper = badwordMapper;
-        badwords = badwordMapper.getAll();
+    public BadWordChecker(BadWordMapper badWordMapper) {
+        this.badWordMapper = badWordMapper;
+        badWords = badWordMapper.getAll();
     }
 
     public boolean hasBadWord(List<String> inputs) {
@@ -27,7 +27,7 @@ public class BadWordChecker {
         if (!StringUtils.hasText(inputString)) {
             return false;
         }
-        return badwords.stream()
-                .anyMatch(badword -> inputString.trim().contains(badword));
+        return badWords.stream()
+                .anyMatch(badWord -> inputString.trim().contains(badWord));
     }
 }

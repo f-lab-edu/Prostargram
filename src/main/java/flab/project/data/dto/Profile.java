@@ -14,7 +14,7 @@ public class Profile extends User {
     private String selfIntroduction;
 
     @Schema(example = "[\"http://github.com\",\"http://blog.com]\"")
-    private List<String> associatedLinks;
+    private List<String> associatedLinkss;
 
     @Schema(example = "[\"#aws\",\"#java\"]")
     private List<HashTag> hashTags;

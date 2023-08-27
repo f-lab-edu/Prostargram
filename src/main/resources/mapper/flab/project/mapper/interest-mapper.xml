@@ -19,7 +19,7 @@
         DELETE
         FROM INTERESTS
         WHERE user_id = #{userId}
-          and hashtag_id = #{hashtagId};
+          AND hashtag_id = #{hashtagId};
     </delete>
 
 </mapper>

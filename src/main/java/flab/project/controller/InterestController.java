@@ -26,8 +26,8 @@ public class InterestController {
     @DeleteMapping("/users/{userId}/interests")
     public SuccessResponse deleteInterest(
             @PathVariable("userId") @Positive long userId,
-            @RequestParam @Positive long hashtagId
+            @RequestParam @Positive long hashTagId
     ) {
-        return interestFacade.deleteInterest(userId, hashtagId);
+        return interestFacade.deleteInterest(userId, hashTagId);
     }
 }

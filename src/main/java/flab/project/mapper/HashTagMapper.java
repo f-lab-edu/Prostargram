@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface HashtagMapper {
+public interface HashTagMapper {
 
-    Long getHashtagIdByHashtagName(@Param("hashtagName") String hashtagName);
+    Long getHashtagIdByHashtagName(@Param("hashTagName") String hashTagName);
 
-    void save(@Param("hashtag") HashTag hashtagName);
+    void save(@Param("hashTag") HashTag hashTagName);
 }

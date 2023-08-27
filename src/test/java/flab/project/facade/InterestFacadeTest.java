@@ -1,11 +1,10 @@
 package flab.project.facade;
 
 import flab.project.common.BadWordChecker;
-import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import flab.project.data.dto.AddInterest;
 import flab.project.data.dto.model.HashTag;
-import flab.project.service.HashtagService;
+import flab.project.service.HashTagService;
 import flab.project.service.InterestService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ class InterestFacadeTest {
     @Mock
     private InterestService interestService;
     @Mock
-    private HashtagService hashtagService;
+    private HashTagService hashtagService;
     @Mock
     private BadWordChecker badWordChecker;
 
@@ -58,16 +57,16 @@ class InterestFacadeTest {
         AddInterest addInterest = new AddInterest(1L, "test");
         HashTag hashTag = new HashTag(addInterest.getInterestNameWithSharp());
 
-        given(hashtagService.getHashtagIdByHashtagName(anyString()))
+        given(hashtagService.getHashTagIdByHashtagName(anyString()))
                 .willReturn(null);
 
         interestFacade.addInterest(addInterest);
 
         ArgumentCaptor<HashTag> captor = ArgumentCaptor.forClass(HashTag.class);
-        then(hashtagService).should().addHashtag(captor.capture());
+        then(hashtagService).should().addHashTag(captor.capture());
 
-        HashTag captoredHashtag = captor.getValue();
-        assertThat(captoredHashtag.getHashTagName()).isEqualTo(hashTag.getHashTagName());
+        HashTag captoredHashTag = captor.getValue();
+        assertThat(captoredHashTag.getHashTagName()).isEqualTo(hashTag.getHashTagName());
     }
 
     @DisplayName("생성하려는 관심사가 해시 태그 테이블에 존재 하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
@@ -76,11 +75,11 @@ class InterestFacadeTest {
         AddInterest addInterest = new AddInterest(1L, "test");
         HashTag hashTag = new HashTag(addInterest.getInterestNameWithSharp());
 
-        given(hashtagService.getHashtagIdByHashtagName(anyString()))
+        given(hashtagService.getHashTagIdByHashtagName(anyString()))
                 .willReturn(1L);
 
         interestFacade.addInterest(addInterest);
 
-        then(hashtagService).should(never()).addHashtag(hashTag);
+        then(hashtagService).should(never()).addHashTag(hashTag);
     }
 }

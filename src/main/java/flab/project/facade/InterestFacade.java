@@ -6,7 +6,7 @@ import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import flab.project.data.dto.AddInterest;
 import flab.project.data.dto.model.HashTag;
-import flab.project.service.HashtagService;
+import flab.project.service.HashTagService;
 import flab.project.service.InterestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class InterestFacade {
 
     private final BadWordChecker badWordChecker;
     private final InterestService interestService;
-    private final HashtagService hashtagService;
+    private final HashTagService hashTagService;
 
     @Transactional
     public SuccessResponse addInterest(AddInterest addInterestDto) {
@@ -29,25 +29,23 @@ public class InterestFacade {
 
         checkNumberLimitOfInterest(addInterestDto);
 
-        Long hashtagId = hashtagService.getHashtagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
+        Long hashTagId = hashTagService.getHashTagIdByHashtagName(addInterestDto.getInterestNameWithSharp());
 
-        if (hashtagId == null) {
+        if (hashTagId == null) {
             String interestNameWithSharp = addInterestDto.getInterestNameWithSharp();
             HashTag hashTag = new HashTag(interestNameWithSharp);
-            hashtagId = hashtagService.addHashtag(hashTag);
+            hashTagId = hashTagService.addHashTag(hashTag);
         }
 
-        interestService.addInterest(addInterestDto.getUserId(), hashtagId);
+        interestService.addInterest(addInterestDto.getUserId(), hashTagId);
         return new SuccessResponse();
     }
 
+    public SuccessResponse deleteInterest(long userId, long hashTagId) {
 
+        validateUserIdAndHashTagId(userId, hashTagId);
 
-    public SuccessResponse deleteInterest(long userId, long hashtagId) {
-
-        checkValidation(userId, hashtagId);
-
-        interestService.deleteInterest(userId, hashtagId);
+        interestService.deleteInterest(userId, hashTagId);
 
         return new SuccessResponse();
     }
@@ -60,8 +58,8 @@ public class InterestFacade {
         }
     }
 
-    private void checkValidation(long userId, long hashtagId) {
-        if (userId <= 0 || hashtagId <= 0) {
+    private void validateUserIdAndHashTagId(long userId, long hashTagId) {
+        if (userId <= 0 || hashTagId <= 0) {
             throw new InvalidUserInputException();
         }
     }

@@ -11,7 +11,7 @@ class AddInterestTest {
 
     @DisplayName("관심사 이름은 Sharp과 함께 나타나게 한다.")
     @Test
-    void getInterestNameWithSharp(){
+    void getInterestNameWithSharp() {
         AddInterest addInterest = new AddInterest(1L, "test");
 
         String interestNameWithSharp = addInterest.getInterestNameWithSharp();
@@ -21,7 +21,7 @@ class AddInterestTest {
 
     @DisplayName("AddInterest의 String으로 된 필드를 뽑아낼 수 있다.")
     @Test
-    void getStringFields(){
+    void getStringFields() {
         AddInterest addInterest = new AddInterest(1L, "test");
 
         List<String> stringFields = addInterest.getStringFields();
@@ -32,7 +32,7 @@ class AddInterestTest {
 
     @DisplayName("addInterst.convertEscapeCharacter 메서드는 문자열 안에 escape 문자들을 변경해준다.")
     @Test
-    void convertEscapeCharacter(){
+    void convertEscapeCharacter() {
         AddInterest addInterest = new AddInterest(1L, "<<test>>");
 
         assertThat(addInterest.getInterestNameWithSharp()).isEqualTo("#&lt;&lt;test&gt;&gt;");
