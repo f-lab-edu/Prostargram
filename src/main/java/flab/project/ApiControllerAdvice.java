@@ -1,6 +1,5 @@
 package flab.project;
 
-
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;

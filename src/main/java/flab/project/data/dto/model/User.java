@@ -1,4 +1,4 @@
-package flab.project.data.dto;
+package flab.project.data.dto.model;
 
 import flab.project.data.dto.model.BasicUser;
 import io.swagger.v3.oas.annotations.media.Schema;
