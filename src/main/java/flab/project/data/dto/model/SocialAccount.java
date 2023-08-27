@@ -23,7 +23,7 @@ public class SocialAccount {
         this.socialAccountUrl = updateSocialAccount.getSocialAccountUrl();
     }
 
-    //todo 얘는 Converter? Formatter? 그쪽 강의 들으면 더 좋은 방법이 나올듯?
+    //todo Converter, Formatter 강의 수강 후, 리펙토링 여부 결정.
     public String getDomain() {
         String linkUrl = getSocialAccountUrl();
         Matcher matcher = urlPatten.matcher(linkUrl);

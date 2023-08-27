@@ -24,7 +24,6 @@ public class IconService {
     private long getIconIdByDomain(String domain) {
         Long iconId = iconMapper.findByDomain(domain);
 
-        //Service와 Mapper사이에 클래스를 두고, iconId를 분기문으로 가져오게 하고싶은데..
         if (iconId == null) {
             iconId = DEFAULT_ICON_ID;
         }

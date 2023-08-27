@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import static flab.project.common.Constraints.NUMBER_LIMIT_OF_SOCIAL_ACCOUNTS;
 
-
 @RequiredArgsConstructor
 @Service
 public class SocialAccountService {
