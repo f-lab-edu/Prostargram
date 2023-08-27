@@ -16,12 +16,12 @@ public class InterestService {
         return interestMapper.getNumberOfExistingInterests(userId);
     }
 
-    public void addInterest(long userId, long hashtagId) {
-        interestMapper.save(userId, hashtagId);
+    public void addInterest(long userId, long hashTagId) {
+        interestMapper.save(userId, hashTagId);
     }
 
-    public void deleteInterest(long userId, long hashtagId) {
-        int numberOfDeletedRow = interestMapper.delete(userId, hashtagId);
+    public void deleteInterest(long userId, long hashTagId) {
+        int numberOfDeletedRow = interestMapper.delete(userId, hashTagId);
 
         if (numberOfDeletedRow == 0) {
             throw new InvalidUserInputException();

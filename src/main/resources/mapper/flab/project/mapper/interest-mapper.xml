@@ -12,14 +12,14 @@
 
     <insert id="save">
         INSERT INTO INTERESTS(user_id, hashtag_id)
-            VALUE (#{userId},#{hashtagId});
+            VALUE (#{userId},#{hashTagId});
     </insert>
 
     <delete id="delete">
         DELETE
         FROM INTERESTS
         WHERE user_id = #{userId}
-          AND hashtag_id = #{hashtagId};
+          AND hashtag_id = #{hashTagId};
     </delete>
 
 </mapper>

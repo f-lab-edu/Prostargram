@@ -22,20 +22,26 @@ class HashTagServiceTest {
     @DisplayName("해시태그 이름을 통해 해시태그 아이디를 가져올 수 있다.")
     @Test
     void getHashtagIdByHashtagName() {
+        // given
         String interestName = "testInterestName";
 
+        // when
         hashtagService.getHashTagIdByHashtagName(interestName);
 
+        // then
         then(hashtagMapper).should().getHashtagIdByHashtagName(interestName);
     }
 
     @DisplayName("해시태그를 추가할 수 있다.")
     @Test
     void addHashtag() {
+        // given
         HashTag hashTag = new HashTag("testInterestName");
 
+        // when
         hashtagService.addHashTag(hashTag);
 
+        // then
         then(hashtagMapper).should().save(hashTag);
     }
 }

@@ -25,26 +25,42 @@ public class InterestServiceTest {
     @DisplayName("현재 설정한 관심사 개수를 가져올 수 있다.")
     @Test
     public void getNumberOfExistingInterests() {
-        interestService.getNumberOfExistingInterests(1L);
+        // given
+        long userId = 1;
 
-        then(interestMapper).should().getNumberOfExistingInterests(1L);
+        // when
+        interestService.getNumberOfExistingInterests(userId);
+
+        // then
+        then(interestMapper).should().getNumberOfExistingInterests(userId);
     }
 
     @DisplayName("관심사를 설정할 수 있다.")
     @Test
     void addInterest() {
-        interestService.addInterest(1L, 1L);
+        // given
+        long userId = 1L;
+        long hashTagId = 1L;
 
-        then(interestMapper).should().save(1L, 1L);
+        // when
+        interestService.addInterest(userId, hashTagId);
+
+        // then
+        then(interestMapper).should().save(userId, hashTagId);
     }
 
     @DisplayName("관심사를 삭제할 수 있다.")
     @Test
     void deleteInterest() {
-        given(interestMapper.delete(1L, 1L))
+        // given
+        long userId = 1L;
+        long hashTagId = 1L;
+
+        given(interestMapper.delete(userId, hashTagId))
                 .willReturn(1);
 
-        assertThatCode(() -> interestService.deleteInterest(1L, 1L))
+        // when & then
+        assertThatCode(() -> interestService.deleteInterest(userId, hashTagId))
                 .doesNotThrowAnyException();
 
     }
@@ -52,10 +68,15 @@ public class InterestServiceTest {
     @DisplayName("삭제된 관심사가 없으면 InvalidUserInput이 발생한다.")
     @Test
     void throwInvalidUserInputWhenDoesNotDeletedAnyRow() {
-        given(interestMapper.delete(1L, 1L))
+        // given
+        long userId = 1L;
+        long hashTagId = 1L;
+
+        given(interestMapper.delete(userId, hashTagId))
                 .willReturn(0);
 
-        assertThatThrownBy(() -> interestService.deleteInterest(1L, 1L))
+        // when & then
+        assertThatThrownBy(() -> interestService.deleteInterest(userId, hashTagId))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 }
