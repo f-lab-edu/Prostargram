@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.SocialAccountMapper">
+
+    <insert id="save" parameterType="socialAccount">
+        INSERT INTO SOCIAL_ACCOUNTS(icon_id, user_id, social_account_url)
+            VALUE (#{socialAccount.iconId},#{socialAccount.userId},#{socialAccount.socialAccountUrl});
+    </insert>
+
+    <select id="getNumberOfExistingSocialAccounts" resultType="integer">
+        SELECT COUNT(social_account_id)
+        FROM SOCIAL_ACCOUNTS
+        where user_id = #{userId};
+    </select>
+
+    <delete id="remove" parameterType="socialAccount">
+        DELETE
+        FROM SOCIAL_ACCOUNTS
+        WHERE user_id = #{socialAccount.userId}
+          AND social_account_url = #{socialAccount.socialAccountUrl};
+    </delete>
+
+</mapper>

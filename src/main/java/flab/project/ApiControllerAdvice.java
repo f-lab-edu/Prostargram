@@ -18,10 +18,10 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
-        BindException.class,
-        InvalidUserInputException.class,
-        ConstraintViolationException.class,
-        MethodArgumentTypeMismatchException.class
+            BindException.class,
+            InvalidUserInputException.class,
+            ConstraintViolationException.class,
+            MethodArgumentTypeMismatchException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);

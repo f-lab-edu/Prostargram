@@ -21,8 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-  
-    
     @Operation(
             summary = "프로필 정보 확인하기 API",
             description = "1. 프로필 페이지에서 사용되는 API ( type으로 PROFILE_PAGE_REQUEST전달 ), "
