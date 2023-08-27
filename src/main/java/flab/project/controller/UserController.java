@@ -7,16 +7,19 @@ import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.enums.requestparam.PutFollowType;
 
 import flab.project.service.UserService;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -28,7 +31,7 @@ public class UserController {
     )
     @GetMapping(value = "/users/{userId}/profile_update_page")
     public SuccessResponse getProfilePageInfo(
-            @PathVariable("userId") long userId
+            @PathVariable("userId") @Positive long userId
     ) {
         return userService.getProfileInfo(userId, GetProfileRequestType.UPDATE);
     }
@@ -38,7 +41,7 @@ public class UserController {
     )
     @GetMapping(value = "/users/{userId}/profile_page")
     public SuccessResponse<Profile> getProfileUpdatePageInfo(
-            @PathVariable("userId") long userId
+            @PathVariable("userId") @Positive long userId
     ) {
         return userService.getProfileInfo(userId, GetProfileRequestType.GET);
     }

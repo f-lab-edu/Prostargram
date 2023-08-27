@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,23 +64,22 @@ class UserControllerTest {
 
         // when & then
         mockMvc.perform(
-                        get(GET_PROFILE_PAGE_INFO_URL, negativeUserId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
-        mockMvc.perform(
                         get(GET_PROFILE_PAGE_INFO_URL, zeroUserId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
+        mockMvc.perform(
+                        get(GET_PROFILE_PAGE_INFO_URL, negativeUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
@@ -111,21 +111,21 @@ class UserControllerTest {
 
         // when & then
         mockMvc.perform(
-                        get(GET_PROFILE_UPDATE_PAGE_INFO_URL, negativeUserId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
-        mockMvc.perform(
                         get(GET_PROFILE_UPDATE_PAGE_INFO_URL, zeroUserId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        get(GET_PROFILE_UPDATE_PAGE_INFO_URL, negativeUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 }

@@ -47,10 +47,10 @@
         H.hashtag_id,
         H.name
         FROM USERS U
-        LEFT JOIN social_accounts S on U.user_id = S.user_id
-        LEFT JOIN link_icon L on S.icon_id = L.icon_id
-        LEFT JOIN interests I on u.user_id = I.user_id
-        LEFT JOIN hashtags H on I.hashtag_id = H.hashtag_id
+        LEFT JOIN SOCIAL_ACCOUNTS S on U.user_id = S.user_id
+        LEFT JOIN LINK_ICON L on S.icon_id = L.icon_id
+        LEFT JOIN INTERESTS I on u.user_id = I.user_id
+        LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
         where U.user_id = #{userId};
     </select>
 
