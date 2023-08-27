@@ -1,13 +1,11 @@
 package flab.project.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -108,6 +106,7 @@ class UserControllerTest {
 
         // when & then
         assertThat(USER_NAME_16_LENGTH.length()).isEqualTo(16);
+
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith16LengthNickName))
@@ -119,7 +118,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
-
         // given
         String USER_NAME_17_LENGTH = "가나다라마바사아자차카타파하갸냐댜";
         UpdateProfileRequestDto updateProfileRequestDtoWith17LengthNickName
@@ -127,6 +125,7 @@ class UserControllerTest {
 
         // when & then
         assertThat(USER_NAME_17_LENGTH.length()).isEqualTo(17);
+
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith17LengthNickName))
@@ -194,6 +193,7 @@ class UserControllerTest {
 
         // when & then
         assertThat(DEPARTMENT_NAME_18_LENGTH.length()).isEqualTo(18);
+
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith18DepartmentName))
@@ -213,6 +213,7 @@ class UserControllerTest {
 
         // when & then
         assertThat(DEPARTMENT_NAME_19_LENGTH.length()).isEqualTo(19);
+
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
                                 .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith19DepartmentName))
