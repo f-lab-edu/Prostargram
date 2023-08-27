@@ -18,13 +18,13 @@ public class AddInterest {
     @Length(min = 1, max = 15)
     private String interestName;
 
-    //todo getInterestName대신 getInterestNameWithSharp를 사용하게 강제하고 싶은데 방법이 없겠지..?
+    //todo 항상 클라이언트는 getInterestName을 사용하지 못 하고, getInterestNameWithSharp를 사용할 수 밖에 없도록 리펙토링 예정.
     @JsonIgnore
     public String getInterestNameWithSharp() {
         return "#" + interestName;
     }
 
-    // todo 이거 annotation을 직접 만들어서 어노테이션 지정해놓으면 만들어지게 하면 어떨까?
+    // todo 이거 annotation을 직접 만들어서 마치 Lombok처럼 Annotation을 작성하면 Compile시점에 해당 메서드가 만들어 지도록 리펙토링 예정.
     @JsonIgnore
     public List<String> getStringFields() {
         return List.of(interestName);
