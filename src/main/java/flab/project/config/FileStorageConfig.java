@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FileStorageConfig {
+
     @Value("${ncp.endPoint}")
     private String endPoint;
     @Value("${ncp.accessKey}")

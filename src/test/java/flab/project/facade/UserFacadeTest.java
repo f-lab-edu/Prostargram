@@ -2,7 +2,6 @@ package flab.project.facade;
 
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
-import flab.project.data.dto.file.ProfileImage;
 import flab.project.data.enums.FileType;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -36,14 +35,19 @@ class UserFacadeTest {
     @Mock
     private UserService userService;
 
-
     @DisplayName("프로필 이미지를 수정할 수 있다.")
     @Test
     void updateProfileImage() {
-        MultipartFile multipartFile = new MockMultipartFile("profileImage", "test.txt",
-                "text/plain", "test file".getBytes());
+        // given
         Long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
+
+        MultipartFile multipartFile = new MockMultipartFile(
+                "profileImage",
+                "test.txt",
+                "text/plain",
+                "test file".getBytes()
+        );
 
         given(fileStorage.getFileNamesInBucket(anyLong()))
                 .willReturn(List.of("test-file"));
@@ -52,9 +56,10 @@ class UserFacadeTest {
         given(userService.updateProfileImage(anyLong(), anyString()))
                 .willReturn(true);
 
-
+        // when
         userFacade.updateProfileImage(userId, multipartFile);
 
+        // then
         then(fileStorage).should().getFileNamesInBucket(userId);
         then(fileStorage).should().uploadFile(userId, multipartFile, FileType.PROFILE_IMAGE);
         then(userService).should().updateProfileImage(userId, uploadedProfileImageUrl);
@@ -64,17 +69,23 @@ class UserFacadeTest {
     @DisplayName("DB에 새로 등록된 프로필 이미지 반영을 실패했을 경우, 업로드된 파일이 삭제되어야 한다.")
     @Test
     void uploadedFileMustBeDeletedWhenFailedToReflectProfileImageToDatabase() {
-        MultipartFile multipartFile = new MockMultipartFile("profileImage", "test.txt",
-                "text/plain", "test file".getBytes());
+        // given
         Long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
+
+        MultipartFile multipartFile = new MockMultipartFile(
+                "profileImage",
+                "test.txt",
+                "text/plain",
+                "test file".getBytes()
+        );
 
         given(fileStorage.uploadFile(anyLong(), any(MultipartFile.class), any(FileType.class)))
                 .willReturn(uploadedProfileImageUrl);
         given(userService.updateProfileImage(anyLong(), anyString()))
                 .willReturn(false);
 
-
+        // when & then
         assertThatThrownBy(() -> userFacade.updateProfileImage(userId, multipartFile))
                 .isInstanceOf(FailedToReflectProfileImageToDatabaseException.class);
 
@@ -84,10 +95,16 @@ class UserFacadeTest {
     @DisplayName("기존 파일이 없을 경우, 기존 파일 삭제 메서드는 호출되지 않는다.")
     @Test
     void deleteExistingFileMethodNotCalledWhenExistingFileDoesNotExist() {
-        MultipartFile multipartFile = new MockMultipartFile("profileImage", "test.txt",
-                "text/plain", "test file".getBytes());
+        // given
         Long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
+
+        MultipartFile multipartFile = new MockMultipartFile(
+                "profileImage",
+                "test.txt",
+                "text/plain",
+                "test file".getBytes()
+        );
 
         given(fileStorage.getFileNamesInBucket(anyLong()))
                 .willReturn(new ArrayList());
@@ -96,10 +113,10 @@ class UserFacadeTest {
         given(userService.updateProfileImage(anyLong(), anyString()))
                 .willReturn(true);
 
-
+        // when
         userFacade.updateProfileImage(userId, multipartFile);
 
+        // then
         then(fileStorage).should(never()).deleteFile(eq(BASE_BUCKET_NAME), anyString());
     }
-
 }

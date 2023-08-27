@@ -1,6 +1,7 @@
 package flab.project.config.exception;
 
-public class FailedToReflectProfileImageToDatabaseException extends RuntimeException{
+public class FailedToReflectProfileImageToDatabaseException extends RuntimeException {
+
     public FailedToReflectProfileImageToDatabaseException() {
     }
 

@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
 import flab.project.data.dto.User;
 import flab.project.data.enums.requestparam.GetFollowsType;
 import flab.project.mapper.UserMapper;
@@ -12,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+
     private final UserMapper userMapper;
 
     public List<User> getFollows(Long userId, GetFollowsType requestType) {

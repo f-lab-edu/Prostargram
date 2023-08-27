@@ -32,7 +32,6 @@ public class UserController {
     private final UserService userService;
     private final UserFacade userFacade;
 
-
     @Operation(
             summary = "프로필 정보 확인하기 API",
             description = "1. 프로필 페이지에서 사용되는 API ( type으로 PROFILE_PAGE_REQUEST전달 ), "
@@ -53,7 +52,6 @@ public class UserController {
     ) {
         return null;
     }
-
 
     @Operation(
             summary = "개인 설정 상태 확인하기 API"
@@ -153,5 +151,4 @@ public class UserController {
 
         return "test";
     }
-
 }

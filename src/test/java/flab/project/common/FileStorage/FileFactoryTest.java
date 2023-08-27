@@ -16,13 +16,19 @@ class FileFactoryTest {
     @DisplayName("FileType으로 PROFILE_IMAGE가 넘어오면 ProfileImage 객체를 생성하여 반환한다.")
     @Test
     void returnProfileImageWhenParameterFileTypeIsPROFILE_IMAGE() {
-        MultipartFile multipartFile = new MockMultipartFile("profileImage", "test.txt",
-                "text/plain", "test file".getBytes());
+        // given
+        MultipartFile multipartFile = new MockMultipartFile(
+                "profileImage",
+                "test.txt",
+                "text/plain",
+                "test file".getBytes()
+        );
         FileFactory fileFactory = new FileFactory();
 
+        // when
         Uploadable fileInfo = fileFactory.getFileInfo(1L, multipartFile, FileType.PROFILE_IMAGE);
 
+        // then
         assertThat(fileInfo).isInstanceOf(ProfileImage.class);
     }
-
 }

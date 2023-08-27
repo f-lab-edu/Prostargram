@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class FileStorage {
+
     private final AmazonS3 amazonS3;
     private final FileFactory fileFactory;
 
     public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
-
         try {
             Uploadable fileInfo = fileFactory.getFileInfo(userId, multipartFile, fileType);
             String bucketPath = fileInfo.getBucketName();
@@ -35,7 +35,6 @@ public class FileStorage {
 
             return amazonS3.getUrl(bucketPath, fileName).toString();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -44,7 +43,6 @@ public class FileStorage {
         String folder = "" + userId;
         String targetBucketName = ProfileImage.BASE_BUCKET_NAME;
 
-
         ListObjectsRequest listObjectsRequest
                 = new ListObjectsRequest()
                 .withBucketName(targetBucketName)
@@ -52,8 +50,8 @@ public class FileStorage {
                 .withDelimiter("/");
 
         ObjectListing objectListing = amazonS3.listObjects(listObjectsRequest);
-
         List<S3ObjectSummary> objectSummaries = objectListing.getObjectSummaries();
+
         List<String> fileNames = objectSummaries.stream()
                 .map(S3ObjectSummary::getKey)
                 .filter(fileName -> fileName.trim().length() != 0)
