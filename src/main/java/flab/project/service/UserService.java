@@ -21,9 +21,9 @@ public class UserService {
     }
 
     public boolean updateProfileImage(long userId, String profileImgUrl) {
-        int refelctedRowNum = userMapper.updateProfileImage(userId, profileImgUrl);
+        int NumberOfAffectedRow = userMapper.updateProfileImage(userId, profileImgUrl);
 
-        if (refelctedRowNum > 0) {
+        if (NumberOfAffectedRow > 0) {
             return true;
         }
 
