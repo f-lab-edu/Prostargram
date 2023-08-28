@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class SettingService {
+
     private final SettingMapper settingMapper;
 
     public SuccessResponse getPersonalSettings(long userId) {
