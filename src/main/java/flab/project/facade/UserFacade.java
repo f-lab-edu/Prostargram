@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
@@ -19,13 +20,15 @@ public class UserFacade {
 
     private final FileStorage fileStorage;
     private final UserService userService;
+    private final FileExtensionFilter fileExtensionFilter;
 
     public SuccessResponse updateProfileImage(long userId, MultipartFile profileImg) {
         try {
-            //todo 확장자 필터링하기.
+            fileExtensionFilter.filterImageFileExtension(profileImg);
 
             List<String> fileNamesInBucket = fileStorage.getFileNamesInBucket(userId);
-            String uploadedProfileImgUrl = fileStorage.uploadFile(userId, profileImg, PROFILE_IMAGE);
+            String uploadedProfileImgUrl = fileStorage.uploadFile(userId, profileImg,
+                PROFILE_IMAGE);
 
             boolean isSuccess = userService.updateProfileImage(userId, uploadedProfileImgUrl);
 

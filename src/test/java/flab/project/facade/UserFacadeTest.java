@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
 import flab.project.data.enums.FileType;
@@ -18,12 +19,10 @@ import java.util.List;
 
 import static flab.project.data.dto.file.ProfileImage.BASE_BUCKET_NAME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
-
 
 @ExtendWith(MockitoExtension.class)
 class UserFacadeTest {
@@ -34,12 +33,14 @@ class UserFacadeTest {
     private FileStorage fileStorage;
     @Mock
     private UserService userService;
+    @Mock
+    private FileExtensionFilter fileExtensionFilter;
 
     @DisplayName("프로필 이미지를 수정할 수 있다.")
     @Test
     void updateProfileImage() {
         // given
-        Long userId = 1L;
+        long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
 
         MultipartFile multipartFile = new MockMultipartFile(
@@ -70,7 +71,7 @@ class UserFacadeTest {
     @Test
     void uploadedFileMustBeDeletedWhenFailedToReflectProfileImageToDatabase() {
         // given
-        Long userId = 1L;
+        long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
 
         MultipartFile multipartFile = new MockMultipartFile(
@@ -96,7 +97,7 @@ class UserFacadeTest {
     @Test
     void deleteExistingFileMethodNotCalledWhenExistingFileDoesNotExist() {
         // given
-        Long userId = 1L;
+        long userId = 1L;
         String uploadedProfileImageUrl = "https://uploadedProfileImage.com";
 
         MultipartFile multipartFile = new MockMultipartFile(

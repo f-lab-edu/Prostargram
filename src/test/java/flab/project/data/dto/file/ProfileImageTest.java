@@ -1,5 +1,6 @@
 package flab.project.data.dto.file;
 
+import com.amazonaws.util.StringInputStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class ProfileImageTest {
         String testContent = "test content";
 
         given(multipartFile.getOriginalFilename()).willReturn("test.jpg");
-        given(multipartFile.getInputStream()).willReturn(new StringBufferInputStream(testContent));
+        given(multipartFile.getInputStream()).willReturn(new StringInputStream(testContent));
 
         // when
         ProfileImage profileImage = new ProfileImage(1L, multipartFile);

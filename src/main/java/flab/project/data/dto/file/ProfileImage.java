@@ -1,7 +1,9 @@
 package flab.project.data.dto.file;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import flab.project.common.FileStorage.FileExtensionExtractor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.UUID;
 public class ProfileImage implements Uploadable {
 
     public static final String BASE_BUCKET_NAME = "profileimage";
+
     private final String bucketName;
     private final String fileName;
     ObjectMetadata objectMetadata;
@@ -33,14 +36,8 @@ public class ProfileImage implements Uploadable {
     }
 
     private String createFileName(MultipartFile file) {
-        String extension = getFileExtension(file);
+        String extension = FileExtensionExtractor.extractFileExtension(file);
 
-        return UUID.randomUUID() + extension;
-    }
-
-    private String getFileExtension(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-
-        return originalFilename.substring(originalFilename.lastIndexOf("."));
+        return UUID.randomUUID() + "." + extension;
     }
 }
