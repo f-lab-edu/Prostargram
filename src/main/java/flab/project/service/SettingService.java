@@ -20,7 +20,6 @@ public class SettingService {
         final int COOKIE_MAX_AGE = 60 * 60 * 24 * 400;
 
         Cookie cookie = new Cookie("screen-mode", screenMode.name());
-        cookie.setPath("/users/{userId}/settings");
         cookie.setMaxAge(COOKIE_MAX_AGE);
 
         httpServletResponse.addCookie(cookie);
