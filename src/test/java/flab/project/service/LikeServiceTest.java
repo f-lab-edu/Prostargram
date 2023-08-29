@@ -21,7 +21,7 @@ public class LikeServiceTest {
     @Mock
     LikeMapper likeMapper;
 
-    @DisplayName("존재하는 게시물 또는 존재하는 유저가 좋아요를 추가할 때, 정상적으로 게시물에 좋아요가 반영된다.")
+    @DisplayName("게시물에 좋아요를 할 수 있다.")
     @Test
     void validParamterInAddPostLike() {
         // given
@@ -39,31 +39,29 @@ public class LikeServiceTest {
     @Test
     void invalidParameterInAddPostLike() {
         // given
-        long invalidPostId = -1L;
+        long negativePostId = -1L;
         long userId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(invalidPostId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> likeService.addPostLike(negativePostId, userId)).isInstanceOf(InvalidUserInputException.class);
+
+        // given
+        long zeroPostId = 0;
+
+        // when & then
+        assertThatThrownBy(() -> likeService.addPostLike(zeroPostId, userId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
         long postId = 1L;
-        long invalidUserId = -1L;
+        long negativeUserId = -2L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(postId, invalidUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> likeService.addPostLike(postId, negativeUserId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
-        long invalidNegativePostId = -2L;
-        long invalidNegativeUserId = -2L;
+        long zeroUserId = 0L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(invalidNegativePostId, invalidNegativeUserId)).isInstanceOf(InvalidUserInputException.class);
-
-        // given
-        long invalidZeroPostId = 0L;
-        long invalidZeroUserId = 0L;
-
-        // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(invalidZeroPostId, invalidZeroUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> likeService.addPostLike(postId, zeroUserId)).isInstanceOf(InvalidUserInputException.class);
     }
 }
