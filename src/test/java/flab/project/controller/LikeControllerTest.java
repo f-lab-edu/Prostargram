@@ -3,7 +3,6 @@ package flab.project.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.InvalidUserInputException;
 import flab.project.service.LikeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,19 +30,19 @@ public class LikeControllerTest {
     @MockBean
     private LikeService likeService;
 
-    @DisplayName("게시물에 좋아요를 추가할 때, postId 및 userId는 양수 값만 가능하다.")
+    @DisplayName("게시물에 좋아요를 할 수 있다.")
     @Test
-    void parameterOfLikeIsPostitive() throws Exception {
+    void parameterOfPostLikeIsPostitive() throws Exception {
         // given
-        long postId1 = 1L;
-        long userId1 = 2L;
+        long postId = 1L;
+        long userId = 2L;
 
-        given(likeService.addPostLike(postId1, userId1)).willReturn(new SuccessResponse());
+        given(likeService.addPostLike(postId, userId)).willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(
-                post("/posts/{postId}/likes", postId1)
-                        .param("userId", String.valueOf(userId1))
+                post("/posts/{postId}/likes", postId)
+                        .param("userId", String.valueOf(userId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -52,25 +51,47 @@ public class LikeControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
-    @DisplayName("게시물에 좋아요를 추가할 때, postId 및 userId는 음수 값일 수 없다.")
+    @DisplayName("게시물에 좋아요를 추가할 때, postId 및 userId는 양수여야 한다.")
     @Test
-    void parameterOfLikeIsNonPositive() throws Exception {
+    void parameterOfPostLikeIsNonPositive() throws Exception {
         // given
-        // Todo postId2 -> invalidPostId로 변수명 변경하기
-        long postId2 = -1L;
-        long userId2 = -2L;
-
-        /*
-        * 양수가 아닌 음수일 경우, 올바른 예외를 던지는지 확인하고 싶어서 작성한 코드입니다.
-        * 그런데, "왜 postId 또는 userId는 0보다 커야 한다." + "code : 400을 기대했지만 500이 반환된다."라는 오류가 뜨는지 모르겠습니다.
-        */
-
-        given(likeService.addPostLike(postId2, userId2)).willThrow(new InvalidUserInputException("postId 또는 userId는 0보다 커야 합니다."));
+        long negativePostId = -1L;
+        long userId = 1L;
 
         // when & then
-        mockMvc.perform(post("/posts/{postId}/likes", postId2)
-                        .param("userId", String.valueOf(userId2))
+        mockMvc.perform(post("/posts/{postId}/likes", negativePostId)
+                        .param("userId", String.valueOf(userId))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+
+        // given
+        long zeroPostId = 0;
+
+        // when & then
+        mockMvc.perform(post("/posts/{postId}/likes", zeroPostId)
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("게시물에 좋아요를 추가할 때, postId 및 userId는 필수 값이다.")
+    @Test
+    void AllParameterOfAddPostLikeIsRequired() throws Exception {
+        // given
+        long userId = 1L;
+
+        // Todo IllegalArgumentException: Not enough variable values available to expand 'postId'
+        mockMvc.perform(post("/posts/{postId}/likes")
+                    .param("userId", String.valueOf(userId))
+                    .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
