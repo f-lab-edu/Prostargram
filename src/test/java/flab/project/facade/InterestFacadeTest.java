@@ -19,7 +19,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class InterestFacadeTest {
@@ -32,7 +31,6 @@ class InterestFacadeTest {
     private HashTagService hashtagService;
     @Mock
     private BadWordChecker badWordChecker;
-
 
     @DisplayName("관심사는 최대 10개까지 설정할 수 있다.")
     @Test
@@ -81,7 +79,7 @@ class InterestFacadeTest {
         assertThat(captoredHashTag.getHashTagName()).isEqualTo(hashTag.getHashTagName());
     }
 
-    @DisplayName("생성하려는 관심사가 해시 태그 테이블에 존재 하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
+    @DisplayName("생성하려는 관심사가 해시 태그 테이블에 존재하는 관심사라면 해시태그 테이블에 추가하는 메서드가 호출되지 않는다.")
     @Test
     void receivedInterestNameExistInHashtagThenMethodToAddHashtagTableDoesNotCalled() {
         // given

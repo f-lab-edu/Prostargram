@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AddInterestTest {
 
-    @DisplayName("관심사 이름은 Sharp과 함께 나타나게 한다.")
+    @DisplayName("관심사 이름은 #과 함께 나타나게 한다.")
     @Test
     void getInterestNameWithSharp() {
         // given
