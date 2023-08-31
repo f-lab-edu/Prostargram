@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ApiControllerAdvice {
-
-    /*
-    * 클라이언트에서 잘못 요청하여 발생한 예외를 위한 핸들링입니다.*/
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             InvalidUserInputException.class,
@@ -24,8 +21,6 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
-    /*
-    * 서버 내부에서 예기치 못하게 발생한 예외를 위한 핸들링입니다.*/
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
