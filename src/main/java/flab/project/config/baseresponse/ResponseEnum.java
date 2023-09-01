@@ -17,7 +17,7 @@ public enum ResponseEnum {
     private final int code;
     private final String message;
 
-    private ResponseEnum(boolean isSuccess, int code, String message) {
+    ResponseEnum(boolean isSuccess, int code, String message) {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
