@@ -1,4 +1,4 @@
-package flab.project.data.dto.domain;
+package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import java.util.List;
 public class BasicPost extends BasePost {
 
     @Schema(example = "https://imageUrl.url", nullable = false)
-    private final List<String> contentImgUrls;
+    private List<String> contentImgUrls;
 }

@@ -1,4 +1,4 @@
-package flab.project.data.dto.domain;
+package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -12,11 +12,11 @@ import java.util.List;
 @Schema(description = "통계 게시물 Dto")
 public class PollPost extends BasePost {
 
-    private final List<Option> options;
+    private List<Option> options;
 
     @Schema(example = "2023-07-01")
-    private final LocalDate startDate;
+    private LocalDate startDate;
 
     @Schema(example = "2023-07-14")
-    private final LocalDate endDate;
+    private LocalDate endDate;
 }

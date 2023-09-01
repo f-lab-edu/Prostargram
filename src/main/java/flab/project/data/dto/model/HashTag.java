@@ -1,4 +1,4 @@
-package flab.project.data.dto.domain;
+package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

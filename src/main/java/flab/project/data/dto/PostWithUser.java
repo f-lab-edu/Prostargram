@@ -1,7 +1,7 @@
 package flab.project.data.dto;
 
-import flab.project.data.dto.domain.BasePost;
-import flab.project.data.dto.domain.BasicUser;
+import flab.project.data.dto.model.BasePost;
+import flab.project.data.dto.model.BasicUser;
 
 public class PostWithUser {
     private final BasePost basePost;
