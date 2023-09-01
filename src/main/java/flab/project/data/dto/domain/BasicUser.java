@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class BasicUser {
+
     @Schema(example = "1")
     private long userId;
 
