@@ -40,23 +40,22 @@ class UserControllerTest {
     void updateProfile() throws Exception {
         // given
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+            .willReturn(new SuccessResponse());
 
         UpdateProfileRequestDto updateProfileRequestDto
-                = new UpdateProfileRequestDto("정민욱", "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto("정민욱", "카카오", "다닐 예정입니다.");
 
         // when & then
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDto))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(objectMapper.writeValueAsString(updateProfileRequestDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+            .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+            .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
     @DisplayName("프로필 수정에서 userId는 양수여야 한다.")
@@ -64,33 +63,35 @@ class UserControllerTest {
     void userIdMustBePositiveWhenUpdateProfile() throws Exception {
         // given
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+            .willReturn(new SuccessResponse());
 
+        long negativeUserId = -1;
+        long zeroUserId = 0;
         UpdateProfileRequestDto updateProfileRequestDto
-                = new UpdateProfileRequestDto("정민욱", "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto("정민욱", "카카오", "다닐 예정입니다.");
 
         // when & then
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, -1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDto))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, negativeUserId)
+                    .content(objectMapper.writeValueAsString(updateProfileRequestDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 0)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDto))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, zeroUserId)
+                    .content(objectMapper.writeValueAsString(updateProfileRequestDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
     @DisplayName("유저 닉네임은 최대 16글자까지 허용된다.")
@@ -98,44 +99,46 @@ class UserControllerTest {
     void userNameMaxLengthIs16() throws Exception {
         // given
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+            .willReturn(new SuccessResponse());
 
         String USER_NAME_16_LENGTH = "가나다라마바사아자차카타파하갸냐";
         UpdateProfileRequestDto updateProfileRequestDtoWith16LengthNickName
-                = new UpdateProfileRequestDto(USER_NAME_16_LENGTH, "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto(USER_NAME_16_LENGTH, "카카오", "다닐 예정입니다.");
 
         // when & then
         assertThat(USER_NAME_16_LENGTH.length()).isEqualTo(16);
 
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith16LengthNickName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(
+                        objectMapper.writeValueAsString(updateProfileRequestDtoWith16LengthNickName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+            .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+            .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
         // given
         String USER_NAME_17_LENGTH = "가나다라마바사아자차카타파하갸냐댜";
         UpdateProfileRequestDto updateProfileRequestDtoWith17LengthNickName
-                = new UpdateProfileRequestDto(USER_NAME_17_LENGTH, "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto(USER_NAME_17_LENGTH, "카카오", "다닐 예정입니다.");
 
         // when & then
         assertThat(USER_NAME_17_LENGTH.length()).isEqualTo(17);
 
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith17LengthNickName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(
+                        objectMapper.writeValueAsString(updateProfileRequestDtoWith17LengthNickName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
     @DisplayName("유저 닉네임에는 영어/한글/숫자/_(언더바)/.(온점)을 사용할 수 있다.")
@@ -143,41 +146,41 @@ class UserControllerTest {
     void OnlyAFewCharactersAreAllowedInNickName() throws Exception {
         // given
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+            .willReturn(new SuccessResponse());
 
         String validNickName = "aB가1_.";
         UpdateProfileRequestDto updateProfileRequestDtoWithValidNickName
-                = new UpdateProfileRequestDto(validNickName, "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto(validNickName, "카카오", "다닐 예정입니다.");
 
         // when & then
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWithValidNickName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(objectMapper.writeValueAsString(updateProfileRequestDtoWithValidNickName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+            .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+            .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
         // given
         String invalidNickName = "aB가1_.@";
         UpdateProfileRequestDto updateProfileRequestDtoWithInvalidNickName
-                = new UpdateProfileRequestDto(invalidNickName, "카카오", "다닐 예정입니다.");
+            = new UpdateProfileRequestDto(invalidNickName, "카카오", "다닐 예정입니다.");
 
         // when & then
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWithInvalidNickName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(
+                        objectMapper.writeValueAsString(updateProfileRequestDtoWithInvalidNickName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
     @DisplayName("학교/회사정보는 최대 18글자까지 허용된다.")
@@ -185,44 +188,45 @@ class UserControllerTest {
     void departmentNameMaxLengthIs18() throws Exception {
         // given
         given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+            .willReturn(new SuccessResponse());
 
         String DEPARTMENT_NAME_18_LENGTH = "가나다라마바사아자차카타파하갸냐댜랴";
         UpdateProfileRequestDto updateProfileRequestDtoWith18DepartmentName
-                = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_18_LENGTH, "다닐 예정입니다.");
+            = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_18_LENGTH, "다닐 예정입니다.");
 
         // when & then
         assertThat(DEPARTMENT_NAME_18_LENGTH.length()).isEqualTo(18);
 
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith18DepartmentName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(
+                        objectMapper.writeValueAsString(updateProfileRequestDtoWith18DepartmentName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+            .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+            .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
         // given
         String DEPARTMENT_NAME_19_LENGTH = "가나다라마바사아자차카타파하갸냐댜랴먀";
         UpdateProfileRequestDto updateProfileRequestDtoWith19DepartmentName
-                = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_19_LENGTH, "다닐 예정입니다.");
+            = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_19_LENGTH, "다닐 예정입니다.");
 
         // when & then
         assertThat(DEPARTMENT_NAME_19_LENGTH.length()).isEqualTo(19);
 
         mockMvc.perform(
-                        patch(UPDATE_PROFILE_INFO_URL, 1)
-                                .content(objectMapper.writeValueAsString(updateProfileRequestDtoWith19DepartmentName))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+                patch(UPDATE_PROFILE_INFO_URL, 1)
+                    .content(
+                        objectMapper.writeValueAsString(updateProfileRequestDtoWith19DepartmentName))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+            .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+            .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 }
