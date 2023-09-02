@@ -3,7 +3,7 @@ package flab.project.facade;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
+import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
 import flab.project.data.dto.file.ProfileImage;
 import flab.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,15 @@ public class UserFacade {
             fileExtensionFilter.filterImageFileExtension(profileImg);
 
             List<String> fileNamesInBucket = fileStorage.getFileNamesInBucket(userId);
-            String uploadedProfileImgUrl = fileStorage.uploadFile(userId, profileImg,
-                PROFILE_IMAGE);
+            String uploadedProfileImgUrl
+                    = fileStorage.uploadFile(userId, profileImg, PROFILE_IMAGE);
 
             boolean isSuccess = userService.updateProfileImage(userId, uploadedProfileImgUrl);
 
             if (!isSuccess) {
                 fileStorage.deleteFile(ProfileImage.BASE_BUCKET_NAME, uploadedProfileImgUrl);
-                throw new FailedToReflectProfileImageToDatabaseException();
+
+                throw new FailedToUpdateProfileImageToDatabaseException();
             }
 
             if (fileNamesInBucket.size() > 0) {
@@ -45,7 +46,7 @@ public class UserFacade {
 
             return new SuccessResponse();
         } catch (Exception e) {
-            throw new FailedToReflectProfileImageToDatabaseException();
+            throw new FailedToUpdateProfileImageToDatabaseException();
         }
     }
 }

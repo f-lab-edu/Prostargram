@@ -13,10 +13,10 @@ class FileExtensionExtractorTest {
     public void extractFileExtension() {
         // given
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
-            "test",
-            "test.jpg",
-            null,
-            "test".getBytes()
+                "test",
+                "test.jpg",
+                null,
+                "test".getBytes()
         );
 
         // when

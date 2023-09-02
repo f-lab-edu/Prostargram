@@ -23,10 +23,6 @@ public class UserService {
     public boolean updateProfileImage(long userId, String profileImgUrl) {
         int NumberOfAffectedRow = userMapper.updateProfileImage(userId, profileImgUrl);
 
-        if (NumberOfAffectedRow > 0) {
-            return true;
-        }
-
-        return false;
+        return NumberOfAffectedRow == 1;
     }
 }

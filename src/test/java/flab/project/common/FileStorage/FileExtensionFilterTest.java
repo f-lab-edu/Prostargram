@@ -21,7 +21,6 @@ import org.springframework.mock.web.MockMultipartFile;
 class FileExtensionFilterTest {
 
     private FileExtensionFilter fileExtensionFilter;
-
     @Mock
     private FileExtensionMapper fileExtensionMapper;
 
@@ -30,21 +29,21 @@ class FileExtensionFilterTest {
     public void filterImageFileExtension() {
         // given
         given(fileExtensionMapper.findAllByType(any(ExtensionType.class)))
-            .willReturn(new HashSet<>(List.of("jpg", "jpeg", "png")));
+                .willReturn(new HashSet<>(List.of("jpg", "jpeg", "png")));
 
         MockMultipartFile mockMultipartFile
-            = new MockMultipartFile(
-            "test-image.jpg",
-            "test-image.jpg",
-            null,
-            "test-content".getBytes()
+                = new MockMultipartFile(
+                "test-image.jpg",
+                "test-image.jpg",
+                null,
+                "test-content".getBytes()
         );
 
         this.fileExtensionFilter = new FileExtensionFilter(fileExtensionMapper);
 
         // when & then
         assertThatCode(() ->
-            fileExtensionFilter.filterImageFileExtension(mockMultipartFile)
+                fileExtensionFilter.filterImageFileExtension(mockMultipartFile)
         ).doesNotThrowAnyException();
     }
 
@@ -53,20 +52,21 @@ class FileExtensionFilterTest {
     public void throwNotImageExtensionOrNotSupportedExtensionExceptionIfNotImageFileExtension() {
         // given
         given(fileExtensionMapper.findAllByType(any(ExtensionType.class)))
-            .willReturn(new HashSet<>(List.of("jpg", "jpeg", "png")));
+                .willReturn(new HashSet<>(List.of("jpg", "jpeg", "png")));
 
         MockMultipartFile mockMultipartFile
-            = new MockMultipartFile(
-            "test-image.jpg",
-            "test-image.not-supported-extension",
-            null,
-            "test-content".getBytes()
+                = new MockMultipartFile(
+                "test-image.jpg",
+                "test-image.not-supported-extension",
+                null,
+                "test-content".getBytes()
         );
 
         this.fileExtensionFilter = new FileExtensionFilter(fileExtensionMapper);
 
         // when & then
-        assertThatThrownBy(() -> fileExtensionFilter.filterImageFileExtension(mockMultipartFile))
-            .isInstanceOf(NotImageExtensionOrNotSupportedExtensionException.class);
+        assertThatThrownBy(() ->
+                fileExtensionFilter.filterImageFileExtension(mockMultipartFile)
+        ).isInstanceOf(NotImageExtensionOrNotSupportedExtensionException.class);
     }
 }

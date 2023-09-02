@@ -1,6 +1,5 @@
 package flab.project.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.facade.UserFacade;
 import flab.project.service.UserService;

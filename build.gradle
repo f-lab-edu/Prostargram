@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.0'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'flab'
@@ -9,27 +9,27 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
-	implementation 'com.mysql:mysql-connector-j'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
+    implementation 'com.mysql:mysql-connector-j'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.238'
-	implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.238'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
 
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

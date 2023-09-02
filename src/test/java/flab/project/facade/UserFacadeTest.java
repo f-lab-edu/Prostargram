@@ -2,7 +2,7 @@ package flab.project.facade;
 
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
-import flab.project.config.exception.FailedToReflectProfileImageToDatabaseException;
+import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
 import flab.project.data.enums.FileType;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +76,7 @@ class UserFacadeTest {
 
         MultipartFile multipartFile = new MockMultipartFile(
                 "profileImage",
-                "test.txt",
+                "test.jpg",
                 "text/plain",
                 "test file".getBytes()
         );
@@ -88,7 +88,7 @@ class UserFacadeTest {
 
         // when & then
         assertThatThrownBy(() -> userFacade.updateProfileImage(userId, multipartFile))
-                .isInstanceOf(FailedToReflectProfileImageToDatabaseException.class);
+                .isInstanceOf(FailedToUpdateProfileImageToDatabaseException.class);
 
         then(fileStorage).should().deleteFile(BASE_BUCKET_NAME, uploadedProfileImageUrl);
     }

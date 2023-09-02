@@ -27,7 +27,8 @@ public class FileStorageConfig {
                 .withEndpointConfiguration(
                         new AwsClientBuilder.EndpointConfiguration(endPoint, region))
                 .withCredentials(
-                        new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+                        new AWSStaticCredentialsProvider(
+                                new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
     }
 }

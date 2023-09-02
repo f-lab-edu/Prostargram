@@ -42,8 +42,9 @@ public class UserController {
             }
     )
     @ApiResponses({
-            @ApiResponse(description = "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
-                    + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
+            @ApiResponse(description =
+                    "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
+                            + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
     @GetMapping(value = "/users/{userId}")
     public Profile getProfileInfo(
             @PathVariable("userId") Long userId,

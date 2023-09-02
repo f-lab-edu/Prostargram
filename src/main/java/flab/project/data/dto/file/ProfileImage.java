@@ -3,7 +3,6 @@ package flab.project.data.dto.file;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import flab.project.common.FileStorage.FileExtensionExtractor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

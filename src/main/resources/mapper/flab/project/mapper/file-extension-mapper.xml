@@ -5,8 +5,7 @@
 <mapper namespace="flab.project.mapper.FileExtensionMapper">
 
   <select id="findAllByType" resultType="string">
-    SELECT
-        extension
+    SELECT extension
     FROM FILE_EXTENSION
   </select>
 

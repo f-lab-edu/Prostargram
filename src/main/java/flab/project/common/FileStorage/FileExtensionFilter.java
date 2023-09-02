@@ -12,16 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileExtensionFilter {
 
     private HashSet<String> imageFileExtensions;
-
     private final FileExtensionMapper fileExtensionMapper;
 
     // TODO 추후, imageFileExtension은 Lazy Initilization으로 수정해도 좋을 것 같음.
     public FileExtensionFilter(
-        FileExtensionMapper fileExtensionMapper
+            FileExtensionMapper fileExtensionMapper
     ) {
         this.fileExtensionMapper = fileExtensionMapper;
-
-        imageFileExtensions = fileExtensionMapper.findAllByType(IMAGE);
+        this.imageFileExtensions = fileExtensionMapper.findAllByType(IMAGE);
     }
 
     public void filterImageFileExtension(MultipartFile file) {
