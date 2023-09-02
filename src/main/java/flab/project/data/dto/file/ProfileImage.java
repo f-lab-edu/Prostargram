@@ -15,7 +15,7 @@ public class ProfileImage implements Uploadable {
 
     private final String bucketName;
     private final String fileName;
-    ObjectMetadata objectMetadata;
+    private final ObjectMetadata objectMetadata;
 
     public ProfileImage(long userId, MultipartFile file) {
         this.bucketName = BASE_BUCKET_NAME + "/" + userId;
