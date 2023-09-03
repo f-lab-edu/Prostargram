@@ -35,12 +35,6 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.DUPLICATE_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public FailResponse exceptionResolveToNonExistUser(DataIntegrityViolationException e) {
-        return new FailResponse(ResponseEnum.NON_EXIST_USER);
-    }
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
