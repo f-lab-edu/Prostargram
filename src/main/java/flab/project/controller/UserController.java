@@ -1,10 +1,12 @@
 package flab.project.controller;
 
+import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.*;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 
 import flab.project.service.UserService;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,8 +15,10 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -32,59 +36,56 @@ public class UserController {
             }
     )
     @ApiResponses({
-            @ApiResponse(description = "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
-                    + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
+            @ApiResponse(description =
+                    "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
+                            + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
     @GetMapping(value = "/users/{userId}")
     public Profile getProfileInfo(
-        @PathVariable("userId") Long userId,
-        @RequestParam("type") GetProfileRequestType type
+            @PathVariable("userId") Long userId,
+            @RequestParam("type") GetProfileRequestType type
     ) {
         return null;
     }
 
-    
     @Operation(
             summary = "개인 설정 상태 확인하기 API"
     )
     @Parameters(
             value = {
-                @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
+                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
             }
     )
     @GetMapping(value = "/users/{userId}/options")
     public Settings getPersonalSettings(
-        @PathVariable("userId") Long userId
+            @PathVariable("userId") Long userId
     ) {
         return null;
     }
 
-
     @Operation(
-        summary = "옵션을 수정하는 API"
+            summary = "옵션을 수정하는 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
+            }
     )
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettings(
-        @PathVariable("userId") Long userId,
-        Settings updateOptionsRequestDto
+            @PathVariable("userId") Long userId,
+            Settings updateOptionsRequestDto
     ) {
         return "test";
     }
 
     @Operation(
-        summary = "프로필 수정하기 API"
+            summary = "프로필 수정하기 API"
     )
-    @PatchMapping(value = "/users/profile-info")
-    public String updateProfile(
-        Profile updateProfileRequestDto
+    @PatchMapping(value = "/users/{userId}/profile-info")
+    public SuccessResponse updateProfile(
+            @PathVariable("userId") @Positive long userId,
+            @Validated @RequestBody UpdateProfileRequestDto updateProfileRequestDto
     ) {
-        return "test";
+        return userService.updateProfile(userId, updateProfileRequestDto);
     }
-
-
-
 }

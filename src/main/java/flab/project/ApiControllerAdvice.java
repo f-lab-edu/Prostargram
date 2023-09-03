@@ -23,6 +23,7 @@ public class ApiControllerAdvice {
             InvalidUserInputException.class,
             ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class,
+            DataIntegrityViolationException.class,
             NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
