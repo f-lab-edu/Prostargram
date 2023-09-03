@@ -19,18 +19,11 @@ public class SettingController {
 
     private final SettingService settingService;
 
-    @Operation(
-            summary = "개인 설정 상태 확인하기 API"
-    )
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
-            }
-    )
+    @Operation(summary = "개인 설정 상태 확인하기 API")
+    @Parameters(value = {
+            @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true)})
     @GetMapping("/users/{userId}/settings")
-    public SuccessResponse getPersonalSettings(
-            @PathVariable("userId") @Positive long userId
-    ) {
+    public SuccessResponse getPersonalSettings(@PathVariable("userId") @Positive long userId) {
         return settingService.getPersonalSettings(userId);
     }
 }

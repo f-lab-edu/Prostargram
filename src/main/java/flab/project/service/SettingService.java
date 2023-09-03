@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotExistUserException;
 import flab.project.data.dto.Settings;
 import flab.project.mapper.SettingMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class SettingService {
         Settings personalSettings = settingMapper.getPersonalSettingsByUserId(userId);
 
         if (personalSettings == null) {
-            throw new RuntimeException();
+            throw new NotExistUserException();
         }
 
         return new SuccessResponse(personalSettings);

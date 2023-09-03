@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotExistUserException;
 import flab.project.data.dto.Settings;
 import flab.project.mapper.SettingMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +57,6 @@ class SettingServiceTest {
 
         // when & then
         assertThatThrownBy(() -> settingService.getPersonalSettings(userId))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(NotExistUserException.class);
     }
 }
