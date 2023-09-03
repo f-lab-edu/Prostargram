@@ -14,6 +14,5 @@ public class BasicUser {
 
     @Schema(example = "https://profileImg.url")
     private String profileImgUrl;
-
 }
 

@@ -3,6 +3,8 @@ package flab.project;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,7 +23,9 @@ public class ApiControllerAdvice {
             BindException.class,
             InvalidUserInputException.class,
             ConstraintViolationException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            DataIntegrityViolationException.class,
+            NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
@@ -34,8 +38,8 @@ public class ApiControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public FailResponse exceptionResolveToNonExistUser(DataIntegrityViolationException e) {
+    @ExceptionHandler(NotExistUserException.class)
+    public FailResponse exceptionResolveToNonExistUser(NotExistUserException e) {
         return new FailResponse(ResponseEnum.NON_EXIST_USER);
     }
 

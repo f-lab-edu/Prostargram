@@ -1,28 +1,50 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.data.dto.Settings;
+import flab.project.data.enums.PublicScope;
 import flab.project.data.enums.ScreenMode;
+import flab.project.mapper.SettingMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class SettingService {
 
-    /*
-     * 2023.08.28 - 정민욱
-     * Chrome은 cookie의 최대 만료 기한을 400일로 강제 하고 있으며, 그 이상의 만료 기한을 원할 시
-     * 갱신 하는 형태로 구현할 것을 강제 함.
-     *
-     * https://developer.chrome.com/blog/cookie-max-age-expires/
-     */
+    private final SettingMapper settingMapper;
+
+    // Available maximum days are 400 days - ${https://developer.chrome.com/blog/cookie-max-age-expires/}
     public SuccessResponse updateScreenMode(long userId, ScreenMode screenMode, HttpServletResponse httpServletResponse) {
-        final int COOKIE_MAX_AGE = 60 * 60 * 24 * 400;
+        final int COOKIE_MAX_AGE_400_DAYS = 60 * 60 * 24 * 400;
 
         Cookie cookie = new Cookie("screen-mode", screenMode.name());
-        cookie.setMaxAge(COOKIE_MAX_AGE);
+        cookie.setMaxAge(COOKIE_MAX_AGE_400_DAYS);
 
         httpServletResponse.addCookie(cookie);
+
+        return new SuccessResponse();
+    }
+
+    public SuccessResponse getPersonalSettings(long userId) {
+        Settings personalSettings = settingMapper.getPersonalSettingsByUserId(userId);
+
+        if (personalSettings == null) {
+            throw new NotExistUserException();
+        }
+
+        return new SuccessResponse(personalSettings);
+    }
+
+    public SuccessResponse updateUserPublicScope(long userId, PublicScope publicScope) {
+        int numberOfAffectedRow = settingMapper.updateUserPublicScope(userId, publicScope);
+
+        if (numberOfAffectedRow == 0) {
+            throw new RuntimeException();
+        }
 
         return new SuccessResponse();
     }

@@ -1,20 +1,21 @@
 package flab.project.controller;
 
+import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.*;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 
 import flab.project.service.UserService;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -22,69 +23,61 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-            summary = "프로필 정보 확인하기 API",
-            description = "1. 프로필 페이지에서 사용되는 API ( type으로 PROFILE_PAGE_REQUEST전달 ), "
-                    + "2. 프로필 수정하기 페이지 에서 사용되는 API ( type으로 UPDATE_PAGE_REQUEST전달 ) ")
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "프로필을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
-                    @Parameter(name = "type", description = "어떤 화면에서 사용하느냐에 따라 type을 다르게 전달해야함.", required = true)
-            }
+            summary = "프로필 수정 페이지 정보 확인하기 API"
     )
-    @ApiResponses({
-            @ApiResponse(description = "PROFILE_PAGE_REQUEST로 요청할 경우와 UPDATE_PAGE_REQUEST로 요청할 경우 반환 형식이 다름."
-                    + " example에는 공통 필드만 표시되므로 직접 실행해서 확인바람.")})
-    @GetMapping(value = "/users/{userId}")
-    public Profile getProfileInfo(
-        @PathVariable("userId") Long userId,
-        @RequestParam("type") GetProfileRequestType type
+    @GetMapping(value = "/users/{userId}/profile_update_page")
+    public SuccessResponse getProfileUpdatePageInfo(
+            @PathVariable("userId") @Positive long userId
     ) {
-        return null;
+        return userService.getProfileInfo(userId, GetProfileRequestType.UPDATE);
     }
 
-    
+    @Operation(
+            summary = "프로필 페이지 정보 확인하기 API"
+    )
+    @GetMapping(value = "/users/{userId}/profile_page")
+    public SuccessResponse<Profile> getProfilePageInfo(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        return userService.getProfileInfo(userId, GetProfileRequestType.GET);
+    }
+
     @Operation(
             summary = "개인 설정 상태 확인하기 API"
     )
     @Parameters(
             value = {
-                @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
+                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
             }
     )
     @GetMapping(value = "/users/{userId}/options")
     public Settings getPersonalSettings(
-        @PathVariable("userId") Long userId
+            @PathVariable("userId") Long userId
     ) {
         return null;
     }
 
-
     @Operation(
-        summary = "옵션을 수정하는 API"
+            summary = "옵션을 수정하는 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
+            }
     )
     @PatchMapping(value = "/users/{userId}/options")
     public String updatePersonalSettings(
-        @PathVariable("userId") Long userId,
-        Settings updateOptionsRequestDto
+            @PathVariable("userId") Long userId,
+            Settings updateOptionsRequestDto
     ) {
         return "test";
     }
 
-    @Operation(
-        summary = "프로필 수정하기 API"
-    )
-    @PatchMapping(value = "/users/profile-info")
-    public String updateProfile(
-        Profile updateProfileRequestDto
+    @PatchMapping(value = "/users/{userId}/profile-info")
+    public SuccessResponse updateProfile(
+            @PathVariable("userId") @Positive long userId,
+            @Validated @RequestBody UpdateProfileRequestDto updateProfileRequestDto
     ) {
-        return "test";
+        return userService.updateProfile(userId, updateProfileRequestDto);
     }
-
-
-
 }
