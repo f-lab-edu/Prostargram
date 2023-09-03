@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class BasicUser {
+
     @Schema(example = "1")
     private long userId;
 
@@ -13,6 +14,5 @@ public class BasicUser {
 
     @Schema(example = "https://profileImg.url")
     private String profileImgUrl;
-
 }
 
