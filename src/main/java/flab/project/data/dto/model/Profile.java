@@ -1,5 +1,6 @@
 package flab.project.data.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -13,8 +14,20 @@ public class Profile extends User {
     private String selfIntroduction;
 
     @Schema(example = "[\"http://github.com\",\"http://blog.com]\"")
-    private List<String> associatedLinks;
+    private List<SocialAccountResponse> socialAccounts;
 
     @Schema(example = "[\"#aws\",\"#java\"]")
-    private List<HashTag> hashTags;
+    private List<HashTag> interests;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(example = "100")
+    private Long postCount;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(example = "100")
+    private Long followerCount;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(example = "100")
+    private Long followingCount;
 }

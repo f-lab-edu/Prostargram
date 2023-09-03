@@ -4,12 +4,66 @@
 
 <mapper namespace="flab.project.mapper.UserMapper">
 
+  <select id="getProfileInfo"
+    parameterType="flab.project.data.enums.requestparam.GetProfileRequestType"
+    resultMap="profileResult">
+    SELECT U.user_id,
+    U.user_name,
+    U.profile_img_url,
+    U.department_name,
+    U.self_introduction,
+    <if test="getProfileRequestType.name().equals('GET')">U.post_count,</if>
+    <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
+    <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
+    S.social_account_id,
+    S.social_account_url,
+    L.icon_url,
+    H.hashtag_id,
+    H.name
+    FROM USERS U
+    LEFT JOIN SOCIAL_ACCOUNTS S on U.user_id = S.user_id
+    LEFT JOIN LINK_ICON L on S.icon_id = L.icon_id
+    LEFT JOIN INTERESTS I on u.user_id = I.user_id
+    LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
+    WHERE U.user_id = #{userId};
+  </select>
+
+  <resultMap id="profileResult" type="Profile">
+    <id property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <result property="profileImgUrl" column="profile_img_url"/>
+    <result property="departmentName" column="department_name"/>
+    <result property="selfIntroduction" column="self_introduction"/>
+    <result property="postCount" column="post_count"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="followingCount" column="following_count"/>
+    <association property="socialAccounts" resultMap="socialAccountResult"/>
+    <association property="interests" resultMap="hashtagResult"/>
+  </resultMap>
+
+  <resultMap id="socialAccountResult" type="SocialAccountResponse">
+    <id property="socialAccountId" column="social_account_id"/>
+    <result property="iconUrl" column="icon_url"/>
+    <result property="socialAccountUrl" column="social_account_url"/>
+  </resultMap>
+
+  <resultMap id="hashtagResult" type="HashTag">
+    <id property="hashTagId" column="hashtag_id"/>
+    <result property="hashTagName" column="name"/>
+  </resultMap>
+
   <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
     UPDATE USERS
     <set>
-      <if test="updateProfileRequestDto.userName !=null">user_name=#{updateProfileRequestDto.userName},</if>
-      <if test="updateProfileRequestDto.departmentName !=null">department_name=#{updateProfileRequestDto.departmentName},</if>
-      <if test="updateProfileRequestDto.selfIntroduction !=null">self_introduction=#{updateProfileRequestDto.selfIntroduction}</if>
+      <if test="updateProfileRequestDto.userName !=null">
+        user_name=#{updateProfileRequestDto.userName},
+      </if>
+      <if test="updateProfileRequestDto.departmentName !=null">
+        department_name=#{updateProfileRequestDto.departmentName},
+      </if>
+      <if test="updateProfileRequestDto.selfIntroduction !=null">
+        self_introduction=#{updateProfileRequestDto.selfIntroduction}
+      </if>
     </set>
     WHERE user_id=#{userId};
   </update>

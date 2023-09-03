@@ -1,6 +1,9 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.data.dto.model.Profile;
+import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.mapper.UserMapper;
@@ -29,5 +32,15 @@ public class UserService {
         if (userId <= 0) {
             throw new InvalidUserInputException();
         }
+    }
+
+    public SuccessResponse<Profile> getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
+        Profile profileInfo = userMapper.getProfileInfo(userId, getProfileRequestType);
+
+        if (profileInfo == null) {
+            throw new NotExistUserException();
+        }
+
+        return new SuccessResponse<Profile>(profileInfo);
     }
 }

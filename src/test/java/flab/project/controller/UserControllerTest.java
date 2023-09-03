@@ -2,6 +2,7 @@ package flab.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -14,10 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -26,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
 
+    private static final String GET_PROFILE_PAGE_INFO_URL = "/users/{userId}/profile_page";
+    private static final String GET_PROFILE_UPDATE_PAGE_INFO_URL = "/users/{userId}/profile_update_page";
     private static final String UPDATE_PROFILE_INFO_URL = "/users/{userId}/profile-info";
 
     @Autowired
@@ -34,6 +38,100 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private UserService userService;
+
+    @DisplayName("프로필 페이지 정보를 가져올 수 있다.")
+    @Test
+    void getProfilePageInfo() throws Exception {
+        // given
+        long userId = 1;
+
+        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
+                .willReturn(new SuccessResponse());
+
+        // when & then
+        mockMvc.perform(
+                        get(GET_PROFILE_PAGE_INFO_URL, userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+    }
+
+    @DisplayName("프로필 페이지 정보를 가져올 때, userId는 항상 양수여야 한다.")
+    @Test
+    void userIdMustBePositiveWhenGetProfilePageInfo() throws Exception {
+        // given
+        long zeroUserId = 0;
+        long negativeUserId = -1;
+
+        // when & then
+        mockMvc.perform(
+                        get(GET_PROFILE_PAGE_INFO_URL, zeroUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        get(GET_PROFILE_PAGE_INFO_URL, negativeUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
+    @Test
+    void getUpdateProfilePageInfo() throws Exception {
+        // given
+        long userId = 1;
+
+        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
+                .willReturn(new SuccessResponse());
+
+        // when & then
+        mockMvc.perform(
+                        get(GET_PROFILE_UPDATE_PAGE_INFO_URL, userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+    }
+
+    @DisplayName("프로필 수정 페이지 정보를 가져올 때, userId는 양수여야 한다..")
+    @Test
+    void userIdMustBePositiveWhenGetUpdateProfilePageInfo() throws Exception {
+        // given
+        long zeroUserId = 0;
+        long negativeUserId = -1;
+
+        // when & then
+        mockMvc.perform(
+                        get(GET_PROFILE_UPDATE_PAGE_INFO_URL, zeroUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+
+        mockMvc.perform(
+                        get(GET_PROFILE_UPDATE_PAGE_INFO_URL, negativeUserId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
 
     @DisplayName("유저 프로필을 수정할 수 있다.")
     @Test
