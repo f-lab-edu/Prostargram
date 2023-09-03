@@ -15,7 +15,7 @@ public class BadWordChecker {
 
     public BadWordChecker(BadWordMapper badWordMapper) {
         this.badWordMapper = badWordMapper;
-        badWords = badWordMapper.getAll();
+        badWords = badWordMapper.findAll();
     }
 
     public boolean hasBadWord(List<String> inputs) {
