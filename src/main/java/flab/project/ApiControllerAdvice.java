@@ -49,4 +49,3 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 }
-
