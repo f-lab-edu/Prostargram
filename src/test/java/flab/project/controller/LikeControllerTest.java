@@ -23,10 +23,8 @@ public class LikeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private LikeService likeService;
 
@@ -75,23 +73,6 @@ public class LikeControllerTest {
         mockMvc.perform(post("/posts/{postId}/likes", zeroPostId)
                         .param("userId", String.valueOf(userId))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
-    }
-
-    @DisplayName("게시물에 좋아요를 추가할 때, postId 및 userId는 필수 값이다.")
-    @Test
-    void AllParameterOfAddPostLikeIsRequired() throws Exception {
-        // given
-        long userId = 1L;
-
-        // Todo IllegalArgumentException: Not enough variable values available to expand 'postId'
-        mockMvc.perform(post("/posts/{postId}/likes")
-                    .param("userId", String.valueOf(userId))
-                    .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))

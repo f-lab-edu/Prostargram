@@ -17,7 +17,6 @@ public class LikeServiceTest {
 
     @InjectMocks
     LikeService likeService;
-
     @Mock
     LikeMapper likeMapper;
 
