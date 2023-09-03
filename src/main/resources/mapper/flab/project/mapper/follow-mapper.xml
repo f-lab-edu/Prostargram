@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.UserMapper">
+<mapper namespace="flab.project.mapper.FollowMapper">
 
     <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType" resultType="User">
         SELECT
@@ -29,7 +29,29 @@
                     WHERE from_user_id=#{userId}
                 );
             </when>
+            <when test='requestType.name().equals("ALL")'>
+                WHERE user_id IN (
+                    SELECT
+                        to_user_id
+                    FROM FOLLOWS
+                    WHERE from_user_id=#{userId}
+                ) OR user_id IN (
+                    SELECT
+                        from_user_id
+                    FROM FOLLOWS
+                    WHERE to_user_id=#{userId}
+                );
+            </when>
         </choose>
     </select>
 
+    <insert id="addFollow" parameterType="Follows">
+        INSERT INTO FOLLOWS(from_user_id, to_user_id)
+        VALUES (#{followRequestDto.fromUserId},#{followRequestDto.toUserId});
+    </insert>
+
+    <insert id="deleteFollow" parameterType="Follows">
+        DELETE FROM FOLLOWS
+        WHERE from_user_id=#{followRequestDto.fromUserId} and to_user_id=#{followRequestDto.toUserId};
+    </insert>
 </mapper>
