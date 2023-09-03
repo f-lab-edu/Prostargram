@@ -29,7 +29,6 @@ class FollowServiceUnitTest {
 
     @InjectMocks
     FollowService followService;
-
     @Mock
     FollowMapper followMapper;
 

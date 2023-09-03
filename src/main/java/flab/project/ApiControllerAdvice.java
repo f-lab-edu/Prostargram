@@ -3,16 +3,17 @@ package flab.project;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.config.exception.NotExistUserException;
-import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.config.exception.NumberLimitOfInterestExceededException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.validation.BindException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
@@ -24,6 +25,7 @@ public class ApiControllerAdvice {
             InvalidUserInputException.class,
             ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class,
+            MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
             NumberLimitOfInterestExceededException.class
     })
