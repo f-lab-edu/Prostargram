@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.BadWordMapper">
 
-    <select id="getAll" resultType="string">
+    <select id="findAll" resultType="string">
         SELECT name
         FROM BADWORDS
     </select>
