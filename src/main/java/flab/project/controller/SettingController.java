@@ -11,6 +11,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static flab.project.data.enums.PublicScope.PRIVATE;
+import static flab.project.data.enums.PublicScope.PUBLIC;
 
 @Validated
 @RequiredArgsConstructor
@@ -25,5 +29,19 @@ public class SettingController {
     @GetMapping("/users/{userId}/settings")
     public SuccessResponse getPersonalSettings(@PathVariable("userId") @Positive long userId) {
         return settingService.getPersonalSettings(userId);
+    }
+
+    @PatchMapping("/users/{userId}/settings/public-scope/public")
+    public SuccessResponse updateUserPublicScopeToPublic(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        return settingService.updateUserPublicScope(userId, PUBLIC);
+    }
+
+    @PatchMapping("/users/{userId}/settings/public-scope/private")
+    public SuccessResponse updateUserPublicScopeToPrivate(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        return settingService.updateUserPublicScope(userId, PRIVATE);
     }
 }

@@ -1,7 +1,9 @@
 package flab.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.service.SettingService;
+import flab.project.data.dto.AddInterest;
+import flab.project.facade.InterestFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,40 +14,142 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static flab.project.data.enums.PublicScope.PRIVATE;
-import static flab.project.data.enums.PublicScope.PUBLIC;
-import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SettingController.class)
-class SettingControllerTest {
+@WebMvcTest(controllers = InterestController.class)
+class InterestControllerTest {
 
-    private static final String GET_PERSONAL_SETTINGS_URL = "/users/{userId}/settings";
-    private static final String UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL = "/users/{userId}/settings/public-scope/public";
-    private static final String UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL = "/users/{userId}/settings/public-scope/private";
+    private static final String ADD_INTERST_API_URL = "/users/{userId}/interests";
+    private static final String DELETE_INTEREST_API_URL = "/users/{userId}/interests";
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
     @MockBean
-    private SettingService settingService;
+    private InterestFacade interestFacade;
 
-    @DisplayName("유저의 설정 상태 정보를 가져올 수 있다.")
+    @DisplayName("관심사를 설정할 수 있다.")
     @Test
-    void getPersonalSettings() throws Exception {
+    void addInterest() throws Exception {
         // given
-        long userId = 1L;
+        AddInterest addInterest = new AddInterest(1L, "test-interest");
 
-        given(settingService.getPersonalSettings(userId))
+        given(interestFacade.addInterest(any(AddInterest.class)))
                 .willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(
-                        get(GET_PERSONAL_SETTINGS_URL, userId)
+                        post(ADD_INTERST_API_URL, 1)
+                                .content(objectMapper.writeValueAsString(addInterest))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+    }
+
+    @DisplayName("관심사 추가 API에서 userId는 양수여야 한다.")
+    @Test
+    void userIdMustBePositiveWhenAddInterest() throws Exception {
+        // given
+        AddInterest addInterestWithinvalidUserId1 = new AddInterest(-1L, "test");
+
+        // when & then
+        mockMvc.perform(
+                        post(ADD_INTERST_API_URL, -1)
+                                .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId1))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+
+        // given
+        AddInterest addInterestWithinvalidUserId2 = new AddInterest(0L, "test");
+
+        // when & then
+        mockMvc.perform(
+                        post(ADD_INTERST_API_URL, 0, "test")
+                                .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId2))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("관심사 추가 API에서 interestName은 최대 15글자까지만 허용된다.")
+    @Test
+    void interestNameCanHaveMax15LenthStringWhenAddInterest() throws Exception {
+        // given
+        final String STRING_LENGTH_15 = "ABCDEFGHIJKLMNO";
+        final String STRING_LENGTH_16 = "ABCDEFGHIJKLMNOP";
+
+        given(interestFacade.addInterest(any(AddInterest.class)))
+                .willReturn(new SuccessResponse());
+
+        // when & then
+        assertThat(STRING_LENGTH_15.length()).isEqualTo(15);
+        assertThat(STRING_LENGTH_16.length()).isEqualTo(16);
+
+        // given
+        AddInterest addInterestWith15LengthString = new AddInterest(1L, STRING_LENGTH_15);
+
+        // when & then
+        mockMvc.perform(
+                        post(ADD_INTERST_API_URL, 1)
+                                .content(objectMapper.writeValueAsString(addInterestWith15LengthString))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+        // given
+        AddInterest addInterestWith16LengthString = new AddInterest(1L, STRING_LENGTH_16);
+
+        // when & then
+        mockMvc.perform(
+                        post(ADD_INTERST_API_URL, 1)
+                                .content(objectMapper.writeValueAsString(addInterestWith16LengthString))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+
+    @DisplayName("관심사를 제거할 수 있다.")
+    @Test
+    void deleteInterest() throws Exception {
+        // given
+        given(interestFacade.deleteInterest(anyLong(), anyLong()))
+                .willReturn(new SuccessResponse());
+
+        // when & then
+        mockMvc.perform(
+                        delete(DELETE_INTEREST_API_URL, 1)
+                                .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -55,16 +159,17 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
-    @DisplayName("유저의 설정 상태 정보를 가져올 때, userId는 양수여야 한다.")
+    @DisplayName("관심사 제거 API에서 userId는 양수여야 한다.")
     @Test
-    void userIdMustBePositiveWhenGetPersonalSettings() throws Exception {
+    void userIdMustBePositiveWhenDeleteInterest() throws Exception {
         // given
         long zeroUserId = 0L;
         long negativeUserId = -1L;
 
         // when & then
         mockMvc.perform(
-                        get(GET_PERSONAL_SETTINGS_URL, zeroUserId)
+                        delete(DELETE_INTEREST_API_URL, negativeUserId)
+                                .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -74,111 +179,8 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
 
         mockMvc.perform(
-                        get(GET_PERSONAL_SETTINGS_URL, negativeUserId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-    }
-
-    @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정할 수 있다.")
-    @Test
-    void updateUserPublicScopeToPublic() throws Exception {
-        // given
-        long userId = 1;
-
-        given(settingService.updateUserPublicScope(userId, PUBLIC))
-                .willReturn(new SuccessResponse());
-
-        // when & then
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, userId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
-        then(settingService).should().updateUserPublicScope(userId, PUBLIC);
-    }
-
-    @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정 할 때, userId는 양수여야 한다.")
-    @Test
-    void userIdMustBePositiveWhenUpdateUserPublicScope() throws Exception {
-        // given
-        long zeroUserId = 0;
-        long negativeUserId = -1;
-
-        // when & then
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, zeroUserId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, negativeUserId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-    }
-
-    @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정할 수 있다.")
-    @Test
-    void updateUserPublicScopeToPrivate() throws Exception {
-        // given
-        long userId = 1;
-
-        given(settingService.updateUserPublicScope(userId, PRIVATE))
-                .willReturn(new SuccessResponse());
-
-        // when & then
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, userId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
-                .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
-                .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-
-        then(settingService).should().updateUserPublicScope(userId, PRIVATE);
-    }
-
-    @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정 할 때, userId는 양수여야 한다.")
-    @Test
-    void userIdMustBePositiveWhenUpdateUserPrivateScope() throws Exception {
-        // given
-        long zeroUserId = 0;
-        long negativeUserId = -1;
-
-        // when & then
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, zeroUserId)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-
-        mockMvc.perform(
-                        patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, negativeUserId)
+                        delete(DELETE_INTEREST_API_URL, zeroUserId)
+                                .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())

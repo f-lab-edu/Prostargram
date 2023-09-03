@@ -10,4 +10,10 @@
         WHERE user_id = #{userId};
     </select>
 
+    <update id="updateUserPublicScope">
+        UPDATE USERS
+        SET public_scope=#{publicScope}
+        WHERE user_id = #{userId};
+    </update>
+
 </mapper>

@@ -4,7 +4,9 @@ import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotExistUserException;
+import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -21,7 +23,9 @@ public class ApiControllerAdvice {
             BindException.class,
             InvalidUserInputException.class,
             ConstraintViolationException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            DataIntegrityViolationException.class,
+            NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
