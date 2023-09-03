@@ -11,4 +11,8 @@ public class HashTag {
 
     @Schema(example = "#aws")
     private String hashTagName;
+
+    public HashTag(String hashTagName) {
+        this.hashTagName = hashTagName;
+    }
 }

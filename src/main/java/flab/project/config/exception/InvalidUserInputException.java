@@ -9,3 +9,4 @@ public class InvalidUserInputException extends RuntimeException {
         super(message);
     }
 }
+

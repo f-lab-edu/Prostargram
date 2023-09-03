@@ -1,10 +1,7 @@
-package flab.project.data.dto;
+package flab.project.data.dto.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import flab.project.data.dto.model.HashTag;
-import flab.project.data.dto.model.SocialAccountResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
