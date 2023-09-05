@@ -5,8 +5,20 @@
 <mapper namespace="flab.project.mapper.VoteMapper">
 
     <insert id="addPostVote">
-        INSERT INTO CHOICE(option_id, user_id)
-        VALUES (#{post_id}, #{user_id});
+        INSERT INTO CHOICE(post_id, option_id, user_id)
+        VALUES (#{postId}, #{option_id}, #{user_id});
     </insert>
+
+    <select id="find" resultType="Long">
+        SELECT option_id
+        FROM CHOICE
+        WHERE post_id = #{postId};
+    </select>
+    
+    <select id="check" resultType="boolean">
+        SELECT duplicate_check
+        FROM POST
+        WHERE post_id = #{postId};
+    </select>
 
 </mapper>
