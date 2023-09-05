@@ -23,10 +23,24 @@ public class VoteController {
 
     private final VoteService voteService;
 
-    @Operation(summary = "투표하기 API")
-    @Parameters({@Parameter(name = "postId", description = "게시물의 id", required = true)})
-    @PostMapping(value = "/posts/{postId}/votes")
-    public SuccessResponse addPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("post type") PostType postType, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
-        return voteService.addPostVote(postType, optionIds, userId);
+    @Operation(summary = "기본 게시물 투표하기 API")
+    @Parameter(name = "postId", description = "게시물의 id", required = true)
+    @PostMapping(value = "/posts/{postId}/votes/basic")
+    public SuccessResponse addBasicPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+        return voteService.addBasicPostVote(optionIds, userId);
+    }
+
+    @Operation(summary = "토론 게시물 투표하기 API")
+    @Parameter(name = "postId", description = "게시물의 id", required = true)
+    @PostMapping(value = "/posts/{postId}/votes/debate")
+    public SuccessResponse addDebatePostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+        return voteService.addDebatePostVote(optionIds, userId);
+    }
+
+    @Operation(summary = "설문 게시물 투표하기 API")
+    @Parameter(name = "postId", description = "게시물의 id", required = true)
+    @PostMapping(value = "/posts/{postId}/votes/poll")
+    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+        return voteService.addPollPostVote(optionIds, userId);
     }
 }
