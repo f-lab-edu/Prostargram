@@ -23,21 +23,21 @@ public class VoteService {
     }
 
     public SuccessResponse addPollPostVote(long postId, List<Long> optionIds, long userId) {
-        List<Long> actualOptionIds = voteMapper.find(postId);
-        boolean allowDuplicateCheck = voteMapper.check(postId);
+        List<Long> postOptionIds = voteMapper.find(postId);
+        boolean duplicateCheck = voteMapper.check(postId);
 
         checkUserIdAndOptionIds(postId, optionIds, userId);
 
-        if (!allowDuplicateCheck && optionIds.size() > 1) {
+        if (!duplicateCheck && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll.");
         }
 
-        if (optionIds.size() > actualOptionIds.size()) {
+        if (optionIds.size() > postOptionIds.size()) {
             throw new InvalidUserInputException("Selected more options than available.");
         }
 
         for (Long selectedOptionId : optionIds) {
-            if (!actualOptionIds.contains(selectedOptionId)) {
+            if (!postOptionIds.contains(selectedOptionId)) {
                 throw new InvalidUserInputException("Invalid option ID selected.");
             }
         }
