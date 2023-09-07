@@ -1,7 +1,5 @@
 package flab.project.service;
 
-import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.enums.PostType;
 import flab.project.mapper.VoteMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,42 +10,49 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class VoteServiceTest {
 
     @InjectMocks
     VoteService voteService;
-
     @Mock
     VoteMapper voteMapper;
 
-    @DisplayName("토론 게시물에 투표할 때, 하나의 선택지만 제출했다면 정상적으로 투표가 반영된다.")
+    @DisplayName("토론 게시물에 투표할 수 있다.")
     @Test
     void validParameterForVoteInDebatePost() {
         // given
-        PostType postType = PostType.DEBATE;
-        List<Long> optionIds = List.of(1L);
-        long userId = 1L;
+        long postId = 1L;
+        long optionId = 2L;
+        long userId = 3L;
+
+        given(voteMapper.find(postId)).willReturn(List.of(optionId));
 
         // when
-        voteService.addPostVote(postType, optionIds, userId);
+        voteService.addDebatePostVote(postId, optionId, userId);
 
         // then
-        then(voteMapper).should().addPostVote(optionIds.get(0), userId);
+        then(voteMapper).should().addDebatePostVote(postId, optionId, userId);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, 두 선택지를 모두 제출했다면 투표가 반영되지 않는다.")
+    @DisplayName("통계 게시물에 투표할 수 있다.")
     @Test
-    void invalidParameterForVoteInDebatePost() {
+    void validParameterForVoteInPollPost() {
         // given
-        PostType postType = PostType.DEBATE;
-        List<Long> invalidOptionIds = List.of(1L, 2L);
-        long userId = 1L;
+        long postId = 1L;
+        List<Long> optionIds = List.of(1L, 2L);
+        long userId = 3L;
 
-        // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(postType, invalidOptionIds, userId)).isInstanceOf(InvalidUserInputException.class);
+        given(voteMapper.find(postId)).willReturn(optionIds);
+        given(voteMapper.check(postId)).willReturn(true);
+
+        // when
+        voteService.addPollPostVote(postId, optionIds, userId);
+
+        // then
+        then(voteMapper).should().addPollPostVote(postId, optionIds, userId);
     }
 }

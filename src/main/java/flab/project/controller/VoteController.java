@@ -24,14 +24,14 @@ public class VoteController {
     @Operation(summary = "토론 게시물 투표하기 API")
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/debate")
-    public SuccessResponse addDebatePostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") long optionId, @RequestParam("userId") @Positive long userId) {
+    public SuccessResponse addDebatePostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") @Positive long optionId, @RequestParam("userId") @Positive long userId) {
         return voteService.addDebatePostVote(postId, optionId, userId);
     }
 
     @Operation(summary = "통계 게시물 투표하기 API")
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/poll")
-    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionIds") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
         return voteService.addPollPostVote(postId, optionIds, userId);
     }
 }
