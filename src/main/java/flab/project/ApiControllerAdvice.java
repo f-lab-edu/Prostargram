@@ -2,18 +2,20 @@ package flab.project;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
+import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.validation.BindException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
@@ -33,6 +35,14 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            NotImageExtensionOrNotSupportedExtensionException.class
+    })
+    public FailResponse exceptionResolveToNotImageExtensionOrNotSupportedExtension(NotImageExtensionOrNotSupportedExtensionException e) {
+        return new FailResponse(ResponseEnum.NOT_IMAGE_EXTENSION_OR_NOT_SUPPORTED_EXTENSION);
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DuplicateKeyException.class)
     public FailResponse exceptionResolveToDuplicateRequest(DuplicateKeyException e) {
@@ -49,5 +59,11 @@ public class ApiControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
         return new FailResponse(ResponseEnum.SERVER_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(FailedToUpdateProfileImageToDatabaseException.class)
+    public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
+        return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
     }
 }

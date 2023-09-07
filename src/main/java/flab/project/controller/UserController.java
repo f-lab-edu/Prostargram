@@ -5,6 +5,7 @@ import flab.project.data.dto.*;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 
+import flab.project.facade.UserFacade;
 import flab.project.service.UserService;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Validated
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserFacade userFacade;
 
     @Operation(
             summary = "프로필 수정 페이지 정보 확인하기 API"
@@ -79,5 +82,16 @@ public class UserController {
             @Validated @RequestBody UpdateProfileRequestDto updateProfileRequestDto
     ) {
         return userService.updateProfile(userId, updateProfileRequestDto);
+    }
+
+    @Operation(
+            summary = "프로필 이미지 수정하기 API"
+    )
+    @PatchMapping(value = "/users/{userId}/profile-image")
+    public SuccessResponse updateProfileImage(
+            @PathVariable("userId") @Positive long userId,
+            @RequestPart(value = "profileImage") MultipartFile profileImg
+    ) {
+        return userFacade.updateProfileImage(userId, profileImg);
     }
 }

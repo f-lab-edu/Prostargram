@@ -28,12 +28,6 @@ public class UserService {
         return new SuccessResponse();
     }
 
-    private void checkUserId(long userId) {
-        if (userId <= 0) {
-            throw new InvalidUserInputException();
-        }
-    }
-
     public SuccessResponse<Profile> getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
         Profile profileInfo = userMapper.getProfileInfo(userId, getProfileRequestType);
 
@@ -42,5 +36,17 @@ public class UserService {
         }
 
         return new SuccessResponse<Profile>(profileInfo);
+    }
+
+    public boolean updateProfileImage(long userId, String profileImgUrl) {
+        int NumberOfAffectedRow = userMapper.updateProfileImage(userId, profileImgUrl);
+
+        return NumberOfAffectedRow == 1;
+    }
+
+    private void checkUserId(long userId) {
+        if (userId <= 0) {
+            throw new InvalidUserInputException();
+        }
     }
 }

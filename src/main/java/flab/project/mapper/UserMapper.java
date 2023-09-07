@@ -10,5 +10,8 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
     Profile getProfileInfo(@Param("userId") long userId, @Param("getProfileRequestType") GetProfileRequestType getProfileRequestType);
+
     int updateProfile(@Param("userId") long userId, @Param("updateProfileRequestDto") UpdateProfileRequestDto updateProfileRequestDto);
+
+    int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
 }
