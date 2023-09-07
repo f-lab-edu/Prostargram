@@ -36,7 +36,7 @@
   <insert id="updateProfileImage">
     UPDATE USERS
     SET profile_img_url=#{profileImgUrl}
-    where user_id = #{userId};
+    WHERE user_id = #{userId};
   </insert>
 
 </mapper>

@@ -4,6 +4,7 @@ import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
+import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
 import flab.project.data.dto.file.ProfileImage;
 import flab.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,8 @@ public class UserFacade {
             }
 
             return new SuccessResponse();
+        } catch (NotImageExtensionOrNotSupportedExtensionException notImageExtensionOrNotSupportedExtensionException) {
+            throw new NotImageExtensionOrNotSupportedExtensionException();
         } catch (Exception e) {
             throw new FailedToUpdateProfileImageToDatabaseException();
         }
