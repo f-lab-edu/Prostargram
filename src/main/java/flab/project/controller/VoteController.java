@@ -28,7 +28,7 @@ public class VoteController {
         return voteService.addDebatePostVote(postId, optionId, userId);
     }
 
-    @Operation(summary = "설문 게시물 투표하기 API")
+    @Operation(summary = "통계 게시물 투표하기 API")
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/poll")
     public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
