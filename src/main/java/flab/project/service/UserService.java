@@ -1,12 +1,14 @@
 package flab.project.service;
 
-import flab.project.data.dto.User;
-import flab.project.data.enums.requestparam.GetFollowsType;
+import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.data.dto.model.Profile;
+import flab.project.data.enums.requestparam.GetProfileRequestType;
+import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -14,15 +16,37 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public List<User> getFollows(Long userId, GetFollowsType requestType) {
-        List<User> result = userMapper.findAll(requestType, userId);
+    public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
+        checkUserId(userId);
 
-        return result;
+        int numberOfAffectedRow = userMapper.updateProfile(userId, updateProfileRequestDto);
+
+        if (numberOfAffectedRow == 0) {
+            throw new RuntimeException();
+        }
+
+        return new SuccessResponse();
+    }
+
+    public SuccessResponse<Profile> getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
+        Profile profileInfo = userMapper.getProfileInfo(userId, getProfileRequestType);
+
+        if (profileInfo == null) {
+            throw new NotExistUserException();
+        }
+
+        return new SuccessResponse<Profile>(profileInfo);
     }
 
     public boolean updateProfileImage(long userId, String profileImgUrl) {
         int NumberOfAffectedRow = userMapper.updateProfileImage(userId, profileImgUrl);
 
         return NumberOfAffectedRow == 1;
+    }
+
+    private void checkUserId(long userId) {
+        if (userId <= 0) {
+            throw new InvalidUserInputException();
+        }
     }
 }

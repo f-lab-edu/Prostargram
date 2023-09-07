@@ -13,6 +13,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import flab.project.config.exception.NotExistUserException;
+import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
@@ -24,7 +27,9 @@ public class ApiControllerAdvice {
             InvalidUserInputException.class,
             ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class,
-            DataIntegrityViolationException.class
+            MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class,
+            NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
@@ -42,6 +47,12 @@ public class ApiControllerAdvice {
     @ExceptionHandler(DuplicateKeyException.class)
     public FailResponse exceptionResolveToDuplicateRequest(DuplicateKeyException e) {
         return new FailResponse(ResponseEnum.DUPLICATE_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotExistUserException.class)
+    public FailResponse exceptionResolveToNonExistUser(NotExistUserException e) {
+        return new FailResponse(ResponseEnum.NON_EXIST_USER);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
