@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +31,7 @@ public class VoteController {
     @Operation(summary = "통계 게시물 투표하기 API")
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/poll")
-    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionIds") List<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionIds") Set<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
         return voteService.addPollPostVote(postId, optionIds, userId);
     }
 }

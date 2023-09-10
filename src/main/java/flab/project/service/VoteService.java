@@ -2,75 +2,65 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.mapper.PostMapper;
+import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class VoteService {
 
     private final VoteMapper voteMapper;
+    private final PostOptionsMapper postOptionsMapper;
+    private final PostMapper postMapper;
 
+    // Todo 토론 게시물에서 postId가 유효한 Id인지 검증을 해야하지 않나?
     public SuccessResponse addDebatePostVote(long postId, long optionId, long userId) {
-        checkPostIdAndOptionId(postId, optionId, userId);
+        Set<Long> validOptionIds = Set.of(1L, 2L);
 
-        List<Long> validOptionIds = voteMapper.find(postId);
+        checkPostIdAndUserId(postId, Set.of(optionId), userId, validOptionIds);
 
-        if (!validOptionIds.contains(optionId)) {
-            throw new InvalidUserInputException("Invalid option ID selected.");
-        }
-
-        voteMapper.addDebatePostVote(postId, optionId, userId);
+        voteMapper.addPostVote(postId, Set.of(optionId), userId);
 
         return new SuccessResponse();
     }
 
-    @Transactional
-    public SuccessResponse addPollPostVote(long postId, List<Long> optionIds, long userId) {
-        List<Long> validOptionIds = voteMapper.find(postId);
-        boolean duplicateCheck = voteMapper.check(postId);
+    public SuccessResponse addPollPostVote(long postId, Set<Long> optionIds, long userId) {
+        Set<Long> validOptionIds = postOptionsMapper.find(postId);
 
-        checkPostIdAndOptionIds(postId, optionIds, userId);
+        checkPostIdAndUserId(postId, optionIds, userId, validOptionIds);
+        checkMultipleVotes(postId, optionIds);
 
-        if (!duplicateCheck && optionIds.size() > 1) {
-            throw new InvalidUserInputException("Multiple selections are not allowed for this poll.");
-        }
-
-        if (optionIds.size() > validOptionIds.size()) {
-            throw new InvalidUserInputException("Selected more options than available.");
-        }
-
-        for (Long selectOptionId : optionIds) {
-            if (!validOptionIds.contains(selectOptionId)) {
-                throw new InvalidUserInputException("Invalid option ID selected.");
-            }
-        }
-
-        voteMapper.addPollPostVote(postId, optionIds, userId);
+        voteMapper.addPostVote(postId, optionIds, userId);
 
         return new SuccessResponse();
     }
 
-    // Todo userId는 추후, JWT 구현 후 삭제할 예정이므로 메서드 이름에서 userId를 제외한채 명명
-    private void checkPostIdAndOptionId(long postId, long optionId, long userId) {
-        if (postId <= 0 || optionId <= 0 || userId <= 0) {
-            throw new InvalidUserInputException("Invalid postId or userId");
+    private void checkPostIdAndUserId(long postId, Set<Long> optionIds, long userId, Set<Long> validOptionIds) {
+        if (postId <= 0) {
+            throw new InvalidUserInputException("Invalid postId.");
         }
-    }
 
-    private void checkPostIdAndOptionIds(long postId, List<Long> optionIds, long userId) {
-        if (postId <= 0 || userId <= 0) {
+        if (userId <= 0) {
             throw new InvalidUserInputException("Invalid userId.");
         }
 
         for (Long id : optionIds) {
-            if (id == null || id <= 0) {
-                throw new InvalidUserInputException("All optionIds should be positive values.");
+            if (!validOptionIds.contains(id)) {
+                throw new InvalidUserInputException("OptionIds should be one of the fixed values.");
             }
+        }
+    }
+
+    private void checkMultipleVotes(long postId, Set<Long> optionIds) {
+        boolean allowMultipleVotes = postMapper.check(postId);
+
+        if (!allowMultipleVotes && optionIds.size() > 1) {
+            throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
         }
     }
 }
