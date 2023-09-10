@@ -2,7 +2,7 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.PostMapper;
+import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class VoteService {
 
     private final VoteMapper voteMapper;
     private final PostOptionsMapper postOptionsMapper;
-    private final PostMapper postMapper;
+    private final PollPostMapper pollPostMapper;
 
     // Todo 토론 게시물에서 postId가 유효한 Id인지 검증을 해야하지 않나?
     public SuccessResponse addDebatePostVote(long postId, long optionId, long userId) {
@@ -57,7 +57,7 @@ public class VoteService {
     }
 
     private void checkMultipleVotes(long postId, Set<Long> optionIds) {
-        boolean allowMultipleVotes = postMapper.check(postId);
+        boolean allowMultipleVotes = pollPostMapper.check(postId);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");

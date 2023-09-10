@@ -1,7 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.PostMapper;
+import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ public class VoteServiceTest {
     @Mock
     PostOptionsMapper postOptionsMapper;
     @Mock
-    PostMapper postMapper;
+    PollPostMapper pollPostMapper;
 
     @DisplayName("토론 게시물에 투표할 수 있다.")
     @Test
@@ -53,7 +53,7 @@ public class VoteServiceTest {
         long userId = 3L;
 
         given(postOptionsMapper.find(postId)).willReturn(optionIds);
-        given(postMapper.check(postId)).willReturn(true);
+        given(pollPostMapper.check(postId)).willReturn(true);
 
         // when
         voteService.addPollPostVote(postId, optionIds, userId);
