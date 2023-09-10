@@ -22,7 +22,7 @@ public class VoteService {
     public SuccessResponse addDebatePostVote(long postId, long optionId, long userId) {
         Set<Long> validOptionIds = Set.of(1L, 2L);
 
-        checkPostIdAndUserId(postId, Set.of(optionId), userId, validOptionIds);
+        checkPostIdAndUOptionIds(postId, Set.of(optionId), userId, validOptionIds);
 
         voteMapper.addPostVote(postId, Set.of(optionId), userId);
 
@@ -32,7 +32,7 @@ public class VoteService {
     public SuccessResponse addPollPostVote(long postId, Set<Long> optionIds, long userId) {
         Set<Long> validOptionIds = postOptionsMapper.find(postId);
 
-        checkPostIdAndUserId(postId, optionIds, userId, validOptionIds);
+        checkPostIdAndUOptionIds(postId, optionIds, userId, validOptionIds);
         checkMultipleVotes(postId, optionIds);
 
         voteMapper.addPostVote(postId, optionIds, userId);
@@ -40,7 +40,8 @@ public class VoteService {
         return new SuccessResponse();
     }
 
-    private void checkPostIdAndUserId(long postId, Set<Long> optionIds, long userId, Set<Long> validOptionIds) {
+    // Todo userId는 추후, 삭제될 예정이므로 메서드 명명에서 제외
+    private void checkPostIdAndUOptionIds(long postId, Set<Long> optionIds, long userId, Set<Long> validOptionIds) {
         if (postId <= 0) {
             throw new InvalidUserInputException("Invalid postId.");
         }
