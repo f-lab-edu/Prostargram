@@ -3,6 +3,7 @@ package flab.project;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,7 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             InvalidUserInputException.class,
+            ConstraintViolationException.class,
             MethodArgumentNotValidException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
