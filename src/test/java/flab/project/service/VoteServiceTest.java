@@ -53,7 +53,7 @@ public class VoteServiceTest {
         long userId = 3L;
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.checkAllowMultipleVotes(postId)).willReturn(true);
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
 
         // when
         voteService.addPollPostVote(postId, optionIds, userId);

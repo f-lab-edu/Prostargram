@@ -36,16 +36,8 @@ public class VoteService {
     }
 
     private void validateVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
-        Set<Long> validOptionIds;
-
-        if (postType == PostType.DEBATE) {
-            validOptionIds = Set.of(1L, 2L);
-        } else {
-            validOptionIds = postOptionsMapper.findValidOptionIds(postId);
-        }
-
         checkPostIdAndUserId(postId, userId);
-        checkOptionIds(optionIds, validOptionIds);
+        checkOptionIds(postId, optionIds, postType);
 
         if (postType == PostType.POLL) {
             checkMultipleVotes(postId, optionIds);
@@ -62,7 +54,9 @@ public class VoteService {
         }
     }
 
-    private void checkOptionIds(Set<Long> optionIds, Set<Long> validOptionIds) {
+    private void checkOptionIds(long postId, Set<Long> optionIds, PostType postType) {
+        Set<Long> validOptionIds = checkValidOptionIds(postId, postType);
+
         for (Long id : optionIds) {
             if (!validOptionIds.contains(id)) {
                 throw new InvalidUserInputException("OptionIds should be one of the fixed values.");
@@ -70,8 +64,16 @@ public class VoteService {
         }
     }
 
+    private Set<Long> checkValidOptionIds(long postId, PostType postType) {
+        if (postType == PostType.DEBATE) {
+            return Set.of(1L, 2L);
+        } else {
+            return postOptionsMapper.findValidOptionIds(postId);
+        }
+    }
+
     private void checkMultipleVotes(long postId, Set<Long> optionIds) {
-        boolean allowMultipleVotes = pollPostMapper.checkAllowMultipleVotes(postId);
+        boolean allowMultipleVotes = pollPostMapper.findAllowMultipleVotes(postId);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
