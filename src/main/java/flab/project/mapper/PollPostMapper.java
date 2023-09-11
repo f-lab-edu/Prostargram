@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface PollPostMapper {
 
-    boolean checkAllowMultipleVotes(@Param("postId") long postId);
+    boolean findAllowMultipleVotes(@Param("postId") long postId);
 }

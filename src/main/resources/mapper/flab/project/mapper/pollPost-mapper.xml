@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.PollPostMapper">
 
-    <select id="checkAllowMultipleVotes" resultType="boolean">
+    <select id="findAllowMultipleVotes" resultType="boolean">
         SELECT allow_multiple_votes
         FROM POLL_POST
         WHERE post_id = #{postId};
