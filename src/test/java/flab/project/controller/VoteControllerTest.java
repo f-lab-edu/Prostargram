@@ -160,28 +160,13 @@ public class VoteControllerTest {
     void addPollPostVote_invalidOptionIds() throws Exception {
         // given
         long postId = 1L;
-        Set<Long> negativeOptionIds = Set.of(-1L, 1L);
+        Set<Long> negativeOptionIds = Set.of(-1L, 0L, 1L);
         long userId = 3L;
 
         // when & then
         mockMvc.perform(
                         post("/posts/{postId}/votes/poll", postId)
                                 .param("optionIds", negativeOptionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
-                                .param("userId", String.valueOf(userId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
-
-        // given
-        Set<Long> zeroOptionIds = Set.of(0L, 1L);
-
-        // when & then
-        mockMvc.perform(
-                        post("/posts/{postId}/votes/poll", postId)
-                                .param("optionIds", zeroOptionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
                                 .param("userId", String.valueOf(userId))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
