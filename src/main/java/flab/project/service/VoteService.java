@@ -2,6 +2,7 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
@@ -18,11 +19,8 @@ public class VoteService {
     private final PostOptionsMapper postOptionsMapper;
     private final PollPostMapper pollPostMapper;
 
-    // Todo 토론 게시물에서 postId가 유효한 Id인지 검증을 해야하지 않나?
     public SuccessResponse addDebatePostVote(long postId, long optionId, long userId) {
-        Set<Long> validOptionIds = Set.of(1L, 2L);
-
-        checkPostIdAndUOptionIds(postId, Set.of(optionId), userId, validOptionIds);
+        validateVote(postId, Set.of(optionId), userId, PostType.DEBATE);
 
         voteMapper.addPostVote(postId, Set.of(optionId), userId);
 
@@ -30,18 +28,31 @@ public class VoteService {
     }
 
     public SuccessResponse addPollPostVote(long postId, Set<Long> optionIds, long userId) {
-        Set<Long> validOptionIds = postOptionsMapper.find(postId);
-
-        checkPostIdAndUOptionIds(postId, optionIds, userId, validOptionIds);
-        checkMultipleVotes(postId, optionIds);
+        validateVote(postId, optionIds, userId, PostType.POLL);
 
         voteMapper.addPostVote(postId, optionIds, userId);
 
         return new SuccessResponse();
     }
 
-    // Todo userId는 추후, 삭제될 예정이므로 메서드 명명에서 제외
-    private void checkPostIdAndUOptionIds(long postId, Set<Long> optionIds, long userId, Set<Long> validOptionIds) {
+    private void validateVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
+        Set<Long> validOptionIds;
+
+        if (postType == PostType.DEBATE) {
+            validOptionIds = Set.of(1L, 2L);
+        } else {
+            validOptionIds = postOptionsMapper.find(postId);
+        }
+
+        checkPostIdAndUserId(postId, userId);
+        checkOptionIds(optionIds, validOptionIds);
+
+        if (postType == PostType.POLL) {
+            checkMultipleVotes(postId, optionIds);
+        }
+    }
+
+    private void checkPostIdAndUserId(long postId, long userId) {
         if (postId <= 0) {
             throw new InvalidUserInputException("Invalid postId.");
         }
@@ -49,7 +60,9 @@ public class VoteService {
         if (userId <= 0) {
             throw new InvalidUserInputException("Invalid userId.");
         }
+    }
 
+    private void checkOptionIds(Set<Long> optionIds, Set<Long> validOptionIds) {
         for (Long id : optionIds) {
             if (!validOptionIds.contains(id)) {
                 throw new InvalidUserInputException("OptionIds should be one of the fixed values.");
