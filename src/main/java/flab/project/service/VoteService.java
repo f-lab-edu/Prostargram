@@ -41,7 +41,7 @@ public class VoteService {
         if (postType == PostType.DEBATE) {
             validOptionIds = Set.of(1L, 2L);
         } else {
-            validOptionIds = postOptionsMapper.find(postId);
+            validOptionIds = postOptionsMapper.findValidOptionIds(postId);
         }
 
         checkPostIdAndUserId(postId, userId);
@@ -71,7 +71,7 @@ public class VoteService {
     }
 
     private void checkMultipleVotes(long postId, Set<Long> optionIds) {
-        boolean allowMultipleVotes = pollPostMapper.check(postId);
+        boolean allowMultipleVotes = pollPostMapper.checkAllowMultipleVotes(postId);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
