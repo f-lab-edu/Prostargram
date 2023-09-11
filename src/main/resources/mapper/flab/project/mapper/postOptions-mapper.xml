@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.PostOptionsMapper">
 
-    <select id="find" resultType="Long">
+    <select id="findValidOptionIds" resultType="Long">
         SELECT option_id
         FROM POST_OPTIONS
         WHERE post_id = #{postId};

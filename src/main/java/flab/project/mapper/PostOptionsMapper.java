@@ -8,5 +8,5 @@ import java.util.Set;
 @Mapper
 public interface PostOptionsMapper {
 
-    Set<Long> find(@Param("postId") long postId);
+    Set<Long> findValidOptionIds(@Param("postId") long postId);
 }
