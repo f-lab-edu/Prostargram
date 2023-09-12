@@ -3,6 +3,7 @@ package flab.project.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.enums.PostType;
 import flab.project.service.VoteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ public class VoteControllerTest {
         long optionId = 1L;
         long userId = 3L;
 
-        given(voteService.addDebatePostVote(postId, optionId, userId)).willReturn(new SuccessResponse());
+        given(voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE)).willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(
@@ -62,7 +63,7 @@ public class VoteControllerTest {
         Set<Long> optionIds = Set.of(1L, 2L);
         long userId = 3L;
 
-        given(voteService.addPollPostVote(postId, optionIds, userId)).willReturn(new SuccessResponse());
+        given(voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(

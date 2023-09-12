@@ -19,16 +19,8 @@ public class VoteService {
     private final PostOptionsMapper postOptionsMapper;
     private final PollPostMapper pollPostMapper;
 
-    public SuccessResponse addDebatePostVote(long postId, long optionId, long userId) {
-        validateVote(postId, Set.of(optionId), userId, PostType.DEBATE);
-
-        voteMapper.addPostVote(postId, Set.of(optionId), userId);
-
-        return new SuccessResponse();
-    }
-
-    public SuccessResponse addPollPostVote(long postId, Set<Long> optionIds, long userId) {
-        validateVote(postId, optionIds, userId, PostType.POLL);
+    public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
+        validateVote(postId, optionIds, userId, postType);
 
         voteMapper.addPostVote(postId, optionIds, userId);
 

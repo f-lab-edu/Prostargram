@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
@@ -38,7 +39,7 @@ public class VoteServiceTest {
         long userId = 3L;
 
         // when
-        voteService.addDebatePostVote(postId, optionId, userId);
+        voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE);
 
         // then
         then(voteMapper).should().addPostVote(postId, Set.of(optionId), userId);
@@ -56,7 +57,7 @@ public class VoteServiceTest {
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
 
         // when
-        voteService.addPollPostVote(postId, optionIds, userId);
+        voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
 
         // then
         then(voteMapper).should().addPostVote(postId, optionIds, userId);
@@ -71,7 +72,7 @@ public class VoteServiceTest {
         long negativeUserId = -1L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addDebatePostVote(negativePostId, optionId, negativeUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(negativePostId, Set.of(optionId), negativeUserId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("통계 게시물에 투표할 때, postId와 userId는 양수여야 한다.")
@@ -83,7 +84,7 @@ public class VoteServiceTest {
         long zeroUserId = 0L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addPollPostVote(zeroPostId, optionIds, zeroUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(zeroPostId, optionIds, zeroUserId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("토론 게시물에 투표할 때, optionId는 양수여야 한다.")
@@ -95,13 +96,13 @@ public class VoteServiceTest {
         long userId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addDebatePostVote(postId, negativeOptionId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(negativeOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
 
         // given
         long zeroOptionId = 0L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addDebatePostVote(postId, negativeOptionId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(negativeOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("통계 게시물에 투표할 때, optionId는 양수여야 한다.")
@@ -113,7 +114,7 @@ public class VoteServiceTest {
         long userId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addPollPostVote(postId, invalidOptionIds, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
     // Todo "통계 게시물에 투표할 때, 통계 게시물의 optionId는 반드시 1 ~ 5 값을 가진다."와 같은 로직은 Service에 추가해야하지 않나?
@@ -126,6 +127,6 @@ public class VoteServiceTest {
         long userId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addDebatePostVote(postId, invalidOptionId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(invalidOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 }

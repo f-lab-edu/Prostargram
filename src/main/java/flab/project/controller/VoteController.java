@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.enums.PostType;
 import flab.project.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,13 +26,13 @@ public class VoteController {
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/debate")
     public SuccessResponse addDebatePostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionId") @Positive long optionId, @RequestParam("userId") @Positive long userId) {
-        return voteService.addDebatePostVote(postId, optionId, userId);
+        return voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE);
     }
 
     @Operation(summary = "통계 게시물 투표하기 API")
     @Parameter(name = "postId", description = "게시물의 id", required = true)
     @PostMapping(value = "/posts/{postId}/votes/poll")
     public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionIds") Set<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
-        return voteService.addPollPostVote(postId, optionIds, userId);
+        return voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
     }
 }
