@@ -35,8 +35,8 @@ public class VoteServiceTest {
     void addDebatePostVote() {
         // given
         long postId = 1L;
-        long optionId = 2L;
-        long userId = 3L;
+        long optionId = 1L;
+        long userId = 1L;
 
         // when
         voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE);
@@ -51,7 +51,7 @@ public class VoteServiceTest {
         // given
         long postId = 1L;
         Set<Long> optionIds = Set.of(1L, 2L);
-        long userId = 3L;
+        long userId = 1L;
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
@@ -63,28 +63,52 @@ public class VoteServiceTest {
         then(voteMapper).should().addPostVote(postId, optionIds, userId);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, postId와 userId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, postId는 양수여야 한다.")
     @Test
-    void addDebatePostVote_invalidPostIdAndUserId() {
+    void addDebatePostVote_invalidPostId() {
         // given
         long negativePostId = -1L;
+        long optionId = 1L;
+        long userId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(negativePostId, Set.of(optionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("토론 게시물에 투표할 때, userId는 양수여야 한다.")
+    @Test
+    void addDebatePostVote_invalidUserId() {
+        // given
+        long postId = -1L;
         long optionId = 1L;
         long negativeUserId = -1L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(negativePostId, Set.of(optionId), negativeUserId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(optionId), negativeUserId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, postId와 userId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, postId는 양수여야 한다.")
     @Test
-    void addPollPostVote_invalidPostIdAndUserId() {
+    void addPollPostVote_invalidPostId() {
         // given
         long zeroPostId = 0L;
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(zeroPostId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
+    @Test
+    void addPollPostVote_invalidUserId() {
+        // given
+        long postId = 0L;
         Set<Long> optionIds = Set.of(1L, 2L);
         long zeroUserId = 0L;
 
         // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(zeroPostId, optionIds, zeroUserId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, zeroUserId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("토론 게시물에 투표할 때, optionId는 양수여야 한다.")
@@ -117,7 +141,6 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    // Todo "통계 게시물에 투표할 때, 통계 게시물의 optionId는 반드시 1 ~ 5 값을 가진다."와 같은 로직은 Service에 추가해야하지 않나?
     @DisplayName("토론 게시물에 투표할 때, 토론 게시물의 optionId는 반드시 1 또는 2 값을 가진다.")
     @Test
     void addDebatePostVote_invalidRangeOfOptionId() {
