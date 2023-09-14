@@ -28,15 +28,15 @@ public class VoteService {
     }
 
     private void validateVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
-        checkPostIdAndUserId(postId, userId);
-        checkOptionIds(postId, optionIds, postType);
+        validatePostIdAndUserId(postId, userId);
+        validateOptionIds(postId, optionIds, postType);
 
         if (postType == PostType.POLL) {
-            checkMultipleVotes(postId, optionIds);
+            validateMultipleVotes(postId, optionIds);
         }
     }
 
-    private void checkPostIdAndUserId(long postId, long userId) {
+    private void validatePostIdAndUserId(long postId, long userId) {
         if (postId <= 0) {
             throw new InvalidUserInputException("Invalid postId.");
         }
@@ -46,8 +46,8 @@ public class VoteService {
         }
     }
 
-    private void checkOptionIds(long postId, Set<Long> optionIds, PostType postType) {
-        Set<Long> validOptionIds = checkValidOptionIds(postId, postType);
+    private void validateOptionIds(long postId, Set<Long> optionIds, PostType postType) {
+        Set<Long> validOptionIds = getValidOptionIds(postId, postType);
 
         for (Long id : optionIds) {
             if (!validOptionIds.contains(id)) {
@@ -56,7 +56,7 @@ public class VoteService {
         }
     }
 
-    private Set<Long> checkValidOptionIds(long postId, PostType postType) {
+    private Set<Long> getValidOptionIds(long postId, PostType postType) {
         if (postType == PostType.DEBATE) {
             return Set.of(1L, 2L);
         } else {
@@ -64,7 +64,7 @@ public class VoteService {
         }
     }
 
-    private void checkMultipleVotes(long postId, Set<Long> optionIds) {
+    private void validateMultipleVotes(long postId, Set<Long> optionIds) {
         boolean allowMultipleVotes = pollPostMapper.findAllowMultipleVotes(postId);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
