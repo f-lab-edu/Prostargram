@@ -44,10 +44,10 @@ public class VoteControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/debate", postId)
-                                .param("optionId", String.valueOf(optionId))
-                                .param("userId", String.valueOf(userId))
-                                .contentType(MediaType.APPLICATION_JSON))
+                post("/posts/{postId}/votes/debate", postId)
+                        .param("optionId", String.valueOf(optionId))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
@@ -71,50 +71,87 @@ public class VoteControllerTest {
                         .param("optionIds", optionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .param("userId", String.valueOf(userId))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
+                .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
-    @DisplayName("토론 게시물에 투표할 때, postId와 userId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, postId는 양수여야 한다.")
     @Test
-    void addDebatePostVote_invalidPostIdAndUserId() throws Exception {
+    void addDebatePostVote_invalidPostId() throws Exception {
         // given
         long negativePostId = -1L;
         long optionId = 1L;
-        long negativeUserId = -1L;
+        long userId = 1L;
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/debate", negativePostId)
-                                .param("optionId", String.valueOf(optionId))
-                                .param("userId", String.valueOf(negativeUserId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+                post("/posts/{postId}/votes/debate", negativePostId)
+                        .param("optionId", String.valueOf(optionId))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("통계 게시물에 투표할 때, postId와 userId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
     @Test
-    void addPollPostVote_invalidPostIdAndUserId() throws Exception {
+    void addDebatePostVote_invalidUserId() throws Exception {
+        // given
+        long postId = 1L;
+        long optionId = 1L;
+        long negativeUserId = -1L;
+
+        // when & then
+        mockMvc.perform(
+                post("/posts/{postId}/votes/debate", postId)
+                        .param("optionId", String.valueOf(optionId))
+                        .param("userId", String.valueOf(negativeUserId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, postId는 양수여야 한다.")
+    @Test
+    void addPollPostVote_invalidPostId() throws Exception {
         // given
         long zeroPostId = 0L;
-        Set<Long> negativeOptionIds = Set.of(1L, 2L);
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        // when & then
+        mockMvc.perform(
+                post("/posts/{postId}/votes/poll", zeroPostId)
+                        .param("optionIds", optionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
+    @Test
+    void addPollPostVote_invalidUserId() throws Exception {
+        // given
+        long postId = 1L;
+        Set<Long> optionIds = Set.of(1L, 2L);
         long zeroUserId = 0L;
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/poll", zeroPostId)
-                                .param("optionIds", negativeOptionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
-                                .param("userId", String.valueOf(zeroUserId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+                post("/posts/{postId}/votes/poll", postId)
+                        .param("optionIds", optionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
+                        .param("userId", String.valueOf(zeroUserId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
@@ -130,12 +167,11 @@ public class VoteControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/debate", postId)
-                                .param("optionId", String.valueOf(negativeOptionId))
-                                .param("userId", String.valueOf(userId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+                post("/posts/{postId}/votes/debate", postId)
+                        .param("optionId", String.valueOf(negativeOptionId))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
@@ -145,12 +181,11 @@ public class VoteControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/debate", postId)
-                                .param("optionId", String.valueOf(zeroOptionId))
-                                .param("userId", String.valueOf(userId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+                post("/posts/{postId}/votes/debate", postId)
+                        .param("optionId", String.valueOf(zeroOptionId))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
@@ -166,12 +201,11 @@ public class VoteControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/votes/poll", postId)
-                                .param("optionIds", negativeOptionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
-                                .param("userId", String.valueOf(userId))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+                post("/posts/{postId}/votes/poll", postId)
+                        .param("optionIds", negativeOptionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
+                        .param("userId", String.valueOf(userId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
