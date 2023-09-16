@@ -111,36 +111,6 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, zeroUserId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, optionId는 양수여야 한다.")
-    @Test
-    void addDebatePostVote_invalidOptionId() {
-        // given
-        long postId = 1L;
-        long negativeOptionId = -1L;
-        long userId = 1L;
-
-        // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(negativeOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
-
-        // given
-        long zeroOptionId = 0L;
-
-        // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(negativeOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
-    }
-
-    @DisplayName("통계 게시물에 투표할 때, optionId는 양수여야 한다.")
-    @Test
-    void addPollPostVote_invalidOptionIds() {
-        // given
-        long postId = 1L;
-        Set<Long> invalidOptionIds = Set.of(0L, -1L, 1L);
-        long userId = 1L;
-
-        // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
-    }
-
     @DisplayName("토론 게시물에 투표할 때, 토론 게시물의 optionId는 반드시 1 또는 2 값을 가진다.")
     @Test
     void addDebatePostVote_invalidRangeOfOptionId() {
@@ -151,5 +121,36 @@ public class VoteServiceTest {
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(invalidOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, optionId는 유효한 optionId들 중 하나여야 한다.")
+    @Test
+    void addPollPostVote_invalidOptionIds() {
+        // given
+        long postId = 1L;
+        Set<Long> validOptionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(validOptionIds);
+
+        Set<Long> invalidOptionIds = Set.of(3L);
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나여야만 한다.")
+    @Test
+    void validAllowMultipleVotes_invalidOptionId() {
+        // given
+        long postId = 1L;
+        Set<Long> multipleOptionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(Set.of(1L, 2L));
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, multipleOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 }
