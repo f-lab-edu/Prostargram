@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -63,7 +64,23 @@ public class VoteServiceTest {
         then(voteMapper).should().addPostVote(postId, optionIds, userId);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, postId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나의 값만 존재한다.")
+    @Test
+    void validAllowMultipleVotes_validOptionId() {
+        // given
+        long postId = 1L;
+        Set<Long> optionIds = Set.of(1L);
+        long userId = 1L;
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
+
+        // when & then
+        assertThatCode(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("토론 게시물에 투표할 때, postId가 음수라면 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidPostId() {
         // given
@@ -75,7 +92,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(negativePostId, Set.of(optionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, userId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, userId가 음수라면 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidUserId() {
         // given
@@ -87,7 +104,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(optionId), negativeUserId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, postId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, postId가 음수라면 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidPostId() {
         // given
@@ -99,7 +116,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(zeroPostId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, userId가 음수라면 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidUserId() {
         // given
@@ -139,7 +156,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나여야만 한다.")
+    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId가 두 개 이상이라면 InvalidUserInputException을 반환한다.")
     @Test
     void validAllowMultipleVotes_invalidOptionId() {
         // given
