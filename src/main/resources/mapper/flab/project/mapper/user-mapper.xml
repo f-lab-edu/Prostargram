@@ -63,6 +63,14 @@
     WHERE U.user_id = #{userId};
   </select>
 
+  <select id="getBasicUser" resultType="BasicUser">
+    SELECT user_id,
+           user_name,
+           profile_img_url
+    FROM USERS
+    WHERE user_id = #{userId};
+  </select>
+
   <resultMap id="profileResult" type="Profile">
     <id property="userId" column="user_id"/>
     <result property="userName" column="user_name"/>

@@ -2,9 +2,7 @@ package flab.project;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
-import flab.project.config.exception.InvalidUserInputException;
-import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
+import flab.project.config.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import flab.project.config.exception.NotExistUserException;
-import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
@@ -53,6 +49,12 @@ public class ApiControllerAdvice {
     @ExceptionHandler(NotExistUserException.class)
     public FailResponse exceptionResolveToNonExistUser(NotExistUserException e) {
         return new FailResponse(ResponseEnum.NON_EXIST_USER);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(DeletedPostException.class)
+    public FailResponse exceptionResolveToDeletedPost(DeletedPostException e) {
+        return new FailResponse(ResponseEnum.DELETED_POST);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
