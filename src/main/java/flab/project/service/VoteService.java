@@ -19,7 +19,7 @@ public class VoteService {
     private final PostOptionsMapper postOptionsMapper;
     private final PollPostMapper pollPostMapper;
 
-    private final static Set<Long> debatePostOptionIds = Set.of(1L, 2L);
+    private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
 
     public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
         validateVote(postId, optionIds, userId, postType);
