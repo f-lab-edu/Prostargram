@@ -77,7 +77,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
-    @DisplayName("토론 게시물에 투표할 때, postId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, postId가 음수일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidPostId() throws Exception {
         // given
@@ -97,7 +97,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, userId가 음수일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidUserId() throws Exception {
         // given
@@ -117,7 +117,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("통계 게시물에 투표할 때, postId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, postId가 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidPostId() throws Exception {
         // given
@@ -137,7 +137,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("통계 게시물에 투표할 때, userId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, userId가 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidUserId() throws Exception {
         // given
@@ -157,7 +157,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("토론 게시물에 투표할 때, optionId는 양수여야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, optionId가 음수 또는 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidOptionId() throws Exception {
         // given
@@ -191,7 +191,7 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("통계 게시물에 투표할 때, optionId는 양수여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, optionId가 음수 또는 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidOptionIds() throws Exception {
         // given
