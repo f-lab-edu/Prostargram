@@ -78,7 +78,7 @@ public class VoteServiceTest {
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
 
         // when & then
-        assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.POLL))
+        assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.DEBATE))
                 .doesNotThrowAnyException();
     }
 
@@ -179,14 +179,14 @@ public class VoteServiceTest {
     void addPollPostVote_validAllowMultipleVotes_invalidOptionId() {
         // given
         long postId = 1L;
-        Set<Long> multipleOptionIds = Set.of(1L, 2L);
+        Set<Long> optionIds = Set.of(1L, 2L);
         long userId = 1L;
 
-        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(Set.of(1L, 2L));
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
 
         // when & then
-        assertThatThrownBy(() -> voteService.addPostVote(postId, multipleOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("통계 게시물에 투표할 때, 투표가 마감된 경우 투표할 수 없다.")
@@ -197,7 +197,7 @@ public class VoteServiceTest {
         Set<Long> optionIds = Set.of(1L, 2L);
         long userId = 1L;
 
-        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(Set.of(1L, 2L));
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
         given(pollPostMapper.findEndDate(postId)).willReturn(LocalDate.now().minusDays(1));
 
