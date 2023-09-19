@@ -9,6 +9,7 @@ import flab.project.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -33,6 +34,10 @@ public class VoteService {
         validatePostIdAndUserId(postId, userId);
         validateOptionIds(postId, optionIds, postType);
         validateMultipleVotes(postId, optionIds, postType);
+
+        if (postType == PostType.POLL) {
+            validatePollPostExpiration(postId);
+        }
     }
 
     private void validatePostIdAndUserId(long postId, long userId) {
@@ -74,5 +79,14 @@ public class VoteService {
 
     private boolean getAllowMultipleVotes(long postId, PostType postType) {
         return postType == PostType.POLL ? pollPostMapper.findAllowMultipleVotes(postId) : false;
+    }
+
+    private void validatePollPostExpiration(long postId) {
+        LocalDate endDate = pollPostMapper.findEndDate(postId);
+        LocalDate now = LocalDate.now();
+
+        if (endDate.isBefore(now)) {
+            throw new InvalidUserInputException("This poll post has expired.");
+        }
     }
 }

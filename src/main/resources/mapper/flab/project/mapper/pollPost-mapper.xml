@@ -10,4 +10,10 @@
         WHERE post_id = #{postId};
     </select>
 
+    <select id="findEndDate" parameterType="long" resultType="java.time.LocalDate">
+        SELECT end_date
+        FROM POLL_POST
+        WHERE post_id = #{postId};
+    </select>
+
 </mapper>

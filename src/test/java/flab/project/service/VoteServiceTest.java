@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,6 +57,7 @@ public class VoteServiceTest {
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollPostMapper.findEndDate(postId)).willReturn(LocalDate.now().plusDays(1));
 
         // when
         voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
@@ -64,9 +66,9 @@ public class VoteServiceTest {
         then(voteMapper).should().addPostVote(postId, optionIds, userId);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, allowMultipleVotes는 항상 false이며 optionId는 하나의 값만 존재해야 한다.")
+    @DisplayName("토론 게시물에 투표할 때, allowMultipleVotes는 항상 false이며 optionId는 하나의 값만 존재한다.")
     @Test
-    void validAllowMultipleVotes_validOptionId() {
+    void addDebatePostVote_validAllowMultipleVotes_validOptionId() {
         // given
         long postId = 1L;
         Set<Long> optionId = Set.of(1L);
@@ -82,7 +84,7 @@ public class VoteServiceTest {
 
     @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나의 값만 존재한다.")
     @Test
-    void validAllowMultipleVotes_validOptionIds() {
+    void addPollPostVote_validAllowMultipleVotes_validOptionIds() {
         // given
         long postId = 1L;
         Set<Long> optionIds = Set.of(1L);
@@ -96,7 +98,7 @@ public class VoteServiceTest {
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("토론 게시물에 투표할 때, postId가 음수라면 InvalidUserInputException을 반환한다.")
+    @DisplayName("토론 게시물에 투표할 때, postId가 음수일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidPostId() {
         // given
@@ -108,11 +110,11 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(negativePostId, Set.of(optionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, userId가 음수라면 InvalidUserInputException을 반환한다.")
+    @DisplayName("토론 게시물에 투표할 때, userId가 음수일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidUserId() {
         // given
-        long postId = -1L;
+        long postId = 1L;
         long optionId = 1L;
         long negativeUserId = -1L;
 
@@ -120,23 +122,23 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(optionId), negativeUserId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, postId가 음수라면 InvalidUserInputException을 반환한다.")
+    @DisplayName("통계 게시물에 투표할 때, postId가 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidPostId() {
         // given
         long zeroPostId = 0L;
         Set<Long> optionIds = Set.of(1L, 2L);
-        long userId = 0L;
+        long userId = 1L;
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(zeroPostId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, userId가 음수라면 InvalidUserInputException을 반환한다.")
+    @DisplayName("통계 게시물에 투표할 때, userId가 0일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidUserId() {
         // given
-        long postId = 0L;
+        long postId = 1L;
         Set<Long> optionIds = Set.of(1L, 2L);
         long zeroUserId = 0L;
 
@@ -144,7 +146,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, zeroUserId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("토론 게시물에 투표할 때, 토론 게시물의 optionId는 반드시 1 또는 2 값을 가진다.")
+    @DisplayName("토론 게시물에 투표할 때, 토론 게시물의 optionId가 1 또는 2 외의 값을 가질 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addDebatePostVote_invalidRangeOfOptionId() {
         // given
@@ -156,7 +158,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, Set.of(invalidOptionId), userId, PostType.DEBATE)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, optionId는 유효한 optionId들 중 하나여야 한다.")
+    @DisplayName("통계 게시물에 투표할 때, optionId는 유효한 optionId들 중 하나가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addPollPostVote_invalidOptionIds() {
         // given
@@ -172,9 +174,9 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, invalidOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId가 두 개 이상이라면 InvalidUserInputException을 반환한다.")
+    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId가 한 개가 아니라면 InvalidUserInputException을 반환한다.")
     @Test
-    void validAllowMultipleVotes_invalidOptionId() {
+    void addPollPostVote_validAllowMultipleVotes_invalidOptionId() {
         // given
         long postId = 1L;
         Set<Long> multipleOptionIds = Set.of(1L, 2L);
@@ -185,5 +187,21 @@ public class VoteServiceTest {
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, multipleOptionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, 투표가 마감된 경우 투표할 수 없다.")
+    @Test
+    void addPollPostVote_invalidEndDate() {
+        // given
+        long postId = 1L;
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(Set.of(1L, 2L));
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollPostMapper.findEndDate(postId)).willReturn(LocalDate.now().minusDays(1));
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 }
