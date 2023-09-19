@@ -64,9 +64,25 @@ public class VoteServiceTest {
         then(voteMapper).should().addPostVote(postId, optionIds, userId);
     }
 
-    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나의 값만 존재한다.")
+    @DisplayName("토론 게시물에 투표할 때, allowMultipleVotes는 항상 false이며 optionId는 하나의 값만 존재해야 한다.")
     @Test
     void validAllowMultipleVotes_validOptionId() {
+        // given
+        long postId = 1L;
+        Set<Long> optionId = Set.of(1L);
+        long userId = 1L;
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionId);
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
+
+        // when & then
+        assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.POLL))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나의 값만 존재한다.")
+    @Test
+    void validAllowMultipleVotes_validOptionIds() {
         // given
         long postId = 1L;
         Set<Long> optionIds = Set.of(1L);
