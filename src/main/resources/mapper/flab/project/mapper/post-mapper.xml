@@ -8,7 +8,7 @@
         SELECT post.post_id,
                post.user_id,
                post.content,
-               h.name,
+               hashtags.name,
                post.type,
                like_count,
                comment_count,
@@ -17,9 +17,9 @@
                IFNULL(post_like.user_id, FALSE) as is_like,
                IFNULL(follow.to_user_id, FALSE) as is_follow
         FROM POST post
-                 JOIN IMAGE image on image.post_id = post.post_id
+                 JOIN POST_IMAGES post_images on post_images.post_id = post.post_id
                  LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS h on h.hashtag_id = phm.hashtag_id
+                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
                  LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
                  LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
         WHERE post.post_id = #{postId};
@@ -29,7 +29,7 @@
         SELECT post.post_id,
                post.user_id,
                post.content as post_content,
-               h.name,
+               hashtags.name,
                post.type,
                like_count,
                comment_count,
@@ -44,7 +44,7 @@
                  JOIN POST_OPTIONS options on options.post_id = post.post_id
                  LEFT JOIN CHOICE choice on choice.option_id = options.option_id and choice.user_id = #{userId}
                  LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS h on h.hashtag_id = phm.hashtag_id
+                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
                  LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
                  LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
         WHERE post.post_id = #{postId};
@@ -54,7 +54,7 @@
         SELECT post.post_id,
                post.user_id,
                post.content as post_content,
-               h.name,
+               hashtags.name,
                post.type,
                like_count,
                comment_count,
@@ -72,7 +72,7 @@
                  JOIN STATISTICS_METADATA statistics_metadata on statistics_metadata.post_id = post.post_id
                  LEFT JOIN CHOICE choice on choice.post_id = post.post_id and choice.user_id = #{userId}
                  LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS h on h.hashtag_id = phm.hashtag_id
+                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
                  LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
                  LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
         WHERE post.post_id = #{postId};

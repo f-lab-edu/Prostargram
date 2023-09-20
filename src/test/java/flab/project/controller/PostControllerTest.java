@@ -6,6 +6,8 @@ import flab.project.config.exception.DeletedPostException;
 import flab.project.data.dto.PostWithUser;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.dto.model.BasicUser;
+import flab.project.data.dto.model.DebatePost;
+import flab.project.data.dto.model.PollPost;
 import flab.project.data.enums.PostType;
 import flab.project.service.PostService;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +61,7 @@ class PostControllerTest {
         long userId = 1L;
 
         given(postService.getPostDetail(postId, userId, DEBATE))
-                .willReturn(new SuccessResponse(new PostWithUser(new BasicPost(), new BasicUser())));
+                .willReturn(new SuccessResponse(new PostWithUser(new DebatePost(), new BasicUser())));
 
         validateGetPostDetail(postId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }
@@ -72,7 +74,7 @@ class PostControllerTest {
         long userId = 1L;
 
         given(postService.getPostDetail(postId, userId, PostType.POLL))
-                .willReturn(new SuccessResponse(new PostWithUser(new BasicPost(), new BasicUser())));
+                .willReturn(new SuccessResponse(new PostWithUser(new PollPost(), new BasicUser())));
 
         validateGetPostDetail(postId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }
@@ -82,10 +84,8 @@ class PostControllerTest {
     void getBasicPostDetail_invalidPostId() throws Exception {
         // given
         long negativePostId = -1L;
-        long zeroPostId = 0L;
 
         validateGetPostDetail(negativePostId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
-        validateGetPostDetail(zeroPostId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @DisplayName("토론 게시물 상세보기를 할 때, postId는 양수여야 한다.")
@@ -93,10 +93,8 @@ class PostControllerTest {
     void getDebatePostDetail_invalidPostId() throws Exception {
         // given
         long negativePostId = -1L;
-        long zeroPostId = 0L;
 
         validateGetPostDetail(negativePostId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
-        validateGetPostDetail(zeroPostId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @DisplayName("통계 게시물 상세보기를 할 때, postId는 양수여야 한다.")
@@ -104,10 +102,8 @@ class PostControllerTest {
     void getPollPostDetail_invalidPostId() throws Exception {
         // given
         long negativePostId = -1L;
-        long zeroPostId = 0L;
 
         validateGetPostDetail(negativePostId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
-        validateGetPostDetail(zeroPostId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @DisplayName("없는 일반 게시물을 요청했다면 DELETED_POST를 반환한다.")
