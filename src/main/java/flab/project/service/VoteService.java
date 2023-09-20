@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.DeletedPostException;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
@@ -23,6 +24,10 @@ public class VoteService {
     private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
 
     public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
+        if (postType == null) {
+            throw new DeletedPostException();
+        }
+
         validateVote(postId, optionIds, userId, postType);
 
         voteMapper.addPostVote(postId, optionIds, userId);
