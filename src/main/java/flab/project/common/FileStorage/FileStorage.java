@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,17 @@ public class FileStorage {
 
     private final AmazonS3 amazonS3;
     private final FileFactory fileFactory;
+
+    public List<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
+        List<String> uploadedFileUrls = new ArrayList<>();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            String uploadedFileUrl = uploadFile(userId, multipartFile, fileType);
+            uploadedFileUrls.add(uploadedFileUrl);
+        }
+
+        return uploadedFileUrls;
+    }
 
     public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
         try {

@@ -13,10 +13,10 @@ import java.util.List;
 public abstract class BasePost {
 
     @Schema(example = "1")
-    protected long userId;
+    protected long postId;
 
     @Schema(example = "1")
-    protected long postId;
+    protected long userId;
 
     @Schema(example = "오늘 깃허브에 알고리즘 관련 내용을 정리했습니다.", maxLength = 100)
     protected String content;
@@ -34,5 +34,5 @@ public abstract class BasePost {
     protected long commentCount;
 
     @Schema(example = "방금 전")
-    protected String createTime;
+    protected String createAt;
 }
