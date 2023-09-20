@@ -82,10 +82,14 @@ public class VoteService {
     }
 
     private void validatePollPostExpiration(long postId) {
+        // Todo 투표의 유효기간(시작 날짜, 종료 날짜)을 각각 DB에 한 번씩 접근해서 따로 가져오는 건 비효율적인 것 같고, 이를 위해 Dto를 설계하긴 또 좀 애매한 것 같은데..
+        LocalDate startDate = pollPostMapper.findStartDate(postId);
         LocalDate endDate = pollPostMapper.findEndDate(postId);
-        LocalDate now = LocalDate.now();
+        LocalDate today = LocalDate.now();
 
-        if (endDate.isBefore(now)) {
+        if (startDate.isAfter(today)) {
+            throw new InvalidUserInputException("This poll post has not started yet.");
+        } else if (endDate.isBefore(today)) {
             throw new InvalidUserInputException("This poll post has expired.");
         }
     }

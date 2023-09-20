@@ -10,5 +10,7 @@ public interface PollPostMapper {
 
     boolean findAllowMultipleVotes(@Param("postId") long postId);
 
+    LocalDate findStartDate(@Param("postId") long postId);
+
     LocalDate findEndDate(@Param("postId") long postId);
 }

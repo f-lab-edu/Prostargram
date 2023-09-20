@@ -189,6 +189,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
+    // Todo 투표 유효기간 로직이 fix되면, 시작 기한에 대한 테스트 케이스를 추가할 예정
     @DisplayName("통계 게시물에 투표할 때, 투표가 마감된 경우 투표할 수 없다.")
     @Test
     void addPollPostVote_invalidEndDate() {
