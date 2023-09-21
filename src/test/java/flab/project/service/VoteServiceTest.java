@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
@@ -57,7 +58,7 @@ public class VoteServiceTest {
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findEndDate(postId)).willReturn(LocalDate.now().plusDays(1));
+        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
 
         // when
         voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
@@ -74,9 +75,6 @@ public class VoteServiceTest {
         Set<Long> optionId = Set.of(1L);
         long userId = 1L;
 
-        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionId);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
-
         // when & then
         assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.DEBATE))
                 .doesNotThrowAnyException();
@@ -92,6 +90,7 @@ public class VoteServiceTest {
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
+        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
 
         // when & then
         assertThatCode(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL))
@@ -189,8 +188,7 @@ public class VoteServiceTest {
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
     }
 
-    // Todo 투표 유효기간 로직이 fix되면, 시작 기한에 대한 테스트 케이스를 추가할 예정
-    @DisplayName("통계 게시물에 투표할 때, 투표가 마감된 경우 투표할 수 없다.")
+    @DisplayName("통계 게시물에 투표할 때, 투표가 오픈하기 전이거나 마감된 경우 투표할 수 없다.")
     @Test
     void addPollPostVote_invalidEndDate() {
         // given
@@ -200,7 +198,7 @@ public class VoteServiceTest {
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findEndDate(postId)).willReturn(LocalDate.now().minusDays(1));
+        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().plusDays(1), LocalDate.now().minusDays(1)));
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
