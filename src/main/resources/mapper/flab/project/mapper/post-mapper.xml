@@ -69,7 +69,7 @@
                IFNULL(follow.to_user_id, FALSE) as is_follow
         FROM POST post
                  JOIN POST_OPTIONS options on options.post_id = post.post_id
-                 JOIN STATISTICS_METADATA statistics_metadata on statistics_metadata.post_id = post.post_id
+                 JOIN POLL_METADATA poll_metadata on poll_metadata.post_id = post.post_id
                  LEFT JOIN CHOICE choice on choice.post_id = post.post_id and choice.user_id = #{userId}
                  LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
                  LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
