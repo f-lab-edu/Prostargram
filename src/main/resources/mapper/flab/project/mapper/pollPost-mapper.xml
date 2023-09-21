@@ -10,14 +10,9 @@
         WHERE post_id = #{postId};
     </select>
 
-    <select id="findStartDate" parameterType="long" resultType="java.time.LocalDate">
-        SELECT start_date
-        FROM POLL_POST
-        WHERE post_id = #{postId};
-    </select>
-
-    <select id="findEndDate" parameterType="long" resultType="java.time.LocalDate">
-        SELECT end_date
+    <select id="findPollPeriod" parameterType="long" resultType="flab.project.data.dto.domain.PollPeriod">
+        SELECT start_date startDate,
+               end_date endDate
         FROM POLL_POST
         WHERE post_id = #{postId};
     </select>

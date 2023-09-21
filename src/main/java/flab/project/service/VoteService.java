@@ -3,6 +3,7 @@ package flab.project.service;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.DeletedPostException;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
 import flab.project.mapper.PostOptionsMapper;
@@ -41,7 +42,7 @@ public class VoteService {
         validateMultipleVotes(postId, optionIds, postType);
 
         if (postType == PostType.POLL) {
-            validatePollPostExpiration(postId);
+            validatePollPostPeriod(postId);
         }
     }
 
@@ -86,10 +87,11 @@ public class VoteService {
         return postType == PostType.POLL ? pollPostMapper.findAllowMultipleVotes(postId) : false;
     }
 
-    private void validatePollPostExpiration(long postId) {
-        // Todo 투표의 유효기간(시작 날짜, 종료 날짜)을 각각 DB에 한 번씩 접근해서 따로 가져오는 건 비효율적인 것 같고, 이를 위해 Dto를 설계하긴 또 좀 애매한 것 같은데..
-        LocalDate startDate = pollPostMapper.findStartDate(postId);
-        LocalDate endDate = pollPostMapper.findEndDate(postId);
+    private void validatePollPostPeriod(long postId) {
+        PollPeriod pollPeriod = pollPostMapper.findPollPeriod(postId);
+
+        LocalDate startDate = pollPeriod.getStartDate();
+        LocalDate endDate = pollPeriod.getEndDate();
         LocalDate today = LocalDate.now();
 
         if (startDate.isAfter(today)) {
