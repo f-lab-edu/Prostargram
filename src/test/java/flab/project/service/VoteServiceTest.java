@@ -1,6 +1,7 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotFoundException;
 import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollMetadataMapper;
@@ -76,8 +77,7 @@ public class VoteServiceTest {
         long userId = 1L;
 
         // when & then
-        assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.DEBATE))
-                .doesNotThrowAnyException();
+        assertThatCode(() -> voteService.addPostVote(postId, optionId, userId, PostType.DEBATE)).doesNotThrowAnyException();
     }
 
     @DisplayName("통계 게시물에 투표할 때, allowMultipleVotes가 false일 경우 optionId는 하나의 값만 존재한다.")
@@ -93,8 +93,7 @@ public class VoteServiceTest {
         given(pollMetadataMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
 
         // when & then
-        assertThatCode(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL))
-                .doesNotThrowAnyException();
+        assertThatCode(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).doesNotThrowAnyException();
     }
 
     @DisplayName("토론 게시물에 투표할 때, postId가 음수일 경우 InvalidUserInputException을 반환한다.")
@@ -222,5 +221,29 @@ public class VoteServiceTest {
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("존재하지 않는 토론 게시물이라면 NotFoundException을 반환한다.")
+    @Test
+    void addDebatePostVote_invalidDebatePost() {
+        // given
+        long postId = 1L;
+        Set<Long> optionId = Set.of(1L);
+        long userId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionId, userId, null)).isInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("존재하지 않는 통계 게시물이라면 NotFoundException을 반환한다.")
+    @Test
+    void addPollPostVote_invalidPollPost() {
+        // given
+        long postId = 1L;
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, null)).isInstanceOf(NotFoundException.class);
     }
 }
