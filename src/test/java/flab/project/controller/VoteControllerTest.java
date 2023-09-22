@@ -3,6 +3,7 @@ package flab.project.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.NotFoundException;
 import flab.project.data.enums.PostType;
 import flab.project.service.VoteService;
 import org.junit.jupiter.api.DisplayName;
@@ -197,7 +198,7 @@ public class VoteControllerTest {
         // given
         long postId = 1L;
         Set<Long> negativeOptionIds = Set.of(-1L, 0L, 1L);
-        long userId = 3L;
+        long userId = 1L;
 
         // when & then
         mockMvc.perform(
@@ -209,5 +210,49 @@ public class VoteControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("존재하지 않는 토론 게시물이라면, NotFoundException을 반환한다.")
+    @Test
+    void addDebatePostVote_invalidDebatePost() throws Exception {
+        // given
+        long deletedPostId = 99L;
+        long optionId = 1L;
+        long userId = 1L;
+
+        given(voteService.addPostVote(deletedPostId, Set.of(1L), userId, PostType.DEBATE)).willThrow(NotFoundException.class);
+
+        // when & then
+        mockMvc.perform(
+                        post("/posts/{postId}/votes/debate", deletedPostId)
+                                .param("optionId", String.valueOf(optionId))
+                                .param("userId", String.valueOf(userId))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.NOT_FOUND_POST.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.NOT_FOUND_POST.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.NOT_FOUND_POST.getMessage()));
+    }
+
+    @DisplayName("존재하지 않는 통계 게시물이라면, NotFoundException을 반환한다.")
+    @Test
+    void addPollPostVote_invalidPollPost() throws Exception {
+        // given
+        long deletedPostId = 99L;
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 1L;
+
+        given(voteService.addPostVote(deletedPostId, optionIds, userId, PostType.POLL)).willThrow(NotFoundException.class);
+
+        // when & then
+        mockMvc.perform(
+                        post("/posts/{postId}/votes/poll", deletedPostId)
+                                .param("optionIds", optionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
+                                .param("userId", String.valueOf(userId))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.NOT_FOUND_POST.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.NOT_FOUND_POST.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.NOT_FOUND_POST.getMessage()));
     }
 }

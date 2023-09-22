@@ -3,6 +3,7 @@ package flab.project;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,12 @@ public class ApiControllerAdvice {
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public FailResponse exceptionResolveToDeletedPost(NotFoundException e) {
+        return new FailResponse(ResponseEnum.NOT_FOUND_POST);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
