@@ -27,26 +27,33 @@ public class PostFacade {
 
     @Transactional
     public SuccessResponse addBasicPost(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
-        ExecutorService updateProfileService = Executors.newFixedThreadPool(3);
+//        ExecutorService updateProfileService = Executors.newFixedThreadPool(3);
+//
+//        List<Runnable> addBasicPostTasks = getAddBasicPostTasks(userId, basicPost, contentImages);
+//        addBasicPostTasks.forEach(updateProfileService::submit);
 
-        List<Runnable> addBasicPostTasks = getAddBasicPostTasks(userId, basicPost, contentImages);
-        addBasicPostTasks.forEach(updateProfileService::submit);
-
-        return new SuccessResponse();
+        postService.addBasicPost(basicPost);
+        postHashTagService.saveAll(basicPost.getHashTags());
+//
+//        List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
+//        imageService.saveAll(userId, uploadedFileUrls);
+//
+        throw new RuntimeException();
+//        return new SuccessResponse();
     }
 
-    private List<Runnable> getAddBasicPostTasks(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
-        Runnable addBasicPostTask = () -> postService.addBasicPost(basicPost);
-        Runnable addHashTagTask = () -> postHashTagService.saveAll(basicPost.getHashTags());
-        Runnable addContentImageTask = () -> {
-            List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
-            imageService.saveAll(userId, uploadedFileUrls);
-        };
-
-        return List.of(
-                addBasicPostTask,
-                addHashTagTask,
-                addContentImageTask
-        );
-    }
+//    private List<Runnable> getAddBasicPostTasks(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
+//        Runnable addBasicPostTask = () -> postService.addBasicPost(basicPost);
+//        Runnable addHashTagTask = () -> postHashTagService.saveAll(basicPost.getHashTags());
+//        Runnable addContentImageTask = () -> {
+//            List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
+//            imageService.saveAll(userId, uploadedFileUrls);
+//        };
+//
+//        return List.of(
+//                addBasicPostTask,
+//                addHashTagTask,
+//                addContentImageTask
+//        );
+//    }
 }

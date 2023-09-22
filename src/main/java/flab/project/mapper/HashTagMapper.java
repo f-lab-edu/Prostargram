@@ -12,9 +12,9 @@ public interface HashTagMapper {
 
     Long getHashtagIdByHashtagName(@Param("hashTagName") String hashTagName);
 
-    HashMap<String,Long> getHashtagIdsByHashtagNames(@Param("hashTagNames") List<String> hashTagNames);
+    List<HashTag> getHashTagsByHashtagNames(@Param("hashTagNames") List<String> hashTagNames);
 
     void save(@Param("hashTag") HashTag hashTagName);
 
-    List<Long> saveAll(List<String> notExistHashTagNames);
+    List<Long> saveAll(@Param("hashTagNames") List<String> notExistHashTagNames);
 }

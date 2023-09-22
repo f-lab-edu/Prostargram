@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@SuperBuilder
 @Getter
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {

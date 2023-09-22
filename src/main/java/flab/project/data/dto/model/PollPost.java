@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.util.List;
 
-@SuperBuilder
 @Getter
 @Schema(description = "통계 게시물 Dto")
 public class PollPost extends BasePost {

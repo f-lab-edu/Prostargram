@@ -4,6 +4,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.facade.PostFacade;
 import flab.project.service.PostService;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,10 @@ public class PostController {
     private final PostService postService;
     private final PostFacade postFacade;
 
-    @PostMapping
+    @PostMapping("posts/basic-post")
     public SuccessResponse addBasicPost(
             @Validated @RequestBody BasicPost basicPost,
-            @RequestPart(value = "contentImages") List<MultipartFile> contentImages
+            @RequestPart(value = "contentImages") @Nullable List<MultipartFile> contentImages
     ) {
         long userId = 1L;
 
