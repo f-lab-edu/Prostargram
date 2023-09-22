@@ -6,14 +6,14 @@
 
     <select id="findAllowMultipleVotes" resultType="boolean">
         SELECT allow_multiple_votes
-        FROM POLL_POST
+        FROM POLL_METADATA
         WHERE post_id = #{postId};
     </select>
 
     <select id="findPollPeriod" parameterType="long" resultType="flab.project.data.dto.domain.PollPeriod">
         SELECT start_date,
                end_date
-        FROM POLL_POST
+        FROM POLL_METADATA
         WHERE post_id = #{postId};
     </select>
 
