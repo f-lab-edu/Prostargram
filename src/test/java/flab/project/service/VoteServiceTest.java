@@ -190,15 +190,35 @@ public class VoteServiceTest {
 
     @DisplayName("통계 게시물에 투표할 때, 투표가 오픈하기 전이거나 마감된 경우 투표할 수 없다.")
     @Test
+    void addPollPostVote_invalidStartDate() {
+        // given
+        long postId = 1L;
+        Set<Long> optionIds = Set.of(1L, 2L);
+        long userId = 1L;
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now().plusDays(1);
+
+        given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
+        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
+
+        // when & then
+        assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("통계 게시물에 투표할 때, 투표가 마감된 경우 투표할 수 없다.")
+    @Test
     void addPollPostVote_invalidEndDate() {
         // given
         long postId = 1L;
         Set<Long> optionIds = Set.of(1L, 2L);
         long userId = 1L;
+        LocalDate startDate = LocalDate.now().minusDays(1);
+        LocalDate endDate = LocalDate.now().minusDays(1);
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
         given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().plusDays(1), LocalDate.now().minusDays(1)));
+        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
