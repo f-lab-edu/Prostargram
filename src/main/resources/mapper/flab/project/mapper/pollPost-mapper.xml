@@ -11,8 +11,8 @@
     </select>
 
     <select id="findPollPeriod" parameterType="long" resultType="flab.project.data.dto.domain.PollPeriod">
-        SELECT start_date startDate,
-               end_date endDate
+        SELECT start_date,
+               end_date
         FROM POLL_POST
         WHERE post_id = #{postId};
     </select>
