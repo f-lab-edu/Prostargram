@@ -1,8 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.DeletedPostException;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotFoundException;
 import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollPostMapper;
@@ -26,7 +26,7 @@ public class VoteService {
 
     public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
         if (postType == null) {
-            throw new DeletedPostException();
+            throw new NotFoundException();
         }
 
         validateVote(postId, optionIds, userId, postType);
