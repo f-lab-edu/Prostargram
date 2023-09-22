@@ -1,15 +1,15 @@
 package flab.project.data.dto.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PollPeriod {
 
-    private LocalDate startDate;
+    private final LocalDate startDate;
 
-    private LocalDate endDate;
+    private final LocalDate endDate;
 }
