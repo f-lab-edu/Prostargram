@@ -16,5 +16,5 @@ public interface HashTagMapper {
 
     void save(@Param("hashTag") HashTag hashTagName);
 
-    List<Long> saveAll(@Param("hashTagNames") List<String> notExistHashTagNames);
+    void saveAll(@Param("hashTags") List<HashTag> notExistHashTagNames);
 }

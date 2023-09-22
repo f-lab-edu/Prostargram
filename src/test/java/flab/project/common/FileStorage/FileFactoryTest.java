@@ -1,6 +1,6 @@
 package flab.project.common.FileStorage;
 
-import flab.project.data.dto.file.ProfileImage;
+import flab.project.data.dto.file.File;
 import flab.project.data.dto.file.Uploadable;
 import flab.project.data.enums.FileType;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +28,6 @@ class FileFactoryTest {
         Uploadable fileInfo = fileFactory.getFileInfo(1L, multipartFile, FileType.PROFILE_IMAGE);
 
         // then
-        assertThat(fileInfo).isInstanceOf(ProfileImage.class);
+        assertThat(fileInfo).isInstanceOf(File.class);
     }
 }

@@ -12,9 +12,9 @@ public class PostService {
     private final PostMapper postMapper;
 
     public void addBasicPost(BasicPost basicPost) {
-        int NumberOfAffectedRow = postMapper.addBasicPost(basicPost);
+        int numberOfAffectedRow = postMapper.addBasicPost(basicPost);
 
-        if (NumberOfAffectedRow != 1) {
+        if (numberOfAffectedRow != 1) {
             throw new RuntimeException();
         }
     }

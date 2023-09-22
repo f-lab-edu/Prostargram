@@ -1,6 +1,6 @@
 package flab.project.common.FileStorage;
 
-import flab.project.data.dto.file.ProfileImage;
+import flab.project.data.dto.file.File;
 import flab.project.data.dto.file.Uploadable;
 import flab.project.data.enums.FileType;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class FileFactory {
 
     public Uploadable getFileInfo(long userId, MultipartFile file, FileType fileType) {
         if (fileType.equals(PROFILE_IMAGE)) {
-            return new ProfileImage(userId, file);
+            return new File(userId, file, fileType);
         } else if (fileType.equals(POST_IMAGE)) {
             return null;
         } else {

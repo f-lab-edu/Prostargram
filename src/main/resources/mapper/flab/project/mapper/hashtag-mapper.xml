@@ -26,11 +26,11 @@
         VALUES (#{hashtag.hashTagName})
     </insert>
 
-    <insert id="saveAll" useGeneratedKeys="true" keyColumn="hashtag_id">
+    <insert id="saveAll" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
         INSERT INTO HASHTAGS(name)
         VALUES
-        <foreach collection="hashTagNames" item="hashTagName" open="(" separator="," close=")">
-            #{hashTagName}
+        <foreach collection="hashTags" item="hashTag" separator=",">
+            ( #{hashTag.hashTagName} )
         </foreach>
     </insert>
 

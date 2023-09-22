@@ -4,7 +4,7 @@ import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.enums.FileType;
-import flab.project.service.ImageService;
+import flab.project.service.PostImageService;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +21,7 @@ public class PostFacade {
     private final PostService postService;
     private final PostHashTagService postHashTagService;
     private final FileStorage fileStorage;
-    private final ImageService imageService;
+    private final PostImageService postImageService;
 
     @Transactional
     public SuccessResponse addBasicPost(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
@@ -33,13 +31,13 @@ public class PostFacade {
 //        addBasicPostTasks.forEach(updateProfileService::submit);
 
         postService.addBasicPost(basicPost);
-        postHashTagService.saveAll(basicPost.getHashTags());
-//
-//        List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
-//        imageService.saveAll(userId, uploadedFileUrls);
-//
-        throw new RuntimeException();
-//        return new SuccessResponse();
+
+        postHashTagService.saveAll(basicPost.getPostId(), basicPost.getHashTags());
+
+        List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
+        postImageService.saveAll(basicPost.getPostId(), uploadedFileUrls);
+
+        return new SuccessResponse();
     }
 
 //    private List<Runnable> getAddBasicPostTasks(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {

@@ -25,7 +25,7 @@ public class PostController {
 
     @PostMapping("posts/basic-post")
     public SuccessResponse addBasicPost(
-            @Validated @RequestBody BasicPost basicPost,
+            @RequestPart(value = "basicPost") BasicPost basicPost,
             @RequestPart(value = "contentImages") @Nullable List<MultipartFile> contentImages
     ) {
         long userId = 1L;

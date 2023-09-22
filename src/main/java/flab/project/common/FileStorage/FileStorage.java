@@ -2,7 +2,7 @@ package flab.project.common.FileStorage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import flab.project.data.dto.file.ProfileImage;
+import flab.project.data.dto.file.File;
 import flab.project.data.dto.file.Uploadable;
 import flab.project.data.enums.FileType;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static flab.project.data.enums.FileType.PROFILE_IMAGE;
 
 @RequiredArgsConstructor
 @Component
@@ -33,7 +35,7 @@ public class FileStorage {
 
     public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
         try {
-            Uploadable fileInfo = fileFactory.getFileInfo(userId, multipartFile, fileType);
+            Uploadable fileInfo = new File(userId, multipartFile, fileType);
             String bucketPath = fileInfo.getBucketName();
             String fileName = fileInfo.getFileName();
             ObjectMetadata objectMetadata = fileInfo.getObjectMetadata();
@@ -53,7 +55,7 @@ public class FileStorage {
 
     public List<String> getFileNamesInBucket(long userId) {
         String folder = "" + userId;
-        String targetBucketName = ProfileImage.BASE_BUCKET_NAME;
+        String targetBucketName = BaseBucketName.getBaseBucektName(PROFILE_IMAGE);
 
         ListObjectsRequest listObjectsRequest
                 = new ListObjectsRequest()

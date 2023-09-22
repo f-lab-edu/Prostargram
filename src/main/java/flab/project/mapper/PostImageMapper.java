@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface PostHashTagMapper {
+public interface PostImageMapper {
 
-    int saveAll(@Param("postId") long postId, @Param("hashTagIds") List<Long> hashTagIds);
+    int saveAll(@Param("postId") long postId, @Param("contentImgUrls") List<String> contentImgUrls);
 }

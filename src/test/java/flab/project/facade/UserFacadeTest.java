@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.common.FileStorage.BaseBucketName;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static flab.project.data.dto.file.ProfileImage.BASE_BUCKET_NAME;
+import static flab.project.data.enums.FileType.PROFILE_IMAGE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -62,9 +63,9 @@ class UserFacadeTest {
 
         // then
         then(fileStorage).should().getFileNamesInBucket(userId);
-        then(fileStorage).should().uploadFile(userId, multipartFile, FileType.PROFILE_IMAGE);
+        then(fileStorage).should().uploadFile(userId, multipartFile, PROFILE_IMAGE);
         then(userService).should().updateProfileImage(userId, uploadedProfileImageUrl);
-        then(fileStorage).should().deleteFile(BASE_BUCKET_NAME, "test-file");
+        then(fileStorage).should().deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), "test-file");
     }
 
     @DisplayName("DB에 새로 등록된 프로필 이미지 반영을 실패했을 경우, 업로드된 파일이 삭제되어야 한다.")
@@ -90,7 +91,7 @@ class UserFacadeTest {
         assertThatThrownBy(() -> userFacade.updateProfileImage(userId, multipartFile))
                 .isInstanceOf(FailedToUpdateProfileImageToDatabaseException.class);
 
-        then(fileStorage).should().deleteFile(BASE_BUCKET_NAME, uploadedProfileImageUrl);
+        then(fileStorage).should().deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), uploadedProfileImageUrl);
     }
 
     @DisplayName("기존 파일이 없을 경우, 기존 파일 삭제 메서드는 호출되지 않는다.")
@@ -118,6 +119,6 @@ class UserFacadeTest {
         userFacade.updateProfileImage(userId, multipartFile);
 
         // then
-        then(fileStorage).should(never()).deleteFile(eq(BASE_BUCKET_NAME), anyString());
+        then(fileStorage).should(never()).deleteFile(eq(BaseBucketName.getBaseBucektName(PROFILE_IMAGE)), anyString());
     }
 }
