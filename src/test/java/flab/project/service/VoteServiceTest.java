@@ -3,7 +3,7 @@ package flab.project.service;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
-import flab.project.mapper.PollPostMapper;
+import flab.project.mapper.PollMetadataMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ public class VoteServiceTest {
     @Mock
     PostOptionsMapper postOptionsMapper;
     @Mock
-    PollPostMapper pollPostMapper;
+    PollMetadataMapper pollMetadataMapper;
 
     @DisplayName("토론 게시물에 투표할 수 있다.")
     @Test
@@ -57,8 +57,8 @@ public class VoteServiceTest {
         long userId = 1L;
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
+        given(pollMetadataMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollMetadataMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
 
         // when
         voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
@@ -89,8 +89,8 @@ public class VoteServiceTest {
         long userId = 1L;
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
-        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
+        given(pollMetadataMapper.findAllowMultipleVotes(postId)).willReturn(false);
+        given(pollMetadataMapper.findPollPeriod(postId)).willReturn(new PollPeriod(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
 
         // when & then
         assertThatCode(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL))
@@ -182,7 +182,7 @@ public class VoteServiceTest {
         long userId = 1L;
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(false);
+        given(pollMetadataMapper.findAllowMultipleVotes(postId)).willReturn(false);
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
@@ -199,8 +199,8 @@ public class VoteServiceTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
+        given(pollMetadataMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollMetadataMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);
@@ -217,8 +217,8 @@ public class VoteServiceTest {
         LocalDate endDate = LocalDate.now().minusDays(1);
 
         given(postOptionsMapper.findValidOptionIds(postId)).willReturn(optionIds);
-        given(pollPostMapper.findAllowMultipleVotes(postId)).willReturn(true);
-        given(pollPostMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
+        given(pollMetadataMapper.findAllowMultipleVotes(postId)).willReturn(true);
+        given(pollMetadataMapper.findPollPeriod(postId)).willReturn(new PollPeriod(startDate, endDate));
 
         // when & then
         assertThatThrownBy(() -> voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).isInstanceOf(InvalidUserInputException.class);

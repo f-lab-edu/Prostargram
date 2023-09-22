@@ -5,7 +5,7 @@ import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
 import flab.project.data.dto.domain.PollPeriod;
 import flab.project.data.enums.PostType;
-import flab.project.mapper.PollPostMapper;
+import flab.project.mapper.PollMetadataMapper;
 import flab.project.mapper.PostOptionsMapper;
 import flab.project.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class VoteService {
 
     private final VoteMapper voteMapper;
     private final PostOptionsMapper postOptionsMapper;
-    private final PollPostMapper pollPostMapper;
+    private final PollMetadataMapper pollMetadataMapper;
 
     private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
 
@@ -84,11 +84,11 @@ public class VoteService {
     }
 
     private boolean getAllowMultipleVotes(long postId, PostType postType) {
-        return postType == PostType.POLL ? pollPostMapper.findAllowMultipleVotes(postId) : false;
+        return postType == PostType.POLL ? pollMetadataMapper.findAllowMultipleVotes(postId) : false;
     }
 
     private void validatePollPostPeriod(long postId) {
-        PollPeriod pollPeriod = pollPostMapper.findPollPeriod(postId);
+        PollPeriod pollPeriod = pollMetadataMapper.findPollPeriod(postId);
 
         LocalDate startDate = pollPeriod.getStartDate();
         LocalDate endDate = pollPeriod.getEndDate();
