@@ -18,11 +18,11 @@ import java.util.Set;
 @Service
 public class VoteService {
 
+    private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
+
     private final VoteMapper voteMapper;
     private final PostOptionsMapper postOptionsMapper;
     private final PollMetadataMapper pollMetadataMapper;
-
-    private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
 
     public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
         if (postType == null) {
@@ -59,12 +59,9 @@ public class VoteService {
     private void validateOptionIds(long postId, Set<Long> optionIds, PostType postType) {
         Set<Long> validOptionIds = getValidOptionIds(postId, postType);
 
-        optionIds.stream()
-                .filter(i -> !validOptionIds.contains(i))
-                .findAny()
-                .ifPresent(i -> {
-                    throw new InvalidUserInputException(String.format("Invalid optionId %d is received", i));
-                });
+        optionIds.stream().filter(i -> !validOptionIds.contains(i)).findAny().ifPresent(i -> {
+            throw new InvalidUserInputException(String.format("Invalid optionId %d is received", i));
+        });
     }
 
     private Set<Long> getValidOptionIds(long postId, PostType postType) {
@@ -76,7 +73,7 @@ public class VoteService {
     }
 
     private void validateMultipleVotes(long postId, Set<Long> optionIds, PostType postType) {
-        boolean allowMultipleVotes = getAllowMultipleVotes(postId, postType);
+        Boolean allowMultipleVotes = getAllowMultipleVotes(postId, postType);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
