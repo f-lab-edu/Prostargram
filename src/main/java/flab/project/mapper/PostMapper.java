@@ -1,11 +1,11 @@
 package flab.project.mapper;
 
-import flab.project.data.dto.model.AddBasicPostRequest;
+import flab.project.data.dto.model.AddPostRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface PostMapper {
 
-    int addBasicPost(@Param("userId") long userId, @Param("basicPost") AddBasicPostRequest basicPost);
+    int addPost(@Param("userId") long userId, @Param("basicPost") AddPostRequest post);
 }
