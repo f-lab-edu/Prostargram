@@ -2,7 +2,7 @@ package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
-import flab.project.data.dto.domain.PollPeriod;
+import flab.project.data.dto.model.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollMetadataMapper;
 import flab.project.mapper.PostOptionsMapper;

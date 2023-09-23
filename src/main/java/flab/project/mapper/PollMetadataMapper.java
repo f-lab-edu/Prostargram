@@ -1,6 +1,6 @@
 package flab.project.mapper;
 
-import flab.project.data.dto.domain.PollPeriod;
+import flab.project.data.dto.model.PollPeriod;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
