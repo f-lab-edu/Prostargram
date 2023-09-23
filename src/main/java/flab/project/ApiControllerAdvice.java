@@ -17,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestControllerAdvice
 public class ApiControllerAdvice {
@@ -29,7 +30,8 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
-            NumberLimitOfInterestExceededException.class
+            NumberLimitOfInterestExceededException.class,
+            MissingServletRequestPartException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         e.printStackTrace();
