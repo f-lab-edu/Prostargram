@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface PollMetadataMapper {
 
-    Boolean findAllowMultipleVotes(@Param("postId") long postId);
+    boolean findAllowMultipleVotes(@Param("postId") long postId);
 
     PollPeriod findPollPeriod(@Param("postId") long postId);
 }

@@ -73,7 +73,7 @@ public class VoteService {
     }
 
     private void validateMultipleVotes(long postId, Set<Long> optionIds, PostType postType) {
-        Boolean allowMultipleVotes = getAllowMultipleVotes(postId, postType);
+        boolean allowMultipleVotes = getAllowMultipleVotes(postId, postType);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
             throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
