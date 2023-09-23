@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.VoteMapper">
+
+    <insert id="addComment" parameterType="flab.project.data.dto.model.Comment" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO CHOICE(post_id, user_id, content)
+        VALUES (#{postId}, #{userId}, #{content})
+    </insert>
+
+</mapper>
