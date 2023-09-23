@@ -5,6 +5,10 @@ plugins {
     id 'jacoco'
 }
 
+test{
+    finalizedBy 'jacocoTestReport'
+}
+
 group = 'flab'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
@@ -34,4 +38,29 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        html.destination file("${buildDir}/jacoco/index.html")
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+        }
+    }
 }
