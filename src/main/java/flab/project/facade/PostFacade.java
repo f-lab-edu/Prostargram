@@ -2,7 +2,7 @@ package flab.project.facade;
 
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.model.BasicPost;
+import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.enums.FileType;
 import flab.project.service.PostImageService;
 import flab.project.service.PostHashTagService;
@@ -24,34 +24,14 @@ public class PostFacade {
     private final PostImageService postImageService;
 
     @Transactional
-    public SuccessResponse addBasicPost(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
-//        ExecutorService updateProfileService = Executors.newFixedThreadPool(3);
-//
-//        List<Runnable> addBasicPostTasks = getAddBasicPostTasks(userId, basicPost, contentImages);
-//        addBasicPostTasks.forEach(updateProfileService::submit);
+    public SuccessResponse addBasicPost(long userId, AddBasicPostRequest basicPost, List<MultipartFile> contentImages) {
+        postService.addBasicPost(userId, basicPost);
 
-        postService.addBasicPost(basicPost);
-
-        postHashTagService.saveAll(basicPost.getPostId(), basicPost.getHashTags());
+        postHashTagService.saveAll(basicPost.getPostId(), basicPost.getHashTagNames());
 
         List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
         postImageService.saveAll(basicPost.getPostId(), uploadedFileUrls);
 
         return new SuccessResponse();
     }
-
-//    private List<Runnable> getAddBasicPostTasks(long userId, BasicPost basicPost, List<MultipartFile> contentImages) {
-//        Runnable addBasicPostTask = () -> postService.addBasicPost(basicPost);
-//        Runnable addHashTagTask = () -> postHashTagService.saveAll(basicPost.getHashTags());
-//        Runnable addContentImageTask = () -> {
-//            List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, contentImages, FileType.POST_IMAGE);
-//            imageService.saveAll(userId, uploadedFileUrls);
-//        };
-//
-//        return List.of(
-//                addBasicPostTask,
-//                addHashTagTask,
-//                addContentImageTask
-//        );
-//    }
 }

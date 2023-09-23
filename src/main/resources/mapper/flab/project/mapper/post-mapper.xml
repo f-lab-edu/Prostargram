@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="flab.project.mapper.PostMapper">
 
-    <insert id="addBasicPost" parameterType="BasePost" useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
-        INSERT INTO POST(user_id, content, type)
-            VALUE (#{basicPost.userId}, #{basicPost.content}, #{basicPost.postType});
-    </insert>
+  <insert id="addBasicPost" parameterType="BasePost" useGeneratedKeys="true" keyProperty="basicPost.postId"
+    keyColumn="post_id">
+    INSERT INTO POST(user_id, content, type)
+    VALUES (#{userId}, #{basicPost.content}, #{basicPost.postType});
+  </insert>
 
 </mapper>

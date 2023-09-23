@@ -32,6 +32,7 @@ public class ApiControllerAdvice {
             NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 

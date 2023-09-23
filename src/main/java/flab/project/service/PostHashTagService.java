@@ -1,35 +1,31 @@
 package flab.project.service;
 
-import flab.project.data.dto.model.HashTag;
+import static flab.project.data.dto.model.HashTag.LIMIT_OF_MAX_LENGTH;
+
+import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NumberLimitOfPostHashTagExceededException;
 import flab.project.mapper.HashTagMapper;
 import flab.project.mapper.PostHashTagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostHashTagService {
 
+    private static final int POST_HASHTAG_MAX_LENGTH = 5;
+
     private final HashTagMapper hashTagMapper;
     private final PostHashTagMapper postHashTagMapper;
+    private final HashTagService hashTagService;
 
     public void saveAll(long postId, List<String> hashTagNames) {
-        List<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
 
-        Map<String, HashTag> existingHashMap = convertHashTagMap(existingHashTags);
+        validateSavePostHashTags(postId, hashTagNames);
 
-
-        List<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashMap);
-
-        saveNonExistHashTagsAndSetHashTagIds(nonExistHashTags);
-
-        List<Long> hashTagIds = unionHashTagIds(existingHashTags, nonExistHashTags);
+        List<Long> hashTagIds = hashTagService.findHashTagIdsByHashTagNames(hashTagNames);
 
         int NumberOfAffectedRow = postHashTagMapper.saveAll(postId, hashTagIds);
 
@@ -38,40 +34,32 @@ public class PostHashTagService {
         }
     }
 
-    private List<Long> unionHashTagIds(List<HashTag> existingHashTags, List<HashTag> nonExistHashTags) {
-        List<Long> hashTagIds = new ArrayList<>();
+    private void validateSavePostHashTags(long postId, List<String> hashTagNames) {
+        validatePostId(postId);
 
-        hashTagIds.addAll(extractHashTagIds(existingHashTags));
-        hashTagIds.addAll(extractHashTagIds(nonExistHashTags));
+        validateNumberLimitOfPostHashTags(hashTagNames);
 
-        return hashTagIds;
+        validateMaxLengthOfHashTags(hashTagNames);
     }
 
-    private void saveNonExistHashTagsAndSetHashTagIds(List<HashTag> nonExistHashTags) {
-        if(!nonExistHashTags.isEmpty()){
-            hashTagMapper.saveAll(nonExistHashTags);
+    private static void validateMaxLengthOfHashTags(List<String> hashTagNames) {
+        boolean isExceedMaxLength = hashTagNames.stream()
+                .anyMatch(hashTagName -> hashTagName.length() > LIMIT_OF_MAX_LENGTH);
+
+        if (isExceedMaxLength) {
+            throw new InvalidUserInputException();
         }
     }
 
-    private static List<HashTag> findNonExistingHashTags(List<String> hashTagNames, Map<String, HashTag> existingHashMap) {
-        return hashTagNames.stream()
-                .filter((hashTagName) -> !existingHashMap.containsKey(hashTagName))
-                .map(HashTag::new)
-                .collect(Collectors.toList());
+    private static void validateNumberLimitOfPostHashTags(List<String> hashTagNames) {
+        if (hashTagNames.size() > POST_HASHTAG_MAX_LENGTH) {
+            throw new NumberLimitOfPostHashTagExceededException();
+        }
     }
 
-    private List<Long> extractHashTagIds(List<HashTag> existingHashMap) {
-        return existingHashMap
-                .stream()
-                .map(HashTag::getHashTagId)
-                .toList();
-    }
-
-    private Map<String, HashTag> convertHashTagMap(List<HashTag> existHashTags) {
-        return existHashTags.stream()
-                .collect(Collectors.toMap(
-                        HashTag::getHashTagName,
-                        Function.identity()
-                ));
+    private void validatePostId(long postId) {
+        if (postId < 0) {
+            throw new InvalidUserInputException();
+        }
     }
 }

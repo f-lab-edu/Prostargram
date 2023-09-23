@@ -20,7 +20,6 @@ import static flab.project.data.enums.FileType.PROFILE_IMAGE;
 public class FileStorage {
 
     private final AmazonS3 amazonS3;
-    private final FileFactory fileFactory;
 
     public List<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
         List<String> uploadedFileUrls = new ArrayList<>();

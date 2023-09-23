@@ -5,7 +5,7 @@
 <mapper namespace="flab.project.mapper.PostImageMapper">
 
     <insert id="saveAll">
-        INSERT INTO POST_IMAGE(post_id, img_url)
+        INSERT INTO POST_IMAGES(post_id, img_url)
         VALUES
         <foreach collection="contentImgUrls" item="contentImgUrl" separator=",">
             ( #{postId}, #{contentImgUrl} )

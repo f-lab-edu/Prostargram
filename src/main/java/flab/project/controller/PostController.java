@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.facade.PostFacade;
 import flab.project.service.PostService;
@@ -25,7 +26,7 @@ public class PostController {
 
     @PostMapping("posts/basic-post")
     public SuccessResponse addBasicPost(
-            @RequestPart(value = "basicPost") BasicPost basicPost,
+            @RequestPart(value = "basicPost") @Validated AddBasicPostRequest basicPost,
             @RequestPart(value = "contentImages") @Nullable List<MultipartFile> contentImages
     ) {
         long userId = 1L;
