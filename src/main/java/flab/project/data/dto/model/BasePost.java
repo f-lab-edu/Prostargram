@@ -12,7 +12,6 @@ import java.util.List;
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {
 
-    @Schema(example = "1")
     protected long userId;
 
     @Schema(example = "1")
