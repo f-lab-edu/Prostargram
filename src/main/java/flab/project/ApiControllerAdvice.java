@@ -51,12 +51,6 @@ public class ApiControllerAdvice {
         return new FailResponse(ResponseEnum.NON_EXIST_USER);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(DeletedPostException.class)
-    public FailResponse exceptionResolveToDeletedPost(DeletedPostException e) {
-        return new FailResponse(ResponseEnum.DELETED_POST);
-    }
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {

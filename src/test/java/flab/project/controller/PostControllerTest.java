@@ -2,7 +2,6 @@ package flab.project.controller;
 
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.DeletedPostException;
 import flab.project.data.dto.PostWithUser;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.dto.model.BasicUser;
@@ -104,45 +103,6 @@ class PostControllerTest {
         long negativePostId = -1L;
 
         validateGetPostDetail(negativePostId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
-    }
-
-    @DisplayName("없는 일반 게시물을 요청했다면 DELETED_POST를 반환한다.")
-    @Test
-    void getBasicPostDetail_deletedPost() throws Exception {
-        // given
-        long deletedPostId = 99L;
-        long userId = 1L;
-
-        given(postService.getPostDetail(deletedPostId, userId, BASIC))
-                .willThrow(DeletedPostException.class);
-
-        validateGetPostDetail(deletedPostId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isNotFound(), DELETED_POST);
-    }
-
-    @DisplayName("없는 토론 게시물을 요청했다면 DELETED_POST를 반환한다.")
-    @Test
-    void getDebatePostDetail_deletedPost() throws Exception {
-        // given
-        long deletedPostId = 99L;
-        long userId = 1L;
-
-        given(postService.getPostDetail(deletedPostId, userId, DEBATE))
-                .willThrow(DeletedPostException.class);
-
-        validateGetPostDetail(deletedPostId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isNotFound(), DELETED_POST);
-    }
-
-    @DisplayName("없는 통계 게시물을 요청했다면 DELETED_POST를 반환한다.")
-    @Test
-    void getPollPostDetail_deletedPost() throws Exception {
-        // given
-        long deletedPostId = 99L;
-        long userId = 1L;
-
-        given(postService.getPostDetail(deletedPostId, userId, POLL))
-                .willThrow(DeletedPostException.class);
-
-        validateGetPostDetail(deletedPostId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isNotFound(), DELETED_POST);
     }
 
     private void validateGetPostDetail(long postId, String requestUrl, ResultMatcher statusCode, ResponseEnum responseEnum) throws Exception {

@@ -1,12 +1,12 @@
 package flab.project.service;
 
-import flab.project.config.exception.DeletedPostException;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.dto.model.DebatePost;
 import flab.project.data.dto.model.PollPost;
 import flab.project.mapper.PostMapper;
 import flab.project.mapper.UserMapper;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ class PostServiceTest {
 
     @DisplayName("일반 게시물 상세 보기를 할 수 있다.")
     @Test
-    void getBasicPostDetail() {
+    void getBasicPostDetail() throws NotFoundException {
         // given
         long postId = 1L;
         long userId = 1L;
@@ -48,7 +48,7 @@ class PostServiceTest {
 
     @DisplayName("토론 게시물 상세 보기를 할 수 있다.")
     @Test
-    void getDebatePostDetail() {
+    void getDebatePostDetail() throws NotFoundException {
         // given
         long postId = 1L;
         long userId = 1L;
@@ -65,7 +65,7 @@ class PostServiceTest {
 
     @DisplayName("통계 게시물 상세 보기를 할 수 있다.")
     @Test
-    void getPollPostDetail() {
+    void getPollPostDetail() throws NotFoundException {
         // given
         long postId = 1L;
         long userId = 1L;
@@ -78,51 +78,6 @@ class PostServiceTest {
 
         then(userMapper).should().getBasicUser(userId);
         then(postMapper).should().getPollPostDetail(postId, userId);
-    }
-
-    @DisplayName("일반 게시물이 존재하지 않는 게시물이면 DeletedPostException을 던진다.")
-    @Test
-    void getBasicPostDetail_deletedPost() {
-        // given
-        long postId = 1L;
-        long userId = 1L;
-
-        given(postMapper.getBasicPostDetail(postId, userId))
-                .willReturn(null);
-
-        // when & then
-        assertThatThrownBy(() -> postService.getPostDetail(postId, userId, BASIC))
-                .isInstanceOf(DeletedPostException.class);
-    }
-
-    @DisplayName("토론 게시물이 존재하지 않는 게시물이면 DeletedPostException을 던진다.")
-    @Test
-    void getDebatePostDetail_deletedPost() {
-        // given
-        long postId = 1L;
-        long userId = 1L;
-
-        given(postMapper.getDebatePostDetail(postId, userId))
-                .willReturn(null);
-
-        // when & then
-        assertThatThrownBy(() -> postService.getPostDetail(postId, userId, DEBATE))
-                .isInstanceOf(DeletedPostException.class);
-    }
-
-    @DisplayName("통계 게시물이 존재하지 않는 게시물이면 DeletedPostException을 던진다.")
-    @Test
-    void getPollPostDetail_deletedPost() {
-        // given
-        long postId = 1L;
-        long userId = 1L;
-
-        given(postMapper.getPollPostDetail(postId, userId))
-                .willReturn(null);
-
-        // when & then
-        assertThatThrownBy(() -> postService.getPostDetail(postId, userId, POLL))
-                .isInstanceOf(DeletedPostException.class);
     }
 
     @DisplayName("게시물 상세 보기를 할 때, postId는 양수여야 한다.")
