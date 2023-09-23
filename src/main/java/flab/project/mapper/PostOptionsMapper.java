@@ -3,8 +3,10 @@ package flab.project.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-@Mapper
-public interface IconMapper {
+import java.util.Set;
 
-    Long findByDomain(@Param("domain") String domain);
+@Mapper
+public interface PostOptionsMapper {
+
+    Set<Long> findValidOptionIds(@Param("postId") long postId);
 }

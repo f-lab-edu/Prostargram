@@ -1,7 +1,6 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.config.exception.NumberLimitOfInterestExceededException;
 import flab.project.mapper.InterestMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

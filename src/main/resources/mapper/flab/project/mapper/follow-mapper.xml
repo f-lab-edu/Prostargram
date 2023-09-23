@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.FollowMapper">
 
-    <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType" resultType="User">
+    <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType" resultType="flab.project.data.dto.model.User">
         SELECT
             U.user_id,
             U.user_name,

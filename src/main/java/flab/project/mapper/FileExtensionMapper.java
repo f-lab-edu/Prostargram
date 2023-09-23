@@ -1,9 +1,10 @@
 package flab.project.mapper;
 
 import flab.project.data.enums.ExtensionType;
-import java.util.HashSet;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.HashSet;
 
 @Mapper
 public interface FileExtensionMapper {
