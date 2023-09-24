@@ -12,8 +12,8 @@ public class PostService {
 
     private final PostMapper postMapper;
 
-    public void addPost(long userId, AddPostRequest basicPost) {
-        int numberOfAffectedRow = postMapper.addPost(userId, basicPost);
+    public void addPost(long userId, AddPostRequest post) {
+        int numberOfAffectedRow = postMapper.addPost(userId, post);
 
         if (numberOfAffectedRow != 1) {
             throw new RuntimeException();

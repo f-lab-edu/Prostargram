@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@SuperBuilder
+//@SuperBuilder
 @NoArgsConstructor
 public class AddPollPostRequest extends AddPostRequest{
 

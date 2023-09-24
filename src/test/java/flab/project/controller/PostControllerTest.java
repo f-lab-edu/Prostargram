@@ -15,7 +15,6 @@ import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
-import flab.project.facade.PostFacade;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
 import flab.project.service.PostService;

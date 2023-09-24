@@ -11,7 +11,7 @@ import java.util.List;
 
 import static flab.project.data.enums.PostType.DEBATE;
 
-@SuperBuilder
+//@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class AddDebatePostRequest extends AddPostRequest{

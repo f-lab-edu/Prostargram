@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.PostMapper">
 
-  <insert id="addBasicPost" parameterType="BasePost" useGeneratedKeys="true" keyProperty="post.postId"
+  <insert id="addPost" parameterType="BasePost" useGeneratedKeys="true" keyProperty="post.postId"
     keyColumn="post_id">
     INSERT INTO POST(user_id, content, type)
     VALUES (#{userId}, #{post.content}, #{post.postType});
