@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +22,7 @@ public class PostHashTagService {
     private final PostHashTagMapper postHashTagMapper;
     private final HashTagService hashTagService;
 
-    public void saveAll(long postId, List<String> hashTagNames) {
+    public void saveAll(long postId, Set<String> hashTagNames) {
 
         validateSavePostHashTags(postId, hashTagNames);
 
@@ -34,7 +35,7 @@ public class PostHashTagService {
         }
     }
 
-    private void validateSavePostHashTags(long postId, List<String> hashTagNames) {
+    private void validateSavePostHashTags(long postId, Set<String> hashTagNames) {
         validatePostId(postId);
 
         validateNumberLimitOfPostHashTags(hashTagNames);
@@ -42,7 +43,7 @@ public class PostHashTagService {
         validateMaxLengthOfHashTags(hashTagNames);
     }
 
-    private static void validateMaxLengthOfHashTags(List<String> hashTagNames) {
+    private static void validateMaxLengthOfHashTags(Set<String> hashTagNames) {
         boolean isExceedMaxLength = hashTagNames.stream()
                 .anyMatch(hashTagName -> hashTagName.length() > LIMIT_OF_MAX_LENGTH);
 
@@ -51,7 +52,7 @@ public class PostHashTagService {
         }
     }
 
-    private static void validateNumberLimitOfPostHashTags(List<String> hashTagNames) {
+    private static void validateNumberLimitOfPostHashTags(Set<String> hashTagNames) {
         if (hashTagNames.size() > POST_HASHTAG_MAX_LENGTH) {
             throw new NumberLimitOfPostHashTagExceededException();
         }

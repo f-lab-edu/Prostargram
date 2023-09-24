@@ -6,13 +6,14 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-//@SuperBuilder
+@SuperBuilder
 @NoArgsConstructor
 public class AddPollPostRequest extends AddPostRequest{
 

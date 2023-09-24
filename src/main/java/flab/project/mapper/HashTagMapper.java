@@ -6,13 +6,14 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface HashTagMapper {
 
     Long getHashtagIdByHashtagName(@Param("hashTagName") String hashTagName);
 
-    List<HashTag> getHashTagsByHashtagNames(@Param("hashTagNames") List<String> hashTagNames);
+    List<HashTag> getHashTagsByHashtagNames(@Param("hashTagNames") Set<String> hashTagNames);
 
     void save(@Param("hashTag") HashTag hashTagName);
 

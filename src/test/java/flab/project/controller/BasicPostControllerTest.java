@@ -1,9 +1,12 @@
 package flab.project.controller;
 
+import static flab.project.common.Constraints.*;
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,13 +18,17 @@ import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
+import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
 import flab.project.service.PostService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 
+import flab.project.template.PostFacadeTemplate;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,41 +40,37 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
-@WebMvcTest(controllers = PostController.class)
-class PostControllerTest {
+@WebMvcTest(controllers = BasicPostController.class)
+class BasicPostControllerTest {
 
     private static final String ADD_BASIC_POST_REQUEST_URL = "/posts/basic-post";
     private static final String validPostContent = "게시물 내용입니다";
-    private static final List<String> validHashTagNames = List.of("#test1", "#test2");
+    private static final Set<String> validHashTagNames = Set.of("#test1", "#test2");
+    private static final MockMultipartFile validContentImage = createMockMultiPartFile();
+    private static final List<MockMultipartFile> validContentImages = List.of(validContentImage, validContentImage);
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private PostFacade postFacade;
-    @MockBean
-    private PostService postService;
-    @MockBean
-    private PostHashTagService PostHashTagService;
-    @MockBean
-    private FileStorage fileStorage;
-    @MockBean
-    private PostImageService postImageService;
+    private PostFacadeTemplate postFacadeTemplate;
 
     @DisplayName("일반 게시물을 생성할 수 있다.")
     @Test
     void addBasicPost() throws Exception {
         // given
         AddBasicPostRequest validBasicPost = createAddBasicPostRequest(validPostContent, validHashTagNames);
+
         MockMultipartFile dto = createMultiPartDto("basicPost", validBasicPost);
 
-        given(postFacade.addBasicPost(anyLong(), any(AddBasicPostRequest.class), anyList()))
+        given(postFacadeTemplate.addPost(anyLong(), any(AddBasicPostRequest.class)))
                 .willReturn(new SuccessResponse<>());
 
         // when & then
-        validateAddBasicPost(List.of(createMockMultiPartFile(), createMockMultiPartFile()), dto, status().isOk(), SUCCESS);
+        validateAddBasicPost(validContentImages, dto, status().isOk(), SUCCESS);
     }
 
     @DisplayName("일반 게시물을 생성할 때, contentImages가 없으면 INVALID_USER_INPUT을 반환한다.")
@@ -81,52 +84,91 @@ class PostControllerTest {
         validateAddBasicPost(List.of(), dto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @DisplayName("일반 게시물을 생성할 때, content가 \"\"면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("일반 게시물을 생성할 때, postContent가 비어있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyPostContent() throws Exception {
         // given
-        String invalidPostContent = "";
-        AddBasicPostRequest basicPostWithEmptyContent = createAddBasicPostRequest(invalidPostContent, validHashTagNames);
-        MockMultipartFile dto = createMultiPartDto("basicPost", basicPostWithEmptyContent);
+        String emptyPostContent = "";
+        AddBasicPostRequest invalidBasicPostRequest = createAddBasicPostRequest(emptyPostContent, validHashTagNames);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPostRequest);
 
         // when & then
-        validateAddBasicPost(List.of(createMockMultiPartFile(), createMockMultiPartFile()), dto, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @DisplayName("일반 게시물을 생성할 때, content가 공백으로만 이루어져 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("일반 게시물을 생성할 때, postContent가 공백으로만 이루어져 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankPostContent() throws Exception {
         // given
-        String invalidPostContent = "   ";
-        AddBasicPostRequest basicPostWithOnlyBlankContent = createAddBasicPostRequest(invalidPostContent, validHashTagNames);
-        MockMultipartFile dto = createMultiPartDto("basicPost", basicPostWithOnlyBlankContent);
+        String onlyBlankPostContent = "   ";
+        AddBasicPostRequest invalidBasicPostRequest = createAddBasicPostRequest(onlyBlankPostContent, validHashTagNames);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPostRequest);
 
         // when & then
-        validateAddBasicPost(List.of(createMockMultiPartFile(), createMockMultiPartFile()), dto, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 \"\"인 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("일반 게시물을 생성할 때, 최대 길이를 초과한 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
+    @Test
+    void addBasicPost_withExceedMaxLengthOfPostContent() throws Exception {
+        // given
+        String postContentExceededMaxLength = RandomStringUtils.randomAlphanumeric(MAX_LENGTH_OF_POST_CONTENTS + 1);
+        AddBasicPostRequest invalidBasicPostRequest = createAddBasicPostRequest(postContentExceededMaxLength, validHashTagNames);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPostRequest);
+
+        // when & then
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
+    }
+
+    @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 비어 있는 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyHashTagNames() throws Exception {
         // given
-        List<String> invalidHashTagNames = List.of("#test1", " ");
-        AddBasicPostRequest basicPostWithEmptyHashTagNames = createAddBasicPostRequest(validPostContent, invalidHashTagNames);
-        MockMultipartFile dto = createMultiPartDto("basicPost", basicPostWithEmptyHashTagNames);
+        Set<String> hashTagNamesWithEmpty = Set.of("#test1", "");
+        AddBasicPostRequest invalidBasicPostRequest = createAddBasicPostRequest(validPostContent, hashTagNamesWithEmpty);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPostRequest);
 
         // when & then
-        validateAddBasicPost(List.of(createMockMultiPartFile(), createMockMultiPartFile()), dto, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 공백으로만 이루어진 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankHashTagNames() throws Exception {
         // given
-        List<String> invalidHashTagNames = List.of("#test1", " ");
-        AddBasicPostRequest basicPostWithEmptyHashTagNames = createAddBasicPostRequest(validPostContent, invalidHashTagNames);
-        MockMultipartFile dto = createMultiPartDto("basicPost", basicPostWithEmptyHashTagNames);
+        Set<String> hashTagNamesWithOnlyBlank = Set.of("#test1", "      ");
+        AddBasicPostRequest invalidBasicPost = createAddBasicPostRequest(validPostContent, hashTagNamesWithOnlyBlank);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPost);
 
         // when & then
-        validateAddBasicPost(List.of(createMockMultiPartFile(), createMockMultiPartFile()), dto, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
+    }
+
+    @DisplayName("일반 게시물을 생성할 때, hashTagNames가 최대 개수를 초과하면 INVALID_USER_INPUT을 반환한다.")
+    @Test
+    void addBasicPost_withExceedMaxSizeOfHashTagNames() throws Exception {
+        // given
+        Set<String> hashTagNamesExceededMaxSize = Set.of("#test1", "#test2", "#test3", "#test4", "#test5", "#test6");
+        AddBasicPostRequest invalidBasicPost = createAddBasicPostRequest(validPostContent, hashTagNamesExceededMaxSize);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPost);
+
+        // when & then
+        assertThat(hashTagNamesExceededMaxSize).hasSizeGreaterThan(MAX_SIZE_OF_POST_HASHTAGS);
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
+    }
+
+    @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @Test
+    void addBasicPost_withExceedMaxLengthOfHashTagName() throws Exception {
+        // given
+        String hashTagNameExceededMaxLength = RandomStringUtils.randomAlphanumeric(MAX_LENGTH_OF_HASHTAGS + 1);
+        Set<String> invalidHashTagNames = Set.of(hashTagNameExceededMaxLength);
+
+        AddBasicPostRequest invalidBasicPost = createAddBasicPostRequest(validPostContent, invalidHashTagNames);
+        MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPost);
+
+        // when & then
+        validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     private MockMultipartFile createMultiPartDto(String paramName, AddBasicPostRequest basicPostWithoutEmptyContent) throws JsonProcessingException {
@@ -138,14 +180,14 @@ class PostControllerTest {
         );
     }
 
-    private AddBasicPostRequest createAddBasicPostRequest(String postContent, List<String> hashTagNames) {
+    private AddBasicPostRequest createAddBasicPostRequest(String postContent, Set<String> hashTagNames) {
         return AddBasicPostRequest.builder()
                 .content(postContent)
                 .hashTagNames(hashTagNames)
                 .build();
     }
 
-    private MockMultipartFile createMockMultiPartFile() {
+    private static MockMultipartFile createMockMultiPartFile() {
         return new MockMultipartFile(
                 "contentImages",
                 "test.jpg",

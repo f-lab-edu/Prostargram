@@ -5,6 +5,7 @@ import flab.project.mapper.HashTagMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class HashTagService {
         return hashTag.getHashTagId();
     }
 
-    public List<Long> findHashTagIdsByHashTagNames(List<String> hashTagNames) {
+    public List<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
         List<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
 
         List<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashTags);
@@ -36,7 +37,7 @@ public class HashTagService {
         return unionHashTagIds(existingHashTags, nonExistHashTags);
     }
 
-    private List<HashTag> findNonExistingHashTags(List<String> hashTagNames, List<HashTag> existingHashTags) {
+    private List<HashTag> findNonExistingHashTags(Set<String> hashTagNames, List<HashTag> existingHashTags) {
         Map<String, HashTag> existingHashMap = convertHashTagMap(existingHashTags);
 
         return hashTagNames.stream()

@@ -3,7 +3,7 @@ package flab.project.template;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.PostOptionMapper;
 import io.micrometer.common.util.StringUtils;
-import java.util.List;
+
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
@@ -23,31 +23,39 @@ public abstract class PostOptionServiceTemplate {
     }
 
     private void validateSavePostOptions(long postId, Set<String> optionContents) {
-        validatePostId(postId);
+        validatePostIdPositive(postId);
 
-        validateOptionContents(optionContents);
-
-        validateOptionContentsCount(optionContents.size());
+        validateOptionContentsBlank(optionContents);
+        validateOptionContentsLength(optionContents);
+        validateOptionContentsSize(optionContents.size());
     }
 
-
-    private void validateOptionContents(Set<String> optionContents) {
-        int contentMaxLength = getMaxLengthOfOptionContent();
-
+    private void validateOptionContentsBlank(Set<String> optionContents) {
         boolean isInvalidOptionContent = optionContents.stream()
-                .anyMatch(optionContent -> optionContent.length() > contentMaxLength || StringUtils.isBlank(optionContent));
+                .anyMatch(StringUtils::isBlank);
 
         if (isInvalidOptionContent) {
             throw new InvalidUserInputException();
         }
     }
 
-    private void validatePostId(long postId) {
+    private void validateOptionContentsLength(Set<String> optionContents) {
+        int contentMaxLength = getMaxLengthOfOptionContent();
+
+        boolean isInvalidOptionContent = optionContents.stream()
+                .anyMatch(optionContent -> optionContent.length() > contentMaxLength);
+
+        if (isInvalidOptionContent) {
+            throw new InvalidUserInputException();
+        }
+    }
+
+    private void validatePostIdPositive(long postId) {
         if (postId < 0) {
             throw new InvalidUserInputException();
         }
     }
 
     protected abstract int getMaxLengthOfOptionContent();
-    protected abstract void validateOptionContentsCount(int optionContentsCount);
+    protected abstract void validateOptionContentsSize(int optionContentsSize);
 }
