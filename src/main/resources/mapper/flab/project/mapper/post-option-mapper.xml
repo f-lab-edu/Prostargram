@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.PostOptionMapper">
+
+  <insert id="saveAll" parameterType="BasePost" useGeneratedKeys="true" keyProperty="post.postId"
+    keyColumn="post_id">
+    INSERT INTO POST_OPTIONS(option_id, post_id, content)
+    VALUES
+    <foreach collection="optionContents" index="optionId" item="optionContent" separator=",">
+      (#{optionId}, #{postId}, #{optionContent})
+    </foreach>
+  </insert>
+
+</mapper>

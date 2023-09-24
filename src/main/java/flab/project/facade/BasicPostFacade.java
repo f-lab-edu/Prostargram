@@ -12,12 +12,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BasicPostFacadeFacade extends PostFacadeTemplate {
+public class BasicPostFacade extends PostFacadeTemplate {
 
     private final FileStorage fileStorage;
     private final PostImageService postImageService;
 
-    public BasicPostFacadeFacade(
+    public BasicPostFacade(
             PostService postService,
             PostHashTagService postHashTagService,
             FileStorage fileStorage,

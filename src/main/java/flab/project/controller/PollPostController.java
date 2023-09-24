@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PollPostController {
 
-    private final PostFacadeTemplate debatePostFacade;
+    private final PostFacadeTemplate pollPostFacade;
 
     @PostMapping("/posts/poll-post")
     public SuccessResponse addBasicPost(
@@ -22,6 +22,6 @@ public class PollPostController {
     ) {
         long userId = 1L;
 
-        return debatePostFacade.addPost(userId, pollPost);
+        return pollPostFacade.addPost(userId, pollPost);
     }
 }

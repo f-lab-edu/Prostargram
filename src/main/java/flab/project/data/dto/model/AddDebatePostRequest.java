@@ -2,6 +2,7 @@ package flab.project.data.dto.model;
 
 import flab.project.data.enums.PostType;
 import jakarta.validation.constraints.Size;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,5 @@ public class AddDebatePostRequest extends AddPostRequest{
     private static final PostType postType = DEBATE;
 
     @Size(min = 2, max = 2)
-    private List<String> optionContents;
+    private Set<String> optionContents;
 }

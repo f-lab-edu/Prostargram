@@ -10,11 +10,11 @@ import flab.project.template.PostOptionServiceTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DebatePostFacadeFacade extends PostFacadeTemplate {
+public class DebatePostFacade extends PostFacadeTemplate {
 
     private final PostOptionServiceTemplate postOptionServiceTemplate;
 
-    public DebatePostFacadeFacade(
+    public DebatePostFacade(
             PostService postService,
             PostHashTagService postHashTagService,
             DebatePostOptionService debatePostOptionService

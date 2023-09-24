@@ -4,6 +4,7 @@ import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.PostOptionMapper;
 import io.micrometer.common.util.StringUtils;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -11,7 +12,7 @@ public abstract class PostOptionServiceTemplate {
 
     private final PostOptionMapper postOptionMapper;
     
-    public void savePostOptions(long postId, List<String> optionContents) {
+    public void savePostOptions(long postId, Set<String> optionContents) {
         validateSavePostOptions(postId, optionContents);
 
         int numberOfAffectedRow = postOptionMapper.saveAll(postId, optionContents);
@@ -21,7 +22,7 @@ public abstract class PostOptionServiceTemplate {
         }
     }
 
-    private void validateSavePostOptions(long postId, List<String> optionContents) {
+    private void validateSavePostOptions(long postId, Set<String> optionContents) {
         validatePostId(postId);
 
         validateOptionContents(optionContents);
@@ -30,7 +31,7 @@ public abstract class PostOptionServiceTemplate {
     }
 
 
-    private void validateOptionContents(List<String> optionContents) {
+    private void validateOptionContents(Set<String> optionContents) {
         int contentMaxLength = getMaxLengthOfOptionContent();
 
         boolean isInvalidOptionContent = optionContents.stream()

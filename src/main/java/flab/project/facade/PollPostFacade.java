@@ -11,12 +11,12 @@ import flab.project.template.PostOptionServiceTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PollPostFacadeFacade extends PostFacadeTemplate {
+public class PollPostFacade extends PostFacadeTemplate {
 
     private final PollMetadataService pollMetadataService;
     private final PostOptionServiceTemplate postOptionServiceTemplate;
 
-    public PollPostFacadeFacade(
+    public PollPostFacade(
             PostService postService,
             PostHashTagService postHashTagService,
             PollMetadataService pollMetadataService,
