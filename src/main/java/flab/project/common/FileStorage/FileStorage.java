@@ -5,12 +5,11 @@ import com.amazonaws.services.s3.model.*;
 import flab.project.data.dto.file.File;
 import flab.project.data.dto.file.Uploadable;
 import flab.project.data.enums.FileType;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,14 +23,9 @@ public class FileStorage {
     private final AmazonS3 amazonS3;
 
     public Set<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
-        Set<String> uploadedFileUrls = new HashSet<>();
-
-        for (MultipartFile multipartFile : multipartFiles) {
-            String uploadedFileUrl = uploadFile(userId, multipartFile, fileType);
-            uploadedFileUrls.add(uploadedFileUrl);
-        }
-
-        return uploadedFileUrls;
+        return multipartFiles.stream()
+                .map(multipartFile -> uploadFile(userId, multipartFile, fileType))
+                .collect(Collectors.toSet());
     }
 
     public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
@@ -67,12 +61,10 @@ public class FileStorage {
         ObjectListing objectListing = amazonS3.listObjects(listObjectsRequest);
         List<S3ObjectSummary> objectSummaries = objectListing.getObjectSummaries();
 
-        List<String> fileNames = objectSummaries.stream()
+        return objectSummaries.stream()
                 .map(S3ObjectSummary::getKey)
-                .filter(fileName -> fileName.trim().length() != 0)
-                .collect(Collectors.toList());
-
-        return fileNames;
+                .filter(fileName -> !StringUtils.isBlank(fileName))
+                .toList();
     }
 
     public void deleteFile(String bucketName, String fileName) {

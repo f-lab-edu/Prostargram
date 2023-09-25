@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.config.exception.ExceedMaxSizeOfPostHashTagsException;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.PostHashTagMapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,7 +16,6 @@ import java.util.Set;
 import static flab.project.common.Constraints.MAX_LENGTH_OF_HASHTAGS;
 import static flab.project.common.Constraints.MAX_SIZE_OF_POST_HASHTAGS;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)

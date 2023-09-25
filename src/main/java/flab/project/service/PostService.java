@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;

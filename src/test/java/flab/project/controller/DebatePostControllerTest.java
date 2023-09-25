@@ -168,7 +168,7 @@ public class DebatePostControllerTest {
         AddDebatePostRequest invalidDebatePostRequest = createAddDebatePost(validPostContent, validHashTagNames, optionContentsInvalidSize);
 
         // when & then
-        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.COUNT_OF_DEBATE_POST_OPTION_COUNT);
+        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.MAX_SIZE_OF_DEBATE_POST_OPTIONS);
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
 
         // given
@@ -176,7 +176,7 @@ public class DebatePostControllerTest {
         AddDebatePostRequest anotherInvalidDebatePostRequest = createAddDebatePost(validPostContent, validHashTagNames, anotherOptionContentsInvalidSize);
 
         // when & then
-        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.COUNT_OF_DEBATE_POST_OPTION_COUNT);
+        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.MAX_SIZE_OF_DEBATE_POST_OPTIONS);
         validateAddDebatePostRequest(anotherInvalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 

@@ -5,13 +5,14 @@ import flab.project.mapper.PostOptionMapper;
 import io.micrometer.common.util.StringUtils;
 
 import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class PostOptionServiceTemplate {
 
     private final PostOptionMapper postOptionMapper;
-    
+
     public void savePostOptions(long postId, Set<String> optionContents) {
         validateSavePostOptions(postId, optionContents);
 
@@ -37,10 +38,10 @@ public abstract class PostOptionServiceTemplate {
     }
 
     private void validateOptionContentsBlank(Set<String> optionContents) {
-        boolean isInvalidOptionContent = optionContents.stream()
+        boolean hasBlankOptionContent = optionContents.stream()
                 .anyMatch(StringUtils::isBlank);
 
-        if (isInvalidOptionContent) {
+        if (hasBlankOptionContent) {
             throw new InvalidUserInputException();
         }
     }
@@ -57,5 +58,6 @@ public abstract class PostOptionServiceTemplate {
     }
 
     protected abstract int getMaxLengthOfOptionContent();
+
     protected abstract void validateOptionContentsSize(int optionContentsSize);
 }

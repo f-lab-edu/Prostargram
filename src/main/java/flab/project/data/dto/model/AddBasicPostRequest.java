@@ -3,7 +3,7 @@ package flab.project.data.dto.model;
 import static flab.project.data.enums.PostType.BASIC;
 
 import flab.project.data.enums.PostType;
-import java.io.Serializable;
+
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-public class AddBasicPostRequest extends AddPostRequest implements Serializable {
+public class AddBasicPostRequest extends AddPostRequest {
 
     private static final PostType postType = BASIC;
 

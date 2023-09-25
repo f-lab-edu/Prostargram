@@ -3,7 +3,6 @@ package flab.project.data.dto.model;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -33,5 +32,5 @@ public abstract class BasePost {
     protected long commentCount;
 
     @Schema(example = "방금 전")
-    protected String createAt;
+    protected String createdAt;
 }

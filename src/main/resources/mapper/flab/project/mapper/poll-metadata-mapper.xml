@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="flab.project.mapper.PollMetadataMapper">
 
-  <insert id="save" parameterType="AddPollPostRequest">
-    INSERT INTO POLL_METADATA(post_id, start_date, end_date)
-    VALUES (#{pollPost.postId}, #{pollPost.startDate}, #{pollPost.endDate});
-  </insert>
+    <insert id="save" parameterType="AddPollPostRequest">
+        INSERT INTO POLL_METADATA(post_id, start_date, end_date)
+        VALUES (#{pollPost.postId}, #{pollPost.startDate}, #{pollPost.endDate});
+    </insert>
 
 </mapper>

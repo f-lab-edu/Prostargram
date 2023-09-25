@@ -4,8 +4,6 @@ import flab.project.data.dto.model.HashTag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 @Mapper

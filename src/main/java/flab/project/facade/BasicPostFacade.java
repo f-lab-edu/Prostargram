@@ -8,7 +8,7 @@ import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
 import flab.project.service.PostService;
 import flab.project.template.PostFacadeTemplate;
-import java.util.List;
+
 import java.util.Set;
 
 import org.springframework.stereotype.Service;

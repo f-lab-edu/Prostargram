@@ -3,7 +3,9 @@ package flab.project.controller;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.template.PostFacadeTemplate;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

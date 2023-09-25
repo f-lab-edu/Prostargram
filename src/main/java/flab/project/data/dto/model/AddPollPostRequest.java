@@ -4,7 +4,9 @@ import flab.project.data.enums.PostType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import java.util.Set;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,7 +19,7 @@ import static flab.project.data.enums.PostType.POLL;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class AddPollPostRequest extends AddPostRequest{
+public class AddPollPostRequest extends AddPostRequest {
 
     private static final PostType postType = POLL;
 

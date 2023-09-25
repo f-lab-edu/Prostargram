@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.mapper.PostMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 

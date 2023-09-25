@@ -19,7 +19,7 @@ public class DebatePostController {
     @PostMapping("/posts/debate-post")
     public SuccessResponse addDebatePost(
             @RequestBody @Validated AddDebatePostRequest debatePost
-    ){
+    ) {
         long userId = 1L;
 
         return debatePostFacade.addPost(userId, debatePost);

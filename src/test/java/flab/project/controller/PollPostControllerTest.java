@@ -227,7 +227,6 @@ public class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 문자열의 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withEmptyHashTagName() throws Exception {
@@ -362,7 +361,7 @@ public class PollPostControllerTest {
                 .build();
 
         // when & then
-        assertThat(optionContentsExceededMaxSize).hasSizeGreaterThan(Constraints.MAX_COUNT_OF_POLL_POST_OPTION_COUNT);
+        assertThat(optionContentsExceededMaxSize).hasSizeGreaterThan(Constraints.MAX_SIZE_OF_POLL_POST_OPTION_COUNT);
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
@@ -382,7 +381,7 @@ public class PollPostControllerTest {
                 .build();
 
         // when & then
-        assertThat(optionContentsLessThanMinSize).hasSizeLessThan(Constraints.MIN_COUNT_OF_POLL_POST_OPTION_COUNT);
+        assertThat(optionContentsLessThanMinSize).hasSizeLessThan(Constraints.MIN_SIZE_OF_POLL_POST_OPTION_COUNT);
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
@@ -391,7 +390,7 @@ public class PollPostControllerTest {
     void addPollPost_exceedMaxLengtheOfOptionContents() throws Exception {
         // given
         String optionContentExceededMaxLength = RandomStringUtils.randomAlphanumeric(MAX_LENGTH_POLL_POST_OPTION_CONTENT + 1);
-        Set<String> invalidOptionContents = Set.of("test1","test2",optionContentExceededMaxLength);
+        Set<String> invalidOptionContents = Set.of("test1", "test2", optionContentExceededMaxLength);
 
         AddPollPostRequest invalidPollPostRequest = AddPollPostRequest.builder()
                 .content(validPostContent)

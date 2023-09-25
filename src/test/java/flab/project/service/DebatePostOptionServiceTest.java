@@ -15,7 +15,6 @@ import java.util.Set;
 
 import static flab.project.common.Constraints.*;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -94,7 +93,7 @@ class DebatePostOptionServiceTest {
         // given
         Set<String> invalidPostOptions = new HashSet<>();
 
-        for (int i = 0; i < COUNT_OF_DEBATE_POST_OPTION_COUNT + 1; i++) {
+        for (int i = 0; i < MAX_SIZE_OF_DEBATE_POST_OPTIONS + 1; i++) {
             invalidPostOptions.add("#test" + i);
         }
 

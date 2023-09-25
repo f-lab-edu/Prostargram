@@ -29,11 +29,11 @@ public class PollPostFacade extends PostFacadeTemplate {
 
     @Override
     protected void specializedMethod(long userId, AddPostRequest post) {
-        if (!(post instanceof AddPollPostRequest pollPost)){
+        if (!(post instanceof AddPollPostRequest pollPost)) {
             throw new RuntimeException();
         }
 
         pollMetadataService.addMetadata(pollPost);
-        postOptionServiceTemplate.savePostOptions(pollPost.getPostId(),pollPost.getOptionContents());
+        postOptionServiceTemplate.savePostOptions(pollPost.getPostId(), pollPost.getOptionContents());
     }
 }

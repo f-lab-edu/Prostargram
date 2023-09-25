@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 public class AddPostRequest {
+    
     protected long postId;
 
     @NotBlank

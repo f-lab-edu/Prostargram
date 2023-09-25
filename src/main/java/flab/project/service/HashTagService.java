@@ -6,6 +6,7 @@ import flab.project.mapper.HashTagMapper;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class HashTagService {
         Map<String, HashTag> existingHashMap = convertHashTagMap(existingHashTags);
 
         return hashTagNames.stream()
-                .filter((hashTagName) -> !existingHashMap.containsKey(hashTagName))
+                .filter(hashTagName -> !existingHashMap.containsKey(hashTagName))
                 .map(HashTag::new)
                 .collect(Collectors.toSet());
     }

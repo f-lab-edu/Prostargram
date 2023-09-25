@@ -27,13 +27,13 @@ public class PollPostOptionService extends PostOptionServiceTemplate {
     }
 
     private void validateIsLessThanMinCountOfOptionCount(int optionContentsCount) {
-        if (optionContentsCount < MIN_COUNT_OF_POLL_POST_OPTION_COUNT) {
+        if (optionContentsCount < MIN_SIZE_OF_POLL_POST_OPTION_COUNT) {
             throw new InvalidUserInputException();
         }
     }
 
     private void validateIsMoreThanMaxCountOfOptionCount(int optionContentsCount) {
-        if (optionContentsCount > MAX_COUNT_OF_POLL_POST_OPTION_COUNT) {
+        if (optionContentsCount > MAX_SIZE_OF_POLL_POST_OPTION_COUNT) {
             throw new InvalidUserInputException();
         }
     }
