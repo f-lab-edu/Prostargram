@@ -4,8 +4,7 @@
 
 <mapper namespace="flab.project.mapper.PostOptionMapper">
 
-  <insert id="saveAll" parameterType="BasePost" useGeneratedKeys="true" keyProperty="post.postId"
-    keyColumn="post_id">
+  <insert id="saveAll">
     INSERT INTO POST_OPTIONS(option_id, post_id, content)
     VALUES
     <foreach collection="optionContents" index="optionId" item="optionContent" separator=",">

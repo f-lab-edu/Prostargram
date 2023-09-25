@@ -1,5 +1,6 @@
 package flab.project.data.dto.model;
 
+import flab.project.data.enums.PostType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,12 +11,15 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.util.List;
+
+import static flab.project.data.enums.PostType.POLL;
 
 @Getter
 @SuperBuilder
 @NoArgsConstructor
 public class AddPollPostRequest extends AddPostRequest{
+
+    private static final PostType postType = POLL;
 
     @Length(max = 35)
     @NotBlank
