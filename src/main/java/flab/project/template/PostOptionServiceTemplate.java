@@ -30,6 +30,12 @@ public abstract class PostOptionServiceTemplate {
         validateOptionContentsSize(optionContents.size());
     }
 
+    private void validatePostIdPositive(long postId) {
+        if (postId < 0) {
+            throw new InvalidUserInputException();
+        }
+    }
+
     private void validateOptionContentsBlank(Set<String> optionContents) {
         boolean isInvalidOptionContent = optionContents.stream()
                 .anyMatch(StringUtils::isBlank);
@@ -46,12 +52,6 @@ public abstract class PostOptionServiceTemplate {
                 .anyMatch(optionContent -> optionContent.length() > contentMaxLength);
 
         if (isInvalidOptionContent) {
-            throw new InvalidUserInputException();
-        }
-    }
-
-    private void validatePostIdPositive(long postId) {
-        if (postId < 0) {
             throw new InvalidUserInputException();
         }
     }

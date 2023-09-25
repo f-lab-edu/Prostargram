@@ -56,7 +56,7 @@ class BasicPostFacadeTest {
         then(postService).should().addPost(userId, validBasicPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validBasicPostRequest.getHashTagNames()));
         then(fileStorage).should().uploadFiles(userId, validBasicPostRequest.getContentImages(), FileType.POST_IMAGE);
-        then(postImageService).should().saveAll(anyLong(), anyList());
+        then(postImageService).should().saveAll(anyLong(), anySet());
     }
 
     @DisplayName("AddPollPostRequest가 아닌 다른 AddPostReuqest의 자식이 매개변수로 들어올 경우 RuntimeException을 던진다.")

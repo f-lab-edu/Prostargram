@@ -9,6 +9,8 @@ import flab.project.service.PostImageService;
 import flab.project.service.PostService;
 import flab.project.template.PostFacadeTemplate;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +36,7 @@ public class BasicPostFacade extends PostFacadeTemplate {
             throw new RuntimeException();
         }
 
-        List<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPost.getContentImages(), FileType.POST_IMAGE);
+        Set<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPost.getContentImages(), FileType.POST_IMAGE);
         postImageService.saveAll(basicPost.getPostId(), uploadedFileUrls);
     }
 }

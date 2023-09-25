@@ -14,7 +14,7 @@ public class PollMetadataService {
     private final PollMetadataMapper pollMetadataMapper;
 
     public void addMetadata(AddPollPostRequest pollPost) {
-        validateIsEndTimeAfterStartTime(pollPost);
+        validateIsEndDateAfterStartDate(pollPost);
 
         int numberOfAffectedRow = pollMetadataMapper.save(pollPost);
 
@@ -23,11 +23,11 @@ public class PollMetadataService {
         }
     }
 
-    private void validateIsEndTimeAfterStartTime(AddPollPostRequest pollPost) {
-        LocalDate startTime = pollPost.getEndDate();
-        LocalDate endTIme = pollPost.getStartDate();
+    private void validateIsEndDateAfterStartDate(AddPollPostRequest pollPost) {
+        LocalDate startDate = pollPost.getEndDate();
+        LocalDate endDate = pollPost.getStartDate();
         
-        if (startTime.isBefore(endTIme)) {
+        if (startDate.isBefore(endDate)) {
             throw new InvalidUserInputException();
         }
     }

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class HashTag {
 
-    public static final int LIMIT_OF_MAX_LENGTH = 15;
-
     @Schema(example = "1")
     private long hashTagId;
 

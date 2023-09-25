@@ -2,10 +2,8 @@ package flab.project.service;
 
 import flab.project.data.dto.model.HashTag;
 import flab.project.mapper.HashTagMapper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,26 +25,26 @@ public class HashTagService {
         return hashTag.getHashTagId();
     }
 
-    public List<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
-        List<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
+    public Set<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
+        Set<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
 
-        List<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashTags);
+        Set<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashTags);
 
         saveNonExistHashTagsAndSetHashTagIds(nonExistHashTags);
 
         return unionHashTagIds(existingHashTags, nonExistHashTags);
     }
 
-    private List<HashTag> findNonExistingHashTags(Set<String> hashTagNames, List<HashTag> existingHashTags) {
+    private Set<HashTag> findNonExistingHashTags(Set<String> hashTagNames, Set<HashTag> existingHashTags) {
         Map<String, HashTag> existingHashMap = convertHashTagMap(existingHashTags);
 
         return hashTagNames.stream()
                 .filter((hashTagName) -> !existingHashMap.containsKey(hashTagName))
                 .map(HashTag::new)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
-    private Map<String, HashTag> convertHashTagMap(List<HashTag> existHashTags) {
+    private Map<String, HashTag> convertHashTagMap(Set<HashTag> existHashTags) {
         return existHashTags.stream()
                 .collect(Collectors.toMap(
                         HashTag::getHashTagName,
@@ -54,14 +52,14 @@ public class HashTagService {
                 ));
     }
 
-    private void saveNonExistHashTagsAndSetHashTagIds(List<HashTag> nonExistHashTags) {
+    private void saveNonExistHashTagsAndSetHashTagIds(Set<HashTag> nonExistHashTags) {
         if (!nonExistHashTags.isEmpty()) {
             hashTagMapper.saveAll(nonExistHashTags);
         }
     }
 
-    private List<Long> unionHashTagIds(List<HashTag> existingHashTags, List<HashTag> nonExistHashTags) {
-        List<Long> hashTagIds = new ArrayList<>();
+    private Set<Long> unionHashTagIds(Set<HashTag> existingHashTags, Set<HashTag> nonExistHashTags) {
+        Set<Long> hashTagIds = new HashSet<>();
 
         hashTagIds.addAll(extractHashTagIds(existingHashTags));
         hashTagIds.addAll(extractHashTagIds(nonExistHashTags));
@@ -69,10 +67,10 @@ public class HashTagService {
         return hashTagIds;
     }
 
-    private List<Long> extractHashTagIds(List<HashTag> existingHashMap) {
+    private Set<Long> extractHashTagIds(Set<HashTag> existingHashMap) {
         return existingHashMap
                 .stream()
                 .map(HashTag::getHashTagId)
-                .toList();
+                .collect(Collectors.toSet());
     }
 }

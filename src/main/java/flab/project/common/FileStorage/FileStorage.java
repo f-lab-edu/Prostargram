@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static flab.project.data.enums.FileType.PROFILE_IMAGE;
@@ -21,8 +23,8 @@ public class FileStorage {
 
     private final AmazonS3 amazonS3;
 
-    public List<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
-        List<String> uploadedFileUrls = new ArrayList<>();
+    public Set<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
+        Set<String> uploadedFileUrls = new HashSet<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
             String uploadedFileUrl = uploadFile(userId, multipartFile, fileType);
