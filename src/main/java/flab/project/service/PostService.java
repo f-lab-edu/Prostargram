@@ -12,7 +12,7 @@ public class PostService {
     private final PostMapper postMapper;
 
     public void addPost(long userId, AddPostRequest post) {
-        int numberOfAffectedRow = postMapper.addPost(userId, post);
+        int numberOfAffectedRow = postMapper.save(userId, post);
 
         if (numberOfAffectedRow != 1) {
             throw new RuntimeException();

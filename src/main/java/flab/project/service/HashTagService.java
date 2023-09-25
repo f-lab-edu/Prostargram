@@ -4,7 +4,6 @@ import flab.project.data.dto.model.HashTag;
 import flab.project.mapper.HashTagMapper;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,8 @@ public class HashTagService {
     }
 
     public Set<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
+        // TODO hashTagNames 없으면 어애 되는지 보기.
+        // TODO nonExistHashTags 없으면 어애 되는지 보기
         Set<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
 
         Set<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashTags);
@@ -37,20 +38,12 @@ public class HashTagService {
     }
 
     private Set<HashTag> findNonExistingHashTags(Set<String> hashTagNames, Set<HashTag> existingHashTags) {
-        Map<String, HashTag> existingHashMap = convertHashTagMap(existingHashTags);
+        Set<String> existingHashTagNames = extractHashTagNames(existingHashTags);
 
         return hashTagNames.stream()
-                .filter(hashTagName -> !existingHashMap.containsKey(hashTagName))
+                .filter(hashtagName -> !existingHashTagNames.contains(hashtagName))
                 .map(HashTag::new)
                 .collect(Collectors.toSet());
-    }
-
-    private Map<String, HashTag> convertHashTagMap(Set<HashTag> existHashTags) {
-        return existHashTags.stream()
-                .collect(Collectors.toMap(
-                        HashTag::getHashTagName,
-                        Function.identity()
-                ));
     }
 
     private void saveNonExistHashTagsAndSetHashTagIds(Set<HashTag> nonExistHashTags) {
@@ -68,9 +61,14 @@ public class HashTagService {
         return hashTagIds;
     }
 
+    private static Set<String> extractHashTagNames(Set<HashTag> existingHashTags) {
+        return existingHashTags.stream()
+                .map(HashTag::getHashTagName)
+                .collect(Collectors.toSet());
+    }
+
     private Set<Long> extractHashTagIds(Set<HashTag> existingHashMap) {
-        return existingHashMap
-                .stream()
+        return existingHashMap.stream()
                 .map(HashTag::getHashTagId)
                 .collect(Collectors.toSet());
     }

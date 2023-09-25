@@ -38,14 +38,14 @@ class PostServiceTest {
                 .optionContents(Set.of("내용물1", "내용물2"))
                 .build();
 
-        given(postMapper.addPost(userId, addPostRequest))
+        given(postMapper.save(userId, addPostRequest))
                 .willReturn(numberOfAffectedRow);
 
         // when & then
         assertThatCode(() -> postService.addPost(userId, addPostRequest))
                 .doesNotThrowAnyException();
 
-        then(postMapper).should().addPost(userId, addPostRequest);
+        then(postMapper).should().save(userId, addPostRequest);
     }
 
     @DisplayName("게시물을 추가할 때, DB에 반영이 실패 했으면 RuntimeException을 던진다.")
@@ -62,7 +62,7 @@ class PostServiceTest {
                 .optionContents(Set.of("내용물1", "내용물2"))
                 .build();
 
-        given(postMapper.addPost(userId, addPostRequest))
+        given(postMapper.save(userId, addPostRequest))
                 .willReturn(numberOfAffectedRow);
 
         // when & then
