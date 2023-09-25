@@ -25,10 +25,10 @@ public class DebatePostFacade extends PostFacadeTemplate {
 
     @Override
     protected void specializedMethod(long userId, AddPostRequest post) {
-        if (!(post instanceof AddDebatePostRequest debatePost)){
+        if (!(post instanceof AddDebatePostRequest debatePost)) {
             throw new RuntimeException();
         }
 
-        postOptionServiceTemplate.savePostOptions(debatePost.getPostId(),debatePost.getOptionContents());
+        postOptionServiceTemplate.savePostOptions(debatePost.getPostId(), debatePost.getOptionContents());
     }
 }
