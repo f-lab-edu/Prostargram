@@ -3,24 +3,23 @@ package flab.project.facade;
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.service.PostHashTagService;
-import flab.project.service.DebatePostOptionService;
+import flab.project.service.PostOptionService;
 import flab.project.service.PostService;
 import flab.project.template.PostFacadeTemplate;
-import flab.project.template.PostOptionServiceTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DebatePostFacade extends PostFacadeTemplate {
 
-    private final PostOptionServiceTemplate postOptionServiceTemplate;
+    private final PostOptionService postOptionService;
 
     public DebatePostFacade(
             PostService postService,
             PostHashTagService postHashTagService,
-            DebatePostOptionService debatePostOptionService
+            PostOptionService postOptionService
     ) {
         super(postService, postHashTagService);
-        this.postOptionServiceTemplate = debatePostOptionService;
+        this.postOptionService = postOptionService;
     }
 
     @Override
@@ -29,6 +28,6 @@ public class DebatePostFacade extends PostFacadeTemplate {
             throw new RuntimeException();
         }
 
-        postOptionServiceTemplate.savePostOptions(debatePost.getPostId(), debatePost.getOptionContents());
+        postOptionService.savePostOptions(debatePost.getPostId(), debatePost.getOptionContents());
     }
 }

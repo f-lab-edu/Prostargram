@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @RequiredArgsConstructor
 @Service
@@ -27,7 +28,7 @@ public class HashTagService {
 
     public Set<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
         // TODO hashTagNames 없으면 어애 되는지 보기.
-        // TODO nonExistHashTags 없으면 어애 되는지 보기
+        // TODO nonExistingHashTags 없으면 어애 되는지 보기
         Set<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);
 
         Set<HashTag> nonExistHashTags = findNonExistingHashTags(hashTagNames, existingHashTags);
