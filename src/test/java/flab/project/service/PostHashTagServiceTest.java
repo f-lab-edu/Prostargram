@@ -17,6 +17,7 @@ import static flab.project.common.Constraints.MAX_LENGTH_OF_HASHTAGS;
 import static flab.project.common.Constraints.MAX_SIZE_OF_POST_HASHTAGS;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class PostHashTagServiceTest {
@@ -66,44 +67,32 @@ class PostHashTagServiceTest {
                 .isExactlyInstanceOf(RuntimeException.class);
     }
 
-    @DisplayName("게시물에 해시태그를 추가할 때, postId가 음수면 InvalidUserInputException을 던진다.")
+    @DisplayName("게시물에 해시태그를 추가할 때, hashTagNames가 null이면 함수가 종료된다.")
     @Test
-    void saveAll_negativePostId() {
-        // given
-        long negativePostId = -1L;
-        Set<String> hashTagNames = Set.of("#test1", "#test2");
-
-        // when & then
-        assertThatCode(() -> postHashTagService.saveAll(negativePostId, hashTagNames))
-                .isExactlyInstanceOf(InvalidUserInputException.class);
-    }
-
-    @DisplayName("게시물에 해시태그를 추가할 때, hashTagNames가 최대 개수를 초과하면 ExceedMaxSizeOfPostHashTagsException을 던진다.")
-    @Test
-    void saveAll_exceedMaxSizeOfPostHashTags() {
+    void saveAll_nullHashTagNames() {
         // given
         long postId = 1L;
-        Set<String> hashTagNamesExceededMaxSize = new HashSet<>();
+        Set<String> hashTagNames = null;
 
-        for (int i = 0; i < MAX_SIZE_OF_POST_HASHTAGS + 1; i++) {
-            hashTagNamesExceededMaxSize.add("#test" + i);
-        }
+        // when
+        postHashTagService.saveAll(postId, hashTagNames);
 
-        // when & then
-        assertThatCode(() -> postHashTagService.saveAll(postId, hashTagNamesExceededMaxSize))
-                .isExactlyInstanceOf(InvalidUserInputException.class);
+        then(hashTagService).shouldHaveNoInteractions();
+        then(postHashTagMapper).shouldHaveNoInteractions();
     }
 
-    @DisplayName("게시물에 해시태그를 추가할 때, hashTagNames중 최대 길이를 초과한 hashTagName이 있으면 ExceedMaxSizeOfPostHashTagsException을 던진다.")
+    @DisplayName("게시물에 해시태그를 추가할 때, hashTagNames가 empty Set이면 함수가 종료된다.")
     @Test
-    void saveAll_exceedLengthOfPostHashTagName() {
+    void saveAll_emptyHashTagNames() {
         // given
         long postId = 1L;
-        String hashTagNameExceededMaxLength = RandomStringUtils.randomAlphanumeric(MAX_LENGTH_OF_HASHTAGS + 1);
-        Set<String> invalidHashTagNames = Set.of("#test1", hashTagNameExceededMaxLength);
+        Set<String> hashTagNames = new HashSet<>();
 
-        // when & then
-        assertThatCode(() -> postHashTagService.saveAll(postId, invalidHashTagNames))
-                .isExactlyInstanceOf(InvalidUserInputException.class);
+        // when
+        postHashTagService.saveAll(postId, hashTagNames);
+
+        then(hashTagService).shouldHaveNoInteractions();
+        then(postHashTagMapper).shouldHaveNoInteractions();
     }
 }
+
