@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static flab.project.common.Constraints.*;
@@ -117,7 +118,7 @@ public class DebatePostControllerTest {
     @Test
     void addDebatePost_withExceedMaxSizeOfHashTagNames() throws Exception {
         // given
-        Set<String> hashTagNamesExceededMaxSize = Set.of("#test1", "#test2", "#test3", "#test4", "#test5", "#test6");
+        Set<String> hashTagNamesExceededMaxSize = createDummyStringSet(MAX_SIZE_OF_POST_HASHTAGS + 1);
         AddDebatePostRequest invalidDebatePostRequest = createAddDebatePost(validPostContent, hashTagNamesExceededMaxSize, validOptionContents);
 
         // when & then
@@ -164,19 +165,19 @@ public class DebatePostControllerTest {
     @Test
     void addDebatePost_invalidSizeOfOptionContents() throws Exception {
         // given
-        Set<String> optionContentsInvalidSize = Set.of("#test1", "#test2", "#test3");
+        Set<String> optionContentsInvalidSize = createDummyStringSet(FIXED_SIZE_OF_DEBATE_POST_OPTIONS + 1);
         AddDebatePostRequest invalidDebatePostRequest = createAddDebatePost(validPostContent, validHashTagNames, optionContentsInvalidSize);
 
         // when & then
-        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.MAX_SIZE_OF_DEBATE_POST_OPTIONS);
+        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.FIXED_SIZE_OF_DEBATE_POST_OPTIONS);
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
 
         // given
-        Set<String> anotherOptionContentsInvalidSize = Set.of("#test1");
+        Set<String> anotherOptionContentsInvalidSize = createDummyStringSet(FIXED_SIZE_OF_DEBATE_POST_OPTIONS - 1);
         AddDebatePostRequest anotherInvalidDebatePostRequest = createAddDebatePost(validPostContent, validHashTagNames, anotherOptionContentsInvalidSize);
 
         // when & then
-        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.MAX_SIZE_OF_DEBATE_POST_OPTIONS);
+        assertThat(optionContentsInvalidSize.size()).isNotEqualTo(Constraints.FIXED_SIZE_OF_DEBATE_POST_OPTIONS);
         validateAddDebatePostRequest(anotherInvalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
@@ -191,6 +192,16 @@ public class DebatePostControllerTest {
 
         // when & then
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
+    }
+
+    private Set<String> createDummyStringSet(int size) {
+        Set<String> hashTagNames = new HashSet<>();
+
+        for (int i = 0; i < size; i++) {
+            hashTagNames.add("#test" + i);
+        }
+
+        return hashTagNames;
     }
 
     private AddDebatePostRequest createAddDebatePost(String postContent, Set<String> hashTagNames, Set<String> optionContents) {

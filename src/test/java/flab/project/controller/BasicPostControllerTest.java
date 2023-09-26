@@ -18,6 +18,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(controllers = BasicPostController.class)
 class BasicPostControllerTest {
@@ -142,7 +142,7 @@ class BasicPostControllerTest {
     @Test
     void addBasicPost_withExceedMaxSizeOfHashTagNames() throws Exception {
         // given
-        Set<String> hashTagNamesExceededMaxSize = Set.of("#test1", "#test2", "#test3", "#test4", "#test5", "#test6");
+        Set<String> hashTagNamesExceededMaxSize = createHashTagNames(MAX_SIZE_OF_POST_HASHTAGS + 1);
         AddBasicPostRequest invalidBasicPost = createAddBasicPostRequest(validPostContent, hashTagNamesExceededMaxSize);
         MockMultipartFile invalidDto = createMultiPartDto("basicPost", invalidBasicPost);
 
@@ -150,6 +150,8 @@ class BasicPostControllerTest {
         assertThat(hashTagNamesExceededMaxSize).hasSizeGreaterThan(MAX_SIZE_OF_POST_HASHTAGS);
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
+
+
 
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
@@ -172,6 +174,16 @@ class BasicPostControllerTest {
                 "application/json",
                 objectMapper.writeValueAsString(basicPostWithoutEmptyContent).getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    private Set<String> createHashTagNames(int size) {
+        Set<String> hashTagNames = new HashSet<>();
+
+        for (int i = 0; i < size; i++) {
+            hashTagNames.add("#test" + i);
+        }
+
+        return hashTagNames;
     }
 
     private AddBasicPostRequest createAddBasicPostRequest(String postContent, Set<String> hashTagNames) {

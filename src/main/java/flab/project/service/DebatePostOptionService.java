@@ -1,6 +1,6 @@
 package flab.project.service;
 
-import static flab.project.common.Constraints.MAX_SIZE_OF_DEBATE_POST_OPTIONS;
+import static flab.project.common.Constraints.FIXED_SIZE_OF_DEBATE_POST_OPTIONS;
 import static flab.project.common.Constraints.MAX_LENGTH_DEBATE_POST_OPTION_CONTENT;
 
 import flab.project.config.exception.InvalidUserInputException;
@@ -22,7 +22,7 @@ public class DebatePostOptionService extends PostOptionServiceTemplate {
 
     @Override
     protected void validateOptionContentsSize(int optionContentsCount) {
-        if (optionContentsCount != MAX_SIZE_OF_DEBATE_POST_OPTIONS) {
+        if (optionContentsCount != FIXED_SIZE_OF_DEBATE_POST_OPTIONS) {
             throw new InvalidUserInputException();
         }
     }

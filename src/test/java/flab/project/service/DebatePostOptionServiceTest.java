@@ -93,7 +93,7 @@ class DebatePostOptionServiceTest {
         // given
         Set<String> invalidPostOptions = new HashSet<>();
 
-        for (int i = 0; i < MAX_SIZE_OF_DEBATE_POST_OPTIONS + 1; i++) {
+        for (int i = 0; i < FIXED_SIZE_OF_DEBATE_POST_OPTIONS + 1; i++) {
             invalidPostOptions.add("#test" + i);
         }
 

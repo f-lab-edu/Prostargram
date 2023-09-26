@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import static flab.project.common.Constraints.*;
@@ -348,7 +349,7 @@ public class PollPostControllerTest {
     @Test
     void addPollPost_moreThanMaxSizeOfOptionContents() throws Exception {
         // given
-        Set<String> optionContentsExceededMaxSize = Set.of("#test1", "#test2", "#test3", "#test4", "#test5", "#test6");
+        Set<String> optionContentsExceededMaxSize = createDummyStringSet(MAX_SIZE_OF_POLL_POST_OPTION_COUNT + 1);
 
         AddPollPostRequest invalidPollPostRequest = AddPollPostRequest.builder()
                 .content(validPostContent)
@@ -368,7 +369,7 @@ public class PollPostControllerTest {
     @Test
     void addPollPost_lessThanMinSizeOfOptionContents() throws Exception {
         // given
-        Set<String> optionContentsLessThanMinSize = Set.of("#test1");
+        Set<String> optionContentsLessThanMinSize = createDummyStringSet(MIN_SIZE_OF_POLL_POST_OPTION_COUNT - 1);
 
         AddPollPostRequest invalidPollPostRequest = AddPollPostRequest.builder()
                 .content(validPostContent)
@@ -442,6 +443,16 @@ public class PollPostControllerTest {
 
         // when & then
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
+    }
+
+    private Set<String> createDummyStringSet(int size) {
+        Set<String> hashTagNames = new HashSet<>();
+
+        for (int i = 0; i < size; i++) {
+            hashTagNames.add("#test" + i);
+        }
+
+        return hashTagNames;
     }
 
     private void validateAddPollPostRequest(AddPollPostRequest pollPostRequest, String requestUrl, ResultMatcher statusCode, ResponseEnum responseEnum) throws Exception {

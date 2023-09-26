@@ -18,7 +18,6 @@ public class PostHashTagService {
     private final HashTagService hashTagService;
 
     public void saveAll(long postId, Set<String> hashTagNames) {
-        // TODO 아니 이거... DTO로 받았으면 이런 검증 필요없었겠는데.. 그걸 위해서 파라미터를 바꿔야하나..? 이건 좀 아니지않나..?
         validateSavePostHashTags(postId, hashTagNames);
 
         // TODO findHashTagIdsByHashTagNames는 내부에서 존재하지 않는 HashTagNames는 해시태그 테이블에 저장해주는 역할까지 하고있다.
