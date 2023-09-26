@@ -4,7 +4,6 @@ import flab.project.data.dto.model.AddPollPostRequest;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.service.*;
 import flab.project.template.PostFacadeTemplate;
-import flab.project.template.PostOptionServiceTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
