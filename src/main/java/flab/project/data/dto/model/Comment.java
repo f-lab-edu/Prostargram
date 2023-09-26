@@ -1,14 +1,15 @@
 package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.sql.Timestamp;
 
 @Builder
 @Getter
+@AllArgsConstructor
 @Schema(description = "댓글 Dto")
 public class Comment {
 
