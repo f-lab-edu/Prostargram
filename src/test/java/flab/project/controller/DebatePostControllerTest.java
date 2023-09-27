@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = DebatePostController.class)
-public class DebatePostControllerTest {
+class DebatePostControllerTest {
 
     private static final String ADD_DEBATE_POST_REQUEST_URL = "/posts/debate-post";
     private static final String validPostContent = "게시물 내용입니다";
