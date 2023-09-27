@@ -6,6 +6,7 @@ import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -60,11 +61,9 @@ class BasicPostControllerTest {
 
         MockMultipartFile dto = createMultiPartDto("basicPost", validBasicPost);
 
-        given(postFacadeTemplate.addPost(anyLong(), any(AddBasicPostRequest.class)))
-                .willReturn(new SuccessResponse<>());
-
         // when & then
         validateAddBasicPost(validContentImages, dto, status().isOk(), SUCCESS);
+        then(postFacadeTemplate).should().addPost(anyLong(), any(AddBasicPostRequest.class));
     }
 
     @DisplayName("일반 게시물을 생성할 때, contentImages가 없으면 INVALID_USER_INPUT을 반환한다.")

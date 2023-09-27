@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,11 +65,9 @@ public class PollPostControllerTest {
                 .allowMultipleVotes(true)
                 .build();
 
-        given(postFacadeTemplate.addPost(anyLong(), any(AddPollPostRequest.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         validateAddPollPostRequest(validPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isOk(), SUCCESS);
+        then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
     @DisplayName("통계 게시물을 생성할 때, 시작 날짜가 오늘이여도 된다.")
@@ -85,11 +84,9 @@ public class PollPostControllerTest {
                 .allowMultipleVotes(true)
                 .build();
 
-        given(postFacadeTemplate.addPost(anyLong(), any(AddPollPostRequest.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         validateAddPollPostRequest(validPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isOk(), SUCCESS);
+        then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
     @DisplayName("통계 게시물을 생성할 때, 종료 날짜가 오늘이여도 된다.")
@@ -107,11 +104,9 @@ public class PollPostControllerTest {
                 .allowMultipleVotes(true)
                 .build();
 
-        given(postFacadeTemplate.addPost(anyLong(), any(AddPollPostRequest.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         validateAddPollPostRequest(validPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isOk(), SUCCESS);
+        then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")

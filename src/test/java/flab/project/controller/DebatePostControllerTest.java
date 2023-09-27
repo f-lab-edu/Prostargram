@@ -26,6 +26,7 @@ import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,11 +53,9 @@ public class DebatePostControllerTest {
         // given
         AddDebatePostRequest validDebatePostRequest = createAddDebatePost(validPostContent, validHashTagNames, validOptionContents);
 
-        given(postFacadeTemplate.addPost(anyLong(), any(AddDebatePostRequest.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         validateAddDebatePostRequest(validDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isOk(), SUCCESS);
+        then(postFacadeTemplate).should().addPost(anyLong(), any(AddDebatePostRequest.class));
     }
 
     @DisplayName("토론 게시물을 생성할 때, 비어 있는 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")

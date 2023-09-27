@@ -21,7 +21,7 @@ public class BasicPostController {
     private final PostFacadeTemplate basicPostFacade;
 
     @PostMapping("/posts/basic-post")
-    public SuccessResponse addBasicPost(
+    public SuccessResponse<Void> addBasicPost(
             @RequestPart("basicPost") @Validated AddBasicPostRequest basicPost,
             @RequestPart("contentImages") List<MultipartFile> contentImages
     ) {
@@ -29,6 +29,8 @@ public class BasicPostController {
 
         basicPost.setContentImages(contentImages);
 
-        return basicPostFacade.addPost(userId, basicPost);
+        basicPostFacade.addPost(userId, basicPost);
+
+        return new SuccessResponse<>();
     }
 }

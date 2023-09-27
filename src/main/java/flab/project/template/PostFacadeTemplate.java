@@ -14,14 +14,12 @@ public abstract class PostFacadeTemplate {
     private final PostHashTagService postHashTagService;
 
     @Transactional
-    public SuccessResponse addPost(long userId, AddPostRequest post) {
+    public void addPost(long userId, AddPostRequest post) {
         postService.addPost(userId, post);
 
         postHashTagService.saveAll(post.getPostId(), post.getHashTagNames());
 
         specializedMethod(userId, post);
-
-        return new SuccessResponse();
     }
 
     protected abstract void specializedMethod(long userId, AddPostRequest post);

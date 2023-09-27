@@ -17,11 +17,13 @@ public class PollPostController {
     private final PostFacadeTemplate pollPostFacade;
 
     @PostMapping("/posts/poll-post")
-    public SuccessResponse addBasicPost(
+    public SuccessResponse<Void> addBasicPost(
             @RequestBody @Validated AddPollPostRequest pollPost
     ) {
         long userId = 1L;
 
-        return pollPostFacade.addPost(userId, pollPost);
+        pollPostFacade.addPost(userId, pollPost);
+
+        return new SuccessResponse<>();
     }
 }
