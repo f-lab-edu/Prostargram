@@ -1,5 +1,6 @@
 package flab.project.service;
 
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.mapper.PostMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +28,6 @@ class PostServiceTest {
     void addPost() {
         // given
         long userId = 1;
-        int numberOfAffectedRow = 1;
 
         AddDebatePostRequest addPostRequest = AddDebatePostRequest.builder()
                 .postId(1L)
@@ -38,22 +36,16 @@ class PostServiceTest {
                 .optionContents(Set.of("내용물1", "내용물2"))
                 .build();
 
-        given(postMapper.save(userId, addPostRequest))
-                .willReturn(numberOfAffectedRow);
-
         // when & then
-        assertThatCode(() -> postService.addPost(userId, addPostRequest))
-                .doesNotThrowAnyException();
-
+        postService.addPost(userId, addPostRequest);
         then(postMapper).should().save(userId, addPostRequest);
     }
 
-    @DisplayName("게시물을 추가할 때, DB에 반영이 실패 했으면 RuntimeException을 던진다.")
+    @DisplayName("게시물을 추가할 때, userId가 양수가 아니면 InvalidUserInput 예외를 던진다.")
     @Test
-    void addPost_failAffectToDB() {
+    void addPost_negativeUserId() {
         // given
-        long userId = 1;
-        int numberOfAffectedRow = 2;
+        long userId = -1;
 
         AddDebatePostRequest addPostRequest = AddDebatePostRequest.builder()
                 .postId(1L)
@@ -62,11 +54,8 @@ class PostServiceTest {
                 .optionContents(Set.of("내용물1", "내용물2"))
                 .build();
 
-        given(postMapper.save(userId, addPostRequest))
-                .willReturn(numberOfAffectedRow);
-
         // when & then
-        assertThatThrownBy(() -> postService.addPost(userId, addPostRequest))
-                .isExactlyInstanceOf(RuntimeException.class);
+        assertThatCode(() -> postService.addPost(userId, addPostRequest))
+                .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 }

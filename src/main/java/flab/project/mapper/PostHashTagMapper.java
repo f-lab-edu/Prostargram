@@ -8,5 +8,5 @@ import java.util.Set;
 @Mapper
 public interface PostHashTagMapper {
 
-    int saveAll(@Param("postId") long postId, @Param("hashTagIds") Set<Long> hashTagIds);
+    void saveAll(@Param("postId") long postId, @Param("hashTagIds") Set<Long> hashTagIds);
 }

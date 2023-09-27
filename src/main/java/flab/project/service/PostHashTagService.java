@@ -21,16 +21,20 @@ public class PostHashTagService {
     public void saveAll(long postId, Set<String> hashTagNames) {
         // TODO findHashTagIdsByHashTagNames는 내부에서 존재하지 않는 HashTagNames는 해시태그 테이블에 저장해주는 역할까지 하고있다.
         // TODO 이게 괜찮은걸까..?
+        validatePostIdPositive(postId);
+
         if (ObjectUtils.isEmpty(hashTagNames)) {
             return;
         }
 
         Set<Long> hashTagIds = hashTagService.findHashTagIdsByHashTagNames(hashTagNames);
 
-        int numberOfAffectedRow = postHashTagMapper.saveAll(postId, hashTagIds);
+        postHashTagMapper.saveAll(postId, hashTagIds);
+    }
 
-        if (numberOfAffectedRow != hashTagIds.size()) {
-            throw new RuntimeException();
+    private void validatePostIdPositive(long postId) {
+        if (postId <= 0) {
+            throw new InvalidUserInputException();
         }
     }
 }

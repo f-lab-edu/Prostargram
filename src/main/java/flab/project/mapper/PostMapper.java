@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface PostMapper {
 
-    int save(@Param("userId") long userId, @Param("post") AddPostRequest post);
+    void save(@Param("userId") long userId, @Param("post") AddPostRequest post);
 }
