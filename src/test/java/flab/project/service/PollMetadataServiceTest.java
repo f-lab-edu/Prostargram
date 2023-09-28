@@ -1,5 +1,6 @@
 package flab.project.service;
 
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.AddPollPostRequest;
 import flab.project.mapper.PollMetadataMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class PollMetadataServiceTest {
@@ -27,76 +28,38 @@ class PollMetadataServiceTest {
     @Test
     void addMetadata(){
         // given
-        int numberOfAffectedRow = 1;
-
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         AddPollPostRequest pollPostRequest = createPollPostRequest(startDate, endDate);
 
-        given(pollMetadataMapper.save(pollPostRequest))
-                .willReturn(numberOfAffectedRow);
-
         // when & then
-        assertThatCode(() -> pollMetadataService.addMetadata(pollPostRequest))
-                .doesNotThrowAnyException();
-    }
-
-    @DisplayName("poll_metadata를 추가할 때, DB에 반영하는데 실패하면 RuntimeException을 던진다.")
-    @Test
-    void addMetadata_failReflectToDB(){
-        // given
-        int numberOfAffectedRow = -1;
-
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().plusDays(1);
-        AddPollPostRequest pollPostRequest = createPollPostRequest(startDate, endDate);
-
-        given(pollMetadataMapper.save(pollPostRequest))
-                .willReturn(numberOfAffectedRow);
-
-        // when & then
-        assertThatCode(() -> pollMetadataService.addMetadata(pollPostRequest))
-                .isExactlyInstanceOf(RuntimeException.class);
+        pollMetadataService.addMetadata(pollPostRequest);
+        then(pollMetadataMapper).should().save(pollPostRequest);
     }
 
     @DisplayName("poll_metadata를 추가할 때, startDate와 EndDate가 같은 날이여도 된다.")
     @Test
     void addMetadata_sameStartDateAndEndDate(){
         // given
-        int numberOfAffectedRow = 1;
-
-        LocalDate targetDay = LocalDate.now();
-        LocalDate startDate = targetDay;
-        LocalDate endDate = targetDay;
-
-        AddPollPostRequest pollPostRequest = createPollPostRequest(startDate, endDate);
-
-        given(pollMetadataMapper.save(pollPostRequest))
-                .willReturn(numberOfAffectedRow);
+        AddPollPostRequest pollPostRequest = createPollPostRequest(LocalDate.now(), LocalDate.now());
 
         // when & then
-        assertThatCode(() -> pollMetadataService.addMetadata(pollPostRequest))
-                .doesNotThrowAnyException();
+        pollMetadataService.addMetadata(pollPostRequest);
+        then(pollMetadataMapper).should().save(pollPostRequest);
     }
 
     @DisplayName("poll_metadata를 추가할 때, endDate가 startDate보다 과거이면 InvalidUserInputException 던진다.")
     @Test
     void addMetadata_EndDateBeforeStartDate(){
         // given
-        int numberOfAffectedRow = 1;
-
-        LocalDate targetDay = LocalDate.now();
-        LocalDate startDate = targetDay;
-        LocalDate endDate = targetDay;
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(1);
 
         AddPollPostRequest pollPostRequest = createPollPostRequest(startDate, endDate);
 
-        given(pollMetadataMapper.save(pollPostRequest))
-                .willReturn(numberOfAffectedRow);
-
         // when & then
         assertThatCode(() -> pollMetadataService.addMetadata(pollPostRequest))
-                .doesNotThrowAnyException();
+                .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
     private static AddPollPostRequest createPollPostRequest(LocalDate startDate, LocalDate endDate) {

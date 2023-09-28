@@ -18,11 +18,7 @@ public class PollMetadataService {
     public void addMetadata(AddPollPostRequest pollPost) {
         validateIsEndDateAfterStartDate(pollPost);
 
-        int numberOfAffectedRow = pollMetadataMapper.save(pollPost);
-
-        if (numberOfAffectedRow != 1) {
-            throw new RuntimeException();
-        }
+        pollMetadataMapper.save(pollPost);
     }
 
     private void validateIsEndDateAfterStartDate(AddPollPostRequest pollPost) {

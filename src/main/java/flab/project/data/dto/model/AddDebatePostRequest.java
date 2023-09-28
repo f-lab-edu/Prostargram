@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import static flab.project.data.enums.PostType.DEBATE;
 
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class AddDebatePostRequest extends AddPostRequest {
 

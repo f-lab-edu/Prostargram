@@ -25,6 +25,7 @@ public class File implements Uploadable {
 
     private ObjectMetadata getObjectMetadata(MultipartFile file) {
         try {
+            ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(file.getInputStream().available());
 
             return objectMetadata;

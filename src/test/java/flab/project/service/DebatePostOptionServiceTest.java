@@ -17,6 +17,7 @@ import static flab.project.common.Constraints.FIXED_SIZE_OF_DEBATE_POST_OPTIONS;
 import static flab.project.common.Constraints.MAX_LENGTH_DEBATE_POST_OPTION_CONTENT;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class DebatePostOptionServiceTest {
@@ -32,13 +33,11 @@ class DebatePostOptionServiceTest {
     @DisplayName("게시물 보기를 추가한다.")
     @Test
     void savePostOptions() {
-        // given
-        given(postOptionMapper.saveAll(validPostId, validPostOptions))
-                .willReturn(validPostOptions.size());
+        // when
+        debatePostOptionService.savePostOptions(validPostId, validPostOptions);
 
-        // when & then
-        assertThatCode(() -> debatePostOptionService.savePostOptions(validPostId, validPostOptions))
-                .doesNotThrowAnyException();
+        // then
+        then(postOptionMapper).should().saveAll(validPostId, validPostOptions);
     }
 
     @DisplayName("게시물 보기를 추가할 때, postId가 음수면 INVALID_USER_INPUT을 반환한다.")

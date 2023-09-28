@@ -43,7 +43,7 @@ class PostHashTagServiceTest {
         then(postHashTagMapper).should().saveAll(postId, retrievedHashTagIds);
     }
 
-    @DisplayName("게시물에 해시태그를 추가할 때, postId가 음수면 InValidUserInput 예외를 던진다.")
+    @DisplayName("게시물에 해시태그를 추가할 때, postId가 음수면 InvalidUserInput 예외를 던진다.")
     @Test
     void saveAll_negativePostId() {
         // given

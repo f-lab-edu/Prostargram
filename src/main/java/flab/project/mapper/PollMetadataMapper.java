@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface PollMetadataMapper {
 
-    int save(@Param("pollPost") AddPollPostRequest pollPost);
+    void save(@Param("pollPost") AddPollPostRequest pollPost);
 }

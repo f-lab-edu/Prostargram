@@ -14,11 +14,7 @@ public abstract class PostOptionServiceTemplate {
     public void savePostOptions(long postId, Set<String> optionContents) {
         validateSavePostOptions(postId, optionContents);
 
-        int numberOfAffectedRow = postOptionMapper.saveAll(postId, optionContents);
-
-        if (numberOfAffectedRow != optionContents.size()) {
-            throw new RuntimeException();
-        }
+        postOptionMapper.saveAll(postId, optionContents);
     }
 
     private void validateSavePostOptions(long postId, Set<String> optionContents) {

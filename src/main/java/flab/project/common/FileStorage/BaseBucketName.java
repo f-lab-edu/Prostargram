@@ -1,11 +1,10 @@
 package flab.project.common.FileStorage;
 
 import flab.project.data.enums.FileType;
-import flab.project.data.enums.PostType;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import static flab.project.data.enums.FileType.POST_IMAGE;
-import static flab.project.data.enums.FileType.PROFILE_IMAGE;
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaseBucketName {
 
     private static final String PROFILE_IMAGE_BASE_BUCKET_NAME = "profileimage";
