@@ -2,8 +2,8 @@ package flab.project.facade;
 
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.data.dto.model.AddPollPostRequest;
+import flab.project.service.DebatePostOptionService;
 import flab.project.service.PostHashTagService;
-import flab.project.service.PostOptionService;
 import flab.project.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class DebatePostFacadeTest {
     @Mock
     PostHashTagService postHashTagService;
     @Mock
-    PostOptionService postOptionService;
+    DebatePostOptionService debatePostOptionService;
 
     @DisplayName("DebatePost를 생성할 수 있다.")
     @Test
@@ -45,7 +45,7 @@ class DebatePostFacadeTest {
         debatePostFacade.addPost(userId, validDebatePostRequest);
         then(postService).should().addPost(userId, validDebatePostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validDebatePostRequest.getHashTagNames()));
-        then(postOptionService).should().savePostOptions(anyLong(), eq(validDebatePostRequest.getOptionContents()));
+        then(debatePostOptionService).should().savePostOptions(anyLong(), eq(validDebatePostRequest.getOptionContents()));
     }
 
     @DisplayName("AddDebatePostRequest가 아닌 다른 AddPostReuqest의 자식이 매개변수로 들어올 경우 RuntimeException을 던진다.")

@@ -4,23 +4,24 @@ import flab.project.data.dto.model.AddPollPostRequest;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.service.*;
 import flab.project.template.PostFacadeTemplate;
+import flab.project.template.PostOptionServiceTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PollPostFacade extends PostFacadeTemplate {
 
     private final PollMetadataService pollMetadataService;
-    private final PostOptionService postOptionService;
+    private final PostOptionServiceTemplate postOptionServiceTemplate;
 
     public PollPostFacade(
             PostService postService,
             PostHashTagService postHashTagService,
             PollMetadataService pollMetadataService,
-            PostOptionService postOptionService
+            PollPostOptionService pollPostOptionService
     ) {
         super(postService, postHashTagService);
         this.pollMetadataService = pollMetadataService;
-        this.postOptionService = postOptionService;
+        this.postOptionServiceTemplate = pollPostOptionService;
     }
 
     @Override
@@ -30,6 +31,6 @@ public class PollPostFacade extends PostFacadeTemplate {
         }
 
         pollMetadataService.addMetadata(pollPost);
-        postOptionService.savePostOptions(pollPost.getPostId(), pollPost.getOptionContents());
+        postOptionServiceTemplate.savePostOptions(pollPost.getPostId(), pollPost.getOptionContents());
     }
 }

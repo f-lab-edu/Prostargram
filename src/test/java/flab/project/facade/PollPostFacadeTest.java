@@ -30,7 +30,7 @@ class PollPostFacadeTest {
     @Mock
     PollMetadataService pollMetadataService;
     @Mock
-    PostOptionService postOptionService;
+    PollPostOptionService pollPostOptionService;
 
     @DisplayName("통계 게시물을 작성할 수 있다.")
     @Test
@@ -54,7 +54,7 @@ class PollPostFacadeTest {
         then(postService).should().addPost(userId, validPollPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validPollPostRequest.getHashTagNames()));
         then(pollMetadataService).should().addMetadata(validPollPostRequest);
-        then(postOptionService).should().savePostOptions(anyLong(), eq(validPollPostRequest.getOptionContents()));
+        then(pollPostOptionService).should().savePostOptions(anyLong(), eq(validPollPostRequest.getOptionContents()));
     }
 
     @DisplayName("AddPollPostRequest가 아닌 다른 AddPostReuqest의 자식이 매개변수로 들어올 경우 RuntimeException을 던진다.")
