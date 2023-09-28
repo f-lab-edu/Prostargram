@@ -1,8 +1,5 @@
 package flab.project.service;
 
-import static flab.project.common.Constraints.MAX_LENGTH_OF_HASHTAGS;
-import static flab.project.common.Constraints.MAX_SIZE_OF_POST_HASHTAGS;
-
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.PostHashTagMapper;
 import lombok.RequiredArgsConstructor;

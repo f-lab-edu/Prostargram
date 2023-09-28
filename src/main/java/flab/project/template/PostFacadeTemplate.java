@@ -1,6 +1,5 @@
 package flab.project.template;
 
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostService;
