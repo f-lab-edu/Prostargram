@@ -31,12 +31,17 @@ public class BasicPostFacade extends PostFacadeTemplate {
     }
 
     @Override
-    protected void specializedMethod(long userId, AddPostRequest post) {
-        if (!(post instanceof AddBasicPostRequest basicPost)) {
+    protected void validateTypeOfPost(AddPostRequest post) {
+        if (!(post instanceof AddBasicPostRequest)) {
             throw new RuntimeException();
         }
+    }
 
-        Set<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPost.getContentImages(), FileType.POST_IMAGE);
-        postImageService.saveAll(basicPost.getPostId(), uploadedFileUrls);
+    @Override
+    protected void handlePostMetadata(long userId, AddPostRequest post) {
+        AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
+
+        Set<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPostRequest.getContentImages(), FileType.POST_IMAGE);
+        postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls);
     }
 }

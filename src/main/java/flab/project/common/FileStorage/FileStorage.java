@@ -50,7 +50,7 @@ public class FileStorage {
 
     public List<String> getFileNamesInBucket(long userId) {
         String folder = "" + userId;
-        String targetBucketName = BaseBucketName.getBaseBucektName(PROFILE_IMAGE);
+        String targetBucketName = BucketUtils.getBaseBucketName(PROFILE_IMAGE);
 
         ListObjectsRequest listObjectsRequest
                 = new ListObjectsRequest()

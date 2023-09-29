@@ -29,9 +29,7 @@ public class HashTagService {
     // todo 이거 테스트 코드 어떻게 짜야하지?
     public Set<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
         if (ObjectUtils.isEmpty(hashTagNames)) {
-            //todo to 멘토님, PostHashTagService.saveAll()에서는 hashTagNames이 없으면 메서드를 종료 시켰는데 여기서는 반환타입이 Set이라서
-            //todo null을 반환하는데 null을 반환하는건 위험한거 같은데 어떻게 느끼시나요?
-            return null;
+            return new HashSet<>();
         }
 
         Set<HashTag> existingHashTags = hashTagMapper.getHashTagsByHashtagNames(hashTagNames);

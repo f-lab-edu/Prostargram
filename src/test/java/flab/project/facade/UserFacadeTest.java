@@ -1,6 +1,6 @@
 package flab.project.facade;
 
-import flab.project.common.FileStorage.BaseBucketName;
+import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
@@ -65,7 +65,7 @@ class UserFacadeTest {
         then(fileStorage).should().getFileNamesInBucket(userId);
         then(fileStorage).should().uploadFile(userId, multipartFile, PROFILE_IMAGE);
         then(userService).should().updateProfileImage(userId, uploadedProfileImageUrl);
-        then(fileStorage).should().deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), "test-file");
+        then(fileStorage).should().deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), "test-file");
     }
 
     @DisplayName("DB에 새로 등록된 프로필 이미지 반영을 실패했을 경우, 업로드된 파일이 삭제되어야 한다.")
@@ -91,7 +91,7 @@ class UserFacadeTest {
         assertThatThrownBy(() -> userFacade.updateProfileImage(userId, multipartFile))
                 .isInstanceOf(FailedToUpdateProfileImageToDatabaseException.class);
 
-        then(fileStorage).should().deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), uploadedProfileImageUrl);
+        then(fileStorage).should().deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), uploadedProfileImageUrl);
     }
 
     @DisplayName("기존 파일이 없을 경우, 기존 파일 삭제 메서드는 호출되지 않는다.")
@@ -119,6 +119,6 @@ class UserFacadeTest {
         userFacade.updateProfileImage(userId, multipartFile);
 
         // then
-        then(fileStorage).should(never()).deleteFile(eq(BaseBucketName.getBaseBucektName(PROFILE_IMAGE)), anyString());
+        then(fileStorage).should(never()).deleteFile(eq(BucketUtils.getBaseBucketName(PROFILE_IMAGE)), anyString());
     }
 }

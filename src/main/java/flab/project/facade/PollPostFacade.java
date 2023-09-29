@@ -25,12 +25,17 @@ public class PollPostFacade extends PostFacadeTemplate {
     }
 
     @Override
-    protected void specializedMethod(long userId, AddPostRequest post) {
-        if (!(post instanceof AddPollPostRequest pollPost)) {
+    protected void validateTypeOfPost(AddPostRequest post) {
+        if (!(post instanceof AddPollPostRequest)) {
             throw new RuntimeException();
         }
+    }
 
-        pollMetadataService.addMetadata(pollPost);
-        postOptionServiceTemplate.savePostOptions(pollPost.getPostId(), pollPost.getOptionContents());
+    @Override
+    protected void handlePostMetadata(long userId, AddPostRequest post) {
+        AddPollPostRequest pollPostRequest = (AddPollPostRequest) post;
+
+        pollMetadataService.addMetadata(pollPostRequest);
+        postOptionServiceTemplate.savePostOptions(pollPostRequest.getPostId(), pollPostRequest.getOptionContents());
     }
 }

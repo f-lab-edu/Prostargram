@@ -1,7 +1,7 @@
 package flab.project.data.dto.file;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import flab.project.common.FileStorage.BaseBucketName;
+import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionExtractor;
 import flab.project.data.enums.FileType;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class File implements Uploadable {
     private final ObjectMetadata objectMetadata;
 
     public File(long suffix, MultipartFile file, FileType fileType) {
-        this.bucketName = BaseBucketName.getBaseBucektName(fileType) + "/" + suffix;
+        this.bucketName = BucketUtils.getBaseBucketName(fileType) + "/" + suffix;
         this.fileName = createFileName(file);
         this.objectMetadata = getObjectMetadata(file);
     }

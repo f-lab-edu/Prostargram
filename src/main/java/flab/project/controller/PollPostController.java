@@ -16,7 +16,7 @@ public class PollPostController {
 
     private final PostFacadeTemplate pollPostFacade;
 
-    @PostMapping("/posts/poll-post")
+    @PostMapping("/posts/poll")
     public SuccessResponse<Void> addBasicPost(
             @RequestBody @Validated AddPollPostRequest pollPost
     ) {

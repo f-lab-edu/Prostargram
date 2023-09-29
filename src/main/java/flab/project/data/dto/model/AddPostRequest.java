@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class AddPostRequest {
+public abstract class AddPostRequest {
     
     protected long postId;
 
@@ -24,4 +24,6 @@ public class AddPostRequest {
 
     @Size(max = 5)
     protected Set<@NotBlank @Length(max = 15) String> hashTagNames;
+
+    abstract protected String getPostType();
 }

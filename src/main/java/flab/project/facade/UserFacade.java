@@ -1,6 +1,6 @@
 package flab.project.facade;
 
-import flab.project.common.FileStorage.BaseBucketName;
+import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
@@ -34,7 +34,7 @@ public class UserFacade {
             boolean isSuccess = userService.updateProfileImage(userId, uploadedProfileImgUrl);
 
             if (!isSuccess) {
-                fileStorage.deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), uploadedProfileImgUrl);
+                fileStorage.deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), uploadedProfileImgUrl);
 
                 throw new FailedToUpdateProfileImageToDatabaseException();
             }
@@ -42,7 +42,7 @@ public class UserFacade {
             if (fileNamesInBucket.size() > 0) {
                 String existingProfileImgFileName = fileNamesInBucket.get(0);
 
-                fileStorage.deleteFile(BaseBucketName.getBaseBucektName(PROFILE_IMAGE), existingProfileImgFileName);
+                fileStorage.deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), existingProfileImgFileName);
             }
 
             return new SuccessResponse();

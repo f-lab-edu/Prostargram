@@ -14,12 +14,15 @@ public abstract class PostFacadeTemplate {
 
     @Transactional
     public void addPost(long userId, AddPostRequest post) {
+        validateTypeOfPost(post);
+
         postService.addPost(userId, post);
 
         postHashTagService.saveAll(post.getPostId(), post.getHashTagNames());
 
-        specializedMethod(userId, post);
+        handlePostMetadata(userId, post);
     }
 
-    protected abstract void specializedMethod(long userId, AddPostRequest post);
+    protected abstract void validateTypeOfPost(AddPostRequest post);
+    protected abstract void handlePostMetadata(long userId, AddPostRequest post);
 }

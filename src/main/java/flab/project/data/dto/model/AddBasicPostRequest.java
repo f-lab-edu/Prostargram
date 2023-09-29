@@ -15,10 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 @SuperBuilder
 @NoArgsConstructor
 @Getter
-@Setter
 public class AddBasicPostRequest extends AddPostRequest {
 
+    @Getter
     private static final PostType postType = BASIC;
 
+    @Setter
     private List<MultipartFile> contentImages;
 }

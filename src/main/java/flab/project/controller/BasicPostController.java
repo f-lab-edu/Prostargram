@@ -20,7 +20,7 @@ public class BasicPostController {
 
     private final PostFacadeTemplate basicPostFacade;
 
-    @PostMapping("/posts/basic-post")
+    @PostMapping("/posts/basic")
     public SuccessResponse<Void> addBasicPost(
             @RequestPart("basicPost") @Validated AddBasicPostRequest basicPost,
             @RequestPart("contentImages") List<MultipartFile> contentImages

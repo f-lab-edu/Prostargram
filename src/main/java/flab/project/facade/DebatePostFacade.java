@@ -24,11 +24,16 @@ public class DebatePostFacade extends PostFacadeTemplate {
     }
 
     @Override
-    protected void specializedMethod(long userId, AddPostRequest post) {
-        if (!(post instanceof AddDebatePostRequest debatePost)) {
+    protected void validateTypeOfPost(AddPostRequest post) {
+        if (!(post instanceof AddDebatePostRequest)) {
             throw new RuntimeException();
         }
+    }
 
-        postOptionServiceTemplate.savePostOptions(debatePost.getPostId(), debatePost.getOptionContents());
+    @Override
+    protected void handlePostMetadata(long userId, AddPostRequest post) {
+        AddDebatePostRequest debatePostRequest = (AddDebatePostRequest) post;
+
+        postOptionServiceTemplate.savePostOptions(debatePostRequest.getPostId(), debatePostRequest.getOptionContents());
     }
 }

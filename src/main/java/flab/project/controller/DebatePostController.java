@@ -16,7 +16,7 @@ public class DebatePostController {
 
     private final PostFacadeTemplate debatePostFacade;
 
-    @PostMapping("/posts/debate-post")
+    @PostMapping("/posts/debate")
     public SuccessResponse<Void> addDebatePost(
             @RequestBody @Validated AddDebatePostRequest debatePost
     ) {

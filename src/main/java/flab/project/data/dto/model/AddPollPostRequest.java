@@ -21,6 +21,7 @@ import static flab.project.data.enums.PostType.POLL;
 @NoArgsConstructor
 public class AddPollPostRequest extends AddPostRequest {
 
+    @Getter
     private static final PostType postType = POLL;
 
     @Length(max = 35)
