@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = PollPostController.class)
 class PollPostControllerTest {
-    private static final String ADD_POLL_POST_REQUEST_URL = "/posts/poll-post";
+    private static final String ADD_POLL_POST_REQUEST_URL = "/posts/poll";
     private static final String validPostContent = "게시물 내용입니다";
     private static final String validSubject = "통계 주제입니다";
     private static final LocalDate validStartDate = LocalDate.now();

@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 @WebMvcTest(controllers = BasicPostController.class)
 class BasicPostControllerTest {
 
-    private static final String ADD_BASIC_POST_REQUEST_URL = "/posts/basic-post";
+    private static final String ADD_BASIC_POST_REQUEST_URL = "/posts/basic";
     private static final String validPostContent = "게시물 내용입니다";
     private static final Set<String> validHashTagNames = Set.of("#test1", "#test2");
     private static final MockMultipartFile validContentImage = createMockMultiPartFile();

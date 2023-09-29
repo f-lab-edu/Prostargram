@@ -18,9 +18,13 @@ import static flab.project.data.enums.PostType.DEBATE;
 @Getter
 public class AddDebatePostRequest extends AddPostRequest {
 
-    @Getter
     private static final PostType postType = DEBATE;
 
     @Size(min = 2, max = 2)
     private Set<@NotBlank @Length(max = 35) String> optionContents;
+
+    @Override
+    protected PostType getPostType() {
+        return postType;
+    }
 }

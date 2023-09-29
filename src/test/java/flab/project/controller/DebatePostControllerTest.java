@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = DebatePostController.class)
 class DebatePostControllerTest {
 
-    private static final String ADD_DEBATE_POST_REQUEST_URL = "/posts/debate-post";
+    private static final String ADD_DEBATE_POST_REQUEST_URL = "/posts/debate";
     private static final String validPostContent = "게시물 내용입니다";
     private static final Set<String> validHashTagNames = Set.of("#test1", "#test2");
     private static final Set<String> validOptionContents = Set.of("content1", "content2");

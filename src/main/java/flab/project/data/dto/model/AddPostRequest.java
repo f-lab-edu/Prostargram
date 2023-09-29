@@ -1,5 +1,6 @@
 package flab.project.data.dto.model;
 
+import flab.project.data.enums.PostType;
 import jakarta.validation.constraints.NotBlank;
 
 
@@ -25,5 +26,5 @@ public abstract class AddPostRequest {
     @Size(max = 5)
     protected Set<@NotBlank @Length(max = 15) String> hashTagNames;
 
-    abstract protected String getPostType();
+    protected abstract PostType getPostType();
 }
