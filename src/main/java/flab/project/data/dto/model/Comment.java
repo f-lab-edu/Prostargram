@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -23,13 +23,13 @@ public class Comment {
     private long commentId;
 
     @Schema(example = "1", description = "대댓글이 존재할 경우, 가장 최상단의 댓글")
-    private long rootId;
+    private Long rootId;
 
     @Schema(example = "화이팅 합시다!")
     private String content;
 
     @Schema(example = "2023-09-19 12:00:00")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @Schema(example = "1400", defaultValue = "0")
     private long likeCount;
