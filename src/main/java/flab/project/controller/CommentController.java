@@ -1,6 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.dto.model.Comment;
 import flab.project.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,8 @@ public class CommentController {
             @Parameter(name = "content", description = "게시물의 내용", in = ParameterIn.QUERY, required = true)})
     @PostMapping(value = "/posts/{postId}/comment")
     public SuccessResponse addComment(@PathVariable("postId") @Positive long postId, @RequestParam("userId") long userId, @RequestParam("content") String content) {
-        return commentService.addComment(postId, userId, content);
+        Comment comment = commentService.addComment(postId, userId, content);
+
+        return new SuccessResponse<>(comment);
     }
 }
