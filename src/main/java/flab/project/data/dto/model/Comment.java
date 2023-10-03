@@ -22,7 +22,7 @@ public class Comment {
     @Schema(example = "1")
     private long commentId;
 
-    @Schema(example = "1", description = "대댓글이 존재할 경우, 가장 최상단의 댓글")
+    @Schema(example = "1", description = "대댓글이 존재할 경우, 가장 최상단의 댓글", nullable = true)
     private Long rootId;
 
     @Schema(example = "화이팅 합시다!")
@@ -36,4 +36,8 @@ public class Comment {
 
     @Schema(example = "14", defaultValue = "0")
     private long commentCount;
+
+    public void setRootId(Long rootId) {
+        this.rootId = rootId;
+    }
 }
