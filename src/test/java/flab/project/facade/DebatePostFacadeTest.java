@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.data.dto.model.AddPollPostRequest;
 import flab.project.service.DebatePostOptionService;
@@ -11,8 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -48,9 +52,9 @@ class DebatePostFacadeTest {
         then(debatePostOptionService).should().savePostOptions(anyLong(), eq(validDebatePostRequest.getOptionContents()));
     }
 
-    @DisplayName("AddDebatePostRequest가 아닌 다른 AddPostReuqest의 자식이 매개변수로 들어올 경우 RuntimeException을 던진다.")
+    @DisplayName("AddPollPostRequest가 매개변수로 들어올 경우 RuntimeException을 던진다.")
     @Test
-    void addPost_anotherChildOfAddPostRequest() {
+    void addPost_withAddPollPostRequest() {
         long userId = 1L;
         AddPollPostRequest pollPostRequest = AddPollPostRequest.builder()
                 .content("게시물 내용입니다")
@@ -64,5 +68,29 @@ class DebatePostFacadeTest {
 
         assertThatThrownBy(() -> debatePostFacade.addPost(userId, pollPostRequest))
                 .isInstanceOf(RuntimeException.class);
+    }
+
+    @DisplayName("AddBasicPostRequest가 매개변수로 들어올 경우 RuntimeException을 던진다.")
+    @Test
+    void addPost_withAddBasicPostRequest() {
+        long userId = 1L;
+        List<MultipartFile> multiPartFiles = List.of((MultipartFile) createMockMultiPartFile(), (MultipartFile) createMockMultiPartFile());
+        AddBasicPostRequest basicPostRequest = AddBasicPostRequest.builder()
+                .content("게시물 내용입니다")
+                .hashTagNames(Set.of("#test1", "#test2"))
+                .contentImages(multiPartFiles)
+                .build();
+
+        assertThatThrownBy(() -> debatePostFacade.addPost(userId, basicPostRequest))
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    private static MockMultipartFile createMockMultiPartFile() {
+        return new MockMultipartFile(
+                "contentImages",
+                "test.jpg",
+                "text/plain",
+                "test file".getBytes()
+        );
     }
 }

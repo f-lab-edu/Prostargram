@@ -50,6 +50,17 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
+    @DisplayName("게시물 보기를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
+    @Test
+    void savePostOptions_zeroPostId() {
+        // given
+        long zeroPostId = 0L;
+
+        // when & then
+        assertThatCode(() -> pollPostOptionService.savePostOptions(zeroPostId, validPostOptions))
+                .isExactlyInstanceOf(InvalidUserInputException.class);
+    }
+
     @DisplayName("게시물 보기를 추가할 때, postOptions중 비어있는 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_emptyPostOption() {

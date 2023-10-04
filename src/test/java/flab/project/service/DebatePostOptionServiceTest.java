@@ -30,7 +30,7 @@ class DebatePostOptionServiceTest {
     @Mock
     PostOptionMapper postOptionMapper;
 
-    @DisplayName("게시물 보기를 추가한다.")
+    @DisplayName("게시물 선택지를 추가한다.")
     @Test
     void savePostOptions() {
         // when
@@ -48,6 +48,17 @@ class DebatePostOptionServiceTest {
 
         // when & then
         assertThatCode(() -> debatePostOptionService.savePostOptions(negativePostId, validPostOptions))
+                .isExactlyInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("게시물 보기를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
+    @Test
+    void savePostOptions_zeroPostId() {
+        // given
+        long zeroPostId = 0L;
+
+        // when & then
+        assertThatCode(() -> debatePostOptionService.savePostOptions(zeroPostId, validPostOptions))
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 

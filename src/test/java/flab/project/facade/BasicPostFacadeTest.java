@@ -3,6 +3,7 @@ package flab.project.facade;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.AddDebatePostRequest;
+import flab.project.data.dto.model.AddPollPostRequest;
 import flab.project.data.enums.FileType;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -59,9 +61,9 @@ class BasicPostFacadeTest {
         then(postImageService).should().saveAll(anyLong(), anySet());
     }
 
-    @DisplayName("AddPollPostRequest가 아닌 다른 AddPostReuqest의 자식이 매개변수로 들어올 경우 RuntimeException을 던진다.")
+    @DisplayName("AddDebatePostRequest 객체가 매개변수로 들어올 경우 RuntimeException을 던진다.")
     @Test
-    void addPost_anotherChildOfAddPostRequest() {
+    void addPost_withAddDebatePostRequest() {
         long userId = 1L;
         AddDebatePostRequest debatePostRequest = AddDebatePostRequest.builder()
                 .content("게시물 내용입니다")
@@ -70,6 +72,25 @@ class BasicPostFacadeTest {
                 .build();
 
         assertThatThrownBy(() -> basicPostFacade.addPost(userId, debatePostRequest))
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    @DisplayName("AddPollPostRequest가 매개변수로 들어올 경우 RuntimeException을 던진다.")
+    @Test
+    void addPost_withAddPollPostRequest() {
+        long userId = 1L;
+
+        AddPollPostRequest pollPostRequest = AddPollPostRequest.builder()
+                .content("게시물 내용입니다")
+                .hashTagNames(Set.of("#test1", "#test2"))
+                .optionContents(Set.of("content1", "content2"))
+                .subject("test subject")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .allowMultipleVotes(true)
+                .build();
+
+        assertThatThrownBy(() -> basicPostFacade.addPost(userId, pollPostRequest))
                 .isInstanceOf(RuntimeException.class);
     }
 

@@ -150,8 +150,6 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-
-
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxLengthOfHashTagName() throws Exception {

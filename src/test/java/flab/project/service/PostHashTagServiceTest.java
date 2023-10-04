@@ -48,10 +48,22 @@ class PostHashTagServiceTest {
     void saveAll_negativePostId() {
         // given
         long negativePostId = -1L;
-        Set<String> hashTagNames = null;
+        Set<String> hashTagNames = Set.of("#test1", "#test2");
 
         // when
-        assertThatCode(()->postHashTagService.saveAll(negativePostId, hashTagNames))
+        assertThatCode(() -> postHashTagService.saveAll(negativePostId, hashTagNames))
+                .isExactlyInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("게시물에 해시태그를 추가할 때, postId가 0이면 InvalidUserInput 예외를 던진다.")
+    @Test
+    void saveAll_zeroPostId() {
+        // given
+        long zeroPostId = 0L;
+        Set<String> hashTagNames = Set.of("#test1", "#test2");
+
+        // when
+        assertThatCode(() -> postHashTagService.saveAll(zeroPostId, hashTagNames))
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
