@@ -26,7 +26,6 @@ public class HashTagService {
         return hashTag.getHashTagId();
     }
 
-    // todo 이거 테스트 코드 어떻게 짜야하지?
     public Set<Long> findHashTagIdsByHashTagNames(Set<String> hashTagNames) {
         if (ObjectUtils.isEmpty(hashTagNames)) {
             return new HashSet<>();

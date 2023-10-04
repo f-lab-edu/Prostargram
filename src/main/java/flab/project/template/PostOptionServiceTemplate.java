@@ -26,7 +26,7 @@ public abstract class PostOptionServiceTemplate {
     }
 
     private void validatePostIdPositive(long postId) {
-        if (postId < 0) {
+        if (postId <= 0) {
             throw new InvalidUserInputException();
         }
     }

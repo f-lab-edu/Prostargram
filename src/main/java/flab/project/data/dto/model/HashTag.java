@@ -1,6 +1,7 @@
 package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,12 @@ public class HashTag {
     private String hashTagName;
 
     public HashTag(String hashTagName) {
+        this.hashTagName = hashTagName;
+    }
+
+    @Builder
+    public HashTag(long hashTagId, String hashTagName) {
+        this.hashTagId = hashTagId;
         this.hashTagName = hashTagName;
     }
 }
