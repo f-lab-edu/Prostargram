@@ -1,16 +1,14 @@
 package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Schema(description = "댓글 Dto")
 public class Comment {
 
@@ -23,9 +21,9 @@ public class Comment {
     @Schema(example = "1")
     private long commentId;
 
-    @Schema(example = "1", description = "대댓글이 존재할 경우, 가장 최상단의 댓글", nullable = true)
+    @Schema(description = "대댓글이 존재할 경우, 가장 최상단의 댓글", example = "1", nullable = true)
     @Setter
-    private Long rootId;
+    private Long parentId;
 
     @Schema(example = "화이팅 합시다!")
     private String content;
@@ -36,6 +34,15 @@ public class Comment {
     @Schema(example = "1400", defaultValue = "0")
     private long likeCount;
 
-    @Schema(example = "14", defaultValue = "0")
-    private long commentCount;
+    @Schema(description = "대댓글의 개수", example = "14", defaultValue = "0")
+    private long childrenCount;
+
+    @Builder
+    public Comment(long postId, long userId, Long parentId, String content) {
+        this.postId = postId;
+        this.userId = userId;
+        this.parentId = parentId;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+    }
 }
