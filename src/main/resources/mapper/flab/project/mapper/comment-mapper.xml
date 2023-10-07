@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.CommentMapper">
 
-    <insert id="addComment" parameterType="flab.project.data.dto.model.Comment" useGeneratedKeys="true" keyProperty="commentId">
+    <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
         INSERT INTO Comment(post_id, user_id, content)
         VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
     </insert>
