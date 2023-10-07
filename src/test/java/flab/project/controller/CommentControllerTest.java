@@ -1,8 +1,7 @@
 package flab.project.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.dto.model.Comment;
 import flab.project.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,25 +22,63 @@ public class CommentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockBean
     private CommentService commentService;
 
     @DisplayName("댓글을 작성할 수 있다.")
     @Test
-    void addComment() throws Exception {
+    void addComment_isComment() throws Exception {
         // given
         long postId = 1L;
         long userId = 1L;
+        Long parentId = null;
         String content = "안녕하세요.";
 
-        given(commentService.addComment(postId, userId, content)).willReturn(new SuccessResponse<>());
+        Comment comment = Comment.builder()
+                .postId(postId)
+                .userId(userId)
+                .parentId(parentId)
+                .content(content)
+                .build();
+
+        given(commentService.addComment(postId, userId, parentId, content)).willReturn(comment);
+
+        // when & then
+        mockMvc.perform(
+                post("/posts/{postId}/comment", postId)
+                        .param("userId", String.valueOf(userId))
+                        .param("content", content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
+    }
+
+    @DisplayName("대댓글을 작성할 수 있다.")
+    @Test
+    void addComment_isReply() throws Exception {
+        // given
+        long postId = 1L;
+        long userId = 1L;
+        Long parentId = 1L;
+        String content = "안녕하세요.";
+
+        Comment comment = Comment.builder()
+                .postId(postId)
+                .userId(userId)
+                .parentId(parentId)
+                .content(content)
+                .build();
+
+        given(commentService.addComment(postId, userId, parentId, content)).willReturn(comment);
 
         // when & then
         mockMvc.perform(
                         post("/posts/{postId}/comment", postId)
                                 .param("userId", String.valueOf(userId))
+                                .param("parentId", String.valueOf(parentId))
                                 .param("content", content)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -51,12 +88,13 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
-    @DisplayName("댓글을 작성하려고 할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @DisplayName("댓글을 작성할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addComment_invalidPostId() throws Exception {
         // given
         long negativePostId = -1L;
         long userId = 1L;
+        Long parentId = null;
         String content = "안녕하세요.";
 
         // when & then
@@ -72,12 +110,36 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("댓글을 작성하려고 할 때, userId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @DisplayName("대댓글을 작성할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @Test
+    void addReply_invalidPostId() throws Exception {
+        // given
+        long negativePostId = -1L;
+        long userId = 1L;
+        Long parentId = 1L;
+        String content = "안녕하세요.";
+
+        // when & then
+        mockMvc.perform(
+                post("/posts/{postId}/comment", negativePostId)
+                        .param("userId", String.valueOf(userId))
+                        .param("parentId", String.valueOf(parentId))
+                        .param("content", content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("댓글을 작성할 때, userId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addComment_invalidUserId() throws Exception {
         // given
         long postId = 1L;
         long negativeUserId = -1L;
+        Long parentId = null;
         String content = "안녕하세요.";
 
         // when & then
@@ -86,6 +148,52 @@ public class CommentControllerTest {
                         .param("userId", String.valueOf(negativeUserId))
                         .param("content", content)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("대댓글을 작성할 때, userId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @Test
+    void addReply_invalidUserId() throws Exception {
+        // given
+        long postId = 1L;
+        long negativeUserId = -1L;
+        Long parentId = 1L;
+        String content = "안녕하세요.";
+
+        // when & then
+        mockMvc.perform(
+                post("/posts/{postId}/comment", postId)
+                        .param("userId", String.valueOf(negativeUserId))
+                        .param("parentId", String.valueOf(parentId))
+                        .param("content", content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("대댓글을 작성할 때, rootId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @Test
+    void addComment_invalidRootId() throws Exception {
+        // given
+        long postId = 1L;
+        long userId = 1L;
+        Long parentId = -1L;
+        String content = "안녕하세요.";
+
+        // when & then
+        mockMvc.perform(
+                        post("/posts/{postId}/comment", postId)
+                                .param("userId", String.valueOf(userId))
+                                .param("parentId", String.valueOf(parentId))
+                                .param("content", content)
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
