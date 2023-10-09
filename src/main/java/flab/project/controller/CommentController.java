@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +34,7 @@ public class CommentController {
     public SuccessResponse<Comment> addComment(@PathVariable("postId") @Positive long postId,
                                                @RequestParam("userId") @Positive long userId,
                                                @RequestParam(value = "parentId", required = false) @Positive Long parentId,
-                                               @RequestParam("content") String content) {
+                                               @RequestParam("content") @NotBlank String content) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
         return new SuccessResponse<>(comment);
     }
