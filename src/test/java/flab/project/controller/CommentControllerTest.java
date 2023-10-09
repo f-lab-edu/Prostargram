@@ -200,4 +200,27 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
+
+    // Todo @NotBlank가 null + "" + " "을 허용하지 않던데..
+    @DisplayName("댓글을 작성할 때, content가 공백일 경우 InvalidUserInputException을 반환한다.")
+    @Test
+    void addComment_nonNullableContent() throws Exception {
+        // given
+        long postId = 1L;
+        long userId = 1L;
+        Long parentId = null;
+        String content = " ";
+
+        // when & then
+        mockMvc.perform(
+                        post("/posts/{postId}/comment", postId)
+                                .param("userId", String.valueOf(userId))
+                                .param("content", content)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
+    }
 }
