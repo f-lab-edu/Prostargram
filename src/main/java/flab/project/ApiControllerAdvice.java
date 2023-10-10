@@ -61,6 +61,7 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 
