@@ -1,6 +1,6 @@
 package flab.project.controller;
 
-import flab.project.common.jwt.LoginedMemberId;
+import flab.project.common.jwt.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FormLoginRequest;
 import flab.project.data.dto.TokenDto;
@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/reissue")
     public SuccessResponse<TokenDto> reissue(
-            @LoginedMemberId Long userId,
+            @LoggedInUserId Long userId,
             Authentication authentication
     ) {
         TokenDto tokenDto = authService.reissue(userId,authentication);

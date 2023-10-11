@@ -41,11 +41,15 @@ public class AuthService {
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
-        return TokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+        return TokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public TokenDto reissue(Long userId, Authentication authentication) {
         String currentRefreshToken = authentication.getCredentials().toString();
+
         String createdAccessToken = tokenProvider.createAccessToken(authentication);
         String createdRefreshToken = createRefreshToken(authentication, currentRefreshToken, userId);
 
@@ -64,7 +68,7 @@ public class AuthService {
             redisRepository.saveBlackListToken(currentRefreshToken, userId, new Date());
             return tokenProvider.createRefreshToken(authentication);
         }
-        
+
         return null;
     }
 }

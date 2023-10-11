@@ -1,6 +1,6 @@
 package flab.project.config;
 
-import flab.project.common.handler.LoginedMemberIdArgumentResolver;
+import flab.project.common.handler.LoggedInUserIdArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,6 +12,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new LoginedMemberIdArgumentResolver());
+        resolvers.add(new LoggedInUserIdArgumentResolver());
     }
 }

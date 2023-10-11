@@ -1,7 +1,6 @@
 package flab.project.common;
 
 import flab.project.common.jwt.TokenProvider;
-import flab.project.config.exception.BlackListTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package flab.project.common.handler;
 
-import flab.project.common.jwt.LoginedMemberId;
+import flab.project.common.jwt.LoggedInUserId;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,11 +14,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 
 @Component
-public class LoginedMemberIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoggedInUserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(LoginedMemberId.class)
+        return parameter.hasParameterAnnotation(LoggedInUserId.class)
                 && parameter.getParameterType().equals(Long.class);
     }
 
