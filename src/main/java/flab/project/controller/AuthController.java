@@ -1,6 +1,6 @@
 package flab.project.controller;
 
-import flab.project.common.jwt.LoggedInUserId;
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.FormLoginRequest;
 import flab.project.data.dto.TokenDto;
@@ -18,7 +18,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login/form")
-    public SuccessResponse<TokenDto> formLogin(@RequestBody FormLoginRequest formLoginRequest) {
+    public SuccessResponse<TokenDto> formLogin(@Validated @RequestBody FormLoginRequest formLoginRequest) {
         TokenDto tokenDto = authService.formLogin(formLoginRequest);
 
         return new SuccessResponse<>(tokenDto);

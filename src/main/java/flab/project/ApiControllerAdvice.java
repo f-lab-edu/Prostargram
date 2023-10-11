@@ -29,6 +29,7 @@ public class ApiControllerAdvice {
             NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
@@ -61,6 +62,7 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 

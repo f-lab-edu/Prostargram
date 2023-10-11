@@ -1,6 +1,6 @@
 package flab.project.service;
 
-import flab.project.data.FormLoginDto;
+import flab.project.data.UserForAuth;
 import flab.project.mapper.AuthenticationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        FormLoginDto user = authenticationMapper.getUser(username);
+        UserForAuth user = authenticationMapper.getUser(username);
         // todo EncodedPassword가 어떻게 나올 수 있지..?
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         System.out.println("encodedPassword = " + encodedPassword);

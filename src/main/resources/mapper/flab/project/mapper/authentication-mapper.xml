@@ -13,7 +13,7 @@
         WHERE email = #{email};
     </select>
 
-    <resultMap id="User" type="FormLoginRequest">
+    <resultMap id="User" type="UserForAuth">
         <id column="user_id" property="userId"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>

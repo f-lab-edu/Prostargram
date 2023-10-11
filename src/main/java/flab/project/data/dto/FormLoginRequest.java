@@ -1,5 +1,6 @@
 package flab.project.data.dto;
 
+import flab.project.common.annotation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -11,7 +12,7 @@ public class FormLoginRequest {
     @NotBlank
     private String email;
 
+    @Password
     @NotBlank
-    // todo password검증하는 annotation이 있으면 좋겠는뎅...
     private String password;
 }

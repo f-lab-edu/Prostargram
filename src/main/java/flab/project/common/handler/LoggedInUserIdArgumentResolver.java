@@ -1,6 +1,6 @@
 package flab.project.common.handler;
 
-import flab.project.common.jwt.LoggedInUserId;
+import flab.project.common.annotation.LoggedInUserId;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
