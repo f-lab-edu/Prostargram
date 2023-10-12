@@ -1,9 +1,11 @@
 package flab.project.data.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -20,7 +22,7 @@ public abstract class BasePost {
     protected String content;
 
     @Schema(example = "#java")
-    protected List<String> hashTags;
+    protected List<String> hashTagNames;
 
     @Schema(description = "Post 종류 enum")
     protected PostType postType;
@@ -32,5 +34,13 @@ public abstract class BasePost {
     protected long commentCount;
 
     @Schema(example = "방금 전")
-    protected String createdAt;
+    protected LocalDateTime createdAt;
+
+    @JsonProperty("isLike")
+    @Schema(example = "false")
+    protected Boolean isLike;
+
+    @JsonProperty("isFollow")
+    @Schema(example = "false")
+    protected Boolean isFollow;
 }

@@ -8,4 +8,6 @@ public class Option {
     private long optionId;
 
     private String optionContent;
+
+    private long voteCount;
 }
