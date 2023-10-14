@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
 @NoArgsConstructor
 @SuperBuilder
 public abstract class AddPostRequest {
-    
+
     protected long postId;
 
     @NotBlank
@@ -25,6 +26,8 @@ public abstract class AddPostRequest {
 
     @Size(max = 5)
     protected Set<@NotBlank @Length(max = 15) String> hashTagNames;
+
+    protected LocalDateTime createdAt = LocalDateTime.now();
 
     protected abstract PostType getPostType();
 }

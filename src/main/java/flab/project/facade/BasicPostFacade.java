@@ -3,6 +3,8 @@ package flab.project.facade;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.AddPostRequest;
+import flab.project.data.dto.model.BasePost;
+import flab.project.data.dto.model.BasicPost;
 import flab.project.data.enums.FileType;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
@@ -38,10 +40,12 @@ public class BasicPostFacade extends PostFacadeTemplate {
     }
 
     @Override
-    protected void handlePostMetadata(long userId, AddPostRequest post) {
+    protected BasePost handlePostMetadata(long userId, AddPostRequest post) {
         AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
 
         Set<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPostRequest.getContentImages(), FileType.POST_IMAGE);
         postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls);
+
+        return new BasicPost(basicPostRequest, userId, uploadedFileUrls);
     }
 }

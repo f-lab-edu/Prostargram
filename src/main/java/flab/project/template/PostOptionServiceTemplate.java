@@ -1,20 +1,25 @@
 package flab.project.template;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.dto.model.Option;
 import flab.project.mapper.PostOptionMapper;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public abstract class PostOptionServiceTemplate {
     private final PostOptionMapper postOptionMapper;
 
-    public void savePostOptions(long postId, Set<String> optionContents) {
+    public Set<Option> savePostOptions(long postId, Set<String> optionContents) {
         validateSavePostOptions(postId, optionContents);
 
         postOptionMapper.saveAll(postId, optionContents);
+
+        return postOptionMapper.findAll(postId);
     }
 
     private void validateSavePostOptions(long postId, Set<String> optionContents) {

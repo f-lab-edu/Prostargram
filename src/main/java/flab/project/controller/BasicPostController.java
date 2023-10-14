@@ -2,6 +2,8 @@ package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
+import flab.project.data.dto.model.BasePost;
+import flab.project.data.dto.model.BasicPost;
 import flab.project.template.PostFacadeTemplate;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class BasicPostController {
     private final PostFacadeTemplate basicPostFacade;
 
     @PostMapping("/posts/basic")
-    public SuccessResponse<Void> addBasicPost(
+    public SuccessResponse<BasicPost> addBasicPost(
             @RequestPart("basicPost") @Validated AddBasicPostRequest basicPost,
             @RequestPart("contentImages") List<MultipartFile> contentImages
     ) {
@@ -29,8 +31,8 @@ public class BasicPostController {
 
         basicPost.setContentImages(contentImages);
 
-        basicPostFacade.addPost(userId, basicPost);
+        BasicPost createdPost = (BasicPost) basicPostFacade.addPost(userId, basicPost);
 
-        return new SuccessResponse<>();
+        return new SuccessResponse<>(createdPost);
     }
 }

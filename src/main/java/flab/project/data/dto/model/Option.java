@@ -1,11 +1,13 @@
 package flab.project.data.dto.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Builder
+@AllArgsConstructor
+@Getter
 public class Option {
 
-    private long optionId;
+    private Long optionId;
 
     private String optionContent;
 
