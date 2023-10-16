@@ -23,8 +23,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // Todo 토론 게시물의 경우, 어느 진영(빨간색 or 청색)에 작성할 것인지에 따라 endPoint를 분리할 예정
-    // Todo (서버 입장에서) 최상단 댓글의 경우, rootId가 DB에 null이 있는 것이 어색하지 않으므로 회의 후, response에 null을 그대로 반환하는 식으로 수정할 예정
     @Operation(summary = "댓글 작성 API")
     @Parameters({
             @Parameter(name = "postId", description = "게시물의 id", in = ParameterIn.PATH, required = true),
