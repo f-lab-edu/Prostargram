@@ -178,9 +178,9 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @DisplayName("대댓글을 작성할 때, rootId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
+    @DisplayName("대댓글을 작성할 때, parentId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
-    void addComment_invalidRootId() throws Exception {
+    void addComment_invalidParentId() throws Exception {
         // given
         long postId = 1L;
         long userId = 1L;
@@ -201,7 +201,6 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    // Todo @NotBlank가 null + "" + " "을 허용하지 않던데..
     @DisplayName("댓글을 작성할 때, content가 공백일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addComment_nonNullableContent() throws Exception {
