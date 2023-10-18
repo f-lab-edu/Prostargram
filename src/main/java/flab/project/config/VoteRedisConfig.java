@@ -15,10 +15,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableRedisRepositories
 public class VoteRedisConfig {
 
-    @Value("${spring.data.redis.host}")
+    @Value("${spring.data.redis.vote.host}")
     private String host;
 
-    @Value("${spring.data.redis.port}")
+    @Value("${spring.data.redis.vote.port}")
     private int port;
 
     @Bean
