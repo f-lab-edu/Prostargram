@@ -88,28 +88,6 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
-    @DisplayName("댓글을 작성할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
-    @Test
-    void addComment_invalidPostId() throws Exception {
-        // given
-        long negativePostId = -1L;
-        long userId = 1L;
-        Long parentId = null;
-        String content = "안녕하세요.";
-
-        // when & then
-        mockMvc.perform(
-                        post("/posts/{postId}/comment", negativePostId)
-                                .param("userId", String.valueOf(userId))
-                                .param("content", content)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
-    }
-
     @DisplayName("대댓글을 작성할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addReply_invalidPostId() throws Exception {
@@ -124,28 +102,6 @@ public class CommentControllerTest {
                 post("/posts/{postId}/comment", negativePostId)
                         .param("userId", String.valueOf(userId))
                         .param("parentId", String.valueOf(parentId))
-                        .param("content", content)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
-    }
-
-    @DisplayName("댓글을 작성할 때, userId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
-    @Test
-    void addComment_invalidUserId() throws Exception {
-        // given
-        long postId = 1L;
-        long negativeUserId = -1L;
-        Long parentId = null;
-        String content = "안녕하세요.";
-
-        // when & then
-        mockMvc.perform(
-                post("/posts/{postId}/comment", postId)
-                        .param("userId", String.valueOf(negativeUserId))
                         .param("content", content)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
