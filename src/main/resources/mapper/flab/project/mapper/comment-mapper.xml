@@ -9,4 +9,15 @@
         VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
     </insert>
 
+    <select id="findAllByPostId" resultType="flab.project.data.dto.CommentWithUser">
+        SELECT *
+        FROM COMMENT
+        <![CDATA[
+        WHERE post_id = #{postId}
+          AND comment_id < #{lastCommentId}
+        ]]>
+        ORDER BY comment_id DESC
+        LIMIT #{limit}
+    </select>
+
 </mapper>
