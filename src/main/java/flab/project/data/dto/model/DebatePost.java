@@ -22,7 +22,7 @@ public class DebatePost extends BasePost {
         this.postType = debatePostRequest.getPostType();
         this.createdAt = debatePostRequest.getCreatedAt();
         this.options = options;
-        selectedOptionId = null;
+        this.selectedOptionId = null;
         this.likeCount = 0;
         this.commentCount = 0;
         this.isLike = false;

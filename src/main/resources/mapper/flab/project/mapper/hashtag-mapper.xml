@@ -11,7 +11,8 @@
     </select>
 
     <select id="getHashTagsByHashtagNames" resultMap="HashTag">
-        SELECT hashtag_id,
+        SELECT
+        hashtag_id,
         name
         FROM Hashtags
         <where>
@@ -30,7 +31,7 @@
         INSERT INTO HASHTAGS(name)
         VALUES
         <foreach collection="hashTags" item="hashTag" separator=",">
-            ( #{hashTag.hashTagName} )
+            (#{hashTag.hashTagName})
         </foreach>
     </insert>
 

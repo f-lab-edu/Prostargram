@@ -40,7 +40,7 @@ class DebatePostOptionServiceTest {
         then(postOptionMapper).should().saveAll(validPostId, validPostOptions);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postId가 음수면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postId가 음수면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_negativePostId() {
         // given
@@ -51,7 +51,7 @@ class DebatePostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_zeroPostId() {
         // given
@@ -62,7 +62,7 @@ class DebatePostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 비어있는 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 비어있는 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_emptyPostOption() {
         // given
@@ -74,7 +74,7 @@ class DebatePostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 공백으로만 이루어진 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 공백으로만 이루어진 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_OnlyBlankPostOption() {
         // given
@@ -86,7 +86,7 @@ class DebatePostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 최대 길이를 초과한 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 최대 길이를 초과한 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_exceedMaxLengthOfPostOption() {
         // given
@@ -98,7 +98,7 @@ class DebatePostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions가 2가 아니라면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions가 2가 아니라면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_notFixedSizeOfPostOptions() {
         // given

@@ -29,7 +29,7 @@ class PollPostOptionServiceTest {
     @Mock
     PostOptionMapper postOptionMapper;
 
-    @DisplayName("게시물 보기를 추가한다.")
+    @DisplayName("게시물 선택지를 추가한다.")
     @Test
     void savePostOptions() {
         // when
@@ -39,7 +39,7 @@ class PollPostOptionServiceTest {
         then(postOptionMapper).should().saveAll(validPostId, validPostOptions);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postId가 음수면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postId가 음수면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_negativePostId() {
         // given
@@ -50,7 +50,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postId가 0이면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_zeroPostId() {
         // given
@@ -61,7 +61,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 비어있는 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 비어있는 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_emptyPostOption() {
         // given
@@ -73,7 +73,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 공백으로만 이루어진 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 공백으로만 이루어진 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_OnlyBlankPostOption() {
         // given
@@ -85,7 +85,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions중 최대 길이를 초과한 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions중 최대 길이를 초과한 postOption이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_exceedMaxLengthOfPostOption() {
         // given
@@ -97,7 +97,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions가 최소 개수보다 적으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions가 최소 개수보다 적으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_lessThanMinSizeOfPostOptions() {
         // given
@@ -112,7 +112,7 @@ class PollPostOptionServiceTest {
                 .isExactlyInstanceOf(InvalidUserInputException.class);
     }
 
-    @DisplayName("게시물 보기를 추가할 때, postOptions가 최대 개수보다 많으면 INVALID_USER_INPUT을 반환한다.")
+    @DisplayName("게시물 선택지를 추가할 때, postOptions가 최대 개수보다 많으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void savePostOptions_exceedMaxSizeOfPostOptions() {
         // given
