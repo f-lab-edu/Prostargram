@@ -9,15 +9,39 @@
         VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
     </insert>
 
-    <select id="findAllByPostId" resultType="flab.project.data.dto.CommentWithUser">
+    <select id="findAllByPostId" resultMap="commentWithUserResultMap">
         SELECT *
         FROM COMMENT
-        <![CDATA[
         WHERE post_id = #{postId}
+          <if test="lastCommentId != null">
+          <![CDATA[
           AND comment_id < #{lastCommentId}
         ]]>
+        </if>
         ORDER BY comment_id DESC
         LIMIT #{limit}
     </select>
+
+    <resultMap id="commentWithUserResultMap" type="CommentWithUser">
+        <association property="comment" resultMap="commentResultMap"/>
+        <association property="basicUser" resultMap="basicUserResultMap"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="Comment">
+        <id property="commentId" column="comment_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="comment_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="childrenCount" column="children_count"/>
+    </resultMap>
+    
+    <resultMap id="basicUserResultMap" type="BasicUser">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="profileImgUrl" column="profile_img_url"/>
+    </resultMap>
 
 </mapper>
