@@ -30,7 +30,7 @@ public class CommentService {
         return comment;
     }
 
-    public List<CommentWithUser> getComments(long postId, long lastCommentId, long limit) {
+    public List<CommentWithUser> getComments(long postId, Long lastCommentId, long limit) {
         validatePostId(postId);
         validatePagingData(lastCommentId, limit);
 
@@ -62,8 +62,8 @@ public class CommentService {
         }
     }
 
-    private void validatePagingData(long lastCommentId, long limit) {
-        if (lastCommentId <= 0) {
+    private void validatePagingData(Long lastCommentId, long limit) {
+        if (lastCommentId != null && lastCommentId <= 0) {
             throw new InvalidUserInputException("Invalid lastCommentId.");
         }
 
