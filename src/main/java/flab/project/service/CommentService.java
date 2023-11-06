@@ -16,7 +16,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public Comment addComment(long postId, long userId, Long parentId, String content) {
-        validateComment(postId, parentId);
+        validateComment(postId, parentId, content);
 
         Comment comment = Comment.builder()
                 .postId(postId)
@@ -30,17 +30,18 @@ public class CommentService {
         return comment;
     }
 
-    public List<CommentWithUser> getComment(long postId, long lastCommentId, long limit) {
+    public List<CommentWithUser> getComments(long postId, long lastCommentId, long limit) {
         validatePostId(postId);
         validatePagingData(lastCommentId, limit);
 
         return commentMapper.findAllByPostId(postId, lastCommentId, limit);
     }
 
-    private void validateComment(long postId, Long parentId) {
+    private void validateComment(long postId, Long parentId, String content) {
         // Todo userId는 추후 삭제 예정이므로 로직에서 제외
         validatePostId(postId);
         validateParentId(parentId);
+        validateContent(content);
     }
 
     private void validatePostId(long postId) {
@@ -52,6 +53,12 @@ public class CommentService {
     private void validateParentId(Long parentId) {
         if (parentId != null && parentId <= 0) {
             throw new InvalidUserInputException("Invalid parentId.");
+        }
+    }
+
+    private void validateContent(String content) {
+        if (content == null || content.length() == 0 || content.length() > 1000) {
+            throw new InvalidUserInputException("Invalid content.");
         }
     }
 
