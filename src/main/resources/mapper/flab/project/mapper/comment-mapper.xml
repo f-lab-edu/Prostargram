@@ -5,8 +5,8 @@
 <mapper namespace="flab.project.mapper.CommentMapper">
 
     <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
-        INSERT INTO Comment(post_id, user_id, content)
-        VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
+        INSERT INTO Comment(post_id, user_id, parent_id, content)
+        VALUES (#{comment.postId}, #{comment.userId}, #{comment.parentId}, #{comment.content})
     </insert>
 
     <select id="findAllByPostId" resultMap="commentWithUserResultMap">
