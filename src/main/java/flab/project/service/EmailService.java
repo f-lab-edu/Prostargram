@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.util.Random;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -40,24 +40,7 @@ public class EmailService {
     }
 
     private String createVerificationCode() {
-        StringBuffer verificationCode = new StringBuffer();
-        Random random = new Random();
-
-        for (int i = 0; i < 8; i++) {
-            int codeType = random.nextInt(3);
-
-            switch (codeType) {
-                case 0:
-                    verificationCode.append((char) (random.nextInt(26) + 97));
-                    break;
-                case 1:
-                    verificationCode.append((char) (random.nextInt(26) + 65));
-                    break;
-                case 2:
-                    verificationCode.append((random.nextInt(10)));
-                    break;
-            }
-        }
+        String verificationCode = UUID.randomUUID().toString().substring(0, 7);
 
         return verificationCode.toString();
     }

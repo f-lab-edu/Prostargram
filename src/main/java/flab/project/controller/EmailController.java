@@ -4,7 +4,6 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +19,15 @@ public class EmailController {
     private final EmailService emailService;
 
     @Operation(summary = "인증코드 전송 API")
-    @Parameter(name = "address", description = "유저의 이메일", required = true)
     @PostMapping(value = "/verification/email")
     public SuccessResponse sendVerificationCode(@RequestParam("address") @Email @NotBlank String email) {
         emailService.sendVerificationCode(email);
 
-        return new SuccessResponse<>();
+        return new SuccessResponse();
     }
 
     @Operation(summary = "인증코드 검증 API")
-    @Parameters({
-            @Parameter(name = "address", description = "유저의 이메일", required = true),
-            @Parameter(name = "code", description = "유저의 이메일에 발송된 인증코드", required = true)})
+    @Parameter(name = "code", description = "유저의 이메일에 발송된 인증코드", required = true)
     @PostMapping(value = "/verification/email/{address}")
     public SuccessResponse checkVerificationCode(@PathVariable("address") @Email @NotBlank String email,
                                                  @RequestParam("code") @NotBlank String code) {
