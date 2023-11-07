@@ -16,6 +16,7 @@ import java.util.UUID;
 public class EmailService {
 
     private static final String emailSubject = "Prostargram";
+
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
 
