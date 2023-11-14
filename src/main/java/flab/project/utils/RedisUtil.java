@@ -10,15 +10,16 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @Service
 public class RedisUtil {
+
     private final StringRedisTemplate template;
 
-    public String getData(String key) {
+    public String get(String key) {
         ValueOperations<String, String> valueOperations = template.opsForValue();
         return valueOperations.get(key);
     }
 
-    public boolean existData(String key) {
-        return Boolean.TRUE.equals(template.hasKey(key));
+    public boolean exist(String key) {
+        return template.hasKey(key);
     }
 
     public void setDataExpire(String key, String value, long duration) {
@@ -27,7 +28,7 @@ public class RedisUtil {
         valueOperations.set(key, value, expireDuration);
     }
 
-    public void deleteData(String key) {
+    public void delete(String key) {
         template.delete(key);
     }
 }
