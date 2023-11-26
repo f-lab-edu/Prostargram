@@ -1,9 +1,11 @@
 package flab.project.service;
 
+import flab.project.config.exception.InvalidUserInputException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -15,22 +17,31 @@ import static jakarta.mail.internet.MimeMessage.RecipientType.TO;
 
 @RequiredArgsConstructor
 @Service
-public class EmailService {
+public class VerificationService {
 
     private static final String emailSubject = "Prostargram";
     private static final String emailContentCharSet = "utf-8";
     private static final String emailContentSubType = "html";
     private static final String contextName = "verificationCode";
     private static final String templateName = "email";
+    private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
 
     public void sendVerificationCode(String email) {
+        verificationEmail(email);
+
         String verificationCode = createVerificationCode();
         MimeMessage message = writeEmail(email, emailSubject, setContext(verificationCode));
 
         emailSender.send(message);
+    }
+
+    private void verificationEmail(String email) {
+        if (!StringUtils.isBlank(email) && !email.matches(emailPattern)) {
+            throw new InvalidUserInputException("Invalid Email.");
+        }
     }
 
     private String createVerificationCode() {
