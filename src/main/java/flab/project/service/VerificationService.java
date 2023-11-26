@@ -39,7 +39,7 @@ public class VerificationService {
     }
 
     private void verificationEmail(String email) {
-        if (!StringUtils.isBlank(email) && !email.matches(emailPattern)) {
+        if (StringUtils.isBlank(email) || !email.matches(emailPattern)) {
             throw new InvalidUserInputException("Invalid Email.");
         }
     }
