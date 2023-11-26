@@ -72,7 +72,7 @@ public class ApiControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler()
+    @ExceptionHandler(FailedToWriteEmailException.class)
     public FailResponse exceptionResolveToFailedWriteEmail(FailedToWriteEmailException e) {
         return new FailResponse(ResponseEnum.FAILED_WRITE_EMAIL);
     }
