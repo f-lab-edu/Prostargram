@@ -52,7 +52,6 @@ public class EmailConfig {
         properties.put("mail.smtp.auth", auth);
         properties.put("mail.smtp.starttls.enable", starttls);
         properties.put("mail.smtp.starttls.required", startlls_required);
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         return properties;
     }
