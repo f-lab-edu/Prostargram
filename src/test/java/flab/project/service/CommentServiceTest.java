@@ -6,10 +6,12 @@ import flab.project.mapper.CommentMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -37,11 +39,19 @@ public class CommentServiceTest {
                 .content(content)
                 .build();
 
+        ArgumentCaptor<Comment> commentCaptor = ArgumentCaptor.forClass(Comment.class);
         // when
         commentService.addComment(postId, userId, parentId, content);
 
         // then
-        then(commentMapper).should().addComment(comment);
+        then(commentMapper).should().addComment(commentCaptor.capture());
+        Comment captorValue = commentCaptor.getValue();
+
+        assertThat(comment)
+            .extracting(Comment::getPostId, Comment::getUserId,
+                Comment::getParentId, Comment::getContent)
+            .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
+                captorValue.getParentId(), captorValue.getContent());
     }
 
     @DisplayName("대댓글을 작성할 수 있다.")
@@ -60,11 +70,19 @@ public class CommentServiceTest {
                 .content(content)
                 .build();
 
+        ArgumentCaptor<Comment> commentCaptor = ArgumentCaptor.forClass(Comment.class);
         // when
         commentService.addComment(postId, userId, parentId, content);
 
         // then
-        then(commentMapper).should().addComment(comment);
+        then(commentMapper).should().addComment(commentCaptor.capture());
+        Comment captorValue = commentCaptor.getValue();
+
+        assertThat(comment)
+            .extracting(Comment::getPostId, Comment::getUserId,
+                Comment::getParentId, Comment::getContent)
+            .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
+                captorValue.getParentId(), captorValue.getContent());
     }
 
     @DisplayName("댓글을 작성할 때, postId가 양수가 아니라면 InvalidUserInputException을 반환한다.")

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Schema(description = "댓글 Dto")
 public class Comment {
 
