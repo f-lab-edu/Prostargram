@@ -1,5 +1,6 @@
 package flab.project.service;
 
+import flab.project.config.exception.FailedToWriteEmailException;
 import flab.project.config.exception.InvalidUserInputException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -58,7 +59,7 @@ public class VerificationService {
             message.setSubject(subject);
             message.setText(content, emailContentCharSet, emailContentSubType);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new FailedToWriteEmailException(e);
         }
 
         return message;

@@ -26,7 +26,8 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
-            NumberLimitOfInterestExceededException.class
+            NumberLimitOfInterestExceededException.class,
+            FailedToWriteEmailException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
@@ -68,5 +69,11 @@ public class ApiControllerAdvice {
     @ExceptionHandler(FailedToUpdateProfileImageToDatabaseException.class)
     public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
         return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler()
+    public FailResponse exceptionResolveToFailedWriteEmail(FailedToWriteEmailException e) {
+        return new FailResponse(ResponseEnum.FAILED_WRITE_EMAIL);
     }
 }
