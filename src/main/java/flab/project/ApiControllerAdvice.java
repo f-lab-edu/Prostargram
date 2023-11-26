@@ -26,8 +26,7 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
-            NumberLimitOfInterestExceededException.class,
-            FailedToWriteEmailException.class
+            NumberLimitOfInterestExceededException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
