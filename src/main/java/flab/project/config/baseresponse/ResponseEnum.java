@@ -15,7 +15,8 @@ public enum ResponseEnum {
 
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
     DUPLICATE_REQUEST(false, 5001, "서버 오류입니다. 잠시후 다시 시도하세요."),
-    FAILED_UPDATE_PROFILE_IMAGE(false, 5002, "프로필 이미지 수정에 실패했습니다. 잠시 후 다시 시도하세요.");
+    FAILED_UPDATE_PROFILE_IMAGE(false, 5002, "프로필 이미지 수정에 실패했습니다. 잠시 후 다시 시도하세요."),
+    FAILED_WRITE_EMAIL(false, 5003, "이메일 작성에 실패했습니다. 잠시 후 다시 시도하세요.");
 
     private final boolean isSuccess;
     private final int code;
