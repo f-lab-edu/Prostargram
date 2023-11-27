@@ -71,6 +71,19 @@
     WHERE user_id = #{userId};
   </select>
 
+  <select id="findAllByUserAndPostId" resultMap="PostWithUserResultMap">
+    SELECT *
+    FROM POST
+    WHERE user_id = #{userId}
+      <if test="lastProfilePostId != null">
+        <![CDATA[
+          AND post_id < #{lastProfilePostId}
+        ]]>
+      </if>
+    ORDER BY post_id DESC
+    LIMIT #{limit}
+  </select>
+
   <resultMap id="profileResult" type="Profile">
     <id property="userId" column="user_id"/>
     <result property="userName" column="user_name"/>
@@ -93,6 +106,18 @@
   <resultMap id="hashtagResult" type="HashTag">
     <id property="hashTagId" column="hashtag_id"/>
     <result property="hashTagName" column="name"/>
+  </resultMap>
+  
+  <resultMap id="PostWithUserResultMap" type="PostWithUser">
+    <association property="BasePost" resultMap="BasePostResultMap"/>
+    <association property="BasicUser" resultMap="BasicUserResultMap"/>
+  </resultMap>
+
+  <resultMap id="BasePostResultMap" type="BasePost">
+    <id property="postId" column="post_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="content" column="content"/>
+    <result property="hashTags" column=""
   </resultMap>
 
   <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
