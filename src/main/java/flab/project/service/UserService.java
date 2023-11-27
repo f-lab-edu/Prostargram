@@ -1,14 +1,17 @@
 package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotExistUserException;
+import flab.project.data.dto.PostWithUser;
+import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
-import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -44,9 +47,33 @@ public class UserService {
         return NumberOfAffectedRow == 1;
     }
 
+    // Todo userId 검증은 생략
+    public List<PostWithUser> getProfileFeed(long userId, long postId, Long lastProfilePostId, long limit) {
+        validatePostId(postId);
+        validatePagingData(lastProfilePostId, limit);
+
+        return userMapper.findAllByUserIdAndPostId(userId, postId, lastProfilePostId, limit);
+    }
+
     private void checkUserId(long userId) {
         if (userId <= 0) {
             throw new InvalidUserInputException();
+        }
+    }
+
+    private void validatePostId(long postId) {
+        if (postId <= 0) {
+            throw new InvalidUserInputException("Invalid postId.");
+        }
+    }
+
+    private void validatePagingData(Long lastProfilePostId, long limit) {
+        if (lastProfilePostId != null && lastProfilePostId <= 0) {
+            throw new InvalidUserInputException("Invalid lastProfilePostId.");
+        }
+
+        if (limit <= 0) {
+            throw new InvalidUserInputException("Invalid limit.");
         }
     }
 }

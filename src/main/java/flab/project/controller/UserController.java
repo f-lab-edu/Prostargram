@@ -1,26 +1,32 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.*;
+import flab.project.config.exception.InvalidUserInputException;
+import flab.project.data.dto.PostWithUser;
+import flab.project.data.dto.Settings;
+import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
-
 import flab.project.facade.UserFacade;
 import flab.project.service.UserService;
-import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Validated
 @RequiredArgsConstructor
 @RestController
 public class UserController {
+
+    private static final long MAX_LIMIT = 10;
 
     private final UserService userService;
     private final UserFacade userFacade;
@@ -93,5 +99,21 @@ public class UserController {
             @RequestPart(value = "profileImage") MultipartFile profileImg
     ) {
         return userFacade.updateProfileImage(userId, profileImg);
+    }
+
+    @Operation(summary = "프로필 피드 가져오기 API")
+    @Parameters({@Parameter(name = "postId", description = "게시물의 id", in = ParameterIn.QUERY, required = true), @Parameter(name = "lastProfilePostId", description = "가장 마지막으로 받아온 프로필 게시물의 id", in = ParameterIn.QUERY, required = true), @Parameter(name = "limit", description = "한 번에 조회할 프로필 피드의 개수", in = ParameterIn.QUERY, required = true)})
+    @GetMapping(value = "users/{userId}/profile-feed")
+    public SuccessResponse<List<PostWithUser>> getProfileFeed(@PathVariable("userId") @Positive long userId,
+                                                              @RequestParam("postId") @Positive long postId,
+                                                              @RequestParam(value = "lastProfilePostId", required = false) @Positive Long lastProfilePostId,
+                                                              @RequestParam(value = "limit", defaultValue = "10") @Positive long limit) {
+        if (limit > MAX_LIMIT) {
+            throw new InvalidUserInputException("Invalid limit.");
+        }
+
+        List<PostWithUser> profileFeed = userService.getProfileFeed(userId, postId, lastProfilePostId, limit);
+
+        return new SuccessResponse<>(profileFeed);
     }
 }
