@@ -3,10 +3,11 @@ package flab.project.service;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotExistUserException;
-import flab.project.data.dto.PostWithUser;
+import flab.project.data.dto.BasicPostWithUser;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
+import flab.project.mapper.PostMapper;
 import flab.project.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final PostMapper postMapper;
 
     public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
         checkUserId(userId);
@@ -48,22 +50,15 @@ public class UserService {
     }
 
     // Todo userId 검증은 생략
-    public List<PostWithUser> getProfileFeed(long userId, long postId, Long lastProfilePostId, long limit) {
-        validatePostId(postId);
-        validatePagingData(lastProfilePostId, limit);
+    public List<BasicPostWithUser> getProfileFeed(long userId, Long lastProfilePostId, long limit) {
+            validatePagingData(lastProfilePostId, limit);
 
-        return userMapper.findAllByUserIdAndPostId(userId, postId, lastProfilePostId, limit);
+            return userMapper.getProfileFeed(userId, lastProfilePostId, limit);
     }
 
     private void checkUserId(long userId) {
         if (userId <= 0) {
             throw new InvalidUserInputException();
-        }
-    }
-
-    private void validatePostId(long postId) {
-        if (postId <= 0) {
-            throw new InvalidUserInputException("Invalid postId.");
         }
     }
 

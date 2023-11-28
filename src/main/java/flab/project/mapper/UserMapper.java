@@ -1,6 +1,6 @@
 package flab.project.mapper;
 
-import flab.project.data.dto.PostWithUser;
+import flab.project.data.dto.BasicPostWithUser;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.data.dto.model.BasicUser;
 import flab.project.data.dto.model.Profile;
@@ -21,5 +21,5 @@ public interface UserMapper {
 
     int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
 
-    List<PostWithUser> findAllByUserIdAndPostId(@Param("userId") long userId, @Param("postId") long postId, @Param("lastProfilePostId") Long lastProfilePostId, @Param("limit") long limit);
+    List<BasicPostWithUser> getProfileFeed(@Param("userId") long userId, @Param("lastProfilePostId") Long lastProfilePostId, @Param("limit") long limit);
 }
