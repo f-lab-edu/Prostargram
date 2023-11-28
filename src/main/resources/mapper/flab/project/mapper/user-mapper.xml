@@ -71,6 +71,34 @@
     WHERE user_id = #{userId};
   </select>
 
+  <select id="getProfileFeed" resultMap="BasicPostWithUserResultMap">
+    SELECT post.post_id,
+           post.user_id,
+           post.content,
+           post.type,
+           post.like_count,
+           post.comment_count,
+           post.created_at,
+           post_images.img_url,
+           IFNULL(post_like.user_id, FALSE) AS is_like,
+           IFNULL(follow.to_user_id, FALSE) AS is_follow,
+           hashtags.name
+    FROM POST post
+        JOIN POST_IMAGES post_images ON post_images.post_id = post.post_id
+        LEFT JOIN POST_LIKE post_like ON post.post_id = post_like.post_id AND post_like.user_id = #{userId}
+        LEFT JOIN FOLLOW follow ON post.user_id = follow.to_user_id AND follow.from_user_id = #{userId}
+        LEFT JOIN POST_HASHTAG_MAPPING post_hashtag_mapping ON post_hashtag_mapping.post_id = post.post_id
+        LEFT JOIN HASHTAGS hashtags ON hashtags.hashtag_id = post_hashtag_mapping.hashtag_id
+    WHERE post.user_id = #{userId}
+      <if test="lastProfilePostId != null">
+        <![CDATA[
+          AND post.post_id < #{lastProfilePostId}
+        ]]>
+      </if>
+    ORDER BY post.post_id DESC
+    LIMIT #{limit}
+  </select>
+
   <resultMap id="profileResult" type="Profile">
     <id property="userId" column="user_id"/>
     <result property="userName" column="user_name"/>
@@ -93,6 +121,35 @@
   <resultMap id="hashtagResult" type="HashTag">
     <id property="hashTagId" column="hashtag_id"/>
     <result property="hashTagName" column="name"/>
+  </resultMap>
+  
+  <resultMap id="BasicPostWithUserResultMap" type="BasicPostWithUser">
+    <association property="basicPost" resultMap="basicPostResultMap"/>
+    <association property="basicUser" resultMap="basicUserResultMap"/>
+  </resultMap>
+
+  <resultMap id="basicPostResultMap" type="basicPost">
+    <id property="postId" column="post_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="content" column="content"/>
+    <result property="postType" column="type"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="commentCount" column="comment_count"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="isLike" column="is_like"/>
+    <result property="isFollow" column="is_follow"/>
+    <collection property="hashTags" ofType="String">
+      <result property="hashTags" column="name"/>
+    </collection>
+    <collection property="contentImgUrls" ofType="String">
+      <result property="contentImgUrls" column="img_url"/>
+    </collection>
+  </resultMap>
+
+  <resultMap id="basicUserResultMap" type="basicUser">
+    <id property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <result property="profileImgUrl" column="profile_img_url"/>
   </resultMap>
 
   <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
