@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,6 +33,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -53,6 +55,7 @@ class BasicPostControllerTest {
     @MockBean
     private PostFacadeTemplate postFacadeTemplate;
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 수 있다.")
     @Test
     void addBasicPost() throws Exception {
@@ -66,6 +69,7 @@ class BasicPostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddBasicPostRequest.class));
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, contentImages가 없으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withoutContentImages() throws Exception {
@@ -77,6 +81,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(List.of(), dto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, postContent가 비어있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyPostContent() throws Exception {
@@ -89,6 +94,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, postContent가 공백으로만 이루어져 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankPostContent() throws Exception {
@@ -101,6 +107,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, 최대 길이를 초과한 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxLengthOfPostContent() throws Exception {
@@ -113,6 +120,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 비어 있는 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyHashTagNames() throws Exception {
@@ -125,6 +133,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 공백으로만 이루어진 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankHashTagNames() throws Exception {
@@ -137,6 +146,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, hashTagNames가 최대 개수를 초과하면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxSizeOfHashTagNames() throws Exception {
@@ -150,6 +160,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxLengthOfHashTagName() throws Exception {
@@ -210,6 +221,7 @@ class BasicPostControllerTest {
     private ResultActions requestAddBasicPost(List<MockMultipartFile> multipartFiles, MockMultipartFile dto) throws Exception {
         return mockMvc.perform(
                         setMultipartFiles(multipartFiles, dto)
+                        .with(csrf())
                 )
                 .andDo(print());
     }

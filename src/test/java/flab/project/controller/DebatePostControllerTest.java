@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -27,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,6 +49,7 @@ class DebatePostControllerTest {
     @MockBean
     private PostFacadeTemplate postFacadeTemplate;
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 수 있다.")
     @Test
     void addDebatePost() throws Exception {
@@ -58,6 +61,7 @@ class DebatePostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddDebatePostRequest.class));
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 비어 있는 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withEmptyPostContent() throws Exception {
@@ -69,6 +73,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 공백으로만 이루어진 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withOnlyBlankPostContent() throws Exception {
@@ -80,6 +85,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 최대 길이를 초과한 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withExceedMaxLengthOfPostContent() throws Exception {
@@ -91,6 +97,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 비어 있는 문자열의 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withEmptyHashTagName() throws Exception {
@@ -102,6 +109,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 공백으로만 이루어진 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withOnlyBlankHashTagName() throws Exception {
@@ -113,6 +121,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, hashTagNames가 최대 개수를 초과하면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withExceedMaxSizeOfHashTagNames() throws Exception {
@@ -125,6 +134,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withExceedMaxLengthOfHashTagName() throws Exception {
@@ -138,6 +148,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 비어 있는 문자열의 optionContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withEmptyOptionContents() throws Exception {
@@ -149,6 +160,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, 공백으로만 이루어진 optionContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_withOnlyBlankOptionContents() throws Exception {
@@ -160,6 +172,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(invalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, optionContents 요소가 2가 아니면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_invalidSizeOfOptionContents() throws Exception {
@@ -180,6 +193,7 @@ class DebatePostControllerTest {
         validateAddDebatePostRequest(anotherInvalidDebatePostRequest, ADD_DEBATE_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물을 생성할 때, optionContents 요소중 최대 길이를 초과한 요소가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addDebatePost_exceedMaxLengtheOfOptionContents() throws Exception {
@@ -222,6 +236,7 @@ class DebatePostControllerTest {
     private ResultActions requestAddDebatePost(AddDebatePostRequest debatePostRequest, String requestUrl) throws Exception {
         return mockMvc.perform(
                         post(requestUrl)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(debatePostRequest))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
