@@ -1,6 +1,7 @@
 package flab.project.data.dto.file;
 
 import com.amazonaws.util.StringInputStream;
+import flab.project.data.enums.FileType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class ProfileImageTest {
+class FileTest {
 
     @Mock
     private MultipartFile multipartFile;
@@ -30,11 +31,11 @@ class ProfileImageTest {
         given(multipartFile.getInputStream()).willReturn(new StringInputStream(testContent));
 
         // when
-        ProfileImage profileImage = new ProfileImage(1L, multipartFile);
+        File file = new File(1L, multipartFile, FileType.PROFILE_IMAGE);
 
-        String bucketName = profileImage.getBucketName();
-        String fileName = profileImage.getFileName();
-        long contentLength = profileImage.getObjectMetadata().getContentLength();
+        String bucketName = file.getBucketName();
+        String fileName = file.getFileName();
+        long contentLength = file.getObjectMetadata().getContentLength();
 
         // then
         then(multipartFile).should().getInputStream();

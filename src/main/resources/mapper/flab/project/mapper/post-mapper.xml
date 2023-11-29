@@ -4,6 +4,12 @@
 
 <mapper namespace="flab.project.mapper.PostMapper">
 
+    <insert id="save" parameterType="AddPostRequest" useGeneratedKeys="true" keyProperty="post.postId"
+            keyColumn="post_id">
+        INSERT INTO POST(user_id, content, type)
+        VALUES (#{userId}, #{post.content}, #{post.postType});
+    </insert>
+
     <select id="getBasicPostDetail" resultMap="BasicPost">
         SELECT post.post_id,
                post.user_id,
@@ -88,8 +94,8 @@
         <result property="createdAt" column="created_at"/>
         <result property="isLike" column="is_like"/>
         <result property="isFollow" column="is_follow"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
+        <collection property="hashTagNames" ofType="String">
+            <result property="hashTagNames" column="name"/>
         </collection>
         <collection property="contentImgUrls" ofType="String">
             <result property="contentImgUrls" column="img_url"/>
@@ -108,8 +114,8 @@
         <result property="isLike" column="is_like"/>
         <result property="isFollow" column="is_follow"/>
         <collection property="options" ofType="Option" resultMap="Option"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
+        <collection property="hashTagNames" ofType="String">
+            <result property="hashTagNames" column="name"/>
         </collection>
     </resultMap>
 
@@ -129,8 +135,8 @@
             <result property="selectedOptionIds" column="selected_option_id"/>
         </collection>
         <collection property="options" ofType="Option" resultMap="Option"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
+        <collection property="hashTagNames" ofType="String">
+            <result property="hashTagNames" column="name"/>
         </collection>
     </resultMap>
 
