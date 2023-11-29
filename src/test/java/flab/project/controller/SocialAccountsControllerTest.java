@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,6 +39,7 @@ class SocialAccountsControllerTest {
     @MockBean
     private SocialAccountService socialAccountService;
 
+    @WithMockUser
     @DisplayName("소셜 계정을 추가할 수 있다.")
     @Test
     void addSocialAccount() throws Exception {
@@ -49,6 +52,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -59,6 +63,7 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("소셜 계정 추가 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenAddSocialAccount() throws Exception {
@@ -68,6 +73,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -83,6 +89,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         post(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -93,6 +100,7 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("소셜 계정을 삭제할 수 있다.")
     @Test
     void deleteSocialAccount() throws Exception {
@@ -105,6 +113,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -115,6 +124,7 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("소셜 계정 삭제 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenDeleteSocialAccount() throws Exception {
@@ -124,6 +134,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, -1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto1))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -139,6 +150,7 @@ class SocialAccountsControllerTest {
         // when & then
         mockMvc.perform(
                         delete(UPDATE_SOCIAL_ACCOUNT_API_URL, 0)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(updateSocialAccountRequestDto2))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )

@@ -27,90 +27,92 @@ public class FollowController {
 
 
     private final FollowService followService;
+
     @Operation(
-        summary = "팔로워 목록 확인하기 API"
+            summary = "팔로워 목록 확인하기 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
+            }
     )
     @GetMapping(value = "/users/{userId}/followers")
     public SuccessResponse<List<User>> getFollowers(
-        @PathVariable("userId") @Positive Long userId
+            @PathVariable("userId") @Positive Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWERS);
     }
 
     @Operation(
-        summary = "팔로잉 목록 확인하기 API"
+            summary = "팔로잉 목록 확인하기 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
+            }
     )
     @GetMapping(value = "/users/{userId}/followings")
     public SuccessResponse<List<User>> getFollowings(
-        @PathVariable("userId") @Positive Long userId
+            @PathVariable("userId") @Positive Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.FOLLOWINGS);
     }
 
     @Operation(
-        summary = "팔로워/팔로잉 한번에 불러오는 API",
-        description = "메인페이지의 피드의 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
+            summary = "팔로워/팔로잉 한번에 불러오는 API",
+            description = "메인페이지의 피드의 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "팔로워 목록을 확인하고자 하는 유저의 id (로그인한 유저 아님)", required = true),
+            }
     )
     @GetMapping(value = "/users/{userId}/follows/all")
     public SuccessResponse<List<User>> getAllFollows(
-        @PathVariable("userId") @Positive Long userId
+            @PathVariable("userId") @Positive Long userId
     ) {
         return followService.getFollows(userId, GetFollowsType.ALL);
     }
 
     @Operation(
-        summary = "팔로워/팔로잉 생성 API"
+            summary = "팔로워/팔로잉 생성 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+            }
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            content = {
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = SuccessResponse.class)
-                )
-            }
-        ),
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = SuccessResponse.class)
+                            )
+                    }
+            ),
     })
     @PostMapping(value = "/users/{userId}/follows")
     public SuccessResponse addFollow(
-        @Valid @RequestBody Follows follows
+            @PathVariable("userId") long userId,
+            @Valid @RequestBody Follows follows
     ) {
         return followService.addFollow(follows);
     }
 
 
     @Operation(
-        summary = "팔로워/팔로잉 삭제 API"
+            summary = "팔로워/팔로잉 삭제 API"
     )
     @Parameters(
-        value = {
-            @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-        }
+            value = {
+                    @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
+            }
     )
     @DeleteMapping(value = "/users/{userId}/follows")
     public SuccessResponse deleteFollow(
-        @Valid @RequestBody Follows follows
+            @Valid @RequestBody Follows follows
     ) {
         return followService.deleteFollow(follows);
     }
