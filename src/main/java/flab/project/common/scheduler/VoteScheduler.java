@@ -25,7 +25,6 @@ public class VoteScheduler {
     private final VoteMapper voteMapper;
     private static final ScanOptions scanOptions = ScanOptions.scanOptions().count(100).build();
 
-    // todo 해당 주석은 남겨 놔도 될까..?
     // todo 게시물 수정, 게시물 삭제와 같은 API가 추가 된다면, DB반영에 실패하는 경우가 발생하지 않도록 Redis에서 잘못 된 데이터를 삭제하는 기능이 필요.
     @Scheduled(fixedDelay = 1000 * 10)
     public void writeBackVotes() {
@@ -35,7 +34,6 @@ public class VoteScheduler {
         }
 
         List<VoteCache> retrievedVotes = getVotesAndDelete(redisKeys);
-        // TODO 잠만 근데 데이터의 순서가 영향을 끼칠까..?
         voteMapper.addPostVotes(retrievedVotes);
         // todo 추후 저장에 실패한 votes를 log파일로 저장할 수 있는 메서드가 필요.
     }
