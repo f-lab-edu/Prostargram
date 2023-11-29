@@ -2,10 +2,12 @@ package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
 
+@NoArgsConstructor
 @Getter
 @Schema(description = "토론 게시물 Dto")
 public class DebatePost extends BasePost {

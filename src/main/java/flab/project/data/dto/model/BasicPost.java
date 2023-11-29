@@ -3,11 +3,9 @@ package flab.project.data.dto.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
-@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Schema(description = "일반 게시물 Dto")

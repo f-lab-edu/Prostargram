@@ -5,7 +5,7 @@
 <mapper namespace="flab.project.mapper.UserMapper">
 
   <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType"
-    resultType="User">
+    resultType="flab.project.data.dto.model.User">
     SELECT
     U.user_id,
     U.user_name,
@@ -61,6 +61,14 @@
     LEFT JOIN INTERESTS I on u.user_id = I.user_id
     LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
     WHERE U.user_id = #{userId};
+  </select>
+
+  <select id="getBasicUser" resultType="BasicUser">
+    SELECT user_id,
+           user_name,
+           profile_img_url
+    FROM USERS
+    WHERE user_id = #{userId};
   </select>
 
   <resultMap id="profileResult" type="Profile">

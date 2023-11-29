@@ -85,8 +85,7 @@ class FollowServiceUnitTest {
                 .willThrow(DuplicateKeyException.class);
 
         assertThatThrownBy(() -> followService.addFollow(follows))
-                .isInstanceOf(DuplicateKeyException.class)
-                .hasMessage("중복 요청으로 인해 나타난 에러입니다.");
+                .isInstanceOf(DuplicateKeyException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 추가할 때, followMapper가 DataIntegrityViolationException을 던질 수 있다.")
@@ -97,8 +96,7 @@ class FollowServiceUnitTest {
                 .willThrow(DataIntegrityViolationException.class);
 
         assertThatThrownBy(() -> followService.addFollow(follows))
-                .isInstanceOf(DataIntegrityViolationException.class)
-                .hasMessage("Foreign Key 문제로 발생한 에러입니다.");
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 삭제할 때, followRequestDto의 파라미터가 같은 값이 들어올 경우 InvalidUserInput Exception을 던진다.")

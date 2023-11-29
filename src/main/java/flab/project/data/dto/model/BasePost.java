@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
-@SuperBuilder
 @Getter
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {
@@ -38,8 +39,8 @@ public abstract class BasePost {
     @Schema(example = "14", defaultValue = "0")
     protected long commentCount;
 
-    @Schema(example = "방금 전")
-    protected LocalDateTime createdAt;
+    @Schema(example = "2023-09-19 12:00:00")
+    protected Timestamp createdAt;
 
     @JsonProperty("isLike")
     @Schema(example = "false")

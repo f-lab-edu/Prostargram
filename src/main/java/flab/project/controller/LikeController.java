@@ -28,4 +28,3 @@ public class LikeController {
         return likeService.addPostLike(postId, userId);
     }
 }
-

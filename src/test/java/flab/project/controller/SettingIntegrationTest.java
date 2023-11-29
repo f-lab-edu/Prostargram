@@ -1,10 +1,5 @@
 package flab.project.controller;
 
-import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-import static flab.project.data.enums.ScreenMode.LIGHT;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
 import io.restassured.response.ExtractableResponse;
@@ -15,6 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+
+import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
+import static flab.project.data.enums.ScreenMode.LIGHT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SettingIntegrationTest {

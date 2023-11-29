@@ -1,35 +1,47 @@
 package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Builder
+import java.time.LocalDateTime;
+
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "댓글 Dto")
 public class Comment {
 
     @Schema(example = "1")
-    protected long postId;
+    private long postId;
 
     @Schema(example = "1")
-    protected long userId;
+    private long userId;
 
     @Schema(example = "1")
-    protected long commentId;
+    private long commentId;
 
-    @Schema(example = "1", description = "대댓글이 존재할 경우, 가장 최상단의 댓글")
-    protected long rootId;
+    @Schema(description = "대댓글이 존재할 경우, 가장 최상단의 댓글", example = "1", nullable = true)
+    @Setter
+    private Long parentId;
 
     @Schema(example = "화이팅 합시다!")
-    protected String content;
+    private String content;
 
-    @Schema(example = "방금 전")
-    protected String createTime;
+    @Schema(example = "2023-09-19 12:00:00")
+    private LocalDateTime createdAt;
 
     @Schema(example = "1400", defaultValue = "0")
-    protected long likeCount;
+    private long likeCount;
 
-    @Schema(example = "14", defaultValue = "0")
-    protected long commentCount;
+    @Schema(description = "대댓글의 개수", example = "14", defaultValue = "0")
+    private long childrenCount;
+
+    @Builder
+    public Comment(long postId, long userId, Long parentId, String content) {
+        this.postId = postId;
+        this.userId = userId;
+        this.parentId = parentId;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+    }
 }

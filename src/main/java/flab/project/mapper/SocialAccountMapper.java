@@ -1,6 +1,5 @@
 package flab.project.mapper;
 
-import flab.project.data.dto.UpdateSocialAccountRequestDto;
 import flab.project.data.dto.model.SocialAccount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

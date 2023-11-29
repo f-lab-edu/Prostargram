@@ -2,11 +2,13 @@ package flab.project.data.dto.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+@NoArgsConstructor
 @Getter
 @Schema(description = "통계 게시물 Dto")
 public class PollPost extends BasePost {
