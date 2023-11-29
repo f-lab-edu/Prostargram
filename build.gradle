@@ -35,6 +35,9 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 

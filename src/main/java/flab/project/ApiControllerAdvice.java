@@ -71,4 +71,10 @@ public class ApiControllerAdvice {
     public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
         return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(FailedToWriteEmailException.class)
+    public FailResponse exceptionResolveToFailedWriteEmail(FailedToWriteEmailException e) {
+        return new FailResponse(ResponseEnum.FAILED_WRITE_EMAIL);
+    }
 }
