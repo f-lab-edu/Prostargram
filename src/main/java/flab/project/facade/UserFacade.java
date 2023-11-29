@@ -1,11 +1,11 @@
 package flab.project.facade;
 
+import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
 import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
-import flab.project.data.dto.file.ProfileImage;
 import flab.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class UserFacade {
             boolean isSuccess = userService.updateProfileImage(userId, uploadedProfileImgUrl);
 
             if (!isSuccess) {
-                fileStorage.deleteFile(ProfileImage.BASE_BUCKET_NAME, uploadedProfileImgUrl);
+                fileStorage.deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), uploadedProfileImgUrl);
 
                 throw new FailedToUpdateProfileImageToDatabaseException();
             }
@@ -42,7 +42,7 @@ public class UserFacade {
             if (fileNamesInBucket.size() > 0) {
                 String existingProfileImgFileName = fileNamesInBucket.get(0);
 
-                fileStorage.deleteFile(ProfileImage.BASE_BUCKET_NAME, existingProfileImgFileName);
+                fileStorage.deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), existingProfileImgFileName);
             }
 
             return new SuccessResponse();

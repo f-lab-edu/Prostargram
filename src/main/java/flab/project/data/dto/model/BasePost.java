@@ -4,10 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
+@NoArgsConstructor
 @Getter
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {
@@ -22,7 +28,7 @@ public abstract class BasePost {
     protected String content;
 
     @Schema(example = "#java")
-    protected List<String> hashTags;
+    protected Set<String> hashTagNames;
 
     @Schema(description = "Post 종류 enum")
     protected PostType postType;

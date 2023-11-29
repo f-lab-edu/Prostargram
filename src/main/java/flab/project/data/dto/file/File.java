@@ -1,7 +1,9 @@
 package flab.project.data.dto.file;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionExtractor;
+import flab.project.data.enums.FileType;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,16 +11,14 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Getter
-public class ProfileImage implements Uploadable {
-
-    public static final String BASE_BUCKET_NAME = "profileimage";
+public class File implements Uploadable {
 
     private final String bucketName;
     private final String fileName;
     private final ObjectMetadata objectMetadata;
 
-    public ProfileImage(long userId, MultipartFile file) {
-        this.bucketName = BASE_BUCKET_NAME + "/" + userId;
+    public File(long suffix, MultipartFile file, FileType fileType) {
+        this.bucketName = BucketUtils.getBaseBucketName(fileType) + "/" + suffix;
         this.fileName = createFileName(file);
         this.objectMetadata = getObjectMetadata(file);
     }

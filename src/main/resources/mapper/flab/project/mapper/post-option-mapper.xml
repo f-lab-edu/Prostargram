@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.mapper.PostOptionMapper">
+
+    <insert id="saveAll">
+        INSERT INTO POST_OPTIONS(option_id, post_id, content)
+        VALUES
+        <foreach collection="optionContents" index="optionId" item="optionContent" separator=",">
+            (#{optionId} +1, #{postId}, #{optionContent})
+        </foreach>
+    </insert>
+
+    <select id="findAll" resultMap="OptionMap">
+        SELECT option_id,
+               content,
+               vote_count
+        FROM post_options
+        WHERE post_id = #{postId};
+    </select>
+
+    <resultMap id="OptionMap" type="Option">
+        <id property="optionId" column="option_id"/>
+        <result property="optionContent" column="content" javaType="String"/>
+        <result property="voteCount" column="vote_count"/>
+    </resultMap>
+
+</mapper>
