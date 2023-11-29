@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -25,6 +27,7 @@ public class CommentControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @WithMockUser
     @DisplayName("댓글을 작성할 수 있다.")
     @Test
     void addComment_isComment() throws Exception {
@@ -46,6 +49,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                 post("/posts/{postId}/comment", postId)
+                        .with(csrf())
                         .param("userId", String.valueOf(userId))
                         .param("content", content)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -56,6 +60,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("대댓글을 작성할 수 있다.")
     @Test
     void addComment_isReply() throws Exception {
@@ -77,6 +82,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                         post("/posts/{postId}/comment", postId)
+                                .with(csrf())
                                 .param("userId", String.valueOf(userId))
                                 .param("parentId", String.valueOf(parentId))
                                 .param("content", content)
@@ -88,6 +94,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("대댓글을 작성할 때, postId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addReply_invalidPostId() throws Exception {
@@ -100,6 +107,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                 post("/posts/{postId}/comment", negativePostId)
+                        .with(csrf())
                         .param("userId", String.valueOf(userId))
                         .param("parentId", String.valueOf(parentId))
                         .param("content", content)
@@ -111,6 +119,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("대댓글을 작성할 때, userId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addReply_invalidUserId() throws Exception {
@@ -123,6 +132,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                 post("/posts/{postId}/comment", postId)
+                        .with(csrf())
                         .param("userId", String.valueOf(negativeUserId))
                         .param("parentId", String.valueOf(parentId))
                         .param("content", content)
@@ -134,6 +144,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("대댓글을 작성할 때, parentId가 양수가 아닐 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addComment_invalidParentId() throws Exception {
@@ -146,6 +157,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                         post("/posts/{postId}/comment", postId)
+                                .with(csrf())
                                 .param("userId", String.valueOf(userId))
                                 .param("parentId", String.valueOf(parentId))
                                 .param("content", content)
@@ -157,6 +169,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("댓글을 작성할 때, content가 공백일 경우 InvalidUserInputException을 반환한다.")
     @Test
     void addComment_nonNullableContent() throws Exception {
@@ -169,6 +182,7 @@ public class CommentControllerTest {
         // when & then
         mockMvc.perform(
                         post("/posts/{postId}/comment", postId)
+                                .with(csrf())
                                 .param("userId", String.valueOf(userId))
                                 .param("content", content)
                                 .contentType(MediaType.APPLICATION_JSON))
