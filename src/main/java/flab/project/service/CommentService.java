@@ -5,6 +5,7 @@ import flab.project.data.dto.CommentWithUser;
 import flab.project.data.dto.model.Comment;
 import flab.project.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class CommentService {
     }
 
     private void validateContent(String content) {
-        if (content == null || content.length() == 0 || content.length() > 1000) {
+        if (StringUtils.isBlank(content) || content.length() > 1000) {
             throw new InvalidUserInputException("Invalid content.");
         }
     }

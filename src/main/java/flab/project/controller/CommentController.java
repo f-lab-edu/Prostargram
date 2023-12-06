@@ -1,7 +1,6 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.CommentWithUser;
 import flab.project.data.dto.model.Comment;
 import flab.project.service.CommentService;
@@ -9,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 public class CommentController {
 
-    private static final long MAX_LIMIT = 10;
     private final CommentService commentService;
 
     @Operation(summary = "댓글 작성 API")
@@ -34,7 +33,7 @@ public class CommentController {
     public SuccessResponse<Comment> addComment(@PathVariable("postId") @Positive long postId,
                                                @RequestParam("userId") @Positive long userId,
                                                @RequestParam(value = "parentId", required = false) @Positive Long parentId,
-                                               @RequestParam("content") @NotBlank @Size(min = 1, max = 1000) String content) {
+                                               @RequestBody @NotBlank @Size(min = 1, max = 1000) String content) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
 
         return new SuccessResponse<>(comment);
@@ -48,10 +47,7 @@ public class CommentController {
     @GetMapping(value = "posts/{postId}/comments")
     public SuccessResponse<List<CommentWithUser>> getComments(@PathVariable("postId") @Positive long postId,
                                                               @RequestParam(value = "lastCommentId", required = false) @Positive Long lastCommentId,
-                                                              @RequestParam(defaultValue = "10") @Positive long limit) {
-        if (limit > MAX_LIMIT) {
-            throw new InvalidUserInputException("Invalid limit");
-        }
+                                                              @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
 
         List<CommentWithUser> comments = commentService.getComments(postId, lastCommentId, limit);
 
