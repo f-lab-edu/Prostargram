@@ -1,7 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.service.EmailService;
+import flab.project.service.VerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.Email;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class EmailController {
+public class VerificationController {
 
-    private final EmailService emailService;
+    private final VerificationService verificationService;
 
     @Operation(summary = "인증코드 전송 API")
     @PostMapping(value = "/verification/email")
     public SuccessResponse sendVerificationCode(@RequestParam("address") @Email @NotBlank String email) {
-        emailService.sendVerificationCode(email);
+        verificationService.sendVerificationCode(email);
 
         return new SuccessResponse();
     }
@@ -31,7 +31,7 @@ public class EmailController {
     @PostMapping(value = "/verification/email/{address}")
     public SuccessResponse checkVerificationCode(@PathVariable("address") @Email @NotBlank String email,
                                                  @RequestParam("code") @NotBlank String code) {
-        emailService.checkVerificationCode(email, code);
+        verificationService.checkVerificationCode(email, code);
 
         return new SuccessResponse<>();
     }
