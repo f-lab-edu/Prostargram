@@ -32,7 +32,7 @@ public class CommentController {
     @PostMapping(value = "/posts/{postId}/comments")
     public SuccessResponse<Comment> addComment(@PathVariable("postId") @Positive long postId,
                                                @RequestParam("userId") @Positive long userId,
-                                               @RequestParam(value = "parentId", required = false) @Positive Long parentId,
+                                               @RequestParam(required = false) @Positive Long parentId,
                                                @RequestBody @NotBlank @Size(min = 1, max = 1000) String content) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
 
