@@ -26,7 +26,7 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
-            NumberLimitOfInterestExceededException.class
+            NumberLimitOfInterestExceededException.class,
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
@@ -68,5 +68,11 @@ public class ApiControllerAdvice {
     @ExceptionHandler(FailedToUpdateProfileImageToDatabaseException.class)
     public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
         return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateUsername.class)
+    public FailResponse exceptionResolveToNonExistUser(DuplicateUsername e) {
+        return new FailResponse(ResponseEnum.DUPLICATE_USERNAME);
     }
 }
