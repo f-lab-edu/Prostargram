@@ -5,8 +5,43 @@
 <mapper namespace="flab.project.mapper.CommentMapper">
 
     <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
-        INSERT INTO Comment(post_id, user_id, content)
-        VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
+        INSERT INTO Comment(post_id, user_id, parent_id, content)
+        VALUES (#{comment.postId}, #{comment.userId}, #{comment.parentId}, #{comment.content})
     </insert>
+
+    <select id="findAllByPostId" resultMap="commentWithUserResultMap">
+        SELECT *
+        FROM COMMENT
+        WHERE post_id = #{postId}
+          <if test="lastCommentId != null">
+          <![CDATA[
+          AND comment_id < #{lastCommentId}
+        ]]>
+        </if>
+        ORDER BY comment_id DESC
+        LIMIT #{limit}
+    </select>
+
+    <resultMap id="commentWithUserResultMap" type="CommentWithUser">
+        <association property="comment" resultMap="commentResultMap"/>
+        <association property="basicUser" resultMap="basicUserResultMap"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="Comment">
+        <id property="commentId" column="comment_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="comment_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="childrenCount" column="children_count"/>
+    </resultMap>
+    
+    <resultMap id="basicUserResultMap" type="BasicUser">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="profileImgUrl" column="profile_img_url"/>
+    </resultMap>
 
 </mapper>
