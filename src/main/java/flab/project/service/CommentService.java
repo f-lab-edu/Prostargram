@@ -35,11 +35,11 @@ public class CommentService {
         validatePostId(postId);
         validatePagingData(lastCommentId, limit);
 
-        return commentMapper.findAllByPostId(postId, lastCommentId, limit);
+        return commentMapper.getComments(postId, lastCommentId, limit);
     }
 
     private void validateComment(long postId, Long parentId, String content) {
-        // Todo userId는 추후 삭제 예정이므로 로직에서 제외
+        // Todo userId는 추후 삭제 예정이므로 Service 뿐만 아니라 Service Test 에서 검증 제외
         validatePostId(postId);
         validateParentId(parentId);
         validateContent(content);
@@ -64,11 +64,13 @@ public class CommentService {
     }
 
     private void validatePagingData(Long lastCommentId, long limit) {
+        int maxLimit = 10;
+
         if (lastCommentId != null && lastCommentId <= 0) {
             throw new InvalidUserInputException("Invalid lastCommentId.");
         }
 
-        if (limit <= 0) {
+        if (limit <= 0 || limit > maxLimit) {
             throw new InvalidUserInputException("Invalid limit.");
         }
     }

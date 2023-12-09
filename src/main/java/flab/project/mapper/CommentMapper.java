@@ -12,5 +12,5 @@ public interface CommentMapper {
 
     void addComment(@Param("comment") Comment comment);
 
-    List<CommentWithUser> findAllByPostId(long postId, long lastCommentId, long limit);
+    List<CommentWithUser> getComments(@Param("postId") long postId, @Param("lastCommentId") Long lastCommentId, @Param("limit") long limit);
 }
