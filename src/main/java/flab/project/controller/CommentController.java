@@ -42,13 +42,15 @@ public class CommentController {
     // Todo 토론 게시물의 경우, 진영을 의미하는 enum 추가 예정
     @Operation(summary = "댓글 가져오기 API")
     @Parameters({@Parameter(name = "postId", description = "게시물의 id", in = ParameterIn.PATH, required = true),
-            @Parameter(name = "lastCommentId", description = "가장 마지막으로 받아온 댓글의 id", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "userId", description = "유저의 id", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "lastCommentId", description = "가장 마지막으로 받아온 댓글의 id", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "limit", description = "한 번에 조회할 댓글의 개수", in = ParameterIn.QUERY, required = true)})
     @GetMapping(value = "posts/{postId}/comments")
     public SuccessResponse<List<CommentWithUser>> getComments(@PathVariable("postId") @Positive long postId,
+                                                              @RequestParam("userId") @Positive long userId,
                                                               @RequestParam(required = false) @Positive Long lastCommentId,
                                                               @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
-        List<CommentWithUser> comments = commentService.getComments(postId, lastCommentId, limit);
+        List<CommentWithUser> comments = commentService.getComments(postId, userId, lastCommentId, limit);
 
         return new SuccessResponse<>(comments);
     }

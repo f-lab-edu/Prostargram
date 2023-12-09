@@ -31,11 +31,11 @@ public class CommentService {
         return comment;
     }
 
-    public List<CommentWithUser> getComments(long postId, Long lastCommentId, long limit) {
-        validatePostId(postId);
-        validatePagingData(lastCommentId, limit);
+    public List<CommentWithUser> getComments(long postId, long userId, Long lastCommentId, long limit) {
+            validatePostId(postId);
+            validatePagingData(lastCommentId, limit);
 
-        return commentMapper.getComments(postId, lastCommentId, limit);
+            return commentMapper.getComments(postId, userId, lastCommentId, limit);
     }
 
     private void validateComment(long postId, Long parentId, String content) {

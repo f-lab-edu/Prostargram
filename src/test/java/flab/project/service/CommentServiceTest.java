@@ -157,14 +157,15 @@ public class CommentServiceTest {
     void getComments_lastCommentIdIsNull() {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = null;
         long limit = 1L;
 
         // when
-        commentService.getComments(postId, lastCommentId, limit);
+        commentService.getComments(postId, userId, lastCommentId, limit);
 
         // then
-        then(commentMapper).should().getComments(postId, lastCommentId, limit);
+        then(commentMapper).should().getComments(postId, userId, lastCommentId, limit);
     }
 
     @DisplayName("댓글을 가져올 수 있다.")
@@ -172,14 +173,15 @@ public class CommentServiceTest {
     void getComments() {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = 11L;
         long limit = 1L;
 
         // when
-        commentService.getComments(postId, lastCommentId, limit);
+        commentService.getComments(postId, userId, lastCommentId, limit);
 
         // then
-        then(commentMapper).should().getComments(postId, lastCommentId, limit);
+        then(commentMapper).should().getComments(postId, userId, lastCommentId, limit);
     }
 
     @DisplayName("댓글을 가져올 때, postId가 양수가 아니라면 InvalidUserInput 예외를 반환한다.")
@@ -187,11 +189,12 @@ public class CommentServiceTest {
     void getComments_invalidPostId() {
         // given
         long invalidPostId = -1L;
+        long userId = 1L;
         Long lastCommentId = null;
         long limit = 1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(invalidPostId, lastCommentId, limit))
+        assertThatThrownBy(() -> commentService.getComments(invalidPostId, userId, lastCommentId, limit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -200,11 +203,12 @@ public class CommentServiceTest {
     void getComments_invalidLastCommentId() {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long invalidLastCommentId = -1L;
         long limit = 1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, invalidLastCommentId, limit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, invalidLastCommentId, limit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -213,11 +217,12 @@ public class CommentServiceTest {
     void getComments_negativeLimit() {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = null;
         long negativeLimit = -1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, lastCommentId, negativeLimit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, lastCommentId, negativeLimit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -226,11 +231,12 @@ public class CommentServiceTest {
     void getComments_excessLimit() {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = null;
         Long invalidLimit = 11L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, lastCommentId, invalidLimit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, lastCommentId, invalidLimit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 }

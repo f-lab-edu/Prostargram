@@ -201,11 +201,13 @@ public class CommentControllerTest {
     }
 
     // Todo (2023.12.09) return 검증 searching 중입니다.
+    // Todo (2023.12.10) CommentController - 댓글 가져오기 API에 userId의 추가로, 추후 관련 테스트 코드 추가 예정입니다..
     @DisplayName("lastCommentId가 없을 경우, 즉 처음에 댓글을 가져올 수 있다.")
     @Test
     void getComments_lastCommentIdIsNull() throws Exception {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = null;
         long limit = 10L;
 
@@ -217,12 +219,13 @@ public class CommentControllerTest {
         CommentWithUser commentWithUser = new CommentWithUser(comment, basicUser);
         List<CommentWithUser> comments = Arrays.asList(commentWithUser);
 
-        given(commentService.getComments(postId, lastCommentId, limit)).willReturn(comments);
+        given(commentService.getComments(postId, userId, lastCommentId, limit)).willReturn(comments);
 
         // when & then
         mockMvc.perform(get("/posts/{postId}/comments", postId)
-                                .param("limit", String.valueOf(limit))
-                                .contentType(MediaType.APPLICATION_JSON))
+                        .param("userId", String.valueOf(userId))
+                        .param("limit", String.valueOf(limit))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
@@ -235,6 +238,7 @@ public class CommentControllerTest {
     void getComments() throws Exception {
         // given
         long postId = 1L;
+        long userId = 1L;
         Long lastCommentId = 11L;
         long limit = 10L;
 
@@ -244,10 +248,11 @@ public class CommentControllerTest {
         CommentWithUser commentWithUser = new CommentWithUser(comment, basicUser);
         List<CommentWithUser> comments = Arrays.asList(commentWithUser);
 
-        given(commentService.getComments(postId, lastCommentId, limit)).willReturn(comments);
+        given(commentService.getComments(postId, userId, lastCommentId, limit)).willReturn(comments);
 
         // when & then
         mockMvc.perform(get("/posts/{postId}/comments", postId)
+                        .param("userId", String.valueOf(userId))
                         .param("lastCommentId", String.valueOf(lastCommentId))
                         .param("limit", String.valueOf(limit))
                         .contentType(MediaType.APPLICATION_JSON))
