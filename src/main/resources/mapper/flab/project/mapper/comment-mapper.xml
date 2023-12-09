@@ -9,7 +9,7 @@
         VALUES (#{comment.postId}, #{comment.userId}, #{comment.parentId}, #{comment.content})
     </insert>
 
-    <select id="findAllByPostId" resultMap="commentWithUserResultMap">
+    <select id="getComments" resultMap="commentWithUserResultMap">
         SELECT comment.comment_id,
                comment.post_id,
                comment.user_id,
@@ -22,8 +22,8 @@
                users.user_name,
                users.profile_img_url
         FROM COMMENT comment
-        LEFT JOIN COMMENT_LIKE comment_like ON comment.comment_id = comment_like.comment_id
-        LEFT JOIN USERS users ON comment.user_id = users.user_id
+            LEFT JOIN COMMENT_LIKE comment_like ON comment.comment_id = comment_like.comment_id AND comment_like.user_id = #{userId}
+            LEFT JOIN USERS users ON comment.user_id = users.user_id
         WHERE comment.post_id = #{postId}
           <if test="lastCommentId != null">
           <![CDATA[
