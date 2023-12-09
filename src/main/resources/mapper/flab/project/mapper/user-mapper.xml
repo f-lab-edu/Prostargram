@@ -82,13 +82,16 @@
            post_images.img_url,
            IFNULL(post_like.user_id, FALSE) AS is_like,
            IFNULL(follow.to_user_id, FALSE) AS is_follow,
-           hashtags.name
+           hashtags.name,
+           users.user_name,
+           users.profile_img_url
     FROM POST post
         JOIN POST_IMAGES post_images ON post_images.post_id = post.post_id
         LEFT JOIN POST_LIKE post_like ON post.post_id = post_like.post_id AND post_like.user_id = #{userId}
         LEFT JOIN FOLLOW follow ON post.user_id = follow.to_user_id AND follow.from_user_id = #{userId}
         LEFT JOIN POST_HASHTAG_MAPPING post_hashtag_mapping ON post_hashtag_mapping.post_id = post.post_id
         LEFT JOIN HASHTAGS hashtags ON hashtags.hashtag_id = post_hashtag_mapping.hashtag_id
+        LEFT JOIN USERS users ON post.user_id = users.user_id
     WHERE post.user_id = #{userId}
       <if test="lastProfilePostId != null">
         <![CDATA[
