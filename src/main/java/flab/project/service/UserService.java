@@ -63,11 +63,13 @@ public class UserService {
     }
 
     private void validatePagingData(Long lastProfilePostId, long limit) {
+        int maxLimit = 10;
+
         if (lastProfilePostId != null && lastProfilePostId <= 0) {
             throw new InvalidUserInputException("Invalid lastProfilePostId.");
         }
 
-        if (limit <= 0) {
+        if (limit <= 0 || limit > maxLimit) {
             throw new InvalidUserInputException("Invalid limit.");
         }
     }
