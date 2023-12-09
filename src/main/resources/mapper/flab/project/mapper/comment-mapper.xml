@@ -10,15 +10,27 @@
     </insert>
 
     <select id="findAllByPostId" resultMap="commentWithUserResultMap">
-        SELECT *
-        FROM COMMENT
-        WHERE post_id = #{postId}
+        SELECT comment.comment_id,
+               comment.post_id,
+               comment.user_id,
+               comment.parent_id,
+               comment.content,
+               comment.like_count,
+               comment.created_at,
+               comment.children_count,
+               IFNULL(comment_like.user_id, FALSE) AS is_like,
+               users.user_name,
+               users.profile_img_url
+        FROM COMMENT comment
+        LEFT JOIN COMMENT_LIKE comment_like ON comment.comment_id = comment_like.comment_id
+        LEFT JOIN USERS users ON comment.user_id = users.user_id
+        WHERE comment.post_id = #{postId}
           <if test="lastCommentId != null">
           <![CDATA[
-          AND comment_id < #{lastCommentId}
+          AND comment.comment_id < #{lastCommentId}
         ]]>
         </if>
-        ORDER BY comment_id DESC
+        ORDER BY comment.comment_id DESC
         LIMIT #{limit}
     </select>
 

@@ -1,5 +1,6 @@
 package flab.project.data.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -24,6 +25,10 @@ public class Comment {
     @Schema(description = "대댓글이 존재할 경우, 가장 최상단의 댓글", example = "1", nullable = true)
     @Setter
     private Long parentId;
+
+    @JsonProperty("isLike")
+    @Schema(example = "false")
+    private Boolean isLike;
 
     @Schema(example = "화이팅 합시다!")
     private String content;
