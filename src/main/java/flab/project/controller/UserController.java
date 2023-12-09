@@ -1,7 +1,6 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.BasicPostWithUser;
 import flab.project.data.dto.Settings;
 import flab.project.data.dto.UpdateProfileRequestDto;
@@ -26,8 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-
-    private static final long MAX_LIMIT = 10;
 
     private final UserService userService;
     private final UserFacade userFacade;
@@ -103,17 +100,13 @@ public class UserController {
     }
 
     @Operation(summary = "프로필 피드 가져오기 API")
-    @Parameters({
-            @Parameter(name = "postId", description = "게시물의 id", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "lastProfilePostId", description = "가장 마지막으로 받아온 프로필 게시물의 id", in = ParameterIn.QUERY, required = true),
+    @Parameters({@Parameter(name = "userId", description = "유저의 id", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "lastProfilePostId", description = "가장 마지막으로 받아온 프로필 게시물의 id", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "limit", description = "한 번에 조회할 프로필 피드의 개수", in = ParameterIn.QUERY, required = true)})
-    @GetMapping(value = "users/{userId}/profile-feed")
+    @GetMapping(value = "users/{userId}/profile")
     public SuccessResponse<List<BasicPostWithUser>> getProfileFeed(@PathVariable("userId") @Positive long userId,
-                                                                   @RequestParam(value = "lastProfilePostId", required = false) @Positive Long lastProfilePostId,
-                                                                   @RequestParam(value = "limit", defaultValue = "10") @Positive @Max(10) long limit) {
-        if (limit > MAX_LIMIT) {
-            throw new InvalidUserInputException("Invalid limit.");
-        }
+                                                                   @RequestParam(required = false) @Positive Long lastProfilePostId,
+                                                                   @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
 
         List<BasicPostWithUser> profileFeed = userService.getProfileFeed(userId, lastProfilePostId, limit);
 
