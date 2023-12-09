@@ -25,7 +25,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // Todo 이 경우에도 /comments일까?
     @Operation(summary = "댓글 작성 API")
     @Parameters({@Parameter(name = "postId", description = "게시물의 id", in = ParameterIn.PATH, required = true),
             @Parameter(name = "content", description = "게시물의 내용", in = ParameterIn.QUERY, required = true),
@@ -47,7 +46,7 @@ public class CommentController {
             @Parameter(name = "limit", description = "한 번에 조회할 댓글의 개수", in = ParameterIn.QUERY, required = true)})
     @GetMapping(value = "posts/{postId}/comments")
     public SuccessResponse<List<CommentWithUser>> getComments(@PathVariable("postId") @Positive long postId,
-                                                              @RequestParam(value = "lastCommentId", required = false) @Positive Long lastCommentId,
+                                                              @RequestParam(required = false) @Positive Long lastCommentId,
                                                               @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
         List<CommentWithUser> comments = commentService.getComments(postId, lastCommentId, limit);
 
