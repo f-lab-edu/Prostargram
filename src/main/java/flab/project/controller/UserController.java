@@ -103,7 +103,7 @@ public class UserController {
     @Parameters({@Parameter(name = "userId", description = "유저의 id", in = ParameterIn.PATH, required = true),
             @Parameter(name = "lastProfilePostId", description = "가장 마지막으로 받아온 프로필 게시물의 id", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "limit", description = "한 번에 조회할 프로필 피드의 개수", in = ParameterIn.QUERY, required = true)})
-    @GetMapping(value = "users/{userId}/profile")
+    @GetMapping(value = "/users/{userId}/profile")
     public SuccessResponse<List<BasicPostWithUser>> getProfileFeed(@PathVariable("userId") @Positive long userId,
                                                                    @RequestParam(required = false) @Positive Long lastProfilePostId,
                                                                    @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
