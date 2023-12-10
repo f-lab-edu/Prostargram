@@ -1,10 +1,14 @@
 package flab.project.controller;
 
-import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.facade.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import flab.project.data.enums.requestparam.GetProfileRequestType;
+import flab.project.config.baseresponse.ResponseEnum;
+import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.dto.BasicPostWithUser;
 import flab.project.data.dto.UpdateProfileRequestDto;
+import flab.project.data.dto.model.BasicPost;
+import flab.project.data.dto.model.BasicUser;
+import flab.project.data.enums.requestparam.GetProfileRequestType;
+import flab.project.facade.UserFacade;
 import flab.project.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,16 +20,17 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -395,6 +400,136 @@ class UserControllerTest {
                                 .file(multipartFile)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("lastProfilePostId가 없을 경우, 즉 처음에 프로필 피드를 가져올 수 있다.")
+    @Test
+    void getProfileFeed_lastProfilePostIdIsNull() throws Exception {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long limit = 10L;
+
+        BasicPost basicPost = new BasicPost(Arrays.asList("https://pask2202.url"));
+        BasicUser basicUser = new BasicUser(1L, "이은비", "https://pask2202.url");
+
+        BasicPostWithUser basicPostWithUser = new BasicPostWithUser(basicPost, basicUser);
+        List<BasicPostWithUser> feed = Arrays.asList(basicPostWithUser);
+
+        given(userService.getProfileFeed(userId, lastProfilePostId, limit)).willReturn(feed);
+
+        // when & then
+        mockMvc.perform(get("/users/{userId}/profile", userId)
+                        .param("limit", String.valueOf(limit))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
+    }
+
+    @DisplayName("프로필 피드를 가져올 수 있다.")
+    @Test
+    void getProfileFeed() throws Exception {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = 11L;
+        long limit = 10L;
+
+        BasicPost basicPost = new BasicPost(Arrays.asList("https://pask2202.url"));
+        BasicUser basicUser = new BasicUser(1L, "이은비", "https://pask2202.url");
+
+        BasicPostWithUser basicPostWithUser = new BasicPostWithUser(basicPost, basicUser);
+        List<BasicPostWithUser> feed = Arrays.asList(basicPostWithUser);
+
+        given(userService.getProfileFeed(userId, lastProfilePostId, limit)).willReturn(feed);
+
+        // when & then
+        mockMvc.perform(get("/users/{userId}/profile", userId)
+                        .param("lastProfilePostId", String.valueOf(lastProfilePostId))
+                        .param("limit", String.valueOf(limit))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
+                .andExpect(jsonPath("$.code").value(ResponseEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.message").value(ResponseEnum.SUCCESS.getMessage()));
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, userId가 양수가 아니라면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_invalidUserId() throws Exception {
+        // given
+        long invalidUserId = -1L;
+        Long lastProfilePostId = null;
+        long limit = 10L;
+
+        // when & then
+        mockMvc.perform(get("/users/{userId}/profile", invalidUserId)
+                        .param("limit", String.valueOf(limit))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, lastProfilePostId가 양수가 아닐 경우 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_invalidLastProfilePostId() throws Exception {
+        // given
+        long userId = 1L;
+        Long invalidLastProfilePostId = -1L;
+        long limit = 10L;
+
+        // when & then
+        mockMvc.perform(get("/users/{userId}/profile", userId)
+                        .param("lastProfilePostId", String.valueOf(invalidLastProfilePostId))
+                        .param("limit", String.valueOf(limit))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, limit의 값이 양수가 아니라면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_negativeLimit() throws Exception {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long negativeLimit = -1L;
+
+        mockMvc.perform(get("/users/{userId}/profile", userId)
+                        .param("limit", String.valueOf(negativeLimit))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
+                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
+                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, limit의 값이 10을 초과한다면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_excessLimit() throws Exception {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long excessLimit = 11L;
+
+        mockMvc.perform(get("/users/{userId}/profile", userId)
+                        .param("limit", String.valueOf(excessLimit))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
