@@ -155,4 +155,73 @@ class UserServiceTest {
         // then
         assertFalse(isSuccess);
     }
+
+    @DisplayName("lastProfilePostId가 없을 경우, 즉 처음에 프로필 피드들 가져올 수 있다.")
+    @Test
+    void getProfileFeed_lastProfilePostIdIsNull() {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long limit = 1L;
+
+        // when
+        userService.getProfileFeed(userId, lastProfilePostId, limit);
+
+        // then
+        then(userMapper).should().getProfileFeed(userId, lastProfilePostId, limit);
+    }
+
+    @DisplayName("프로필 피드를 가져올 수 있다.")
+    @Test
+    void getProfileFeed() {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = 11L;
+        long limit = 1L;
+
+        // when
+        userService.getProfileFeed(userId, lastProfilePostId, limit);
+
+        // then
+        then(userMapper).should().getProfileFeed(userId, lastProfilePostId, limit);
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, lastProfilePostId의 값이 양수가 아니라면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_invalidLastProfilePostId() {
+        // given
+        long userId = 1L;
+        Long invalidLastProfilePostId = -1L;
+        long limit = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.getProfileFeed(userId, invalidLastProfilePostId, limit))
+                .isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, limit의 값이 양수가 아니라면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_negativeLimit() {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long negativeLimit = -1L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.getProfileFeed(userId, lastProfilePostId, negativeLimit))
+                .isInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("프로필 피드를 가져올 때, limit의 값이 10을 초과한다면 InvalidUserInput 예외를 반환한다.")
+    @Test
+    void getProfileFeed_excessLimit() {
+        // given
+        long userId = 1L;
+        Long lastProfilePostId = null;
+        long excessLimit = 11L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.getProfileFeed(userId, lastProfilePostId, excessLimit))
+                .isInstanceOf(InvalidUserInputException.class);
+    }
 }
