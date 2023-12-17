@@ -15,7 +15,7 @@ import java.util.UUID;
 public class DuplicationService {
 
     private static final String USERNAME_IN_REDIS_SUFFIX = "_verify";
-    private static final int MINUTES_FOR_DURATION = 60 * 30;
+    private static final long MINUTES_FOR_DURATION = 60 * 30L;
 
     private final RedisUtil redisUtil;
     private final DuplicationMapper duplicationMapper;
