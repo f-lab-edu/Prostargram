@@ -36,7 +36,7 @@ public class DuplicationService {
     }
 
     private void validateLengthOfUserName(String userName) {
-        if (StringUtils.isBlank(userName) || userName.length() < 1 || userName.length() > 16) {
+        if (StringUtils.isBlank(userName) || userName.length() > 16) {
             throw new InvalidUserInputException("Invalid userName.");
         }
     }
