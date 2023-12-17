@@ -14,6 +14,8 @@ import java.util.List;
 @Service
 public class CommentService {
 
+    private static final int MAX_LIMIT = 10;
+
     private final CommentMapper commentMapper;
 
     public Comment addComment(long postId, long userId, Long parentId, String content) {
@@ -64,13 +66,12 @@ public class CommentService {
     }
 
     private void validatePagingData(Long lastCommentId, long limit) {
-        int maxLimit = 10;
 
         if (lastCommentId != null && lastCommentId <= 0) {
             throw new InvalidUserInputException("Invalid lastCommentId.");
         }
 
-        if (limit <= 0 || limit > maxLimit) {
+        if (limit <= 0 || limit > MAX_LIMIT) {
             throw new InvalidUserInputException("Invalid limit.");
         }
     }
