@@ -3,6 +3,7 @@ package flab.project.service;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.mapper.DuplicationMapper;
 import flab.project.utils.RedisUtil;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class DuplicationService {
 
     private static final String USERNAME_IN_REDIS_SUFFIX = "_verify";
+    private static final int MINUTES_FOR_DURATION = 60 * 30;
 
     private final RedisUtil redisUtil;
     private final DuplicationMapper duplicationMapper;
@@ -29,17 +31,17 @@ public class DuplicationService {
 
     private void validateUserName(String userName) {
         validateLengthOfUserName(userName);
-        validateUserNameDuplicationDB(userName);
+        validateUserNameDuplicationInDB(userName);
         validateUserNamePreemptionInRedis(userName);
     }
 
     private void validateLengthOfUserName(String userName) {
-        if (userName.length() < 1 || userName.length() > 16) {
+        if (StringUtils.isBlank(userName) || userName.length() < 1 || userName.length() > 16) {
             throw new InvalidUserInputException("Invalid userName.");
         }
     }
 
-    private void validateUserNameDuplicationDB(String userName) {
+    private void validateUserNameDuplicationInDB(String userName) {
         Integer count = duplicationMapper.countUserName(userName);
         if (count == null || count == 1) {
             throw new InvalidUserInputException("Duplicate userName.");
@@ -47,7 +49,7 @@ public class DuplicationService {
     }
 
     private void validateUserNamePreemptionInRedis(String userName) {
-        if (redisUtil.exist(userName)) {
+        if (redisUtil.hasKey(userName)) {
             throw new DuplicateFormatFlagsException("중복된 닉네임입니다.");
         }
     }
@@ -58,8 +60,7 @@ public class DuplicationService {
 
     private void preemptUserName(String userName, String verificationToken) {
         String name = userName + USERNAME_IN_REDIS_SUFFIX;
-        int minutes = 60 * 30;
 
-        redisUtil.setDataExpire(name, verificationToken, minutes);
+        redisUtil.setWithDuration(name, verificationToken, MINUTES_FOR_DURATION);
     }
 }
