@@ -18,11 +18,11 @@ public class RedisUtil {
         return valueOperations.get(key);
     }
 
-    public boolean exist(String key) {
+    public boolean hasKey(String key) {
         return template.hasKey(key);
     }
 
-    public void setDataExpire(String key, String value, long duration) {
+    public void setWithDuration(String key, String value, long duration) {
         ValueOperations<String, String> valueOperations = template.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
