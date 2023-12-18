@@ -156,7 +156,7 @@ class UserServiceTest {
         assertFalse(isSuccess);
     }
 
-    @DisplayName("lastProfilePostId가 없을 경우, 즉 처음에 프로필 피드들 가져올 수 있다.")
+    @DisplayName("프로필 피드 API를 처음 요청하는 경우, lastProfilePostId = null로 요청한다.")
     @Test
     void getProfileFeed_lastProfilePostIdIsNull() {
         // given
