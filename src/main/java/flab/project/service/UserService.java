@@ -18,6 +18,8 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private static final int MAX_LIMIT = 10;
+
     private final UserMapper userMapper;
     private final PostMapper postMapper;
 
@@ -63,13 +65,12 @@ public class UserService {
     }
 
     private void validatePagingData(Long lastProfilePostId, long limit) {
-        int maxLimit = 10;
 
         if (lastProfilePostId != null && lastProfilePostId <= 0) {
             throw new InvalidUserInputException("Invalid lastProfilePostId.");
         }
 
-        if (limit <= 0 || limit > maxLimit) {
+        if (limit <= 0 || limit > MAX_LIMIT) {
             throw new InvalidUserInputException("Invalid limit.");
         }
     }
