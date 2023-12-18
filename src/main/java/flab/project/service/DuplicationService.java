@@ -15,7 +15,7 @@ import java.util.UUID;
 public class DuplicationService {
 
     private static final String USERNAME_IN_REDIS_SUFFIX = "_verify";
-    private static final long MINUTES_FOR_DURATION = 60 * 30L;
+    private static final long SECONDS_FOR_DURATION = 60 * 30L;
 
     private final RedisUtil redisUtil;
     private final DuplicationMapper duplicationMapper;
@@ -24,7 +24,7 @@ public class DuplicationService {
         validateUserName(userName);
 
         String verificationToken = createVerificationToken();
-        preemptUserName(userName, verificationToken);
+        reserveUserName(userName, verificationToken);
 
         return verificationToken;
     }
@@ -44,13 +44,13 @@ public class DuplicationService {
     private void validateUserNameDuplicationInDB(String userName) {
         Integer count = duplicationMapper.countUserName(userName);
         if (count == null || count == 1) {
-            throw new InvalidUserInputException("Duplicate userName.");
+            throw new InvalidUserInputException("Duplicate userName In DB.");
         }
     }
 
     private void validateUserNamePreemptionInRedis(String userName) {
         if (redisUtil.hasKey(userName)) {
-            throw new DuplicateFormatFlagsException("중복된 닉네임입니다.");
+            throw new DuplicateFormatFlagsException("Duplicate userName In Redis.");
         }
     }
 
@@ -58,9 +58,9 @@ public class DuplicationService {
         return UUID.randomUUID().toString().substring(0, 7);
     }
 
-    private void preemptUserName(String userName, String verificationToken) {
+    private void reserveUserName(String userName, String verificationToken) {
         String name = userName + USERNAME_IN_REDIS_SUFFIX;
 
-        redisUtil.setWithDuration(name, verificationToken, MINUTES_FOR_DURATION);
+        redisUtil.setWithDuration(name, verificationToken, SECONDS_FOR_DURATION);
     }
 }

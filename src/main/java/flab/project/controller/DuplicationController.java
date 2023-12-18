@@ -25,7 +25,7 @@ public class DuplicationController {
     // Todo 욕설 및 비속어 필터링은 커스텀 어노테이션을 만들 예정
     @Operation(summary = "닉네임 중복 검증 API")
     @Parameters({@Parameter(name = "userName", description = "유저의 닉네임", in = ParameterIn.QUERY, required = true)})
-    @PostMapping(value = "/users")
+    @PostMapping(value = "/verify-username")
     public SuccessResponse verifyDuplicateUserName(@RequestParam("userName") @NotBlank @Size(min = 1, max = 16) String userName) {
         String userNameToken = duplicationService.verifyDuplicateUserName(userName);
 
