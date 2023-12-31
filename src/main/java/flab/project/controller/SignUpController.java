@@ -1,7 +1,7 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.SignUpInformation;
+import flab.project.data.dto.SignUp;
 import flab.project.service.SignUpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,7 +11,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RequiredArgsConstructor
@@ -25,11 +28,11 @@ public class SignUpController {
     @Parameters({
             @Parameter(name = "emailToken", description = "이메일 검증 토큰", in = ParameterIn.QUERY, required = true),
             @Parameter(name = "userNameToken", description = "닉네임 검증 토큰", in = ParameterIn.QUERY, required = true)})
-    @PostMapping(value = "/users/step1")
-    public SuccessResponse addUserInformation(@RequestBody @Valid SignUpInformation signUpInformation,
+    @PostMapping(value = "/users")
+    public SuccessResponse addUser(@RequestBody @Valid SignUp signUp,
                                               @RequestParam("emailToken") @NotBlank String emailToken,
                                               @RequestParam("userNameToken") @NotBlank String userNameToken) {
-        signUpService.addUserInformation(signUpInformation, emailToken, userNameToken);
+        signUpService.addUser(signUp, emailToken, userNameToken);
 
         return new SuccessResponse<>();
     }

@@ -4,7 +4,7 @@
 
 <mapper namespace="flab.project.mapper.SignUpMapper">
 
-    <insert id="addUserInformation">
+    <insert id="addUser">
         INSERT INTO USERS(email, password, userName)
             VALUE (#{email}, #{password}, #{user_name});
     </insert>
