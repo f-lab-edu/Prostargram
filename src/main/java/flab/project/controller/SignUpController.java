@@ -30,8 +30,8 @@ public class SignUpController {
             @Parameter(name = "userNameToken", description = "닉네임 검증 토큰", in = ParameterIn.QUERY, required = true)})
     @PostMapping(value = "/users")
     public SuccessResponse addUser(@RequestBody @Valid SignUp signUp,
-                                              @RequestParam("emailToken") @NotBlank String emailToken,
-                                              @RequestParam("userNameToken") @NotBlank String userNameToken) {
+                                              @RequestParam @NotBlank String emailToken,
+                                              @RequestParam @NotBlank String userNameToken) {
         signUpService.addUser(signUp, emailToken, userNameToken);
 
         return new SuccessResponse<>();

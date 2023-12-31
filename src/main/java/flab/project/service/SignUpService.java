@@ -2,6 +2,7 @@ package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.SignUp;
+import flab.project.data.enums.LoginType;
 import flab.project.mapper.SignUpMapper;
 import flab.project.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ public class SignUpService {
         String password = signUp.getPassword();
         String userName = signUp.getUserName();
 
-        vaildateToken(email, emailToken, userName, userNameToken);
+        validateToken(email, emailToken, userName, userNameToken);
 
-        signUpMapper.addUser(email, userName, password);
+        signUpMapper.addUser(email, userName, password, LoginType.NORMAL);
     }
 
-    private void vaildateToken(String email, String emailSignUpToken, String userName, String userNameSignUpToken) {
+    private void validateToken(String email, String emailSignUpToken, String userName, String userNameSignUpToken) {
         validateEmailToken(email, emailSignUpToken);
         validateUserNameToken(userName, userNameSignUpToken);
     }

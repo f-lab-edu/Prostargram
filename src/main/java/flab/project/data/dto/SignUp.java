@@ -3,6 +3,7 @@ package flab.project.data.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +20,10 @@ public class SignUp {
     @NotBlank
     private String email;
 
-    @Schema(example = "password", description = "비밀번호는 영문 대소문자, 숫자, 특수 문자가 각각 하나 이상 포함되어야 한다.")
+    @Schema(example = "Password123!!@", description = "비밀번호는 영문 대소문자, 숫자, 특수 문자가 각각 하나 이상 포함되어야 한다.")
     @NotBlank
     @Size(min = 8, max = 20)
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
     private String password;
 
     @Schema(example = "이은비")
