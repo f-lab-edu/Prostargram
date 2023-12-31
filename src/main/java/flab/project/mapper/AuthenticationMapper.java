@@ -1,6 +1,6 @@
 package flab.project.mapper;
 
-import flab.project.data.UserForAuth;
+import flab.project.data.dto.UserForAuth;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

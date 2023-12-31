@@ -1,6 +1,6 @@
 package flab.project.service;
 
-import flab.project.data.UserForAuth;
+import flab.project.data.dto.UserForAuth;
 import flab.project.mapper.AuthenticationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
