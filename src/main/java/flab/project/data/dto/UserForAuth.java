@@ -1,6 +1,5 @@
-package flab.project.data;
+package flab.project.data.dto;
 
-import flab.project.common.annotation.Password;
 import flab.project.data.enums.UserType;
 import lombok.Getter;
 
