@@ -38,7 +38,7 @@ public class TokenProvider implements InitializingBean {
     private Key SIGNING_KEY;
 
     public TokenProvider(
-            @Value("${jwt.secret}") String secret) {
+            @Value("${jwt.secret.key}") String secret) {
         this.secret = secret;
     }
 
