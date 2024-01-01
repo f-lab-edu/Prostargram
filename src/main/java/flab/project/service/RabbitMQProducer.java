@@ -18,7 +18,7 @@ public class RabbitMQProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(Message message) {
+    public void sendMessage(String message) {
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 }
