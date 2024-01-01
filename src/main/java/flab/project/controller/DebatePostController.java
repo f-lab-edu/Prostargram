@@ -1,5 +1,6 @@
 package flab.project.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddDebatePostRequest;
 import flab.project.data.dto.model.BasePost;
@@ -20,10 +21,9 @@ public class DebatePostController {
 
     @PostMapping("/posts/debate")
     public SuccessResponse<DebatePost> addDebatePost(
+            @LoggedInUserId Long userId,
             @RequestBody @Validated AddDebatePostRequest debatePost
     ) {
-        long userId = 1L;
-
         DebatePost createdPost = (DebatePost) debatePostFacade.addPost(userId, debatePost);
 
         return new SuccessResponse<>(createdPost);

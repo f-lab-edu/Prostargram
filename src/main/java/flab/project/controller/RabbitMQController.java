@@ -1,5 +1,6 @@
 package flab.project.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.service.RabbitMQProducer;
 import lombok.RequiredArgsConstructor;

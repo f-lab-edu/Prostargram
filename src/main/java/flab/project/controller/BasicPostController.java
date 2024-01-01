@@ -1,5 +1,6 @@
 package flab.project.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.model.AddBasicPostRequest;
 import flab.project.data.dto.model.BasePost;
@@ -24,11 +25,10 @@ public class BasicPostController {
 
     @PostMapping("/posts/basic")
     public SuccessResponse<BasicPost> addBasicPost(
+            @LoggedInUserId Long userId,
             @RequestPart("basicPost") @Validated AddBasicPostRequest basicPost,
             @RequestPart("contentImages") List<MultipartFile> contentImages
     ) {
-        long userId = 1L;
-
         basicPost.setContentImages(contentImages);
 
         BasicPost createdPost = (BasicPost) basicPostFacade.addPost(userId, basicPost);
