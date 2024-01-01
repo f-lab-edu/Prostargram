@@ -20,5 +20,6 @@ public class RabbitMQProducer {
 
     public void sendMessage(String message) {
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
+        System.out.println("message = " + message);
     }
 }
