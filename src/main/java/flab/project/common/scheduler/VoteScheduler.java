@@ -26,7 +26,7 @@ public class VoteScheduler {
     private static final ScanOptions scanOptions = ScanOptions.scanOptions().count(100).build();
 
     // todo 게시물 수정, 게시물 삭제와 같은 API가 추가 된다면, DB반영에 실패하는 경우가 발생하지 않도록 Redis에서 잘못 된 데이터를 삭제하는 기능이 필요.
-    @Scheduled(fixedDelay = 1000 * 10)
+//    @Scheduled(fixedDelay = 1000000 * 10)
     public void writeBackVotes() {
         Set<String> redisKeys = scanForKeys();
         if (ObjectUtils.isEmpty(redisKeys)) {

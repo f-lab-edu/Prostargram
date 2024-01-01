@@ -45,7 +45,7 @@ public class JwtFilter extends GenericFilterBean {
 
     private boolean isInValidTokenForm(ServletRequest request, ServletResponse response, FilterChain chain, String jwt) throws IOException, ServletException {
         if (!StringUtils.hasText(jwt) || tokenProvider.isInvalidToken(jwt)) {
-            chain.doFilter(request, response);
+//            chain.doFilter(request, response);
             return true;
         }
         return false;

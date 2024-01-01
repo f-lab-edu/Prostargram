@@ -17,7 +17,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login/form")
+    @PostMapping("/login")
     public SuccessResponse<TokenDto> formLogin(@Validated @RequestBody FormLoginRequest formLoginRequest) {
         TokenDto tokenDto = authService.formLogin(formLoginRequest);
 
