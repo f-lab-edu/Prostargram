@@ -4,8 +4,10 @@ import flab.project.data.dto.model.*;
 import flab.project.service.DebatePostOptionService;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostService;
+import flab.project.service.RabbitMQProducer;
 import flab.project.template.PostFacadeTemplate;
 import flab.project.template.PostOptionServiceTemplate;
+import flab.project.utils.FollowerRedisUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

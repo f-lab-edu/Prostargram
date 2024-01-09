@@ -18,7 +18,6 @@ public abstract class PostFacadeTemplate {
         validateTypeOfPost(post);
 
         postService.addPost(userId, post);
-
         postHashTagService.saveAll(post.getPostId(), post.getHashTagNames());
 
         return handlePostMetadata(userId, post);

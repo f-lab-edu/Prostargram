@@ -9,10 +9,12 @@ import flab.project.data.enums.FileType;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
 import flab.project.service.PostService;
+import flab.project.service.RabbitMQProducer;
 import flab.project.template.PostFacadeTemplate;
 
 import java.util.Set;
 
+import flab.project.utils.FollowerRedisUtil;
 import org.springframework.stereotype.Service;
 
 @Service

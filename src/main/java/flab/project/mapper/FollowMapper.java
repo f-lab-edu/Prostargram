@@ -15,4 +15,6 @@ public interface FollowMapper {
     int addFollow(@Param("followRequestDto") Follows follows);
 
     void deleteFollow(@Param("followRequestDto") Follows follows);
+
+    List<Long> findAllFollowerIds(@Param("userId") Long userId);
 }
