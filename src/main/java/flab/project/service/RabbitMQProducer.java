@@ -1,11 +1,13 @@
 package flab.project.service;
 
+import flab.project.data.dto.FanOutMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RabbitMQProducer {
@@ -18,8 +20,8 @@ public class RabbitMQProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(String message) {
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
-        System.out.println("message = " + message);
+    public void sendMessage(FanOutMessage fanOutMessage) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, fanOutMessage);
+        log.info("postMessage = " + fanOutMessage);
     }
 }

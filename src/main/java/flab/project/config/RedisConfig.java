@@ -5,8 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableRedisRepositories
@@ -18,16 +22,30 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+    private RedisConnectionFactory redisConnectionFactory(int namespace) {
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);
+        lettuceConnectionFactory.setDatabase(namespace);
+        lettuceConnectionFactory.afterPropertiesSet();
+        return lettuceConnectionFactory;
     }
 
     @Bean
-    public StringRedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(redisConnectionFactory);
+    public StringRedisTemplate signUpRedisTemplate() {
+        return new StringRedisTemplate(redisConnectionFactory(0));
+    }
 
+
+    @Bean
+    public RedisTemplate<Long, Long> followRedisTemplate() {
+        RedisTemplate<Long, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory(1));
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<Long, Long> newsFeedRedisTemplate() {
+        RedisTemplate<Long, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory(2));
         return template;
     }
 }

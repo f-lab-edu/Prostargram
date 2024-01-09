@@ -2,9 +2,9 @@ package flab.project.controller;
 
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.data.dto.FanOutMessage;
 import flab.project.service.RabbitMQProducer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.Message;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +16,12 @@ public class RabbitMQController {
     private final RabbitMQProducer rabbitMQProducer;
 
     @PostMapping(value = "/send")
-    public SuccessResponse<String> send(
-            @RequestParam String message
+    public SuccessResponse<FanOutMessage> send(
+            @LoggedInUserId Long userId,
+            @RequestParam FanOutMessage fanOutMessage
     ) {
-        rabbitMQProducer.sendMessage(message);
+        rabbitMQProducer.sendMessage(fanOutMessage);
 
-        return new SuccessResponse<>(message);
+        return new SuccessResponse<>(fanOutMessage);
     }
 }
