@@ -1,9 +1,11 @@
 package flab.project.mapper;
 
 import flab.project.data.dto.model.AddPostRequest;
+import flab.project.data.dto.model.BasePost;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.dto.model.DebatePost;
 import flab.project.data.dto.model.PollPost;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +19,6 @@ public interface PostMapper {
     DebatePost getDebatePostDetail(@Param("postId") long postId, @Param("userId") long userId);
 
     PollPost getPollPostDetail(@Param("postId") long postId, @Param("userId") long userId);
+
+    List<BasePost> findByPostIdIn(@Param("postIds") List<Long> postIds);
 }

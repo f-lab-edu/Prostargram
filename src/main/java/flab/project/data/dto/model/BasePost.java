@@ -1,23 +1,31 @@
 package flab.project.data.dto.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Set;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "postType")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = BasicPost.class, name = "BASIC"),
+    @JsonSubTypes.Type(value = DebatePost.class, name = "DEBATE"),
+    @JsonSubTypes.Type(value = PollPost.class, name = "POLL")
+})
+@RedisHash(value = "post")
 @NoArgsConstructor
 @Getter
 @Schema(description = "기본 게시물 Dto")
 public abstract class BasePost {
 
+    @Id
     @Schema(example = "1")
     protected long postId;
 
@@ -49,4 +57,19 @@ public abstract class BasePost {
     @JsonProperty("isFollow")
     @Schema(example = "false")
     protected Boolean isFollow;
+
+    public BasePost(long postId, long userId, String content, Set<String> hashTagNames, PostType postType,
+        long likeCount,
+        long commentCount, Timestamp createdAt, Boolean isLike, Boolean isFollow) {
+        this.postId = postId;
+        this.userId = userId;
+        this.content = content;
+        this.hashTagNames = hashTagNames;
+        this.postType = postType;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+        this.createdAt = createdAt;
+        this.isLike = isLike;
+        this.isFollow = isFollow;
+    }
 }

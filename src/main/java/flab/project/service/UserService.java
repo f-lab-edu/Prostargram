@@ -2,11 +2,15 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
+import flab.project.data.dto.model.BasePost;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.mapper.UserMapper;
+import flab.project.utils.UserRedisUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final UserRedisUtil userRedisUtil;
 
     public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
         checkUserId(userId);
@@ -42,6 +47,31 @@ public class UserService {
         int NumberOfAffectedRow = userMapper.updateProfileImage(userId, profileImgUrl);
 
         return NumberOfAffectedRow == 1;
+    }
+
+    public List<Profile> getUsersByUserIds(List<Long> userIds) {
+        List<Profile> profiles = userRedisUtil.getUsers(userIds);
+
+        List<Long> userIdsNotInRedis = extractUserIdsNotInRedis(profiles, userIds);
+        if (!userIdsNotInRedis.isEmpty()) {
+            List<Profile> usersInDB = userMapper.findByUserIdIn(userIdsNotInRedis);
+            profiles.addAll(usersInDB);
+        }
+
+        return profiles;
+    }
+
+    private List<Long> extractUserIdsNotInRedis(List<Profile> profiles, List<Long> userIds) {
+        List<Long> userIdsNotInRedis = new ArrayList<>();
+
+        for (int index = 0; index < profiles.size(); index++) {
+            Profile profile = profiles.get(index);
+            if (profile == null) {
+                userIdsNotInRedis.add(userIds.get(index));
+            }
+        }
+
+        return userIdsNotInRedis;
     }
 
     private void checkUserId(long userId) {

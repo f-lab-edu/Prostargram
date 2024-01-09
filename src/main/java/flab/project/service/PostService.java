@@ -3,6 +3,9 @@ package flab.project.service;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.data.dto.model.AddPostRequest;
 import flab.project.mapper.PostMapper;
+import flab.project.utils.PostRedisUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.PostWithUser;
@@ -18,6 +21,7 @@ public class PostService {
 
     private final PostMapper postMapper;
     private final UserMapper userMapper;
+    private final PostRedisUtil postRedisUtil;
 
     public void addPost(long userId, AddPostRequest post) {
         validateUserId(userId);
@@ -39,6 +43,32 @@ public class PostService {
         PostWithUser postWithUser = new PostWithUser(post, basicUser);
 
         return new SuccessResponse<>(postWithUser);
+    }
+
+    public List<BasePost> getPostsByPostIds(List<Long> postIds) {
+        List<BasePost> feeds = postRedisUtil.getFeeds(postIds);
+
+        List<Long> postIdsNotInRedis = extractPostIdsNotInRedis(feeds, postIds);
+        if (!postIdsNotInRedis.isEmpty()) {
+            List<BasePost> postsInDB = postMapper.findByPostIdIn(postIdsNotInRedis);
+            feeds.addAll(postsInDB);
+        }
+
+        return feeds;
+    }
+
+    //todo 이름을 어떻게 지어야할까?
+    private List<Long> extractPostIdsNotInRedis(List<BasePost> feeds, List<Long> postIds) {
+        List<Long> postIdsNotInRedis = new ArrayList<>();
+
+        for (int index = 0; index < feeds.size(); index++) {
+            BasePost post = feeds.get(index);
+            if (post == null) {
+                postIdsNotInRedis.add(postIds.get(index));
+            }
+        }
+
+        return postIdsNotInRedis;
     }
 
     private void validateGetPostDetail(long postId, long userId) {
