@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -39,6 +40,7 @@ class PostControllerTest {
     @MockBean
     private PostService postService;
 
+    @WithMockUser
     @DisplayName("일반 게시물 상세 보기를 할 수 있다.")
     @Test
     void getBasicPostDetail() throws Exception {
@@ -52,6 +54,7 @@ class PostControllerTest {
         validateGetPostDetail(postId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물 상세 보기를 할 수 있다.")
     @Test
     void getDebatePostDetail() throws Exception {
@@ -65,6 +68,7 @@ class PostControllerTest {
         validateGetPostDetail(postId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }
 
+    @WithMockUser
     @DisplayName("통계 게시물 상세 보기를 할 수 있다.")
     @Test
     void getPollPostDetail() throws Exception {
@@ -78,6 +82,7 @@ class PostControllerTest {
         validateGetPostDetail(postId, GET_POLL_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }
 
+    @WithMockUser
     @DisplayName("일반 게시물 상세보기를 할 때, postId는 양수여야 한다.")
     @Test
     void getBasicPostDetail_invalidPostId() throws Exception {
@@ -87,6 +92,7 @@ class PostControllerTest {
         validateGetPostDetail(negativePostId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("토론 게시물 상세보기를 할 때, postId는 양수여야 한다.")
     @Test
     void getDebatePostDetail_invalidPostId() throws Exception {
@@ -96,6 +102,7 @@ class PostControllerTest {
         validateGetPostDetail(negativePostId, GET_DEBATE_POST_DETAIL_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
+    @WithMockUser
     @DisplayName("통계 게시물 상세보기를 할 때, postId는 양수여야 한다.")
     @Test
     void getPollPostDetail_invalidPostId() throws Exception {

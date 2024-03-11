@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 @EnableRedisRepositories
@@ -30,6 +31,33 @@ public class RedisConfig {
         StringRedisTemplate template = new StringRedisTemplate();
         template.setConnectionFactory(redisConnectionFactory);
 
+        return template;
+    }
+
+    private RedisConnectionFactory redisConnectionFactory(int namespace) {
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);
+        lettuceConnectionFactory.setDatabase(namespace);
+        lettuceConnectionFactory.afterPropertiesSet();
+        return lettuceConnectionFactory;
+    }
+
+    @Bean
+    public StringRedisTemplate signUpRedisTemplate() {
+        return new StringRedisTemplate(redisConnectionFactory(0));
+    }
+
+
+    @Bean
+    public RedisTemplate<Long, Long> followRedisTemplate() {
+        RedisTemplate<Long, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory(1));
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<Long, Long> newsFeedRedisTemplate() {
+        RedisTemplate<Long, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory(2));
         return template;
     }
 }
