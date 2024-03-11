@@ -15,9 +15,11 @@ import java.util.UUID;
 public class DuplicationService {
 
     private static final String USERNAME_IN_REDIS_SUFFIX = "_verify";
+
     private static final long SECONDS_FOR_DURATION = 60 * 30L;
 
     private final RedisUtil redisUtil;
+
     private final DuplicationMapper duplicationMapper;
 
     public String verifyDuplicateUserName(String userName) {
@@ -50,7 +52,7 @@ public class DuplicationService {
 
     private void validateUserNamePreemptionInRedis(String userName) {
         if (redisUtil.hasKey(userName)) {
-            throw new DuplicateFormatFlagsException("Duplicate userName In Redis.");
+            throw new DuplicateFormatFlagsException("Duplicate userName.");
         }
     }
 
@@ -61,6 +63,10 @@ public class DuplicationService {
     private void reserveUserName(String userName, String verificationToken) {
         String name = userName + USERNAME_IN_REDIS_SUFFIX;
 
-        redisUtil.setWithDuration(name, verificationToken, SECONDS_FOR_DURATION);
+        redisUtil.setWithDuration(
+                name,
+                verificationToken,
+                SECONDS_FOR_DURATION
+        );
     }
 }
