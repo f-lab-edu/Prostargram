@@ -12,14 +12,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisRepository {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final TokenProvider tokenProvider;
 
     public void saveBlackListToken(String jwt, long userId, Date now) {
         long remainTimeInMillis = getRemainTimeInMillis(jwt, now);
 
         if (remainTimeInMillis > 0) {
-            stringRedisTemplate.opsForValue().set(jwt, String.valueOf(userId), remainTimeInMillis, TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(jwt, String.valueOf(userId), remainTimeInMillis, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -29,7 +29,7 @@ public class RedisRepository {
     }
 
     public boolean isBlackListToken(String jwt) {
-        String retrievedJwt = stringRedisTemplate.opsForValue().get(jwt);
+        String retrievedJwt = redisTemplate.opsForValue().get(jwt);
 
         return retrievedJwt != null;
     }

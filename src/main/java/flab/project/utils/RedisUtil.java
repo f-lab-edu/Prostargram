@@ -11,25 +11,25 @@ import java.time.Duration;
 @Service
 public class RedisUtil {
 
-    private final StringRedisTemplate template;
+    private final StringRedisTemplate redisTemplate;
 
     public String get(String key) {
         ValueOperations<String, String> valueOperations
-                = template.opsForValue();
+                = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
 
     public boolean hasKey(String key) {
-        return template.hasKey(key);
+        return redisTemplate.hasKey(key);
     }
 
     public void setWithDuration(String key, String value, long duration) {
-        ValueOperations<String, String> valueOperations = template.opsForValue();
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
     }
 
     public void delete(String key) {
-        template.delete(key);
+        redisTemplate.delete(key);
     }
 }
