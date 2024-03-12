@@ -52,6 +52,7 @@ jobs:
             echo "    }" >> build.gradle
             echo "}" >> build.gradle
           fi
+          chmod 777 ./gradlew
           
 
       - name: Analyze
