@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 public class FanOutMessage {
 
+    private long userId;
     private long postId;
-    private List<Long> followerIds;
 }
