@@ -40,26 +40,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
 
-                .exceptionHandling(handler -> handler
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler))
+            .exceptionHandling(handler -> handler
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler))
 
-                .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
+            .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
 
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/users", "/send", "/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+            .authorizeHttpRequests(authorize ->
+                authorize.requestMatchers("/users", "/send", "/login", "/verification/email","/verify-username", "/swagger-ui/**",
+                        "/v3/api-docs/**").permitAll()
+                    .anyRequest().authenticated()
+            )
 
-                .logout(logout -> logout.addLogoutHandler(addBlackListLogoutHandler()))
-                .logout(logout -> logout.logoutSuccessUrl("/logout/success").permitAll())
+            .logout(logout -> logout.addLogoutHandler(addBlackListLogoutHandler()))
+            .logout(logout -> logout.logoutSuccessUrl("/logout/success").permitAll())
 
-                .apply(new JwtSecurityConfig(tokenProvider, redisRepository));
+            .apply(new JwtSecurityConfig(tokenProvider, redisRepository));
 
         return http.build();
     }
