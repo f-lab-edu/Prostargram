@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestControllerAdvice
 public class ApiControllerAdvice {
@@ -26,9 +27,11 @@ public class ApiControllerAdvice {
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
-            NumberLimitOfInterestExceededException.class
+            NumberLimitOfInterestExceededException.class,
+            MissingServletRequestPartException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
@@ -43,6 +46,7 @@ public class ApiControllerAdvice {
             NotImageExtensionOrNotSupportedExtensionException.class
     })
     public FailResponse exceptionResolveToNotImageExtensionOrNotSupportedExtension(NotImageExtensionOrNotSupportedExtensionException e) {
+        e.printStackTrace();
         return new FailResponse(ResponseEnum.NOT_IMAGE_EXTENSION_OR_NOT_SUPPORTED_EXTENSION);
     }
 
@@ -68,5 +72,17 @@ public class ApiControllerAdvice {
     @ExceptionHandler(FailedToUpdateProfileImageToDatabaseException.class)
     public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
         return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateUsername.class)
+    public FailResponse exceptionResolveToNonExistUser(DuplicateUsername e) {
+        return new FailResponse(ResponseEnum.DUPLICATE_USERNAME);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(FailedToWriteEmailException.class)
+    public FailResponse exceptionResolveToFailedWriteEmail(FailedToWriteEmailException e) {
+        return new FailResponse(ResponseEnum.FAILED_WRITE_EMAIL);
     }
 }

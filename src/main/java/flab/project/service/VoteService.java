@@ -1,5 +1,6 @@
 package flab.project.service;
 
+import flab.project.cacheManager.VoteCacheManager;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
@@ -7,7 +8,6 @@ import flab.project.data.dto.model.PollPeriod;
 import flab.project.data.enums.PostType;
 import flab.project.mapper.PollMetadataMapper;
 import flab.project.mapper.PostOptionsMapper;
-import flab.project.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +20,25 @@ public class VoteService {
 
     private static final Set<Long> debatePostOptionIds = Set.of(1L, 2L);
 
-    private final VoteMapper voteMapper;
+    private final VoteCacheManager voteCacheManager;
     private final PostOptionsMapper postOptionsMapper;
     private final PollMetadataMapper pollMetadataMapper;
 
-    public SuccessResponse addPostVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
+    public SuccessResponse<Void> addPostVote(
+            long postId,
+            Set<Long> optionIds,
+            long userId,
+            PostType postType
+    ) {
         if (postType == null) {
             throw new NotFoundException();
         }
 
         validateVote(postId, optionIds, userId, postType);
 
-        voteMapper.addPostVote(postId, optionIds, userId);
+        voteCacheManager.addPostVote(postId, userId, optionIds);
 
-        return new SuccessResponse();
+        return new SuccessResponse<>();
     }
 
     private void validateVote(long postId, Set<Long> optionIds, long userId, PostType postType) {
@@ -60,7 +65,8 @@ public class VoteService {
         Set<Long> validOptionIds = getValidOptionIds(postId, postType);
 
         optionIds.stream().filter(i -> !validOptionIds.contains(i)).findAny().ifPresent(i -> {
-            throw new InvalidUserInputException(String.format("Invalid optionId %d is received", i));
+            throw new InvalidUserInputException(
+                    String.format("Invalid optionId %d is received", i));
         });
     }
 
@@ -76,12 +82,14 @@ public class VoteService {
         boolean allowMultipleVotes = getAllowMultipleVotes(postId, postType);
 
         if (!allowMultipleVotes && optionIds.size() > 1) {
-            throw new InvalidUserInputException("Multiple selections are not allowed for this poll post.");
+            throw new InvalidUserInputException(
+                    "Multiple selections are not allowed for this poll post.");
         }
     }
 
     private boolean getAllowMultipleVotes(long postId, PostType postType) {
-        return postType == PostType.POLL ? pollMetadataMapper.findAllowMultipleVotes(postId) : false;
+        return postType == PostType.POLL ? pollMetadataMapper.findAllowMultipleVotes(postId)
+                : false;
     }
 
     private void validatePollPostPeriod(long postId) {

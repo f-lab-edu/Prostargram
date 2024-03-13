@@ -2,6 +2,8 @@ package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.utils.RedisUtil;
+import flab.project.config.exception.FailedToWriteEmailException;
+import flab.project.config.exception.InvalidUserInputException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -64,6 +66,7 @@ public class VerificationService {
 
     private void validateEmail(String email) {
         if (StringUtils.isBlank(email) || !email.matches(EMAIL_PATTERN)) {
+
             throw new InvalidUserInputException("Invalid Email.");
         }
     }
@@ -75,6 +78,7 @@ public class VerificationService {
     }
 
     private MimeMessage composeEmail(String email, String subject, String content) {
+
         MimeMessage message = emailSender.createMimeMessage();
 
         try {

@@ -30,7 +30,7 @@ public class EmailConfig {
     private boolean starttls;
 
     @Value("${spring.mail.properties.mail.smtp.starttls.required}")
-    private boolean startlls_required;
+    private boolean starttlsRequired;
 
     @Bean
     public JavaMailSender javaMailService() {
@@ -51,7 +51,7 @@ public class EmailConfig {
 
         properties.put("mail.smtp.auth", auth);
         properties.put("mail.smtp.starttls.enable", starttls);
-        properties.put("mail.smtp.starttls.required", startlls_required);
+        properties.put("mail.smtp.starttls.required", starttlsRequired);
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         return properties;
