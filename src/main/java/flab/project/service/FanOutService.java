@@ -14,8 +14,7 @@ public class FanOutService {
     private final RabbitMQProducer rabbitMQProducer;
 
     public void fanOut(Long userId, long postId) {
-        List<Long> followerIds = followService.getFollowerIds(userId);
-        FanOutMessage fanOutMessage = new FanOutMessage(postId, followerIds);
+        FanOutMessage fanOutMessage = new FanOutMessage(userId, postId);
 
         rabbitMQProducer.sendMessage(fanOutMessage);
     }

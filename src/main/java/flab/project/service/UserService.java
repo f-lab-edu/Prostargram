@@ -2,7 +2,7 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
-import flab.project.data.dto.model.BasePost;
+import flab.project.data.dto.model.BasicUser;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
@@ -10,7 +10,10 @@ import flab.project.data.dto.UpdateProfileRequestDto;
 import flab.project.mapper.UserMapper;
 import flab.project.utils.UserRedisUtil;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,23 +52,32 @@ public class UserService {
         return NumberOfAffectedRow == 1;
     }
 
-    public List<Profile> getUsersByUserIds(List<Long> userIds) {
-        List<Profile> profiles = userRedisUtil.getUsers(userIds);
+    public List<BasicUser> getUsersByUserIds(List<Long> userIds) {
+        Set<BasicUser> users = getUsersFromRedis(userIds);
 
-        List<Long> userIdsNotInRedis = extractUserIdsNotInRedis(profiles, userIds);
+        Set<Long> userIdsNotInRedis = extractUserIdsNotInRedis(new ArrayList<>(users), userIds);
         if (!userIdsNotInRedis.isEmpty()) {
-            List<Profile> usersInDB = userMapper.findByUserIdIn(userIdsNotInRedis);
-            profiles.addAll(usersInDB);
+            List<Profile> usersNotInRedis = new ArrayList<>(userMapper.findWhereUserIdIn(userIdsNotInRedis));
+
+            userRedisUtil.saveAll(usersNotInRedis);
+            users.addAll(usersNotInRedis);
         }
 
-        return profiles;
+        return new ArrayList<>(users);
     }
 
-    private List<Long> extractUserIdsNotInRedis(List<Profile> profiles, List<Long> userIds) {
-        List<Long> userIdsNotInRedis = new ArrayList<>();
+    private Set<BasicUser> getUsersFromRedis(List<Long> userIds) {
+        return userRedisUtil.getUsers(userIds)
+            .stream()
+            .map(BasicUser.class::cast)
+            .collect(Collectors.toSet());
+    }
 
-        for (int index = 0; index < profiles.size(); index++) {
-            Profile profile = profiles.get(index);
+    private Set<Long> extractUserIdsNotInRedis(List<BasicUser> users, List<Long> userIds) {
+        Set<Long> userIdsNotInRedis = new HashSet<>();
+
+        for (int index = 0; index < users.size(); index++) {
+            BasicUser profile = users.get(index);
             if (profile == null) {
                 userIdsNotInRedis.add(userIds.get(index));
             }

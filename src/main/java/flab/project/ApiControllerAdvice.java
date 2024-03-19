@@ -65,7 +65,6 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public FailResponse exceptionResolveToServerError(RuntimeException e) {
-        e.printStackTrace();
         return new FailResponse(ResponseEnum.SERVER_ERROR);
     }
 
@@ -73,6 +72,12 @@ public class ApiControllerAdvice {
     @ExceptionHandler(FailedToUpdateProfileImageToDatabaseException.class)
     public FailResponse exceptionResolveToFailedUpdateProfileImage(FailedToUpdateProfileImageToDatabaseException e) {
         return new FailResponse(ResponseEnum.FAILED_UPDATE_PROFILE_IMAGE);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateUsername.class)
+    public FailResponse exceptionResolveToNonExistUser(DuplicateUsername e) {
+        return new FailResponse(ResponseEnum.DUPLICATE_USERNAME);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

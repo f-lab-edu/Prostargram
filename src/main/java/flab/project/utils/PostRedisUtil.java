@@ -28,4 +28,12 @@ public class PostRedisUtil {
 
         valueOperations.set(post.getPostId(), post);
     }
+
+    public void saveAll(List<BasePost> posts) {
+        postRedisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            posts.forEach(this::save);
+
+            return null;
+        });
+    }
 }

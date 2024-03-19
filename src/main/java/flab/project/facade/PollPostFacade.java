@@ -19,12 +19,13 @@ public class PollPostFacade extends PostFacadeTemplate {
     private final PostOptionServiceTemplate postOptionServiceTemplate;
 
     public PollPostFacade(
-            PostService postService,
-            PostHashTagService postHashTagService,
-            PollMetadataService pollMetadataService,
-            PollPostOptionService pollPostOptionService
+        PostService postService,
+        PostHashTagService postHashTagService,
+        FanOutService fanOutService,
+        PollMetadataService pollMetadataService,
+        PostOptionServiceTemplate pollPostOptionService
     ) {
-        super(postService, postHashTagService);
+        super(postService, postHashTagService, fanOutService);
         this.pollMetadataService = pollMetadataService;
         this.postOptionServiceTemplate = pollPostOptionService;
     }
@@ -44,5 +45,10 @@ public class PollPostFacade extends PostFacadeTemplate {
         Set<Option> options = postOptionServiceTemplate.savePostOptions(pollPostRequest.getPostId(), pollPostRequest.getOptionContents());
 
         return new PollPost(pollPostRequest, userId, options);
+    }
+
+    @Override
+    protected boolean doesNeedFanOut() {
+        return false;
     }
 }

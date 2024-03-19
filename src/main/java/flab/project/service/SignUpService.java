@@ -34,7 +34,7 @@ public class SignUpService {
     }
 
     private void validateEmailToken(String email, String emailSignUpToken) {
-        String emailInRedis = email + "_verify";
+        String emailInRedis = email;
         String emailTokenInRedis = signUpRedisUtil.get(emailInRedis);
 
         if (!emailSignUpToken.equals(emailTokenInRedis)) {

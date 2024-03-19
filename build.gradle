@@ -42,14 +42,21 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    compileOnly'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
+    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
+    testImplementation 'org.springframework.boot:spring-boot-starter-jdbc' // test용 h2 database사용을 위함.
     testImplementation 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
+    runtimeOnly 'com.h2database:h2'
+
+    testCompileOnly(group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2')
     testImplementation 'org.springframework.security:spring-security-test'
 }
 

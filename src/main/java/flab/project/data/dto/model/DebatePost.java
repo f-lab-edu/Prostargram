@@ -1,6 +1,9 @@
 package flab.project.data.dto.model;
 
+import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.sql.Timestamp;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +32,15 @@ public class DebatePost extends BasePost {
         this.commentCount = 0;
         this.isLike = false;
         this.isFollow = false;
+    }
+
+    @Builder
+    public DebatePost(long postId, long userId, String content, Set<String> hashTagNames, PostType postType,
+        long likeCount,
+        long commentCount, Timestamp createdAt, Boolean isLike, Boolean isFollow, Set<Option> options,
+        Integer selectedOptionId) {
+        super(postId, userId, content, hashTagNames, postType, likeCount, commentCount, createdAt, isLike, isFollow);
+        this.options = options;
+        this.selectedOptionId = selectedOptionId;
     }
 }

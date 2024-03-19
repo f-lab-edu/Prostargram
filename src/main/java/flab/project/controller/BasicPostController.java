@@ -34,7 +34,6 @@ public class BasicPostController {
         basicPost.setContentImages(contentImages);
 
         BasicPost createdPost = (BasicPost) basicPostFacade.addPost(userId, basicPost);
-        fanOutService.fanOut(userId, createdPost.getPostId());
 
         return new SuccessResponse<>(createdPost);
     }

@@ -9,26 +9,29 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @Service
-public class SignUpRedisUtil {
+public class RedisUtil {
 
-    private final StringRedisTemplate signUpRedisTemplate;
+
+    private final StringRedisTemplate redisTemplate;
 
     public String get(String key) {
-        ValueOperations<String, String> valueOperations = signUpRedisTemplate.opsForValue();
+        ValueOperations<String, String> valueOperations
+                = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
 
-    public boolean exists(String key) {
-        return signUpRedisTemplate.hasKey(key);
+    public boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
     }
 
-    public void setDataExpire(String key, String value, long duration) {
-        ValueOperations<String, String> valueOperations = signUpRedisTemplate.opsForValue();
+    public void setWithDuration(String key, String value, long duration) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
     }
 
     public void delete(String key) {
-        signUpRedisTemplate.delete(key);
+        redisTemplate.delete(key);
     }
 }

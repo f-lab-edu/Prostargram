@@ -6,6 +6,10 @@ import flab.project.mapper.PostMapper;
 import flab.project.utils.PostRedisUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.data.dto.PostWithUser;
@@ -30,7 +34,7 @@ public class PostService {
     }
 
     public SuccessResponse<PostWithUser> getPostDetail(long postId, long userId, PostType postType)
-            throws NotFoundException {
+        throws NotFoundException {
         validateGetPostDetail(postId, userId);
 
         BasicUser basicUser = userMapper.getBasicUser(userId);
@@ -45,19 +49,20 @@ public class PostService {
         return new SuccessResponse<>(postWithUser);
     }
 
-    public List<BasePost> getPostsByPostIds(List<Long> postIds) {
-        List<BasePost> feeds = postRedisUtil.getFeeds(postIds);
+    public List<BasePost> lookAsidePosts(List<Long> postIds, long userId) {
+        List<BasePost> posts = new ArrayList<>(postRedisUtil.getFeeds(postIds));
 
-        List<Long> postIdsNotInRedis = extractPostIdsNotInRedis(feeds, postIds);
+        List<Long> postIdsNotInRedis = extractPostIdsNotInRedis(posts, postIds);
         if (!postIdsNotInRedis.isEmpty()) {
-            List<BasePost> postsInDB = postMapper.findByPostIdIn(postIdsNotInRedis);
-            feeds.addAll(postsInDB);
+            List<BasePost> postsNotInRedis = getPostsFromDb(userId, postIdsNotInRedis);
+
+            postRedisUtil.saveAll(postsNotInRedis);
+            posts.addAll(postsNotInRedis);
         }
 
-        return feeds;
+        return posts.stream().filter(Objects::nonNull).toList();
     }
 
-    //todo 이름을 어떻게 지어야할까?
     private List<Long> extractPostIdsNotInRedis(List<BasePost> feeds, List<Long> postIds) {
         List<Long> postIdsNotInRedis = new ArrayList<>();
 
@@ -69,6 +74,60 @@ public class PostService {
         }
 
         return postIdsNotInRedis;
+    }
+
+    private List<BasePost> getPostsFromDb(long userId,  List<Long> postIdsNotInRedis) {
+        Map<Long, PostType> postIdPostTypeMap = generatePostIdPostTypeMap(postIdsNotInRedis);
+
+        List<BasicPost> basicPosts = getBasicPostsFromDb(userId, postIdPostTypeMap);
+        List<DebatePost> debatePosts = getDebatePostsFromDb(userId, postIdPostTypeMap);
+
+        return Stream.concat(basicPosts.stream(), debatePosts.stream())
+            .toList();
+    }
+
+    private Map<Long, PostType> generatePostIdPostTypeMap(List<Long> postIdsNotInRedis) {
+        List<PostTypeModel> postTypeModels = postMapper.findTypeByPostIds(postIdsNotInRedis);
+
+        return postTypeModels.stream()
+            .collect(Collectors.toMap(
+                PostTypeModel::getPostId,
+                PostTypeModel::getPostType
+            ));
+    }
+
+    private List<BasicPost> getBasicPostsFromDb(long userId, Map<Long, PostType> postIdPostTypeMap) {
+        List<Long> basicPostIds = extractBasicPostIds(postIdPostTypeMap);
+        if(basicPostIds.isEmpty()){
+            return List.of();
+        }
+
+        return postMapper.getBasicPostsWhereIn(basicPostIds, userId);
+    }
+
+    private List<DebatePost> getDebatePostsFromDb(long userId, Map<Long, PostType> postIdPostTypeMap) {
+        List<Long> debatePostIds = extractDebatePostIds(postIdPostTypeMap);
+        if(debatePostIds.isEmpty()){
+            return List.of();
+        }
+
+        return postMapper.getDebatePostsWhereIn(debatePostIds, userId);
+    }
+
+    private List<Long> extractDebatePostIds(Map<Long, PostType> postIdPostTypeMap) {
+        return postIdPostTypeMap
+            .keySet()
+            .stream()
+            .filter(postId -> postIdPostTypeMap.get(postId) == PostType.DEBATE)
+            .toList();
+    }
+
+    private List<Long> extractBasicPostIds(Map<Long, PostType> postIdPostTypeMap) {
+        return postIdPostTypeMap
+            .keySet()
+            .stream()
+            .filter(postId -> postIdPostTypeMap.get(postId) == PostType.BASIC)
+            .toList();
     }
 
     private void validateGetPostDetail(long postId, long userId) {

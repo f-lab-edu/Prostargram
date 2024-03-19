@@ -3,8 +3,8 @@ package flab.project.service;
 import flab.project.data.dto.PostWithUser;
 import flab.project.data.dto.model.BasePost;
 import flab.project.data.dto.model.BasicUser;
-import flab.project.data.dto.model.Profile;
 import flab.project.utils.NewsFeedRedisUtil;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,20 +23,27 @@ public class NewsFeedService {
     public List<PostWithUser> getFeeds(long userId) {
         // Todo 비활성화 유저 같은 경우는, NewsFeedCache에 데이터가 없을수도 있어요.
         // Todo 막 가입한 유저.
+        try {
+            List<Long> postIds = newsFeedRedisUtil.getPostIds(userId);
+            List<BasePost> posts = postService.lookAsidePosts(postIds, userId);
+            List<Long> writerIds = extractWriterIds(posts);
+            Map<Long, BasicUser> profileMap = generateProfileMap(writerIds);
 
-        List<Long> postIds = newsFeedRedisUtil.getPostIds(userId);
-        List<BasePost> feeds = postService.getPostsByPostIds(postIds);
-
-        List<Long> writerIds = extractWriterIds(feeds);
-        List<Profile> profiles = userService.getUsersByUserIds(writerIds);
-        Map<Long, Profile> profileMap = convertToProfileMap(profiles);
-
-        return feeds.stream()
-            .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
-            .toList();
+            return posts.stream()
+                .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
+                .toList();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
-    private static Map<Long, Profile> convertToProfileMap(List<Profile> profiles) {
+    private Map<Long, BasicUser> generateProfileMap(List<Long> writerIds) {
+        List<BasicUser> users = userService.getUsersByUserIds(writerIds);
+
+        return convertToProfileMap(users);
+    }
+
+    private Map<Long, BasicUser> convertToProfileMap(List<BasicUser> profiles) {
         return profiles.stream()
             .collect(Collectors.toMap(
                 BasicUser::getUserId,
@@ -44,7 +51,7 @@ public class NewsFeedService {
             ));
     }
 
-    private static List<Long> extractWriterIds(List<BasePost> feeds) {
+    private List<Long> extractWriterIds(List<BasePost> feeds) {
         return feeds.stream().map(BasePost::getUserId).toList();
     }
 }

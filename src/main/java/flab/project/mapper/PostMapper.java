@@ -5,6 +5,9 @@ import flab.project.data.dto.model.BasePost;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.dto.model.DebatePost;
 import flab.project.data.dto.model.PollPost;
+import flab.project.data.dto.model.PostTypeModel;
+import flab.project.data.enums.PostType;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,5 +23,9 @@ public interface PostMapper {
 
     PollPost getPollPostDetail(@Param("postId") long postId, @Param("userId") long userId);
 
-    List<BasePost> findByPostIdIn(@Param("postIds") List<Long> postIds);
+    List<BasicPost> getBasicPostsWhereIn(@Param("basicPostIds") List<Long> basicPostIds, @Param("userId") long userId);
+
+    List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds, @Param("userId") long userId);
+
+    List<PostTypeModel> findTypeByPostIds(@Param("postIds") List<Long> postIds);
 }

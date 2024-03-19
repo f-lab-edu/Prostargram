@@ -2,6 +2,7 @@ package flab.project.facade;
 
 import flab.project.data.dto.model.*;
 import flab.project.service.DebatePostOptionService;
+import flab.project.service.FanOutService;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostService;
 import flab.project.service.RabbitMQProducer;
@@ -18,11 +19,12 @@ public class DebatePostFacade extends PostFacadeTemplate {
     private final PostOptionServiceTemplate postOptionServiceTemplate;
 
     public DebatePostFacade(
-            PostService postService,
-            PostHashTagService postHashTagService,
-            DebatePostOptionService debatePostOptionService
+        PostService postService,
+        PostHashTagService postHashTagService,
+        FanOutService fanOutService,
+        PostOptionServiceTemplate debatePostOptionService
     ) {
-        super(postService, postHashTagService);
+        super(postService, postHashTagService, fanOutService);
         this.postOptionServiceTemplate = debatePostOptionService;
     }
 
@@ -39,5 +41,10 @@ public class DebatePostFacade extends PostFacadeTemplate {
         Set<Option> options = postOptionServiceTemplate.savePostOptions(debatePostRequest.getPostId(), debatePostRequest.getOptionContents());
 
         return new DebatePost(debatePostRequest, userId, options);
+    }
+
+    @Override
+    protected boolean doesNeedFanOut() {
+        return true;
     }
 }

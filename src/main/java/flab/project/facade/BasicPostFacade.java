@@ -6,6 +6,7 @@ import flab.project.data.dto.model.AddPostRequest;
 import flab.project.data.dto.model.BasePost;
 import flab.project.data.dto.model.BasicPost;
 import flab.project.data.enums.FileType;
+import flab.project.service.FanOutService;
 import flab.project.service.PostHashTagService;
 import flab.project.service.PostImageService;
 import flab.project.service.PostService;
@@ -24,12 +25,13 @@ public class BasicPostFacade extends PostFacadeTemplate {
     private final PostImageService postImageService;
 
     public BasicPostFacade(
-            PostService postService,
-            PostHashTagService postHashTagService,
-            FileStorage fileStorage,
-            PostImageService postImageService
+        PostService postService,
+        PostHashTagService postHashTagService,
+        FanOutService fanOutService,
+        FileStorage fileStorage,
+        PostImageService postImageService
     ) {
-        super(postService, postHashTagService);
+        super(postService, postHashTagService, fanOutService);
         this.fileStorage = fileStorage;
         this.postImageService = postImageService;
     }
@@ -45,9 +47,15 @@ public class BasicPostFacade extends PostFacadeTemplate {
     protected BasePost handlePostMetadata(long userId, AddPostRequest post) {
         AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
 
-        Set<String> uploadedFileUrls = fileStorage.uploadFiles(userId, basicPostRequest.getContentImages(), FileType.POST_IMAGE);
+        Set<String> uploadedFileUrls
+            = fileStorage.uploadFiles(userId, basicPostRequest.getContentImages(), FileType.POST_IMAGE);
         postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls);
 
         return new BasicPost(basicPostRequest, userId, uploadedFileUrls);
+    }
+
+    @Override
+    protected boolean doesNeedFanOut() {
+        return true;
     }
 }

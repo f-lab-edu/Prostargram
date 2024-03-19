@@ -18,7 +18,7 @@ public class NewsFeedRedisUtil {
     // todo: valueOperations.
     public List<Long> getPostIds(Long key) {
         ListOperations<Long, Long> listOperations = newsFeedRedisTemplate.opsForList();
-        return listOperations.leftPop(key, 10L);
+        return listOperations.range(key, 0, 10L);
     }
 
     public boolean exists(Long key) {

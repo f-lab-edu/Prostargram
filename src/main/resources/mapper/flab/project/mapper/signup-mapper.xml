@@ -6,7 +6,7 @@
 
     <insert id="addUser">
         INSERT INTO USERS(email, password, user_name, login_type)
-            VALUE (#{email}, #{password}, #{userName}, #{loginType});
+            VALUES (#{email}, #{password}, #{userName}, #{loginType});
     </insert>
 
 </mapper>

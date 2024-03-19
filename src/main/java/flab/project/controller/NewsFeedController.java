@@ -6,10 +6,10 @@ import flab.project.data.dto.PostWithUser;
 import flab.project.service.NewsFeedService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class NewsFeedController {
 
@@ -19,6 +19,6 @@ public class NewsFeedController {
     public SuccessResponse<List<PostWithUser>> getFeeds(@LoggedInUserId Long userId) {
         List<PostWithUser> feeds = newsFeedService.getFeeds(userId);
 
-        return new SuccessResponse(feeds);
+        return new SuccessResponse<>(feeds);
     }
 }
