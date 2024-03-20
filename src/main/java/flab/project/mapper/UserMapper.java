@@ -4,6 +4,8 @@ import flab.project.data.dto.model.BasicUser;
 import flab.project.data.dto.model.Profile;
 import flab.project.data.enums.requestparam.GetProfileRequestType;
 import flab.project.data.dto.UpdateProfileRequestDto;
+import java.util.List;
+import java.util.Set;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +19,6 @@ public interface UserMapper {
     int updateProfile(@Param("userId") long userId, @Param("updateProfileRequestDto") UpdateProfileRequestDto updateProfileRequestDto);
 
     int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
+
+    List<Profile> findWhereUserIdIn(@Param("userIds") Set<Long> userIds);
 }

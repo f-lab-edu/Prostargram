@@ -1,11 +1,16 @@
 package flab.project.data.dto.model;
 
+import flab.project.data.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.sql.Timestamp;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @Getter
 @Schema(description = "일반 게시물 Dto")
@@ -26,5 +31,13 @@ public class BasicPost extends BasePost {
         this.commentCount = 0;
         this.isLike = false;
         this.isFollow = false;
+    }
+
+    @Builder
+    public BasicPost(long postId, long userId, String content, Set<String> hashTagNames,
+        PostType postType, long likeCount, long commentCount, Timestamp createdAt,
+        Boolean isLike, Boolean isFollow, Set<String> contentImgUrls) {
+        super(postId, userId, content, hashTagNames, postType, likeCount, commentCount, createdAt, isLike, isFollow);
+        this.contentImgUrls = contentImgUrls;
     }
 }

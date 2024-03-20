@@ -1,17 +1,14 @@
 package flab.project.data.dto.model;
 
+import flab.project.data.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-public class Option {
-
-    private Long optionId;
-
-    private String optionContent;
-
-    private long voteCount;
+public class PostTypeModel {
+    private long postId;
+    private PostType postType;
 }
