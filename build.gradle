@@ -40,10 +40,6 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     compileOnly'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
