@@ -1,8 +1,8 @@
-package flab.project.service;
+package flab.project.domain.like.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.LikeMapper;
+import flab.project.domain.like.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

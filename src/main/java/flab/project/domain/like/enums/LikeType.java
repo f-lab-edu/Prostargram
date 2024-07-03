@@ -1,4 +1,4 @@
-package flab.project.data.enums;
+package flab.project.domain.like.enums;
 
 public enum LikeType {
     LIKE,

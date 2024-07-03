@@ -1,4 +1,4 @@
-package flab.project.mapper;
+package flab.project.domain.like.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

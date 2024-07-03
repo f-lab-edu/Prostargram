@@ -1,7 +1,7 @@
-package flab.project.controller;
+package flab.project.domain.like.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.service.LikeService;
+import flab.project.domain.like.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
