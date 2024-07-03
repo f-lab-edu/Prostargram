@@ -1,8 +1,6 @@
-package flab.project.data.dto;
+package flab.project.domain.feed.model;
 
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @ToString

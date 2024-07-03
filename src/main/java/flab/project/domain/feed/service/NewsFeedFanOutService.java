@@ -1,7 +1,7 @@
-package flab.project.consumer.service;
+package flab.project.domain.feed.service;
 
-import flab.project.data.dto.FanOutMessage;
-import flab.project.service.FollowService;
+import flab.project.domain.feed.model.FanOutMessage;
+import flab.project.domain.user.service.FollowService;
 import flab.project.utils.NewsFeedRedisUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

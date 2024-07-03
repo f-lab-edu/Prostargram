@@ -1,6 +1,6 @@
-package flab.project.service;
+package flab.project.domain.feed.service;
 
-import flab.project.data.dto.FanOutMessage;
+import flab.project.domain.feed.model.FanOutMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

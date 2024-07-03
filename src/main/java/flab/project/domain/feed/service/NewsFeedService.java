@@ -1,8 +1,10 @@
-package flab.project.service;
+package flab.project.domain.feed.service;
 
-import flab.project.data.dto.PostWithUser;
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicUser;
+import flab.project.domain.post.model.PostWithUser;
+import flab.project.domain.post.model.BasePost;
+import flab.project.domain.user.model.BasicUser;
+import flab.project.domain.post.service.PostService;
+import flab.project.domain.user.service.UserService;
 import flab.project.utils.NewsFeedRedisUtil;
 import java.util.Collections;
 import java.util.List;

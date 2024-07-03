@@ -1,9 +1,9 @@
-package flab.project.controller;
+package flab.project.domain.feed.controller;
 
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.FanOutMessage;
-import flab.project.service.RabbitMQProducer;
+import flab.project.domain.feed.model.FanOutMessage;
+import flab.project.domain.feed.service.RabbitMQProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

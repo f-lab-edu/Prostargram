@@ -1,7 +1,7 @@
-package flab.project.consumer.controller;
+package flab.project.domain.feed.controller;
 
-import flab.project.consumer.service.NewsFeedFanOutService;
-import flab.project.data.dto.FanOutMessage;
+import flab.project.domain.feed.service.NewsFeedFanOutService;
+import flab.project.domain.feed.model.FanOutMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

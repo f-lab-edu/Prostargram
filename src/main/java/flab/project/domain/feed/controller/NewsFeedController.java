@@ -1,9 +1,9 @@
-package flab.project.controller;
+package flab.project.domain.feed.controller;
 
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.PostWithUser;
-import flab.project.service.NewsFeedService;
+import flab.project.domain.post.model.PostWithUser;
+import flab.project.domain.feed.service.NewsFeedService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
