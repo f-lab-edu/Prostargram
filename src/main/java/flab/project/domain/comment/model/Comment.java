@@ -1,4 +1,4 @@
-package flab.project.data.dto.model;
+package flab.project.domain.comment.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

@@ -1,7 +1,6 @@
-package flab.project.data.dto;
+package flab.project.domain.comment.model;
 
-import flab.project.data.dto.model.BasicUser;
-import flab.project.data.dto.model.Comment;
+import flab.project.domain.user.model.BasicUser;
 
 public class CommentWithUser {
     private final Comment comment;

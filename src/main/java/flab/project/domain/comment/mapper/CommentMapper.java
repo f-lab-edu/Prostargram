@@ -1,6 +1,6 @@
-package flab.project.mapper;
+package flab.project.domain.comment.mapper;
 
-import flab.project.data.dto.model.Comment;
+import flab.project.domain.comment.model.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

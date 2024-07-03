@@ -1,8 +1,8 @@
-package flab.project.service;
+package flab.project.domain.comment.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.Comment;
-import flab.project.mapper.CommentMapper;
+import flab.project.domain.comment.model.Comment;
+import flab.project.domain.comment.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

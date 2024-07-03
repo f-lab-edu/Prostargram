@@ -1,8 +1,8 @@
-package flab.project.controller;
+package flab.project.domain.comment.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.model.Comment;
-import flab.project.service.CommentService;
+import flab.project.domain.comment.model.Comment;
+import flab.project.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
