@@ -1,9 +1,9 @@
-package flab.project.data.dto.file;
+package flab.project.domain.file.model;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionExtractor;
-import flab.project.data.enums.FileType;
+import flab.project.domain.file.enums.FileType;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 

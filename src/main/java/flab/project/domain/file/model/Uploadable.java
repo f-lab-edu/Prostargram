@@ -1,4 +1,4 @@
-package flab.project.data.dto.file;
+package flab.project.domain.file.model;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 

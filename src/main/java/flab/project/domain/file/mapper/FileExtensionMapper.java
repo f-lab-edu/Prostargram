@@ -1,6 +1,6 @@
-package flab.project.mapper;
+package flab.project.domain.file.mapper;
 
-import flab.project.data.enums.ExtensionType;
+import flab.project.domain.file.enums.ExtensionType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
