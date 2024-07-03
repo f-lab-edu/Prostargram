@@ -1,6 +1,6 @@
 package flab.project.common.jwt;
 
-import flab.project.data.enums.TokenType;
+import flab.project.domain.user.enums.TokenType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
