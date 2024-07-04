@@ -20,5 +20,5 @@ public interface UserMapper {
 
     int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
 
-    List<Profile> findWhereUserIdIn(@Param("userIds") Set<Long> userIds);
+    Set<Profile> findWhereUserIdIn(@Param("userIds") Set<Long> userIds);
 }
