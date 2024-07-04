@@ -3,9 +3,9 @@ package flab.project.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.common.Constraints;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.model.AddPollPostRequest;
-import flab.project.template.PostFacadeTemplate;
+import flab.project.domain.post.model.AddPollPostRequest;
+import flab.project.domain.post.controller.PollPostController;
+import flab.project.domain.post.template.PostFacadeTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,6 @@ import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,7 +52,7 @@ class PollPostControllerTest {
     @MockBean
     private PostFacadeTemplate postFacadeTemplate;
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 수 있다.")
     @Test
     void addPollPost() throws Exception {
@@ -73,7 +72,7 @@ class PollPostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 시작 날짜가 오늘이여도 된다.")
     @Test
     void addPollPost_todayStartDate() throws Exception {
@@ -93,7 +92,7 @@ class PollPostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 종료 날짜가 오늘이여도 된다.")
     @Test
     void addPollPost_todayEndDate() throws Exception {
@@ -114,7 +113,7 @@ class PollPostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddPollPostRequest.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withEmptyPostContent() throws Exception {
@@ -134,7 +133,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 공백으로만 이루어진 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withOnlyBlankPostContent() throws Exception {
@@ -154,7 +153,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 최대 길이를 초과한 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withExceedMaxLengthOfPostContent() throws Exception {
@@ -174,7 +173,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 subject가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withEmptyPollSubject() throws Exception {
@@ -194,7 +193,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 공백으로만 이루어진 subject가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withOnlyBlankPollSubject() throws Exception {
@@ -214,7 +213,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 최대 길이를 초과한 subject가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withExceedMaxLengthOfPollSubject() throws Exception {
@@ -234,7 +233,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 문자열의 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withEmptyHashTagName() throws Exception {
@@ -254,7 +253,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 공백으로만 이루어진 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withOnlyBlankHashTagName() throws Exception {
@@ -274,7 +273,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, hashTagNames가 최대 개수를 초과하면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withExceedMaxSizeOfHashTagNames() throws Exception {
@@ -295,7 +294,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withExceedMaxLengthOfHashTagName() throws Exception {
@@ -317,7 +316,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 비어 있는 문자열의 optionContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withEmptyOptionContents() throws Exception {
@@ -337,7 +336,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, 공백으로만 이루어진 optionContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withOnlyBlankOptionContents() throws Exception {
@@ -357,7 +356,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, optionContents 요소가 2가 아니면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_moreThanMaxSizeOfOptionContents() throws Exception {
@@ -379,7 +378,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @Test
     void addPollPost_lessThanMinSizeOfOptionContents() throws Exception {
         // given
@@ -400,7 +399,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, optionContents 요소중 최대 길이를 초과한 요소가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_exceedMaxLengtheOfOptionContents() throws Exception {
@@ -422,7 +421,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, startDate가 오늘 이전이면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withBeforeStartDateOfToday() throws Exception {
@@ -442,7 +441,7 @@ class PollPostControllerTest {
         validateAddPollPostRequest(invalidPollPostRequest, ADD_POLL_POST_REQUEST_URL, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("통계 게시물을 생성할 때, endDate가 오늘 이전이면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addPollPost_withBeforeEndDateOfToday() throws Exception {

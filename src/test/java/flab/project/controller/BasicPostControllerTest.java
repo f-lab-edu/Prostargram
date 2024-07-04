@@ -5,7 +5,6 @@ import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -16,15 +15,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.model.AddBasicPostRequest;
+import flab.project.domain.feed.service.FanOutService;
+import flab.project.domain.post.model.AddBasicPostRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import flab.project.template.PostFacadeTemplate;
+import flab.project.domain.post.controller.BasicPostController;
+import flab.project.domain.post.template.PostFacadeTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,12 +34,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
-@WebMvcTest(controllers = BasicPostController.class)
+@ActiveProfiles("test")
+@WebMvcTest(BasicPostController.class)
 class BasicPostControllerTest {
 
     private static final String ADD_BASIC_POST_REQUEST_URL = "/posts/basic";
@@ -54,8 +56,10 @@ class BasicPostControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private PostFacadeTemplate postFacadeTemplate;
+    @MockBean
+    private FanOutService fanOutService;
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 수 있다.")
     @Test
     void addBasicPost() throws Exception {
@@ -69,7 +73,7 @@ class BasicPostControllerTest {
         then(postFacadeTemplate).should().addPost(anyLong(), any(AddBasicPostRequest.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, contentImages가 없으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withoutContentImages() throws Exception {
@@ -81,7 +85,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(List.of(), dto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, postContent가 비어있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyPostContent() throws Exception {
@@ -94,7 +98,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, postContent가 공백으로만 이루어져 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankPostContent() throws Exception {
@@ -107,7 +111,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, 최대 길이를 초과한 postContent가 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxLengthOfPostContent() throws Exception {
@@ -120,7 +124,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 비어 있는 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withEmptyHashTagNames() throws Exception {
@@ -133,7 +137,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 공백으로만 이루어진 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withOnlyBlankHashTagNames() throws Exception {
@@ -146,7 +150,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, hashTagNames가 최대 개수를 초과하면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxSizeOfHashTagNames() throws Exception {
@@ -160,7 +164,7 @@ class BasicPostControllerTest {
         validateAddBasicPost(validContentImages, invalidDto, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("일반 게시물을 생성할 때, hashTagNames 중 최대 길이를 초과한 hashTagName이 있으면 INVALID_USER_INPUT을 반환한다.")
     @Test
     void addBasicPost_withExceedMaxLengthOfHashTagName() throws Exception {
