@@ -31,7 +31,6 @@ public class ApiControllerAdvice {
             MissingServletRequestPartException.class
     })
     public FailResponse exceptionResolveToInvalidUserInput(Exception e) {
-        e.printStackTrace();
         return new FailResponse(ResponseEnum.INVALID_USER_INPUT);
     }
 
@@ -46,7 +45,6 @@ public class ApiControllerAdvice {
             NotImageExtensionOrNotSupportedExtensionException.class
     })
     public FailResponse exceptionResolveToNotImageExtensionOrNotSupportedExtension(NotImageExtensionOrNotSupportedExtensionException e) {
-        e.printStackTrace();
         return new FailResponse(ResponseEnum.NOT_IMAGE_EXTENSION_OR_NOT_SUPPORTED_EXTENSION);
     }
 
