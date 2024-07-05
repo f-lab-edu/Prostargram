@@ -1,13 +1,14 @@
 package flab.project.facade;
 
 import flab.project.common.FileStorage.FileStorage;
-import flab.project.data.dto.model.AddBasicPostRequest;
-import flab.project.data.dto.model.AddDebatePostRequest;
-import flab.project.data.dto.model.AddPollPostRequest;
-import flab.project.data.enums.FileType;
-import flab.project.service.PostHashTagService;
-import flab.project.service.PostImageService;
-import flab.project.service.PostService;
+import flab.project.domain.post.model.AddBasicPostRequest;
+import flab.project.domain.post.model.AddDebatePostRequest;
+import flab.project.domain.post.model.AddPollPostRequest;
+import flab.project.domain.file.enums.FileType;
+import flab.project.domain.post.facade.BasicPostFacade;
+import flab.project.domain.post.service.PostHashTagService;
+import flab.project.domain.post.service.PostImageService;
+import flab.project.domain.post.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

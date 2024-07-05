@@ -1,12 +1,13 @@
 package flab.project.service;
 
-import flab.project.cacheManager.VoteCacheManager;
+import flab.project.cache.cacheManager.VoteCacheManager;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
-import flab.project.data.dto.model.PollPeriod;
-import flab.project.data.enums.PostType;
-import flab.project.mapper.PollMetadataMapper;
-import flab.project.mapper.PostOptionsMapper;
+import flab.project.domain.post.model.PollPeriod;
+import flab.project.domain.post.enums.PostType;
+import flab.project.domain.post.service.VoteService;
+import flab.project.domain.post.mapper.PollMetadataMapper;
+import flab.project.domain.post.mapper.PostOptionsMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

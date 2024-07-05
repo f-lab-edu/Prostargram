@@ -1,7 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.PostOptionMapper;
+import flab.project.domain.post.service.PollPostOptionService;
+import flab.project.domain.post.mapper.PostOptionMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 import static flab.project.common.Constraints.*;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)

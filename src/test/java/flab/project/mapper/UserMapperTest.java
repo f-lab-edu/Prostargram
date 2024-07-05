@@ -2,10 +2,13 @@ package flab.project.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import flab.project.data.dto.model.BasicUser;
-import flab.project.data.dto.model.Profile;
-import flab.project.data.enums.LoginType;
+import flab.project.domain.user.model.Profile;
+import flab.project.domain.user.enums.LoginType;
 import java.util.List;
+import java.util.Set;
+
+import flab.project.domain.user.mapper.SignUpMapper;
+import flab.project.domain.user.mapper.UserMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -27,13 +30,13 @@ class UserMapperTest {
     @Test
     void findWhereUserIdIn() {
         //given
-        List<Long> userIds = List.of(1L, 2L);
+        Set<Long> userIds = Set.of(1L, 2L);
 
         signUpMapper.addUser("email", "username1", "password", LoginType.NORMAL);
         signUpMapper.addUser("email", "username2", "password", LoginType.NORMAL);
 
         //when
-        List<Profile> basicUsers = userMapper.findWhereUserIdIn(userIds);
+        Set<Profile> basicUsers = userMapper.findWhereUserIdIn(userIds);
 
         //then
         assertThat(basicUsers).extracting("userId").contains(1L, 2L);

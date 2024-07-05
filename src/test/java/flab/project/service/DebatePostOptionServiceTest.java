@@ -1,7 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.PostOptionMapper;
+import flab.project.domain.post.service.DebatePostOptionService;
+import flab.project.domain.post.mapper.PostOptionMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import java.util.Set;
 import static flab.project.common.Constraints.FIXED_SIZE_OF_DEBATE_POST_OPTIONS;
 import static flab.project.common.Constraints.MAX_LENGTH_DEBATE_POST_OPTION_CONTENT;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)

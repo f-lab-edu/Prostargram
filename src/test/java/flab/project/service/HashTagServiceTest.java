@@ -1,14 +1,13 @@
 package flab.project.service;
 
-import flab.project.data.dto.model.HashTag;
-import flab.project.mapper.HashTagMapper;
+import flab.project.domain.post.model.HashTag;
+import flab.project.domain.post.service.HashTagService;
+import flab.project.domain.post.mapper.HashTagMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 import java.util.HashSet;
 import java.util.Set;

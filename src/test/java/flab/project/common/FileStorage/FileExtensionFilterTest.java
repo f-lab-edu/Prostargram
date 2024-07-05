@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
-import flab.project.data.enums.ExtensionType;
-import flab.project.mapper.FileExtensionMapper;
+import flab.project.domain.file.enums.ExtensionType;
+import flab.project.domain.file.mapper.FileExtensionMapper;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

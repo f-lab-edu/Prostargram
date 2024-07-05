@@ -1,20 +1,18 @@
 package flab.project.service;
 
 
-import static flab.project.data.enums.requestparam.GetFollowsType.*;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatNoException;
+import static flab.project.domain.user.enums.GetFollowsType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.Follows;
-import flab.project.data.enums.requestparam.GetFollowsType;
-import flab.project.mapper.FollowMapper;
+import flab.project.domain.user.model.Follows;
+import flab.project.domain.user.enums.GetFollowsType;
+import flab.project.domain.user.service.FollowService;
+import flab.project.domain.user.mapper.FollowMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

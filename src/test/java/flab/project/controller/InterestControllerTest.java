@@ -2,8 +2,9 @@ package flab.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.AddInterest;
-import flab.project.facade.InterestFacade;
+import flab.project.domain.user.model.AddInterest;
+import flab.project.domain.user.controller.InterestController;
+import flab.project.domain.user.facade.InterestFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

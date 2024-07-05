@@ -2,11 +2,10 @@ package flab.project.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicPost;
-import flab.project.data.enums.PostType;
+import flab.project.domain.post.model.BasePost;
+import flab.project.domain.post.model.BasicPost;
+import flab.project.domain.post.enums.PostType;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;

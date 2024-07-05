@@ -1,11 +1,12 @@
 package flab.project.facade;
 
-import flab.project.data.dto.model.AddBasicPostRequest;
-import flab.project.data.dto.model.AddDebatePostRequest;
-import flab.project.data.dto.model.AddPollPostRequest;
-import flab.project.service.DebatePostOptionService;
-import flab.project.service.PostHashTagService;
-import flab.project.service.PostService;
+import flab.project.domain.post.model.AddBasicPostRequest;
+import flab.project.domain.post.model.AddDebatePostRequest;
+import flab.project.domain.post.model.AddPollPostRequest;
+import flab.project.domain.post.facade.DebatePostFacade;
+import flab.project.domain.post.service.DebatePostOptionService;
+import flab.project.domain.post.service.PostHashTagService;
+import flab.project.domain.post.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -4,21 +4,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import flab.project.data.dto.model.AddBasicPostRequest;
-import flab.project.data.dto.model.AddDebatePostRequest;
-import flab.project.data.dto.model.AddPollPostRequest;
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicPost;
-import flab.project.data.dto.model.DebatePost;
-import flab.project.data.dto.model.Option;
-import flab.project.data.dto.model.PostTypeModel;
-import flab.project.data.enums.PostType;
+import flab.project.domain.post.model.AddBasicPostRequest;
+import flab.project.domain.post.model.AddDebatePostRequest;
+import flab.project.domain.post.model.AddPollPostRequest;
+import flab.project.domain.post.model.BasePost;
+import flab.project.domain.post.model.BasicPost;
+import flab.project.domain.post.model.DebatePost;
+import flab.project.domain.post.model.PostTypeModel;
+import flab.project.domain.post.enums.PostType;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.AfterEach;
+
+import flab.project.domain.post.mapper.PostMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -28,7 +28,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 @Sql("classpath:tableInit.sql")
 @ActiveProfiles("test")

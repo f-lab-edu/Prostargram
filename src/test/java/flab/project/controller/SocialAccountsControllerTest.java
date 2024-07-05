@@ -2,9 +2,10 @@ package flab.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.UpdateSocialAccountRequestDto;
-import flab.project.facade.SocialAccountFacade;
-import flab.project.service.SocialAccountService;
+import flab.project.domain.user.controller.SocialAccountController;
+import flab.project.domain.user.model.UpdateSocialAccountRequestDto;
+import flab.project.domain.user.facade.SocialAccountFacade;
+import flab.project.domain.user.service.SocialAccountService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

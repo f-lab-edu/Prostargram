@@ -1,8 +1,9 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.AddPollPostRequest;
-import flab.project.mapper.PollMetadataMapper;
+import flab.project.domain.post.model.AddPollPostRequest;
+import flab.project.domain.post.service.PollMetadataService;
+import flab.project.domain.post.mapper.PollMetadataMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

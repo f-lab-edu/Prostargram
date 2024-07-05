@@ -1,7 +1,8 @@
 package flab.project.data.dto.file;
 
 import com.amazonaws.util.StringInputStream;
-import flab.project.data.enums.FileType;
+import flab.project.domain.file.enums.FileType;
+import flab.project.domain.file.model.File;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

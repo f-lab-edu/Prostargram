@@ -1,7 +1,9 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.PostHashTagMapper;
+import flab.project.domain.post.service.HashTagService;
+import flab.project.domain.post.service.PostHashTagService;
+import flab.project.domain.post.mapper.PostHashTagMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

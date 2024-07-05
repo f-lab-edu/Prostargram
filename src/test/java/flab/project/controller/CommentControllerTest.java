@@ -1,8 +1,9 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.data.dto.model.Comment;
-import flab.project.service.CommentService;
+import flab.project.domain.comment.model.Comment;
+import flab.project.domain.comment.controller.CommentController;
+import flab.project.domain.comment.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

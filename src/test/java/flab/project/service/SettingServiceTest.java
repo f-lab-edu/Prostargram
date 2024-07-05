@@ -2,9 +2,10 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
-import flab.project.data.dto.Settings;
+import flab.project.domain.user.model.Settings;
 
-import flab.project.mapper.SettingMapper;
+import flab.project.domain.user.service.SettingService;
+import flab.project.domain.user.mapper.SettingMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static flab.project.data.enums.PublicScope.PRIVATE;
-import static flab.project.data.enums.PublicScope.PUBLIC;
+import static flab.project.domain.user.enums.PublicScope.PRIVATE;
+import static flab.project.domain.user.enums.PublicScope.PUBLIC;
 
 @ExtendWith(MockitoExtension.class)
 class SettingServiceTest {

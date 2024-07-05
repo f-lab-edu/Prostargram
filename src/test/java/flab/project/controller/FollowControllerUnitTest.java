@@ -1,7 +1,7 @@
 package flab.project.controller;
 
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-import static flab.project.data.enums.requestparam.GetFollowsType.*;
+import static flab.project.domain.user.enums.GetFollowsType.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -12,8 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.model.Follows;
-import flab.project.service.FollowService;
+import flab.project.domain.user.model.Follows;
+import flab.project.domain.user.controller.FollowController;
+import flab.project.domain.user.service.FollowService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = FollowController.class)

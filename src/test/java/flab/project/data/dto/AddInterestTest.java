@@ -1,5 +1,6 @@
 package flab.project.data.dto;
 
+import flab.project.domain.user.model.AddInterest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

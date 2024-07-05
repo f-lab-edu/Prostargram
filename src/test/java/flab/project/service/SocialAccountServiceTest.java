@@ -1,8 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.exception.NumberLimitOfSocialAccountsExceededException;
-import flab.project.mapper.IconMapper;
-import flab.project.mapper.SocialAccountMapper;
+import flab.project.domain.user.mapper.SocialAccountMapper;
+import flab.project.domain.user.service.SocialAccountService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 

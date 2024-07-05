@@ -1,7 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.mapper.InterestMapper;
+import flab.project.domain.user.service.InterestService;
+import flab.project.domain.user.mapper.InterestMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;

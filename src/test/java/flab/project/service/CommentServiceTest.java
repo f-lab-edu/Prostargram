@@ -1,8 +1,9 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.Comment;
-import flab.project.mapper.CommentMapper;
+import flab.project.domain.comment.model.Comment;
+import flab.project.domain.comment.service.CommentService;
+import flab.project.domain.comment.mapper.CommentMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

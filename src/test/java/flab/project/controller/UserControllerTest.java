@@ -1,11 +1,12 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.facade.UserFacade;
+import flab.project.domain.user.controller.UserController;
+import flab.project.domain.user.facade.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import flab.project.data.enums.requestparam.GetProfileRequestType;
-import flab.project.data.dto.UpdateProfileRequestDto;
-import flab.project.service.UserService;
+import flab.project.domain.user.enums.GetProfileRequestType;
+import flab.project.domain.user.model.UpdateProfileRequestDto;
+import flab.project.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

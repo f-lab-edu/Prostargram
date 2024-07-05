@@ -1,8 +1,9 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.enums.ScreenMode;
-import flab.project.service.SettingService;
+import flab.project.domain.user.enums.ScreenMode;
+import flab.project.domain.user.controller.SettingController;
+import flab.project.domain.user.service.SettingService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-import static flab.project.data.enums.PublicScope.PRIVATE;
-import static flab.project.data.enums.PublicScope.PUBLIC;
-import static flab.project.data.enums.ScreenMode.LIGHT;
+import static flab.project.domain.user.enums.PublicScope.PRIVATE;
+import static flab.project.domain.user.enums.PublicScope.PUBLIC;
+import static flab.project.domain.user.enums.ScreenMode.LIGHT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;

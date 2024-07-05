@@ -1,16 +1,19 @@
 package flab.project.service;
 
-import static flab.project.data.enums.PostType.BASIC;
-import static flab.project.data.enums.PostType.DEBATE;
+import static flab.project.domain.post.enums.PostType.BASIC;
+import static flab.project.domain.post.enums.PostType.DEBATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import flab.project.data.dto.PostWithUser;
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicPost;
-import flab.project.data.dto.model.BasicUser;
-import flab.project.data.dto.model.DebatePost;
-import flab.project.data.dto.model.Option;
+import flab.project.domain.feed.service.NewsFeedService;
+import flab.project.domain.post.model.PostWithUser;
+import flab.project.domain.post.model.BasePost;
+import flab.project.domain.post.model.BasicPost;
+import flab.project.domain.user.model.BasicUser;
+import flab.project.domain.post.model.DebatePost;
+import flab.project.domain.user.model.Option;
+import flab.project.domain.post.service.PostService;
+import flab.project.domain.user.service.UserService;
 import flab.project.utils.NewsFeedRedisUtil;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

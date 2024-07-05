@@ -1,15 +1,16 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.AddDebatePostRequest;
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.Option;
-import flab.project.data.dto.model.PostTypeModel;
-import flab.project.mapper.PostMapper;
-import flab.project.data.dto.model.BasicPost;
-import flab.project.data.dto.model.DebatePost;
-import flab.project.data.dto.model.PollPost;
-import flab.project.mapper.UserMapper;
+import flab.project.domain.post.model.AddDebatePostRequest;
+import flab.project.domain.post.model.BasePost;
+import flab.project.domain.user.model.Option;
+import flab.project.domain.post.model.PostTypeModel;
+import flab.project.domain.post.service.PostService;
+import flab.project.domain.post.mapper.PostMapper;
+import flab.project.domain.post.model.BasicPost;
+import flab.project.domain.post.model.DebatePost;
+import flab.project.domain.post.model.PollPost;
+import flab.project.domain.user.mapper.UserMapper;
 import flab.project.utils.PostRedisUtil;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static flab.project.data.enums.PostType.*;
+import static flab.project.domain.post.enums.PostType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.BDDAssertions.tuple;
 import static org.mockito.BDDMockito.given;

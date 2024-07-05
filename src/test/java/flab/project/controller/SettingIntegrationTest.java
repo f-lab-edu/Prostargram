@@ -15,7 +15,7 @@
 //import org.springframework.security.test.context.support.WithMockUser;
 //
 //import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-//import static flab.project.data.enums.ScreenMode.LIGHT;
+//import static flab.project.domain.user.enums.ScreenMode.LIGHT;
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static org.hamcrest.Matchers.equalTo;
 //
