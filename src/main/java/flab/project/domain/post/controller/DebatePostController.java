@@ -26,7 +26,6 @@ public class DebatePostController {
             @RequestBody @Validated AddDebatePostRequest debatePost
     ) {
         DebatePost createdPost = (DebatePost) debatePostFacade.addPost(userId, debatePost);
-        fanOutService.fanOut(userId, createdPost.getPostId());
 
         return new SuccessResponse<>(createdPost);
     }
