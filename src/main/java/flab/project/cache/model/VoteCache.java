@@ -1,4 +1,4 @@
-package flab.project.data.dto.cache;
+package flab.project.cache.model;
 
 import java.util.Set;
 import lombok.AllArgsConstructor;

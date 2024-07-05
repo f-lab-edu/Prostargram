@@ -1,8 +1,7 @@
-package flab.project.cacheManager;
+package flab.project.cache.cacheManager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import flab.project.data.dto.cache.VoteCache;
+import flab.project.cache.model.VoteCache;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
