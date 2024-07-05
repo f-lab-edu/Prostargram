@@ -1,6 +1,6 @@
 package flab.project.common.FileStorage;
 
-import flab.project.data.enums.FileType;
+import flab.project.domain.file.enums.FileType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

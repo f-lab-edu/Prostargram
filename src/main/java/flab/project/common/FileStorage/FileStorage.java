@@ -2,9 +2,9 @@ package flab.project.common.FileStorage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import flab.project.data.dto.file.File;
-import flab.project.data.dto.file.Uploadable;
-import flab.project.data.enums.FileType;
+import flab.project.domain.file.model.File;
+import flab.project.domain.file.model.Uploadable;
+import flab.project.domain.file.enums.FileType;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static flab.project.data.enums.FileType.PROFILE_IMAGE;
+import static flab.project.domain.file.enums.FileType.PROFILE_IMAGE;
 
 @RequiredArgsConstructor
 @Component

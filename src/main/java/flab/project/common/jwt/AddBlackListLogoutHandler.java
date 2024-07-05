@@ -3,7 +3,7 @@ package flab.project.common.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.common.RedisRepository;
 import flab.project.config.exception.FailLogoutRequestException;
-import flab.project.data.dto.TokenDto;
+import flab.project.domain.user.model.TokenDto;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

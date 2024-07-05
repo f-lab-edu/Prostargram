@@ -1,7 +1,7 @@
 package flab.project.common.scheduler;
 
-import flab.project.data.dto.cache.VoteCache;
-import flab.project.mapper.VoteMapper;
+import flab.project.cache.model.VoteCache;
+import flab.project.domain.post.mapper.VoteMapper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +13,6 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 

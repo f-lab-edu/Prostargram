@@ -1,4 +1,4 @@
-package flab.project.mapper;
+package flab.project.common.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

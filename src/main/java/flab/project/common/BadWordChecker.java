@@ -1,6 +1,6 @@
 package flab.project.common;
 
-import flab.project.mapper.BadWordMapper;
+import flab.project.common.mapper.BadWordMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
