@@ -1,4 +1,4 @@
-package flab.project.controller;
+package flab.project;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
