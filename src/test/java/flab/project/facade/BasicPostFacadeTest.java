@@ -1,6 +1,7 @@
 package flab.project.facade;
 
 import flab.project.common.FileStorage.FileStorage;
+import flab.project.domain.feed.service.FanOutService;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddDebatePostRequest;
 import flab.project.domain.post.model.AddPollPostRequest;
@@ -39,6 +40,8 @@ class BasicPostFacadeTest {
     FileStorage fileStorage;
     @Mock
     PostImageService postImageService;
+    @Mock
+    FanOutService fanOutService;
 
     @DisplayName("일반 게시물을 작성할 수 있다.")
     @Test
@@ -58,6 +61,7 @@ class BasicPostFacadeTest {
         // then
         then(postService).should().addPost(userId, validBasicPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validBasicPostRequest.getHashTagNames()));
+        then(fanOutService).should().fanOut(userId, validBasicPostRequest.getPostId());
         then(fileStorage).should().uploadFiles(userId, validBasicPostRequest.getContentImages(), FileType.POST_IMAGE);
         then(postImageService).should().saveAll(anyLong(), anySet());
     }

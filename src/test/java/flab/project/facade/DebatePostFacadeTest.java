@@ -1,5 +1,6 @@
 package flab.project.facade;
 
+import flab.project.domain.feed.service.FanOutService;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddDebatePostRequest;
 import flab.project.domain.post.model.AddPollPostRequest;
@@ -36,6 +37,8 @@ class DebatePostFacadeTest {
     PostHashTagService postHashTagService;
     @Mock
     DebatePostOptionService debatePostOptionService;
+    @Mock
+    FanOutService fanOutService;
 
     @DisplayName("DebatePost를 생성할 수 있다.")
     @Test
@@ -49,6 +52,7 @@ class DebatePostFacadeTest {
 
         debatePostFacade.addPost(userId, validDebatePostRequest);
         then(postService).should().addPost(userId, validDebatePostRequest);
+        then(fanOutService).should().fanOut(userId,validDebatePostRequest.getPostId());
         then(postHashTagService).should().saveAll(anyLong(), eq(validDebatePostRequest.getHashTagNames()));
         then(debatePostOptionService).should().savePostOptions(anyLong(), eq(validDebatePostRequest.getOptionContents()));
     }
