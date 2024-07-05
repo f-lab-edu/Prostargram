@@ -1,6 +1,6 @@
 package flab.project.config;
 
-import flab.project.data.dto.cache.VoteCache;
+import flab.project.cache.model.VoteCache;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
