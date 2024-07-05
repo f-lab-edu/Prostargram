@@ -1,8 +1,6 @@
 package flab.project.utils;
 
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicUser;
-import flab.project.data.dto.model.Profile;
+import flab.project.domain.user.model.Profile;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisCallback;

@@ -1,10 +1,9 @@
 package flab.project.utils;
 
-import flab.project.data.dto.model.BasePost;
-import flab.project.data.dto.model.BasicPost;
+import flab.project.domain.post.model.BasePost;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
