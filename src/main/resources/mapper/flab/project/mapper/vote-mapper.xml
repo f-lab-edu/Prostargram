@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.VoteMapper">
+<mapper namespace="flab.project.domain.post.mapper.VoteMapper">
 
     <insert id="addPostVotes">
         INSERT INTO VOTES(post_id, user_id, option_id)

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.SignUpMapper">
+<mapper namespace="flab.project.domain.user.mapper.SignUpMapper">
 
     <insert id="addUser">
         INSERT INTO USERS(email, password, user_name, login_type)

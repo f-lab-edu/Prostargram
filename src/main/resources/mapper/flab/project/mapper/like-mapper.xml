@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.LikeMapper">
+<mapper namespace="flab.project.domain.like.mapper.LikeMapper">
 
     <insert id="addPostLike">
         INSERT INTO POST_LIKE(post_id, user_id)

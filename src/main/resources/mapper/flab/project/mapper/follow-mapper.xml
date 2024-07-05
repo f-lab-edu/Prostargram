@@ -2,10 +2,10 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.FollowMapper">
+<mapper namespace="flab.project.domain.user.mapper.FollowMapper">
 
-    <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType"
-            resultType="flab.project.data.dto.model.User">
+    <select id="findAll" parameterType="flab.project.domain.user.enums.GetFollowsType"
+            resultType="flab.project.domain.user.model.User">
         SELECT
         U.user_id,
         U.user_name,

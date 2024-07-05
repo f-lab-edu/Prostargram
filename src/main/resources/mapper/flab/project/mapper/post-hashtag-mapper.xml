@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.PostHashTagMapper">
+<mapper namespace="flab.project.domain.post.mapper.PostHashTagMapper">
 
     <insert id="saveAll">
         INSERT INTO POST_HASHTAG_MAPPING(post_id, hashtag_id)
