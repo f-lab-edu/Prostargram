@@ -23,6 +23,8 @@ public class SettingService {
 
         Cookie cookie = new Cookie("screen-mode", screenMode.name());
         cookie.setMaxAge(COOKIE_MAX_AGE_400_DAYS);
+        cookie.setSecure(false);
+        cookie.setHttpOnly(false);
 
         httpServletResponse.addCookie(cookie);
 
