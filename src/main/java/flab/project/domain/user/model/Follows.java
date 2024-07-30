@@ -3,13 +3,12 @@ package flab.project.domain.user.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "팔로워/팔로잉 추가 DTO")
 public class Follows {
 
@@ -23,4 +22,9 @@ public class Follows {
     @JsonProperty("toUserId")
     private long toUserId;
 
+    @Builder
+    private Follows(long fromUserId, long toUserId) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+    }
 }
