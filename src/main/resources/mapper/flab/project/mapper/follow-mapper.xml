@@ -8,11 +8,10 @@
             resultType="flab.project.domain.user.model.User">
         SELECT
         U.user_id,
+        U.organization_information,
         U.user_name,
-        U.profile_img_url,
-        O.name
+        U.profile_img_url
         FROM USERS AS U
-        JOIN ORGANIZATION O on U.organization_id = O.organization_id
         <choose>
             <when test='requestType.name().equals("FOLLOWERS")'>
                 WHERE user_id IN (
