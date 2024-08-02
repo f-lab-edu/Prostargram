@@ -180,6 +180,6 @@ create table users
     post_count               int      default '0'           not null,
     follower_count           int      default '0'           null,
     following_count          int      default '0'           null,
-    type                     char(21) default 'NORMAL_USER' not null,
+    type                     varchar(21) default 'NORMAL_USER' not null,
     login_type               char(6)                        not null comment 'GITHUB,NORMAL'
 );
