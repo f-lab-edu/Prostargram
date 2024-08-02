@@ -171,6 +171,7 @@ create table users
     user_id                  int auto_increment
         primary key,
     organization_information varchar(200)                   null,
+    public_scope             varchar(20)                        not null default 'PUBLIC',
     user_name                varchar(20)                    null,
     email                    varchar(320)                   not null,
     password                 varchar(60)                    null,
