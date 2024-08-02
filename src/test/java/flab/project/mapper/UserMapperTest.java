@@ -2,9 +2,11 @@ package flab.project.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import flab.project.domain.user.enums.GetProfileRequestType;
+import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.LoginType;
-import java.util.List;
+import flab.project.domain.user.model.UpdateProfileRequestDto;
 import java.util.Set;
 
 import flab.project.domain.user.mapper.SignUpMapper;
@@ -25,6 +27,46 @@ class UserMapperTest {
     private UserMapper userMapper;
     @Autowired
     private SignUpMapper signUpMapper;
+
+    @DisplayName("프로필 이미지를 변경한다.")
+    @Test
+    void updateProfileImage() {
+        // given
+        String profileImageUrl = "https://profile.image.url";
+        signUpMapper.addUser("email", "username1", "password", LoginType.NORMAL);
+
+        // when
+        userMapper.updateProfileImage(1L, profileImageUrl);
+
+        // then
+        BasicUser user = userMapper.getBasicUser(1L);
+        assertThat(user.getProfileImgUrl()).isEqualTo(profileImageUrl);
+    }
+
+    @DisplayName("프로필 정보를 변경한다.")
+    @Test
+    void updateProfile() {
+        // given
+        signUpMapper.addUser("email", "username1", "password", LoginType.NORMAL);
+
+        String updatedUsername = "updatedUsername";
+        String updatedDepartmentName = "updatedDepartmentName";
+        String updatedSelfIntroduction = "updatedSelfIntroduction";
+        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto(
+            updatedUsername,
+            updatedDepartmentName,
+            updatedSelfIntroduction
+        );
+
+        // when
+        userMapper.updateProfile(1L, updateProfileRequestDto);
+
+        // then
+        Profile profile = userMapper.getProfileInfo(1L, GetProfileRequestType.GET);
+        assertThat(profile.getUserName()).isEqualTo(updatedUsername);
+        assertThat(profile.getDepartmentName()).isEqualTo(updatedDepartmentName);
+        assertThat(profile.getSelfIntroduction()).isEqualTo(updatedSelfIntroduction);
+    }
 
     @DisplayName("userIds를 통해 유저 정보를 가져올 수 있다.")
     @Test

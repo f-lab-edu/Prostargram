@@ -45,13 +45,13 @@
     SELECT U.user_id,
     U.user_name,
     U.profile_img_url,
-    U.department_name,
+    U.organization_information,
     U.self_introduction,
     <if test="getProfileRequestType.name().equals('GET')">U.post_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
-    S.social_account_id,
-    S.social_account_url,
+    S.link_id,
+    S.link,
     L.icon_url,
     H.hashtag_id,
     H.name
@@ -127,7 +127,7 @@
         user_name=#{updateProfileRequestDto.userName},
       </if>
       <if test="updateProfileRequestDto.departmentName !=null">
-        department_name=#{updateProfileRequestDto.departmentName},
+        organization_information=#{updateProfileRequestDto.departmentName},
       </if>
       <if test="updateProfileRequestDto.selfIntroduction !=null">
         self_introduction=#{updateProfileRequestDto.selfIntroduction}
