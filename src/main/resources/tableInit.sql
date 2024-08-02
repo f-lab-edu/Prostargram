@@ -161,7 +161,7 @@ create table post_options
 (
     option_id  int             not null,
     post_id    int             not null,
-    content    char(40)        not null,
+    content    varchar(40)        not null,
     vote_count int default '0' not null,
     primary key (option_id, post_id)
 );
@@ -180,6 +180,6 @@ create table users
     post_count               int      default '0'           not null,
     follower_count           int      default '0'           null,
     following_count          int      default '0'           null,
-    type                     char(21) default 'NORMAL_USER' not null,
-    login_type               char(6)                        not null comment 'GITHUB,NORMAL'
+    type                     varchar(21) default 'NORMAL_USER' not null,
+    login_type               varchar(6)                        not null comment 'GITHUB,NORMAL'
 );
