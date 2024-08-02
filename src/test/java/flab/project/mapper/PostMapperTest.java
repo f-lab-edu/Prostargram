@@ -1,15 +1,21 @@
 package flab.project.mapper;
 
+import static flab.project.domain.post.enums.PostType.BASIC;
+import static flab.project.domain.post.enums.PostType.DEBATE;
+import static flab.project.domain.post.enums.PostType.POLL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import flab.project.domain.post.mapper.PollMetadataMapper;
+import flab.project.domain.post.mapper.PostOptionMapper;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddDebatePostRequest;
 import flab.project.domain.post.model.AddPollPostRequest;
 import flab.project.domain.post.model.BasePost;
 import flab.project.domain.post.model.BasicPost;
 import flab.project.domain.post.model.DebatePost;
+import flab.project.domain.post.model.PollPost;
 import flab.project.domain.post.model.PostTypeModel;
 import flab.project.domain.post.enums.PostType;
 import java.sql.Timestamp;
@@ -37,6 +43,12 @@ class PostMapperTest {
     @Autowired
     private PostMapper postMapper;
 
+    @Autowired
+    private PostOptionMapper postOptionMapper;
+
+    @Autowired
+    private PollMetadataMapper pollMetadataMapper;
+
     @DisplayName("postId 목록을 이용해 각 게시물의 타입(일반,통계,토론)을 알 수 있다.")
     @Test
     void findPostTypeByPostIds() {
@@ -56,11 +68,102 @@ class PostMapperTest {
         Optional<PostType> postTypeOptional3 = extractPostTypeByPostId(postTypes, 3);
 
         assertTrue(postTypeOptional1.isPresent());
-        assertEquals(PostType.BASIC, postTypeOptional1.get());
+        assertEquals(BASIC, postTypeOptional1.get());
         assertTrue(postTypeOptional2.isPresent());
         assertEquals(PostType.DEBATE, postTypeOptional2.get());
         assertTrue(postTypeOptional3.isPresent());
         assertEquals(PostType.POLL, postTypeOptional3.get());
+    }
+
+    @DisplayName("일반 게시물 상세보기")
+    @Test
+    void getBasicPostDetail() {
+        // given
+        long postId = 1L;
+        long writerId = 1L;
+        String content = "content";
+
+        AddBasicPostRequest basicPost = AddBasicPostRequest.builder()
+            .postId(postId)
+            .content(content)
+            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+            .hashTagNames(Set.of("hashTagName1"))
+            .contentImages(List.of(new MockMultipartFile("testImage", (byte[]) null)))
+            .build();
+
+        postMapper.save(writerId, basicPost);
+
+        // when
+        BasicPost post = postMapper.getBasicPostDetail(postId, writerId);
+
+        // then
+        assertThat(post.getPostId()).isEqualTo(postId);
+        assertThat(post.getUserId()).isEqualTo(writerId);
+        assertThat(post.getContent()).isEqualTo(content);
+        assertThat(post.getPostType()).isEqualTo(BASIC);
+    }
+
+    @DisplayName("토론 게시물 상세보기")
+    @Test
+    void getDebatePostDetail() {
+        // given
+        long postId = 1L;
+        long writerId = 1L;
+        String content = "content";
+
+        AddDebatePostRequest debatePost = AddDebatePostRequest.builder()
+            .postId(postId)
+            .content(content)
+            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+            .hashTagNames(Set.of("hashTagName1"))
+            .build();
+
+        postMapper.save(writerId, debatePost);
+        postOptionMapper.saveAll(postId, Set.of("option1", "option2"));
+
+        // when
+        DebatePost post = postMapper.getDebatePostDetail(postId, writerId);
+
+        // then
+        assertThat(post.getPostId()).isEqualTo(postId);
+        assertThat(post.getUserId()).isEqualTo(writerId);
+        assertThat(post.getContent()).isEqualTo(content);
+        assertThat(post.getPostType()).isEqualTo(DEBATE);
+    }
+
+    @DisplayName("통계 게시물 상세보기")
+    @Test
+    void getPollPostDetail() {
+        // given
+        long postId = 1L;
+        long writerId = 1L;
+        String content = "content";
+        Set<String> options = Set.of("option1", "option2");
+
+        AddPollPostRequest pollPost = AddPollPostRequest.builder()
+            .postId(postId)
+            .content(content)
+            .subject("통계 subject")
+            .startDate(LocalDate.now())
+            .endDate(LocalDate.now().plusDays(1))
+            .optionContents(options)
+            .allowMultipleVotes(true)
+            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+            .hashTagNames(Set.of("hashTagName1"))
+            .build();
+
+        postMapper.save(writerId, pollPost);
+        pollMetadataMapper.save(pollPost);
+        postOptionMapper.saveAll(postId, options);
+
+        // when
+        PollPost post = postMapper.getPollPostDetail(postId, writerId);
+
+        // then
+        assertThat(post.getPostId()).isEqualTo(postId);
+        assertThat(post.getUserId()).isEqualTo(writerId);
+        assertThat(post.getContent()).isEqualTo(content);
+        assertThat(post.getPostType()).isEqualTo(POLL);
     }
 
     @DisplayName("postIds를 통해 BasicPost List를 받아올 수 있다.")
@@ -95,8 +198,7 @@ class PostMapperTest {
         postMapper.save(userId, debatePost2);
         postMapper.save(userId, debatePost3);
 
-        DebatePost debatePostDetail = postMapper.getDebatePostDetail(1L, 1L);
-        List<DebatePost> debatePosts =  postMapper.getDebatePostsWhereIn(postIds, userId);
+        List<DebatePost> debatePosts = postMapper.getDebatePostsWhereIn(postIds, userId);
 
         long[] retrievedPostIds = debatePosts.stream().mapToLong(DebatePost::getPostId).toArray();
         assertThat(retrievedPostIds).contains(1, 2, 3);
