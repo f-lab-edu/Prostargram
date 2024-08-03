@@ -5,8 +5,8 @@
 <mapper namespace="flab.project.domain.post.mapper.PollMetadataMapper">
 
     <insert id="save" parameterType="AddPollPostRequest">
-        INSERT INTO POLL_METADATA(post_id, start_date, end_date)
-        VALUES (#{pollPost.postId}, #{pollPost.startDate}, #{pollPost.endDate});
+        INSERT INTO POLL_METADATA(post_id, start_date, end_date, allow_multiple_votes)
+        VALUES (#{pollPost.postId}, #{pollPost.startDate}, #{pollPost.endDate}, #{pollPost.allowMultipleVotes});
     </insert>
 
 </mapper>
