@@ -211,10 +211,22 @@ class FollowControllerUnitTest {
     @Test
     void parameterOfAddFollowRequestDtoIsPositive() throws Exception {
         //given
-        Follows invalidFollowDto1 = new Follows(-1L, 2L);
-        Follows invalidFollowDto2 = new Follows(1L, -2L);
-        Follows invalidFollowDto3 = new Follows(-1L, -2L);
-        Follows invalidFollowDto4 = new Follows(0, 1L);
+        Follows invalidFollowDto1 = Follows.builder()
+            .fromUserId(-1L)
+            .toUserId(2L)
+            .build();
+        Follows invalidFollowDto2 = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(-2L)
+            .build();
+        Follows invalidFollowDto3 = Follows.builder()
+            .fromUserId(-1L)
+            .toUserId(-2L)
+            .build();
+        Follows invalidFollowDto4 = Follows.builder()
+            .fromUserId(0)
+            .toUserId(1L)
+            .build();
 
         //when then
         mockMvc.perform(
@@ -294,10 +306,22 @@ class FollowControllerUnitTest {
     @Test
     void parameterOfDeleteFollowRequestDtoIsPositive() throws Exception {
         //given
-        Follows invalidFollowDto1 = new Follows(-1L, 2L);
-        Follows invalidFollowDto2 = new Follows(1L, -2L);
-        Follows invalidFollowDto3 = new Follows(-1L, -2L);
-        Follows invalidFollowDto4 = new Follows(0, 1L);
+        Follows invalidFollowDto1 = Follows.builder()
+            .fromUserId(-1L)
+            .toUserId(2L)
+            .build();
+        Follows invalidFollowDto2 = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(-2L)
+            .build();
+        Follows invalidFollowDto3 = Follows.builder()
+            .fromUserId(-1L)
+            .toUserId(-2L)
+            .build();
+        Follows invalidFollowDto4 = Follows.builder()
+            .fromUserId(0)
+            .toUserId(1L)
+            .build();
 
         //when then
         mockMvc.perform(

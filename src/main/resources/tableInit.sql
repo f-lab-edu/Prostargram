@@ -183,3 +183,4 @@ create table users
     type                     varchar2(21) default 'NORMAL_USER' not null,
     login_type               varchar2(6)                        not null comment 'GITHUB,NORMAL'
 );
+
