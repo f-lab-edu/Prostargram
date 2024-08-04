@@ -16,7 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql("classpath:tableInit.sql")
 @ActiveProfiles("test")
 @MybatisTest
-class LikeMapperTest {
+class PostLikeMapperTest {
 
     @Autowired
     SignUpMapper signUpMapper;
@@ -25,7 +25,7 @@ class LikeMapperTest {
     PostMapper postMapper;
 
     @Autowired
-    LikeMapper likeMapper;
+    PostLikeMapper postLikeMapper;
 
     @DisplayName("게시물에 좋아요를 할 수 있다.")
     @Test
@@ -44,10 +44,10 @@ class LikeMapperTest {
         postMapper.save(postId, basicPost);
 
         // when
-        likeMapper.addPostLike(postId, userId);
+        postLikeMapper.addPostLike(postId, userId);
 
         // then
-        boolean hasLike = likeMapper.hasLike(postId, userId);
+        boolean hasLike = postLikeMapper.hasLike(postId, userId);
         Assertions.assertTrue(hasLike);
     }
 
@@ -67,13 +67,13 @@ class LikeMapperTest {
             .build();
         postMapper.save(postId, basicPost);
 
-        likeMapper.addPostLike(postId, userId);
+        postLikeMapper.addPostLike(postId, userId);
 
         // when
-        likeMapper.cancelLike(postId, userId);
+        postLikeMapper.cancelLike(postId, userId);
 
         // then
-        boolean hasLike = likeMapper.hasLike(postId, userId);
+        boolean hasLike = postLikeMapper.hasLike(postId, userId);
         Assertions.assertFalse(hasLike);
     }
 }

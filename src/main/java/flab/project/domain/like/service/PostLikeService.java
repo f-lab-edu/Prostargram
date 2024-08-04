@@ -2,15 +2,15 @@ package flab.project.domain.like.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.domain.like.mapper.LikeMapper;
+import flab.project.domain.like.mapper.PostLikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class LikeService {
+public class PostLikeService {
 
-    private final LikeMapper likeMapper;
+    private final PostLikeMapper postLikeMapper;
 
     private void checkPostIdAndUserId(long postId, long userId) {
         if (postId <= 0 || userId <= 0) {
@@ -18,9 +18,10 @@ public class LikeService {
         }
     }
 
-    public SuccessResponse addPostLike(long postId, long userId) {
+    public SuccessResponse<Void> addPostLike(long postId, long userId) {
         checkPostIdAndUserId(postId, userId);
-        likeMapper.addPostLike(postId, userId);
-        return new SuccessResponse();
+        postLikeMapper.addPostLike(postId, userId);
+
+        return new SuccessResponse<>();
     }
 }

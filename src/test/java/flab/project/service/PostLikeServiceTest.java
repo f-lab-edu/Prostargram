@@ -1,8 +1,8 @@
 package flab.project.service;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.domain.like.service.LikeService;
-import flab.project.domain.like.mapper.LikeMapper;
+import flab.project.domain.like.service.PostLikeService;
+import flab.project.domain.like.mapper.PostLikeMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class LikeServiceTest {
+class PostLikeServiceTest {
 
     @InjectMocks
-    LikeService likeService;
+    PostLikeService postLikeService;
     @Mock
-    LikeMapper likeMapper;
+    PostLikeMapper postLikeMapper;
 
     @DisplayName("게시물에 좋아요를 할 수 있다.")
     @Test
@@ -29,10 +29,10 @@ public class LikeServiceTest {
         long userId = 2L;
 
         // when
-        likeService.addPostLike(postId, userId);
+        postLikeService.addPostLike(postId, userId);
 
         // then
-        then(likeMapper).should().addPostLike(postId, userId);
+        then(postLikeMapper).should().addPostLike(postId, userId);
     }
 
     @DisplayName("존재하지 않는 게시물 또는 존재하지 않는 유저가 좋아요를 추가할 때, 게시물에 좋아요가 반영되지 않는다.")
@@ -43,25 +43,25 @@ public class LikeServiceTest {
         long userId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(negativePostId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> postLikeService.addPostLike(negativePostId, userId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
         long zeroPostId = 0;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(zeroPostId, userId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> postLikeService.addPostLike(zeroPostId, userId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
         long postId = 1L;
         long negativeUserId = -2L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(postId, negativeUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> postLikeService.addPostLike(postId, negativeUserId)).isInstanceOf(InvalidUserInputException.class);
 
         // given
         long zeroUserId = 0L;
 
         // when & then
-        assertThatThrownBy(() -> likeService.addPostLike(postId, zeroUserId)).isInstanceOf(InvalidUserInputException.class);
+        assertThatThrownBy(() -> postLikeService.addPostLike(postId, zeroUserId)).isInstanceOf(InvalidUserInputException.class);
     }
 }

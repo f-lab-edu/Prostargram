@@ -3,8 +3,8 @@ package flab.project.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.domain.like.controller.LikeController;
-import flab.project.domain.like.service.LikeService;
+import flab.project.domain.like.controller.PostLikeController;
+import flab.project.domain.like.service.PostLikeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = LikeController.class)
-public class LikeControllerTest {
+@WebMvcTest(controllers = PostLikeController.class)
+class PostLikeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockBean
-    private LikeService likeService;
+    private PostLikeService postLikeService;
 
     @WithMockUser
     @DisplayName("게시물에 좋아요를 할 수 있다.")
@@ -39,7 +37,7 @@ public class LikeControllerTest {
         long postId = 1L;
         long userId = 2L;
 
-        given(likeService.addPostLike(postId, userId)).willReturn(new SuccessResponse());
+        given(postLikeService.addPostLike(postId, userId)).willReturn(new SuccessResponse<>());
 
         // when & then
         mockMvc.perform(
