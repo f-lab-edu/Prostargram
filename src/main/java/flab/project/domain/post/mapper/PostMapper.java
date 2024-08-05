@@ -26,4 +26,6 @@ public interface PostMapper {
     List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds, @Param("userId") long userId);
 
     List<PostTypeModel> findTypeByPostIds(@Param("postIds") List<Long> postIds);
+
+    boolean existsById(long postId);
 }
