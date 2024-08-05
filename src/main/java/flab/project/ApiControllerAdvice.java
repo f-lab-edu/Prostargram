@@ -37,7 +37,7 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public FailResponse exceptionResolveToDeletedPost(NotFoundException e) {
-        return new FailResponse(ResponseEnum.NOT_FOUND_POST);
+        return new FailResponse(e.getMessage(), 4002);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
