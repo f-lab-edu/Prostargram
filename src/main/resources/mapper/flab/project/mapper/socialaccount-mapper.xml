@@ -6,7 +6,7 @@
 
     <insert id="save" parameterType="socialAccount">
         INSERT INTO SOCIAL_ACCOUNTS(icon_id, user_id, social_account_url)
-            VALUE (#{socialAccount.iconId},#{socialAccount.userId},#{socialAccount.socialAccountUrl});
+            VALUES (#{socialAccount.iconId},#{socialAccount.userId},#{socialAccount.socialAccountUrl});
     </insert>
 
     <select id="getNumberOfExistingSocialAccounts" resultType="integer">

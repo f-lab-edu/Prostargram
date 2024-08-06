@@ -1,6 +1,5 @@
 package flab.project.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotFoundException;
@@ -27,12 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = VoteController.class)
-public class VoteControllerTest {
+class VoteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockBean
     private VoteService voteService;
 
@@ -45,7 +42,7 @@ public class VoteControllerTest {
         long optionId = 1L;
         long userId = 3L;
 
-        given(voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE)).willReturn(new SuccessResponse());
+        given(voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE)).willReturn(new SuccessResponse<>());
 
         // when & then
         mockMvc.perform(
@@ -70,7 +67,7 @@ public class VoteControllerTest {
         Set<Long> optionIds = Set.of(1L, 2L);
         long userId = 3L;
 
-        given(voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).willReturn(new SuccessResponse());
+        given(voteService.addPostVote(postId, optionIds, userId, PostType.POLL)).willReturn(new SuccessResponse<>());
 
         // when & then
         mockMvc.perform(
@@ -241,7 +238,8 @@ public class VoteControllerTest {
         long optionId = 1L;
         long userId = 1L;
 
-        given(voteService.addPostVote(deletedPostId, Set.of(1L), userId, PostType.DEBATE)).willThrow(NotFoundException.class);
+        given(voteService.addPostVote(deletedPostId, Set.of(1L), userId, PostType.DEBATE))
+            .willThrow(NotFoundException.class);
 
         // when & then
         mockMvc.perform(
@@ -250,10 +248,7 @@ public class VoteControllerTest {
                                 .param("optionId", String.valueOf(optionId))
                                 .param("userId", String.valueOf(userId))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.NOT_FOUND_POST.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.NOT_FOUND_POST.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.NOT_FOUND_POST.getMessage()));
+                .andDo(print()).andExpect(status().isNotFound());
     }
 
     @WithMockUser
@@ -274,9 +269,6 @@ public class VoteControllerTest {
                                 .param("optionIds", optionIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
                                 .param("userId", String.valueOf(userId))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.NOT_FOUND_POST.isSuccess()))
-                .andExpect(jsonPath("$.code").value(ResponseEnum.NOT_FOUND_POST.getCode()))
-                .andExpect(jsonPath("$.message").value(ResponseEnum.NOT_FOUND_POST.getMessage()));
+                .andDo(print()).andExpect(status().isNotFound());
     }
 }

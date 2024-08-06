@@ -1,5 +1,6 @@
 package flab.project.domain.user.service;
 
+import flab.project.domain.user.model.Icon;
 import flab.project.domain.user.model.SocialAccount;
 import flab.project.domain.user.mapper.IconMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,12 @@ public class IconService {
     }
 
     private long getIconIdByDomain(String domain) {
-        Long iconId = iconMapper.findByDomain(domain);
+        Icon icon = iconMapper.findByDomain(domain);
 
-        if (iconId == null) {
-            iconId = DEFAULT_ICON_ID;
+        if (icon == null) {
+            return DEFAULT_ICON_ID;
         }
 
-        return iconId;
+        return icon.getIconId();
     }
 }
