@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS file_extension;
 DROP TABLE IF EXISTS follows;
 DROP TABLE IF EXISTS social_accounts;
 DROP TABLE IF EXISTS organization;
-DROP TABLE IF EXISTS hyper_link;
 DROP TABLE IF EXISTS post_hashtag_mapping;
 DROP TABLE IF EXISTS poll_metadata;
 DROP TABLE IF EXISTS post_images;
@@ -72,15 +71,6 @@ create table hashtags
     name       varchar2(15) not null
 );
 
-create table hyper_link
-(
-    link_id int  not null
-        primary key,
-    icon_id int  not null,
-    user_id int  not null,
-    link    text not null
-);
-
 create table interests
 (
     user_id    int          not null,
@@ -91,11 +81,11 @@ create table interests
 
 create table social_accounts
 (
-    link_id int  not null,
-    icon_id int  not null,
-    user_id int  not null,
-    link    text not null,
-    primary key (user_id)
+    social_account_id  int  not null auto_increment,
+    icon_id            int  not null,
+    user_id            int  not null,
+    social_account_url text not null,
+    primary key (social_account_id)
 );
 
 create table link_icon
