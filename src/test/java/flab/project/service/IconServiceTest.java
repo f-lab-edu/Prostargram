@@ -1,5 +1,6 @@
 package flab.project.service;
 
+import flab.project.domain.user.model.Icon;
 import flab.project.domain.user.model.UpdateSocialAccountRequestDto;
 import flab.project.domain.user.model.SocialAccount;
 import flab.project.domain.user.service.IconService;
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -31,8 +31,13 @@ class IconServiceTest {
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
         SocialAccount socialAccount = new SocialAccount(updateSocialAccountRequestDto);
 
+        Icon icon = Icon.builder()
+            .iconId(10L)
+            .domain("domain")
+            .iconUrl("url")
+            .build();
         given(iconMapper.findByDomain(socialAccount.getDomain()))
-                .willReturn(10L);
+                .willReturn(icon);
 
         // when
         iconService.setIconId(socialAccount);

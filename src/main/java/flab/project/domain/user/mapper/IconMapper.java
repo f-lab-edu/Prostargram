@@ -1,10 +1,13 @@
 package flab.project.domain.user.mapper;
 
+import flab.project.domain.user.model.Icon;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface IconMapper {
 
-    Long findByDomain(@Param("domain") String domain);
+    Icon findByDomain(@Param("domain") String domain);
+
+    void save(@Param("domain") String domain, @Param("iconUrl") String iconUrl);
 }

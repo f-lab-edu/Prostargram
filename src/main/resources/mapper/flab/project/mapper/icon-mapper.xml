@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="flab.project.domain.user.mapper.IconMapper">
 
-    <select id="findByDomain" resultType="long">
-        SELECT ICON.icon_id
-        FROM LINK_ICON ICON
-        WHERE domain =#{domain}
-    </select>
+  <select id="findByDomain" resultType="Icon">
+    SELECT ICON.icon_id,
+           ICON.domain,
+           ICON.icon_url
+    FROM LINK_ICON ICON
+    WHERE domain = #{domain}
+  </select>
+
+  <insert id="save">
+    INSERT INTO LINK_ICON(domain, icon_url)
+    VALUES (#{domain}, #{iconUrl})
+  </insert>
 
 </mapper>
