@@ -39,7 +39,7 @@ create table comment
     user_id        int             not null,
     post_id        int             not null,
     parent_id      int             null,
-    content        varchar2(300)    not null,
+    content        varchar2(300)   not null,
     like_count     int default '0' null,
     created_at     datetime        null,
     children_count int             null
@@ -83,8 +83,8 @@ create table hyper_link
 
 create table interests
 (
-    user_id    int         not null,
-    hashtag_id int         not null,
+    user_id    int          not null,
+    hashtag_id int          not null,
     name       varchar2(15) not null,
     primary key (user_id, name)
 );
@@ -100,19 +100,19 @@ create table social_accounts
 
 create table link_icon
 (
-    icon_id  int         not null
+    icon_id  int          not null auto_increment
         primary key,
-    icon_url text        null,
+    icon_url text         null,
     domain   varchar2(20) null
 );
 
 create table organization
 (
-    organization_id int         not null
+    organization_id int          not null
         primary key,
     name            varchar2(40) not null,
     domain          varchar2(65) not null,
-    type            char(7)     not null comment 'SCHOOL / COMPANY (ENUM으로 쓰는게 좋을듯?)'
+    type            char(7)      not null comment 'SCHOOL / COMPANY (ENUM으로 쓰는게 좋을듯?)'
 );
 
 create table poll_metadata
@@ -131,7 +131,7 @@ create table post
     content       text                                null,
     like_count    int                                 null,
     comment_count int                                 null,
-    type          varchar2(10)                         null comment '무슨 종류의 post인지',
+    type          varchar2(10)                        null comment '무슨 종류의 post인지',
     created_at    timestamp default CURRENT_TIMESTAMP null
 );
 
@@ -161,7 +161,7 @@ create table post_options
 (
     option_id  int             not null,
     post_id    int             not null,
-    content    varchar2(40)        not null,
+    content    varchar2(40)    not null,
     vote_count int default '0' not null,
     primary key (option_id, post_id)
 );
@@ -170,16 +170,16 @@ create table users
 (
     user_id                  int auto_increment
         primary key,
-    organization_information varchar2(200)                   null,
-    public_scope             varchar2(20)                        not null default 'PUBLIC',
-    user_name                varchar2(20)                    null,
-    email                    varchar2(320)                   not null,
-    password                 varchar2(60)                    null,
-    self_introduction        text                           null,
-    profile_img_url          text                           null,
-    post_count               int      default '0'           not null,
-    follower_count           int      default '0'           null,
-    following_count          int      default '0'           null,
+    organization_information varchar2(200)                      null,
+    public_scope             varchar2(20)                       not null default 'PUBLIC',
+    user_name                varchar2(20)                       null,
+    email                    varchar2(320)                      not null,
+    password                 varchar2(60)                       null,
+    self_introduction        text                               null,
+    profile_img_url          text                               null,
+    post_count               int          default '0'           not null,
+    follower_count           int          default '0'           null,
+    following_count          int          default '0'           null,
     type                     varchar2(21) default 'NORMAL_USER' not null,
     login_type               varchar2(6)                        not null comment 'GITHUB,NORMAL'
 );
