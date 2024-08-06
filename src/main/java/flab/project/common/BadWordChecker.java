@@ -1,6 +1,6 @@
 package flab.project.common;
 
-import flab.project.mapper.BadWordMapper;
+import flab.project.common.mapper.BadWordMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -15,7 +15,7 @@ public class BadWordChecker {
 
     public BadWordChecker(BadWordMapper badWordMapper) {
         this.badWordMapper = badWordMapper;
-        badWords = badWordMapper.findAll();
+//        badWords = badWordMapper.findAll();
     }
 
     public boolean hasBadWord(List<String> inputs) {

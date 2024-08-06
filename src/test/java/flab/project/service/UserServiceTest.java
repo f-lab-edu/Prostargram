@@ -2,11 +2,12 @@ package flab.project.service;
 
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
-import flab.project.data.dto.model.Profile;
-import flab.project.data.enums.requestparam.GetProfileRequestType;
+import flab.project.domain.user.model.Profile;
+import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.UpdateProfileRequestDto;
-import flab.project.mapper.UserMapper;
+import flab.project.domain.user.model.UpdateProfileRequestDto;
+import flab.project.domain.user.service.UserService;
+import flab.project.domain.user.mapper.UserMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

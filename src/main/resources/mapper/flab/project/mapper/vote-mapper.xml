@@ -2,12 +2,14 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.VoteMapper">
+<mapper namespace="flab.project.domain.post.mapper.VoteMapper">
 
-    <insert id="addPostVote">
-        INSERT INTO CHOICE(post_id, option_id, user_id)
-        <foreach collection="optionIds" item="optionId" open="VALUES" separator=",">
-            (#{postId}, #{optionId}, #{userId})
+    <insert id="addPostVotes">
+        INSERT INTO VOTES(post_id, user_id, option_id)
+        <foreach collection="votes" item="vote" open="VALUES" separator=",">
+            <foreach collection="vote.optionIds" item="optionId" separator=",">
+                (#{vote.postId}, #{vote.userId}, #{optionId})
+            </foreach>
         </foreach>
     </insert>
 

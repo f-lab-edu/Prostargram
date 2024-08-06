@@ -1,20 +1,17 @@
 package flab.project.service;
 
 
-import static flab.project.data.enums.requestparam.GetFollowsType.*;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatNoException;
+import static flab.project.domain.user.enums.GetFollowsType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import flab.project.config.exception.InvalidUserInputException;
-import flab.project.data.dto.model.Follows;
-import flab.project.data.enums.requestparam.GetFollowsType;
-import flab.project.mapper.FollowMapper;
+import flab.project.domain.user.model.Follows;
+import flab.project.domain.user.enums.GetFollowsType;
+import flab.project.domain.user.service.FollowService;
+import flab.project.domain.user.mapper.FollowMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,16 +50,19 @@ class FollowServiceUnitTest {
         final long ZERO_USER_ID = 0;
 
         assertThatThrownBy(() -> followService.getFollows(NEGATIVE_USER_ID, FOLLOWERS))
-                .isInstanceOf(InvalidUserInputException.class);
+            .isInstanceOf(InvalidUserInputException.class);
 
         assertThatThrownBy(() -> followService.getFollows(ZERO_USER_ID, FOLLOWERS))
-                .isInstanceOf(InvalidUserInputException.class);
+            .isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 추가할 때, followRequestDto의 파라미터가 같은 값이 아니면 정상 처리된다.")
     @Test
     void followRequestDtoParameterIsDifferentInAddFollow() {
-        Follows follows = new Follows(1L, 2L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(2L)
+            .build();
 
         followService.addFollow(follows);
         then(followMapper).should().addFollow(follows);
@@ -71,47 +71,64 @@ class FollowServiceUnitTest {
     @DisplayName("팔로워/팔로잉을 추가할 때, followRequestDto의 파라미터가 같은 값이 들어올 경우 InvalidUserInput Exception을 던진다.")
     @Test
     void followRequestDtoParameterIsNotSameInAddFollow() {
-        Follows follows = new Follows(1L, 1L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(1L)
+            .build();
 
         assertThatThrownBy(() -> followService.addFollow(follows))
-                .isInstanceOf(InvalidUserInputException.class);
+            .isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 추가할 때, followMapper가 DuplicateKeyException을 던질 수 있다.")
     @Test
     void followMapperCanThrowDuplicateKeyException() {
-        Follows follows = new Follows(1L, 2L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(2L)
+            .build();
+
         given(followMapper.addFollow(any(Follows.class)))
-                .willThrow(DuplicateKeyException.class);
+            .willThrow(DuplicateKeyException.class);
 
         assertThatThrownBy(() -> followService.addFollow(follows))
-                .isInstanceOf(DuplicateKeyException.class);
+            .isInstanceOf(DuplicateKeyException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 추가할 때, followMapper가 DataIntegrityViolationException을 던질 수 있다.")
     @Test
     void followMapperCanThrowDataIntegrityViolationException() {
-        Follows follows = new Follows(1L, 2L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(2L)
+            .build();
+
         given(followMapper.addFollow(any(Follows.class)))
-                .willThrow(DataIntegrityViolationException.class);
+            .willThrow(DataIntegrityViolationException.class);
 
         assertThatThrownBy(() -> followService.addFollow(follows))
-                .isInstanceOf(DataIntegrityViolationException.class);
+            .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 삭제할 때, followRequestDto의 파라미터가 같은 값이 들어올 경우 InvalidUserInput Exception을 던진다.")
     @Test
     void followRequestDtoParameterIsNotSameInDeleteFollow() {
-        Follows follows = new Follows(1L, 1L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(1L)
+            .build();
 
         assertThatThrownBy(() -> followService.deleteFollow(follows))
-                .isInstanceOf(InvalidUserInputException.class);
+            .isInstanceOf(InvalidUserInputException.class);
     }
 
     @DisplayName("팔로워/팔로잉을 삭제할 때, followRequestDto의 파라미터가 같은 값이 아니면 정상 처리된다.")
     @Test
     void followRequestDtoParameterIsDifferentInDeleteFollow() {
-        Follows follows = new Follows(1L, 2L);
+        Follows follows = Follows.builder()
+            .fromUserId(1L)
+            .toUserId(2L)
+            .build();
 
         followService.deleteFollow(follows);
 

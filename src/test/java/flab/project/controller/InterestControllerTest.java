@@ -2,14 +2,17 @@ package flab.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.dto.AddInterest;
-import flab.project.facade.InterestFacade;
+import flab.project.domain.user.model.AddInterest;
+import flab.project.domain.user.controller.InterestController;
+import flab.project.domain.user.facade.InterestFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
@@ -17,6 +20,7 @@ import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,6 +40,7 @@ class InterestControllerTest {
     @MockBean
     private InterestFacade interestFacade;
 
+    @WithMockUser
     @DisplayName("관심사를 설정할 수 있다.")
     @Test
     void addInterest() throws Exception {
@@ -48,6 +53,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(addInterest))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -59,6 +65,7 @@ class InterestControllerTest {
 
     }
 
+    @WithUserDetails
     @DisplayName("관심사 추가 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenAddInterest() throws Exception {
@@ -68,6 +75,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, -1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId1))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -83,6 +91,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 0, "test")
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(addInterestWithinvalidUserId2))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -93,6 +102,7 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithUserDetails
     @DisplayName("관심사 추가 API에서 interestName은 최대 15글자까지만 허용된다.")
     @Test
     void interestNameCanHaveMax15LenthStringWhenAddInterest() throws Exception {
@@ -113,6 +123,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(addInterestWith15LengthString))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -128,6 +139,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         post(ADD_INTERST_API_URL, 1)
+                                .with(csrf())
                                 .content(objectMapper.writeValueAsString(addInterestWith16LengthString))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -138,7 +150,7 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-
+    @WithUserDetails
     @DisplayName("관심사를 제거할 수 있다.")
     @Test
     void deleteInterest() throws Exception {
@@ -149,6 +161,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, 1)
+                                .with(csrf())
                                 .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -159,6 +172,7 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
+    @WithUserDetails
     @DisplayName("관심사 제거 API에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenDeleteInterest() throws Exception {
@@ -169,6 +183,7 @@ class InterestControllerTest {
         // when & then
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, negativeUserId)
+                                .with(csrf())
                                 .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -180,6 +195,7 @@ class InterestControllerTest {
 
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, zeroUserId)
+                                .with(csrf())
                                 .param("hashTagId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )

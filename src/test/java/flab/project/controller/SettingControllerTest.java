@@ -1,8 +1,9 @@
 package flab.project.controller;
 
 import flab.project.config.baseresponse.SuccessResponse;
-import flab.project.data.enums.ScreenMode;
-import flab.project.service.SettingService;
+import flab.project.domain.user.enums.ScreenMode;
+import flab.project.domain.user.controller.SettingController;
+import flab.project.domain.user.service.SettingService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,17 +12,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
-import static flab.project.data.enums.PublicScope.PRIVATE;
-import static flab.project.data.enums.PublicScope.PUBLIC;
-import static flab.project.data.enums.ScreenMode.LIGHT;
+import static flab.project.domain.user.enums.PublicScope.PRIVATE;
+import static flab.project.domain.user.enums.PublicScope.PUBLIC;
+import static flab.project.domain.user.enums.ScreenMode.LIGHT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,6 +44,7 @@ class SettingControllerTest {
     @MockBean
     private SettingService settingService;
 
+    @WithMockUser
     @DisplayName("유저의 스크린 모드(라이트/다크 모드)를 수정할 수 있다.")
     @Test
     void updateScreenMode() throws Exception {
@@ -54,6 +58,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_SCREEN_MODE_URL, userId)
+                                .with(csrf())
                                 .queryParam("screen-mode", LIGHT.name())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -64,6 +69,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 스크린 모드(라이트/다크 모드)를 수정할 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateScreenMode() throws Exception {
@@ -75,6 +81,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_SCREEN_MODE_URL, zeroUserId)
+                                .with(csrf())
                                 .queryParam("screen-mode", LIGHT.name())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -86,6 +93,7 @@ class SettingControllerTest {
 
         mockMvc.perform(
                         patch(UPDATE_SCREEN_MODE_URL, negativeUserId)
+                                .with(csrf())
                                 .queryParam("screen-mode", LIGHT.name())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
@@ -96,6 +104,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 스크린 모드(라이트/다크 모드)를 수정할 때, screen-mode는 ScreenMode Enum이어야 한다.")
     @Test
     void screenModeIsInstanceOfScreenModeEnumWhenUpdateScreenMode() throws Exception {
@@ -108,6 +117,7 @@ class SettingControllerTest {
                         patch(UPDATE_SCREEN_MODE_URL, userId)
                                 .queryParam("screen-mode", "notInstanceOfScreenMode")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .with(csrf())
                 )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -116,6 +126,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 설정 상태 정보를 가져올 수 있다.")
     @Test
     void getPersonalSettings() throws Exception {
@@ -137,6 +148,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 설정 상태 정보를 가져올 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenGetPersonalSettings() throws Exception {
@@ -166,6 +178,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정할 수 있다.")
     @Test
     void updateUserPublicScopeToPublic() throws Exception {
@@ -178,6 +191,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, userId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -189,6 +203,7 @@ class SettingControllerTest {
         then(settingService).should().updateUserPublicScope(userId, PUBLIC);
     }
 
+    @WithMockUser
     @DisplayName("유저의 계정 공개 여부를 PUBLIC으로 수정 할 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateUserPublicScope() throws Exception {
@@ -199,6 +214,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, zeroUserId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -209,6 +225,7 @@ class SettingControllerTest {
 
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, negativeUserId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -218,6 +235,7 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
+    @WithMockUser
     @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정할 수 있다.")
     @Test
     void updateUserPublicScopeToPrivate() throws Exception {
@@ -230,6 +248,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, userId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -241,6 +260,7 @@ class SettingControllerTest {
         then(settingService).should().updateUserPublicScope(userId, PRIVATE);
     }
 
+    @WithMockUser
     @DisplayName("유저의 계정 공개 여부를 PRIVATE으로 수정 할 때, userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateUserPrivateScope() throws Exception {
@@ -251,6 +271,7 @@ class SettingControllerTest {
         // when & then
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PRIVATE_URL, zeroUserId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
@@ -261,6 +282,7 @@ class SettingControllerTest {
 
         mockMvc.perform(
                         patch(UPDATE_USER_PUBLIC_SCOPE_TO_PUBLIC_URL, negativeUserId)
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())

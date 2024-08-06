@@ -1,9 +1,9 @@
 package flab.project.common.FileStorage;
 
-import static flab.project.data.enums.ExtensionType.IMAGE;
+import static flab.project.domain.file.enums.ExtensionType.IMAGE;
 
 import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
-import flab.project.mapper.FileExtensionMapper;
+import flab.project.domain.file.mapper.FileExtensionMapper;
 import java.util.HashSet;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

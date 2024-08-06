@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="flab.project.domain.user.mapper.AuthenticationMapper">
+
+    <select id="getUser" resultMap="User">
+        SELECT user_id,
+               email,
+               password,
+               type
+        FROM USERS
+        WHERE email = #{email};
+    </select>
+
+    <resultMap id="User" type="UserForAuth">
+        <id column="user_id" property="userId"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="type" property="userType"/>
+    </resultMap>
+
+</mapper>

@@ -2,26 +2,35 @@ package flab.project.common.FileStorage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import flab.project.data.dto.file.ProfileImage;
-import flab.project.data.dto.file.Uploadable;
-import flab.project.data.enums.FileType;
+import flab.project.domain.file.model.File;
+import flab.project.domain.file.model.Uploadable;
+import flab.project.domain.file.enums.FileType;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static flab.project.domain.file.enums.FileType.PROFILE_IMAGE;
 
 @RequiredArgsConstructor
 @Component
 public class FileStorage {
 
     private final AmazonS3 amazonS3;
-    private final FileFactory fileFactory;
+
+    public Set<String> uploadFiles(long userId, List<MultipartFile> multipartFiles, FileType fileType) {
+        return multipartFiles.stream()
+                .map(multipartFile -> uploadFile(userId, multipartFile, fileType))
+                .collect(Collectors.toSet());
+    }
 
     public String uploadFile(long userId, MultipartFile multipartFile, FileType fileType) {
         try {
-            Uploadable fileInfo = fileFactory.getFileInfo(userId, multipartFile, fileType);
+            Uploadable fileInfo = new File(userId, multipartFile, fileType);
             String bucketPath = fileInfo.getBucketName();
             String fileName = fileInfo.getFileName();
             ObjectMetadata objectMetadata = fileInfo.getObjectMetadata();
@@ -41,7 +50,7 @@ public class FileStorage {
 
     public List<String> getFileNamesInBucket(long userId) {
         String folder = "" + userId;
-        String targetBucketName = ProfileImage.BASE_BUCKET_NAME;
+        String targetBucketName = BucketUtils.getBaseBucketName(PROFILE_IMAGE);
 
         ListObjectsRequest listObjectsRequest
                 = new ListObjectsRequest()
@@ -52,12 +61,10 @@ public class FileStorage {
         ObjectListing objectListing = amazonS3.listObjects(listObjectsRequest);
         List<S3ObjectSummary> objectSummaries = objectListing.getObjectSummaries();
 
-        List<String> fileNames = objectSummaries.stream()
+        return objectSummaries.stream()
                 .map(S3ObjectSummary::getKey)
-                .filter(fileName -> fileName.trim().length() != 0)
-                .collect(Collectors.toList());
-
-        return fileNames;
+                .filter(fileName -> !StringUtils.isBlank(fileName))
+                .toList();
     }
 
     public void deleteFile(String bucketName, String fileName) {

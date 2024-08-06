@@ -2,10 +2,10 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.UserMapper">
+<mapper namespace="flab.project.domain.user.mapper.UserMapper">
 
-  <select id="findAll" parameterType="flab.project.data.enums.requestparam.GetFollowsType"
-    resultType="flab.project.data.dto.model.User">
+  <select id="findAll" parameterType="flab.project.domain.user.enums.GetFollowsType"
+    resultType="flab.project.domain.user.model.User">
     SELECT
     U.user_id,
     U.user_name,
@@ -40,18 +40,18 @@
   </insert>
 
   <select id="getProfileInfo"
-    parameterType="flab.project.data.enums.requestparam.GetProfileRequestType"
+    parameterType="flab.project.domain.user.enums.GetProfileRequestType"
     resultMap="profileResult">
     SELECT U.user_id,
     U.user_name,
     U.profile_img_url,
-    U.department_name,
+    U.organization_information,
     U.self_introduction,
     <if test="getProfileRequestType.name().equals('GET')">U.post_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
-    S.social_account_id,
-    S.social_account_url,
+    S.link_id,
+    S.link,
     L.icon_url,
     H.hashtag_id,
     H.name
@@ -71,11 +71,36 @@
     WHERE user_id = #{userId};
   </select>
 
+  <select id="findWhereUserIdIn" resultType="Profile">
+    SELECT U.user_id,
+    U.user_name,
+    U.profile_img_url,
+    U.organization_information,
+    U.self_introduction,
+    U.post_count,
+    U.follower_count,
+    U.following_count,
+    S.link_id,
+    S.link,
+    L.icon_url,
+    H.hashtag_id,
+    H.name
+    FROM USERS U
+    LEFT JOIN SOCIAL_ACCOUNTS S on U.user_id = S.user_id
+    LEFT JOIN LINK_ICON L on S.icon_id = L.icon_id
+    LEFT JOIN INTERESTS I on u.user_id = I.user_id
+    LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
+    WHERE U.user_id in
+    <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
+      #{userId}
+    </foreach>
+  </select>
+
   <resultMap id="profileResult" type="Profile">
     <id property="userId" column="user_id"/>
     <result property="userName" column="user_name"/>
     <result property="profileImgUrl" column="profile_img_url"/>
-    <result property="departmentName" column="department_name"/>
+    <result property="departmentName" column="organization_information"/>
     <result property="selfIntroduction" column="self_introduction"/>
     <result property="postCount" column="post_count"/>
     <result property="followerCount" column="follower_count"/>
@@ -85,9 +110,9 @@
   </resultMap>
 
   <resultMap id="socialAccountResult" type="SocialAccountResponse">
-    <id property="socialAccountId" column="social_account_id"/>
+    <id property="socialAccountId" column="link_id"/>
     <result property="iconUrl" column="icon_url"/>
-    <result property="socialAccountUrl" column="social_account_url"/>
+    <result property="socialAccountUrl" column="link"/>
   </resultMap>
 
   <resultMap id="hashtagResult" type="HashTag">
@@ -95,14 +120,14 @@
     <result property="hashTagName" column="name"/>
   </resultMap>
 
-  <update id="updateProfile" parameterType="flab.project.data.dto.UpdateProfileRequestDto">
+  <update id="updateProfile" parameterType="flab.project.domain.user.model.UpdateProfileRequestDto">
     UPDATE USERS
     <set>
       <if test="updateProfileRequestDto.userName !=null">
         user_name=#{updateProfileRequestDto.userName},
       </if>
       <if test="updateProfileRequestDto.departmentName !=null">
-        department_name=#{updateProfileRequestDto.departmentName},
+        organization_information=#{updateProfileRequestDto.departmentName},
       </if>
       <if test="updateProfileRequestDto.selfIntroduction !=null">
         self_introduction=#{updateProfileRequestDto.selfIntroduction}

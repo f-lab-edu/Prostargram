@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.HashTagMapper">
+<mapper namespace="flab.project.domain.post.mapper.HashTagMapper">
 
     <select id="getHashtagIdByHashtagName" resultType="long">
         SELECT hashtag_id
@@ -10,9 +10,34 @@
         WHERE name = #{hashTagName};
     </select>
 
+    <select id="getHashTagsByHashtagNames" resultMap="HashTag">
+        SELECT
+        hashtag_id,
+        name
+        FROM Hashtags
+        <where>
+            <foreach collection="hashTagNames" item="name" open="name in (" separator="," close=")">
+                #{name}
+            </foreach>
+        </where>
+    </select>
+
     <insert id="save" parameterType="hashTag" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
         INSERT INTO Hashtags(name)
         VALUES (#{hashtag.hashTagName})
     </insert>
+
+    <insert id="saveAll" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
+        INSERT INTO HASHTAGS(name)
+        VALUES
+        <foreach collection="hashTags" item="hashTag" separator=",">
+            (#{hashTag.hashTagName})
+        </foreach>
+    </insert>
+
+    <resultMap id="HashTag" type="HashTag">
+        <id property="hashTagId" column="hashtag_id"/>
+        <result property="hashTagName" column="name"/>
+    </resultMap>
 
 </mapper>

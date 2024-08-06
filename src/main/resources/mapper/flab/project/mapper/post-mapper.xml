@@ -1,143 +1,229 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.PostMapper">
+<mapper namespace="flab.project.domain.post.mapper.PostMapper">
 
-    <select id="getBasicPostDetail" resultMap="BasicPost">
-        SELECT post.post_id,
-               post.user_id,
-               post.content,
-               hashtags.name,
-               post.type,
-               like_count,
-               comment_count,
-               created_at,
-               img_url,
-               IFNULL(post_like.user_id, FALSE) as is_like,
-               IFNULL(follow.to_user_id, FALSE) as is_follow
-        FROM POST post
-                 JOIN POST_IMAGES post_images on post_images.post_id = post.post_id
-                 LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
-                 LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
-                 LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
-        WHERE post.post_id = #{postId};
-    </select>
+  <insert id="save" parameterType="AddPostRequest" useGeneratedKeys="true" keyProperty="post.postId"
+    keyColumn="post_id">
+    INSERT INTO POST(user_id, content, type)
+    VALUES (#{userId}, #{post.content}, #{post.postType});
+  </insert>
 
-    <select id="getDebatePostDetail" resultMap="DebatePost">
-        SELECT post.post_id,
-               post.user_id,
-               post.content as post_content,
-               hashtags.name,
-               post.type,
-               like_count,
-               comment_count,
-               created_at,
-               IFNULL(choice.option_id, 0) as selected_option_id,
-               options.option_id,
-               options.content as option_content,
-               options.vote_count,
-               IFNULL(post_like.user_id, FALSE) as is_like,
-               IFNULL(follow.to_user_id, FALSE) as is_follow
-        FROM POST post
-                 JOIN POST_OPTIONS options on options.post_id = post.post_id
-                 LEFT JOIN CHOICE choice on choice.option_id = options.option_id and choice.user_id = #{userId}
-                 LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
-                 LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
-                 LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
-        WHERE post.post_id = #{postId};
-    </select>
+  <select id="getBasicPostDetail" resultMap="BasicPost">
+    SELECT post.post_id,
+           post.user_id,
+           post.content,
+           hashtags.name,
+           post.type,
+           like_count,
+           comment_count,
+           created_at,
+           img_url,
+           IFNULL(post_like.user_id, FALSE) as is_like,
+           IFNULL(follow.to_user_id, FALSE) as is_follow
+    FROM POST post
+           LEFT JOIN POST_IMAGES post_images on post_images.post_id = post.post_id
+           LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
+           LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
+           LEFT JOIN POST_LIKE post_like
+                     on post.post_id = post_like.post_id and post_like.user_id = #{userId}
+           LEFT JOIN FOLLOWS follow
+                     on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
+    WHERE post.post_id = #{postId};
+  </select>
 
-    <select id="getPollPostDetail" resultMap="PollPost">
-        SELECT post.post_id,
-               post.user_id,
-               post.content as post_content,
-               hashtags.name,
-               post.type,
-               like_count,
-               comment_count,
-               created_at,
-               start_date,
-               end_date,
-               IFNULL(choice.option_id, 0) as selected_option_id,
-               options.option_id,
-               options.content as option_content,
-               options.vote_count,
-               IFNULL(post_like.user_id, FALSE) as is_like,
-               IFNULL(follow.to_user_id, FALSE) as is_follow
-        FROM POST post
-                 JOIN POST_OPTIONS options on options.post_id = post.post_id
-                 JOIN POLL_METADATA poll_metadata on poll_metadata.post_id = post.post_id
-                 LEFT JOIN CHOICE choice on choice.post_id = post.post_id and choice.user_id = #{userId}
-                 LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
-                 LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
-                 LEFT JOIN POST_LIKE post_like on post.post_id = post_like.post_id and post_like.user_id = #{userId}
-                 LEFT JOIN FOLLOW follow on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
-        WHERE post.post_id = #{postId};
-    </select>
+  <select id="getBasicPostsWhereIn" resultMap="BasicPost">
+    SELECT post.post_id,
+    post.user_id,
+    post.content,
+    hashtags.name,
+    post.type,
+    like_count,
+    comment_count,
+    created_at,
+    img_url,
+    IFNULL(post_like.user_id, FALSE) as is_like,
+    IFNULL(follow.to_user_id, FALSE) as is_follow
+    FROM POST post
+    LEFT JOIN POST_IMAGES post_images on post_images.post_id = post.post_id
+    LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
+    LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
+    LEFT JOIN POST_LIKE post_like
+    on post.post_id = post_like.post_id and post_like.user_id = #{userId}
+    LEFT JOIN FOLLOWS follow
+    on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
+    WHERE post.post_id in
+    <foreach collection="basicPostIds" item="postId" index="index" open="(" close=")" separator=",">
+      #{postId}
+    </foreach>
+  </select>
 
-    <resultMap id="BasicPost" type="BasicPost">
-        <id property="postId" column="post_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="content" column="content"/>
-        <result property="postType" column="type"/>
-        <result property="likeCount" column="like_count"/>
-        <result property="commentCount" column="comment_count"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="isLike" column="is_like"/>
-        <result property="isFollow" column="is_follow"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
-        </collection>
-        <collection property="contentImgUrls" ofType="String">
-            <result property="contentImgUrls" column="img_url"/>
-        </collection>
-    </resultMap>
+  <select id="getDebatePostDetail" resultMap="DebatePost">
+    SELECT post.post_id,
+           post.user_id,
+           post.content,
+           hashtags.name,
+           post.type,
+           like_count,
+           comment_count,
+           created_at,
+           IFNULL(choice.option_id, 0)      as selected_option_id,
+           options.option_id,
+           options.content                  as option_content,
+           options.vote_count,
+           IFNULL(post_like.user_id, FALSE) as is_like,
+           IFNULL(follow.to_user_id, FALSE) as is_follow
+    FROM POST post
+           JOIN POST_OPTIONS options on options.post_id = post.post_id
+           LEFT JOIN CHOICE choice
+                     on choice.option_id = options.option_id and choice.user_id = #{userId}
+           LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
+           LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
+           LEFT JOIN POST_LIKE post_like
+                     on post.post_id = post_like.post_id and post_like.user_id = #{userId}
+           LEFT JOIN FOLLOWS follow
+                     on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
+    WHERE post.post_id = #{postId};
+  </select>
 
-    <resultMap id="DebatePost" type="DebatePost">
-        <id property="postId" column="post_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="content" column="post_content" javaType="String"/>
-        <result property="postType" column="type"/>
-        <result property="likeCount" column="like_count"/>
-        <result property="commentCount" column="comment_count"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="selectedOptionId" column="selected_option_id"/>
-        <result property="isLike" column="is_like"/>
-        <result property="isFollow" column="is_follow"/>
-        <collection property="options" ofType="Option" resultMap="Option"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
-        </collection>
-    </resultMap>
+  <select id="getDebatePostsWhereIn" resultMap="DebatePost">
+    SELECT
+    post.post_id,
+    post.user_id,
+    post.content,
+    hashtags.name,
+    post.type,
+    like_count,
+    comment_count,
+    created_at,
+    IFNULL(choice.option_id, 0) as selected_option_id,
+    options.option_id,
+    options.content as option_content,
+    options.vote_count,
+    IFNULL(post_like.user_id, FALSE) as is_like,
+    IFNULL(follow.to_user_id, FALSE) as is_follow
+    FROM POST post
+    LEFT JOIN POST_OPTIONS options on options.post_id = post.post_id
+    LEFT JOIN CHOICE choice
+    on choice.option_id = options.option_id and choice.user_id = #{userId}
+    LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
+    LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
+    LEFT JOIN POST_LIKE post_like
+    on post.post_id = post_like.post_id and post_like.user_id = #{userId}
+    LEFT JOIN FOLLOWS follow
+    on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
+    WHERE post.post_id in
+    <foreach collection="debatePostIds" item="postId" index="index" open="(" close=")"
+      separator=",">
+      #{postId}
+    </foreach>
+  </select>
 
-    <resultMap id="PollPost" type="PollPost">
-        <id property="postId" column="post_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="content" column="post_content" javaType="String"/>
-        <result property="postType" column="type"/>
-        <result property="likeCount" column="like_count"/>
-        <result property="commentCount" column="comment_count"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="startDate" column="start_date"/>
-        <result property="endDate" column="end_date"/>
-        <result property="isLike" column="is_like"/>
-        <result property="isFollow" column="is_follow"/>
-        <collection property="selectedOptionIds" ofType="Integer">
-            <result property="selectedOptionIds" column="selected_option_id"/>
-        </collection>
-        <collection property="options" ofType="Option" resultMap="Option"/>
-        <collection property="hashTags" ofType="String">
-            <result property="hashTags" column="name"/>
-        </collection>
-    </resultMap>
+  <select id="getPollPostDetail" resultMap="PollPost">
+    SELECT post.post_id,
+           post.user_id,
+           post.content                     as post_content,
+           hashtags.name,
+           post.type,
+           like_count,
+           comment_count,
+           created_at,
+           start_date,
+           end_date,
+           IFNULL(choice.option_id, 0)      as selected_option_id,
+           options.option_id,
+           options.content                  as option_content,
+           options.vote_count,
+           IFNULL(post_like.user_id, FALSE) as is_like,
+           IFNULL(follow.to_user_id, FALSE) as is_follow
+    FROM POST post
+           JOIN POST_OPTIONS options on options.post_id = post.post_id
+           JOIN POLL_METADATA poll_metadata on poll_metadata.post_id = post.post_id
+           LEFT JOIN CHOICE choice on choice.post_id = post.post_id and choice.user_id = #{userId}
+           LEFT JOIN POST_HASHTAG_MAPPING phm on phm.post_id = post.post_id
+           LEFT JOIN HASHTAGS hashtags on hashtags.hashtag_id = phm.hashtag_id
+           LEFT JOIN POST_LIKE post_like
+                     on post.post_id = post_like.post_id and post_like.user_id = #{userId}
+           LEFT JOIN FOLLOWS follow
+                     on post.user_id = follow.to_user_id and follow.from_user_id = #{userId}
+    WHERE post.post_id = #{postId};
+  </select>
 
-    <resultMap id="Option" type="Option">
-        <result property="optionId" column="option_id"/>
-        <result property="optionContent" column="option_content"/>
-        <result property="voteCount" column="vote_count"/>
-    </resultMap>
+  <select id="findTypeByPostIds" resultType="PostTypeModel">
+    SELECT post_id, type as postType
+    FROM POST
+    WHERE post_id in
+    <foreach collection="postIds" item="postId" index="index" open="(" close=")" separator=",">
+      #{postId}
+    </foreach>
+  </select>
+
+  <resultMap id="PostTypeModel" type="PostTypeModel">
+    <id property="postId" column="post_id"/>
+    <result property="postType" column="postType"/>
+  </resultMap>
+
+  <resultMap id="BasicPost" type="BasicPost">
+    <id property="postId" column="post_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="content" column="content"/>
+    <result property="postType" column="type"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="commentCount" column="comment_count"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="isLike" column="is_like"/>
+    <result property="isFollow" column="is_follow"/>
+    <collection property="hashTagNames" ofType="String">
+      <result property="hashTagNames" column="name"/>
+    </collection>
+    <collection property="contentImgUrls" ofType="String">
+      <result property="contentImgUrls" column="img_url"/>
+    </collection>
+  </resultMap>
+
+  <resultMap id="DebatePost" type="DebatePost">
+    <id property="postId" column="post_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="content" column="content" javaType="String"/>
+    <result property="postType" column="type"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="commentCount" column="comment_count"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="selectedOptionId" column="selected_option_id"/>
+    <result property="isLike" column="is_like"/>
+    <result property="isFollow" column="is_follow"/>
+    <collection property="options" ofType="Option" resultMap="Option"/>
+    <collection property="hashTagNames" ofType="String">
+      <result property="hashTagNames" column="name"/>
+    </collection>
+  </resultMap>
+
+  <resultMap id="PollPost" type="PollPost">
+    <id property="postId" column="post_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="content" column="post_content" javaType="String"/>
+    <result property="postType" column="type"/>
+    <result property="likeCount" column="like_count"/>
+    <result property="commentCount" column="comment_count"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="startDate" column="start_date"/>
+    <result property="endDate" column="end_date"/>
+    <result property="isLike" column="is_like"/>
+    <result property="isFollow" column="is_follow"/>
+    <collection property="selectedOptionIds" ofType="Integer">
+      <result property="selectedOptionIds" column="selected_option_id"/>
+    </collection>
+    <collection property="options" ofType="Option" resultMap="Option"/>
+    <collection property="hashTagNames" ofType="String">
+      <result property="hashTagNames" column="name"/>
+    </collection>
+  </resultMap>
+
+  <resultMap id="Option" type="Option">
+    <result property="optionId" column="option_id"/>
+    <result property="optionContent" column="option_content"/>
+    <result property="voteCount" column="vote_count"/>
+  </resultMap>
 
 </mapper>

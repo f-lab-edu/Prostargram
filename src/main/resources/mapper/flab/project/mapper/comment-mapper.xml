@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="flab.project.mapper.CommentMapper">
+<mapper namespace="flab.project.domain.comment.mapper.CommentMapper">
 
     <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
         INSERT INTO Comment(post_id, user_id, parent_id, content)

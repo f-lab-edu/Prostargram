@@ -2,10 +2,11 @@ package flab.project.facade;
 
 import flab.project.common.BadWordChecker;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
-import flab.project.data.dto.AddInterest;
-import flab.project.data.dto.model.HashTag;
-import flab.project.service.HashTagService;
-import flab.project.service.InterestService;
+import flab.project.domain.user.model.AddInterest;
+import flab.project.domain.post.model.HashTag;
+import flab.project.domain.user.facade.InterestFacade;
+import flab.project.domain.post.service.HashTagService;
+import flab.project.domain.user.service.InterestService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

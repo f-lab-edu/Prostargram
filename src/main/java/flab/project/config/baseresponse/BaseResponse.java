@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @JsonPropertyOrder({"isSuccess", "code", "message"})
-public abstract class BaseResponse<T> {
+public abstract class BaseResponse {
 
     @Schema(name = "성공 여부", example = "true")
     private final Boolean isSuccess;
@@ -17,9 +17,15 @@ public abstract class BaseResponse<T> {
     @Schema(name = "요청에 대한 결과 코드", example = "1000")
     private final int code;
 
-    public BaseResponse(ResponseEnum status) {
+    protected BaseResponse(ResponseEnum status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();
         this.code = status.getCode();
+    }
+
+    protected BaseResponse(Boolean isSuccess, String message, int code) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+        this.code = code;
     }
 }

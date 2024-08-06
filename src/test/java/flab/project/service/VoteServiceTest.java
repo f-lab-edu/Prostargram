@@ -1,12 +1,13 @@
 package flab.project.service;
 
+import flab.project.cache.cacheManager.VoteCacheManager;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
-import flab.project.data.dto.model.PollPeriod;
-import flab.project.data.enums.PostType;
-import flab.project.mapper.PollMetadataMapper;
-import flab.project.mapper.PostOptionsMapper;
-import flab.project.mapper.VoteMapper;
+import flab.project.domain.post.model.PollPeriod;
+import flab.project.domain.post.enums.PostType;
+import flab.project.domain.post.service.VoteService;
+import flab.project.domain.post.mapper.PollMetadataMapper;
+import flab.project.domain.post.mapper.PostOptionsMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,12 +24,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class VoteServiceTest {
+class VoteServiceTest {
 
     @InjectMocks
     VoteService voteService;
     @Mock
-    VoteMapper voteMapper;
+    VoteCacheManager voteCacheManager;
     @Mock
     PostOptionsMapper postOptionsMapper;
     @Mock
@@ -46,7 +47,7 @@ public class VoteServiceTest {
         voteService.addPostVote(postId, Set.of(optionId), userId, PostType.DEBATE);
 
         // then
-        then(voteMapper).should().addPostVote(postId, Set.of(optionId), userId);
+        then(voteCacheManager).should().addPostVote(postId, userId, Set.of(optionId));
     }
 
     @DisplayName("통계 게시물에 투표할 수 있다.")
@@ -65,7 +66,7 @@ public class VoteServiceTest {
         voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
 
         // then
-        then(voteMapper).should().addPostVote(postId, optionIds, userId);
+        then(voteCacheManager).should().addPostVote(postId, userId, optionIds);
     }
 
     @DisplayName("토론 게시물에 투표할 때, allowMultipleVotes는 항상 false이며 optionId는 하나의 값만 존재한다.")
