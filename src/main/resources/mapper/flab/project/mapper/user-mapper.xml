@@ -50,8 +50,8 @@
     <if test="getProfileRequestType.name().equals('GET')">U.post_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
-    S.link_id,
-    S.link,
+    S.social_account_id,
+    S.social_account_url,
     L.icon_url,
     H.hashtag_id,
     H.name
@@ -80,8 +80,8 @@
     U.post_count,
     U.follower_count,
     U.following_count,
-    S.link_id,
-    S.link,
+    S.social_account_id,
+    S.social_account_url,
     L.icon_url,
     H.hashtag_id,
     H.name
