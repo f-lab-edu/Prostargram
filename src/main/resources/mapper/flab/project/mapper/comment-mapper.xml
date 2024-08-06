@@ -5,8 +5,55 @@
 <mapper namespace="flab.project.domain.comment.mapper.CommentMapper">
 
     <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
-        INSERT INTO Comment(post_id, user_id, content)
-        VALUES (#{comment.postId}, #{comment.userId}, #{comment.content})
+        INSERT INTO Comment(post_id, user_id, parent_id, content)
+        VALUES (#{comment.postId}, #{comment.userId}, #{comment.parentId}, #{comment.content})
     </insert>
+
+    <select id="getComments" resultMap="commentWithUserResultMap">
+        SELECT comment.comment_id,
+               comment.post_id,
+               comment.user_id,
+               comment.parent_id,
+               comment.content,
+               comment.like_count,
+               comment.created_at,
+               comment.children_count,
+               IFNULL(comment_like.user_id, FALSE) AS is_like,
+               users.user_name,
+               users.profile_img_url
+        FROM COMMENT comment
+            LEFT JOIN COMMENT_LIKE comment_like ON comment.comment_id = comment_like.comment_id AND comment_like.user_id = #{userId}
+            LEFT JOIN USERS users ON comment.user_id = users.user_id
+        WHERE comment.post_id = #{postId}
+          <if test="lastCommentId != null">
+          <![CDATA[
+          AND comment.comment_id < #{lastCommentId}
+        ]]>
+        </if>
+        ORDER BY comment.comment_id DESC
+        LIMIT #{limit}
+    </select>
+
+    <resultMap id="commentWithUserResultMap" type="CommentWithUser">
+        <association property="comment" resultMap="commentResultMap"/>
+        <association property="basicUser" resultMap="basicUserResultMap"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="Comment">
+        <id property="commentId" column="comment_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="comment_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="childrenCount" column="children_count"/>
+    </resultMap>
+    
+    <resultMap id="basicUserResultMap" type="BasicUser">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="profileImgUrl" column="profile_img_url"/>
+    </resultMap>
 
 </mapper>

@@ -1,5 +1,6 @@
 package flab.project.domain.comment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -12,17 +13,21 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Schema(example = "1")
+    private long commentId;
+
+    @Schema(example = "1")
     private long postId;
 
     @Schema(example = "1")
     private long userId;
 
-    @Schema(example = "1")
-    private long commentId;
-
     @Schema(description = "대댓글이 존재할 경우, 가장 최상단의 댓글", example = "1", nullable = true)
     @Setter
     private Long parentId;
+
+    @JsonProperty("isLike")
+    @Schema(example = "false")
+    private Boolean isLike;
 
     @Schema(example = "화이팅 합시다!")
     private String content;

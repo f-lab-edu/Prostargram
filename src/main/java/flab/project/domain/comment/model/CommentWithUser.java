@@ -1,14 +1,17 @@
 package flab.project.domain.comment.model;
 
+
 import flab.project.domain.user.model.BasicUser;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentWithUser {
-    private final Comment comment;
 
-    private final BasicUser basicUser;
+    private Comment comment;
 
-    public CommentWithUser(Comment comment, BasicUser basicUser) {
-        this.comment = comment;
-        this.basicUser = basicUser;
-    }
+    private BasicUser basicUser;
 }

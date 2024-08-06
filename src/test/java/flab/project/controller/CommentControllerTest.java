@@ -47,13 +47,12 @@ public class CommentControllerTest {
 
         given(commentService.addComment(postId, userId, parentId, content)).willReturn(comment);
 
-        // when & then
         mockMvc.perform(
-                post("/posts/{postId}/comment", postId)
-                        .with(csrf())
-                        .param("userId", String.valueOf(userId))
-                        .param("content", content)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        post("/posts/{postId}/comments", postId)
+                                .param("userId", String.valueOf(userId))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf())) // CSRF 토큰 추가
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
@@ -82,12 +81,12 @@ public class CommentControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/comment", postId)
-                                .with(csrf())
+                        post("/posts/{postId}/comments", postId)
                                 .param("userId", String.valueOf(userId))
                                 .param("parentId", String.valueOf(parentId))
-                                .param("content", content)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.SUCCESS.isSuccess()))
@@ -107,12 +106,12 @@ public class CommentControllerTest {
 
         // when & then
         mockMvc.perform(
-                post("/posts/{postId}/comment", negativePostId)
-                        .with(csrf())
-                        .param("userId", String.valueOf(userId))
-                        .param("parentId", String.valueOf(parentId))
-                        .param("content", content)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        post("/posts/{postId}/comments", negativePostId)
+                                .param("userId", String.valueOf(userId))
+                                .param("parentId", String.valueOf(parentId))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
@@ -132,12 +131,12 @@ public class CommentControllerTest {
 
         // when & then
         mockMvc.perform(
-                post("/posts/{postId}/comment", postId)
-                        .with(csrf())
-                        .param("userId", String.valueOf(negativeUserId))
-                        .param("parentId", String.valueOf(parentId))
-                        .param("content", content)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        post("/posts/{postId}/comments", postId)
+                                .param("userId", String.valueOf(negativeUserId))
+                                .param("parentId", String.valueOf(parentId))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
@@ -157,12 +156,12 @@ public class CommentControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/comment", postId)
-                                .with(csrf())
+                        post("/posts/{postId}/comments", postId)
                                 .param("userId", String.valueOf(userId))
                                 .param("parentId", String.valueOf(parentId))
-                                .param("content", content)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
@@ -182,11 +181,11 @@ public class CommentControllerTest {
 
         // when & then
         mockMvc.perform(
-                        post("/posts/{postId}/comment", postId)
-                                .with(csrf())
+                        post("/posts/{postId}/comments", postId)
                                 .param("userId", String.valueOf(userId))
-                                .param("content", content)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isSuccess").value(ResponseEnum.INVALID_USER_INPUT.isSuccess()))
