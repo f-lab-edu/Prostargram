@@ -155,7 +155,7 @@ class InterestControllerTest {
     @Test
     void deleteInterest() throws Exception {
         // given
-        given(interestFacade.deleteInterest(anyLong(), anyLong()))
+        given(interestFacade.deleteInterest(anyLong(), anyLong(), anyString()))
                 .willReturn(new SuccessResponse());
 
         // when & then
@@ -163,6 +163,7 @@ class InterestControllerTest {
                         delete(DELETE_INTEREST_API_URL, 1)
                                 .with(csrf())
                                 .param("hashTagId", "1")
+                                .param("name", "java")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())

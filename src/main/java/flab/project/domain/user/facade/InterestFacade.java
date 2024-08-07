@@ -30,14 +30,15 @@ public class InterestFacade {
 
         Long hashTagId = getHashTagIdByHashTagName(addInterestDto);
 
-        interestService.addInterest(addInterestDto.getUserId(), hashTagId);
+        interestService.addInterest(addInterestDto.getUserId(), hashTagId, addInterestDto.getInterestName());
         return new SuccessResponse();
     }
 
-    public SuccessResponse deleteInterest(long userId, long hashTagId) {
+    public SuccessResponse deleteInterest(long userId, long hashTagId, String name) {
+        // name 관련 검증 메서드 추가해야
         validateUserIdAndHashTagId(userId, hashTagId);
 
-        interestService.deleteInterest(userId, hashTagId);
+        interestService.deleteInterest(userId, hashTagId, name);
 
         return new SuccessResponse();
     }
