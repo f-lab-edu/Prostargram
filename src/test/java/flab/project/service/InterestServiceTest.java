@@ -42,12 +42,13 @@ public class InterestServiceTest {
         // given
         long userId = 1L;
         long hashTagId = 1L;
+        String name = "java";
 
         // when
-        interestService.addInterest(userId, hashTagId);
+        interestService.addInterest(userId, hashTagId, name);
 
         // then
-        then(interestMapper).should().save(userId, hashTagId);
+        then(interestMapper).should().save(userId, hashTagId, name);
     }
 
     @DisplayName("관심사를 삭제할 수 있다.")
@@ -56,12 +57,13 @@ public class InterestServiceTest {
         // given
         long userId = 1L;
         long hashTagId = 1L;
+        String name = "java";
 
-        given(interestMapper.delete(userId, hashTagId))
+        given(interestMapper.delete(userId, hashTagId, name))
                 .willReturn(1);
 
         // when & then
-        assertThatCode(() -> interestService.deleteInterest(userId, hashTagId))
+        assertThatCode(() -> interestService.deleteInterest(userId, hashTagId, name))
                 .doesNotThrowAnyException();
 
     }
@@ -72,12 +74,13 @@ public class InterestServiceTest {
         // given
         long userId = 1L;
         long hashTagId = 1L;
+        String name = "java";
 
-        given(interestMapper.delete(userId, hashTagId))
+        given(interestMapper.delete(userId, hashTagId, name))
                 .willReturn(0);
 
         // when & then
-        assertThatThrownBy(() -> interestService.deleteInterest(userId, hashTagId))
+        assertThatThrownBy(() -> interestService.deleteInterest(userId, hashTagId, name))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 }
