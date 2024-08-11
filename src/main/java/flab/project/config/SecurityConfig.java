@@ -53,8 +53,7 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/users", "/send", "/login", "/verification/email/**", "/verify-username",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**").permitAll()
+                        "/swagger-ui/**", "/v3/api-docs/**", "/users/{userId}/social-accounts-and-interests").permitAll()
                     .anyRequest().authenticated()
             )
 
