@@ -8,13 +8,13 @@ import lombok.Getter;
 @JsonPropertyOrder({"isSuccess", "code", "message"})
 public abstract class BaseResponse {
 
-    @Schema(name = "성공 여부", example = "true")
+    @Schema(description = "성공 여부", example = "true")
     private final Boolean isSuccess;
 
-    @Schema(name = "요청에 대한 결과 메세지", example = "요청에 성공하였습니다.")
+    @Schema(description = "요청에 대한 결과 메세지", example = "요청에 성공하였습니다.")
     private final String message;
 
-    @Schema(name = "요청에 대한 결과 코드", example = "1000")
+    @Schema(description = "요청에 대한 결과 코드", example = "1000")
     private final int code;
 
     protected BaseResponse(ResponseEnum status) {
