@@ -23,22 +23,21 @@ public class InterestFacade {
     private final HashTagService hashTagService;
 
     @Transactional
-    public SuccessResponse addInterest(AddInterest addInterestDto) {
+    public void addInterest(AddInterest addInterestDto) {
         //TODO 추후 해당 로직들을 AOP로 삽입 예정.
         badWordChecker.hasBadWord(addInterestDto.getStringFields());
         validateNumberLimitOfInterest(addInterestDto);
 
         Long hashTagId = getHashTagIdByHashTagName(addInterestDto);
 
-        interestService.addInterest(addInterestDto.getUserId(), hashTagId, addInterestDto.getInterestName());
-        return new SuccessResponse();
+        interestService.addInterest(addInterestDto.getUserId(), hashTagId);
     }
 
-    public SuccessResponse deleteInterest(long userId, long hashTagId, String name) {
+    public SuccessResponse deleteInterest(long userId, long hashTagId) {
         // name 관련 검증 메서드 추가해야
         validateUserIdAndHashTagId(userId, hashTagId);
 
-        interestService.deleteInterest(userId, hashTagId, name);
+        interestService.deleteInterest(userId, hashTagId);
 
         return new SuccessResponse();
     }
