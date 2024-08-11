@@ -17,7 +17,7 @@ public class SocialAccountFacade {
     private final IconService iconService;
 
     @Transactional
-    public SuccessResponse addSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
+    public void addSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
         //todo 추후 feat/#26 브랜치 머지되면 BadwordCheck 로직 추가 예정.
         updateSocialAccount.convertEscapeCharacter();
 
@@ -27,7 +27,5 @@ public class SocialAccountFacade {
         socialAccountService.checkNumberLimitOfSocialAccount(updateSocialAccount.getUserId());
 
         socialAccountService.addSocialAccount(socialAccount);
-
-        return new SuccessResponse();
     }
 }

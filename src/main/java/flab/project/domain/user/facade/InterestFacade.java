@@ -33,13 +33,11 @@ public class InterestFacade {
         interestService.addInterest(addInterestDto.getUserId(), hashTagId);
     }
 
-    public SuccessResponse deleteInterest(long userId, long hashTagId) {
+    public void deleteInterest(long userId, long hashTagId) {
         // name 관련 검증 메서드 추가해야
         validateUserIdAndHashTagId(userId, hashTagId);
 
         interestService.deleteInterest(userId, hashTagId);
-
-        return new SuccessResponse();
     }
 
     private void validateNumberLimitOfInterest(AddInterest addInterestDto) {
