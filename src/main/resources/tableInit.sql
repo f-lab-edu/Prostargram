@@ -75,7 +75,7 @@ create table interests
 (
     user_id    int          not null,
     hashtag_id int          not null,
-블    primary key (user_id, hashtag_id)
+    primary key (user_id, hashtag_id)
 );
 
 create table social_accounts
