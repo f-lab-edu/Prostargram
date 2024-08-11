@@ -4,6 +4,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.facade.InterestFacade;
 import flab.project.domain.user.facade.SocialAccountFacade;
 import flab.project.domain.user.model.AddInterest;
+import flab.project.domain.user.model.CreateUserAdditionalInfoRequestDto;
 import flab.project.domain.user.model.SignUp;
 import flab.project.domain.user.model.UpdateSocialAccountRequestDto;
 import flab.project.domain.user.service.SignUpService;
@@ -39,8 +40,8 @@ public class SignUpController {
             @Parameter(name = "userNameToken", description = "닉네임 검증 토큰", in = ParameterIn.QUERY, required = true)})
     @PostMapping(value = "/users")
     public SuccessResponse addUser(@RequestBody @Valid SignUp signUp,
-                                              @RequestParam @NotBlank String emailToken,
-                                              @RequestParam @NotBlank String userNameToken) {
+                                   @RequestParam @NotBlank String emailToken,
+                                   @RequestParam @NotBlank String userNameToken) {
         signUpService.addUser(signUp, emailToken, userNameToken);
 
         return new SuccessResponse<>();
@@ -52,28 +53,22 @@ public class SignUpController {
     })
     @PostMapping(value = "/users/{userId}/social-accounts-and-interests")
     public SuccessResponse addSocialAccountAndInterest(@PathVariable("userId") @Positive long userId,
-                                                       @RequestBody @Valid @Size(max = 3) Optional<List<UpdateSocialAccountRequestDto>> socialAccounts,
-                                                       @RequestBody @Valid Optional<List<String>> recommendInterests,
-                                                       @RequestBody @Valid @Size(max = 10) Optional<List<AddInterest>> customInterests) {
+                                                       @RequestBody @Valid CreateUserAdditionalInfoRequestDto createUserAdditionalInfoRequestDto) {
 
-        socialAccounts.ifPresent(socialAccountList -> {
-            for (UpdateSocialAccountRequestDto socialAccount : socialAccountList) {
-                socialAccount.convertEscapeCharacter();
-                socialAccountFacade.addSocialAccount(socialAccount);
-            }
+        // List<AddSocialAccountDto> socialAccounts를 하나씩 꺼내서 Facade -> Service -> DB
+        createUserAdditionalInfoRequestDto.getSocialAccounts().forEach(socialAccountDto -> {
+            socialAccountFacade.addSocialAccount(new UpdateSocialAccountRequestDto(userId, socialAccountDto.getSocialAccountUrl()));
         });
 
-        recommendInterests.ifPresent(interestList -> {
-            for (String interest : interestList) {
-                AddInterest addInterest = new AddInterest(userId, interest);
-                interestFacade.addInterest(addInterest);
-            }
+        // List<String> recommendInterests를 하나씩 꺼내서 Facade -> Service -> DB
+        createUserAdditionalInfoRequestDto.getRecommendInterests().forEach(interest -> {
+            AddInterest addInterest = new AddInterest(userId, interest);
+            interestFacade.addInterest(addInterest);
         });
 
-        customInterests.ifPresent(interestList -> {
-            for (AddInterest interest : interestList) {
-                interestFacade.addInterest(interest);
-            }
+        // List<AddCustomInterestDto> hashTags를 하나씩 꺼내서 Facade -> Service -> DB
+        createUserAdditionalInfoRequestDto.getHashTags().forEach(customInterest -> {
+            interestFacade.addInterest(new AddInterest(userId, customInterest.getInterestName()));
         });
 
         return new SuccessResponse<>();
