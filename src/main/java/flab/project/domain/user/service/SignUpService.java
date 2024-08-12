@@ -1,10 +1,12 @@
 package flab.project.domain.user.service;
 
-import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.user.exception.InvalidEmailTokenException;
+import flab.project.domain.user.exception.InvalidUsernameTokenException;
 import flab.project.domain.user.model.SignUp;
 import flab.project.domain.user.enums.LoginType;
 import flab.project.domain.user.mapper.SignUpMapper;
 import flab.project.utils.SignUpRedisUtil;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,41 +15,54 @@ import org.springframework.stereotype.Service;
 @Service
 public class SignUpService {
 
+    public static final int TOKEN_LENGTH = 7;
     private final SignUpMapper signUpMapper;
     private final SignUpRedisUtil signUpRedisUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public void addUser(SignUp signUp, String emailToken, String userNameToken) {
+    public void addUser(SignUp signUp) {
         String email = signUp.getEmail();
-        String userName = signUp.getUserName();
+        String userName = signUp.getUsername();
         String password = signUp.getPassword();
+        String emailToken = signUp.getEmailToken();
+        String usernameToken = signUp.getUsernameToken();
         String encodedPassword = passwordEncoder.encode(password);
 
-        validateToken(email, emailToken, userName, userNameToken);
+        validateToken(email, emailToken, userName, usernameToken);
 
         signUpMapper.addUser(email, userName, encodedPassword, LoginType.NORMAL);
     }
 
-    private void validateToken(String email, String emailSignUpToken, String userName, String userNameSignUpToken) {
-        validateEmailToken(email, emailSignUpToken);
-        validateUserNameToken(userName, userNameSignUpToken);
+    private void validateToken(String email, String emailToken, String userName, String usernameToken) {
+        validateTokenSize(emailToken, usernameToken);
+        validateEmailToken(email, emailToken);
+        validateUsernameToken(userName, usernameToken);
     }
 
-    private void validateEmailToken(String email, String emailSignUpToken) {
-        String emailInRedis = email;
-        String emailTokenInRedis = signUpRedisUtil.get(emailInRedis);
+    private void validateTokenSize(String emailToken, String usernameToken) {
+        if (StringUtils.isBlank(emailToken) || emailToken.length() != TOKEN_LENGTH) {
+            throw new InvalidEmailTokenException();
+        }
 
-        if (!emailSignUpToken.equals(emailTokenInRedis)) {
-            throw new InvalidUserInputException("Invalid emailSignUpToken.");
+        if (StringUtils.isBlank(usernameToken) || usernameToken.length() != TOKEN_LENGTH) {
+            throw new InvalidUsernameTokenException();
         }
     }
 
-    private void validateUserNameToken(String userName, String userNameSignUpToken) {
-        String userNameInRedis = userName + "_verify";
-        String userNameTokenInRedis = signUpRedisUtil.get(userNameInRedis);
+    private void validateEmailToken(String email, String emailToken) {
+        String emailTokenInRedis = signUpRedisUtil.get(email);
 
-        if (!userNameSignUpToken.equals(userNameTokenInRedis)) {
-            throw new InvalidUserInputException("Invalid userNameSignUpToken.");
+        if (!emailToken.equals(emailTokenInRedis)) {
+            throw new InvalidEmailTokenException();
+        }
+    }
+
+    private void validateUsernameToken(String username, String usernameToken) {
+        String usernameKey = username + "_verify";
+        String usernameTokenInRedis = signUpRedisUtil.get(usernameKey);
+
+        if (!usernameToken.equals(usernameTokenInRedis)) {
+            throw new InvalidUsernameTokenException();
         }
     }
 }
