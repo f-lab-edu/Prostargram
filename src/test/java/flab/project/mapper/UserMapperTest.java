@@ -1,6 +1,7 @@
 package flab.project.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.domain.user.model.BasicUser;
@@ -82,5 +83,19 @@ class UserMapperTest {
 
         //then
         assertThat(basicUsers).extracting("userId").contains(1L, 2L);
+    }
+
+    @DisplayName("해당 email로 가입된 유저가 존재하는지 여부를 가져온다.")
+    @Test
+    void existsByEmail() {
+        //given
+        String email = "no-reply@test.com";
+        signUpMapper.addUser(email, "username1", "password", LoginType.NORMAL);
+
+        //when
+        boolean exists = userMapper.existsByEmail(email);
+
+        //then
+        assertTrue(exists);
     }
 }
