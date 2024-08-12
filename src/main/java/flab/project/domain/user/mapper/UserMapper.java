@@ -23,4 +23,6 @@ public interface UserMapper {
     Set<Profile> findWhereUserIdIn(@Param("userIds") Set<Long> userIds);
 
     boolean existsByEmail(String email);
+
+    boolean existsByUsername(String username);
 }
