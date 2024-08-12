@@ -4,7 +4,7 @@ import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.exception.ExistedUsernameException;
-import flab.project.domain.user.service.DuplicationService;
+import flab.project.domain.user.service.UsernameDuplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -34,9 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 // Todo Duplication 대신 다른 명사로 클래스 이름 변경 예정
-public class DuplicationController {
+public class UsernameDuplicationController {
 
-    private final DuplicationService duplicationService;
+    private final UsernameDuplicationService usernameDuplicationService;
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
@@ -134,20 +134,20 @@ public class DuplicationController {
         ),
     })
     @Parameter(
-        name = "userName",
+        name = "username",
         description = "유저의 닉네임",
         in = ParameterIn.QUERY,
         required = true
     )
     @PostMapping(value = "/verify-username")
     public SuccessResponse<String> verifyDuplicateUserName(
-        @RequestParam("userName")
+        @RequestParam("username")
         @NotBlank(message = "닉네임을 입력해주세요.")
         @Size(min = 1, max = 16, message = "닉네임의 최대 길이는 16자입니다.")
-        String userName
+        String username
     ) {
-        String userNameToken = duplicationService.verifyDuplicateUserName(userName);
+        String usernameToken = usernameDuplicationService.verifyDuplicateUserName(username);
 
-        return new SuccessResponse<>(userNameToken);
+        return new SuccessResponse<>(usernameToken);
     }
 }
