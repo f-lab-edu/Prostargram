@@ -45,14 +45,22 @@ public class VerificationController {
 
     @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(ExistedAccountException.class)
-    public FailResponse handleConstraintViolationException(ExistedAccountException exception) {
+    public FailResponse handleExistedAccountException(ExistedAccountException exception) {
+        String exceptionMessage = exception.getMessage();
+
+        return new FailResponse(exceptionMessage, 4000);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidVerificationCodeException.class)
+    public FailResponse handleInvalidVerificationCodeException(InvalidVerificationCodeException exception) {
         String exceptionMessage = exception.getMessage();
 
         return new FailResponse(exceptionMessage, 4000);
     }
 
     @Operation(summary = "인증코드 전송 API", description = "인증코드 전송 API이다.</br>" +
-            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다." +
+            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다.</br>" +
             "[인증 코드 전송 API 개발 시 유의할점](https://www.notion.so/API-fb466d26300646d3934b9f948f2809ce?pvs=4)을 참고 바란다.")
     @PostMapping(value = "/verification/email")
     @Parameter(
