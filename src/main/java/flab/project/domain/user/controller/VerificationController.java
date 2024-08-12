@@ -2,6 +2,7 @@ package flab.project.domain.user.controller;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.domain.user.exception.ExistedAccountException;
 import flab.project.domain.user.service.VerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +33,7 @@ public class VerificationController {
 
     private final VerificationService verificationService;
 
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public FailResponse handleConstraintViolationException(ConstraintViolationException exception) {
         String errorMessage = exception.getConstraintViolations().stream()
@@ -40,8 +43,17 @@ public class VerificationController {
         return new FailResponse(errorMessage, 4000);
     }
 
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(ExistedAccountException.class)
+    public FailResponse handleConstraintViolationException(ExistedAccountException exception) {
+        String exceptionMessage = exception.getMessage();
+
+        return new FailResponse(exceptionMessage, 4000);
+    }
+
     @Operation(summary = "인증코드 전송 API", description = "인증코드 전송 API이다.</br>" +
-            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다.")
+            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다." +
+            "[인증 코드 전송 API 개발 시 유의할점](https://www.notion.so/API-fb466d26300646d3934b9f948f2809ce?pvs=4)을 참고 바란다.")
     @PostMapping(value = "/verification/email")
     @Parameter(
             name = "email",
@@ -75,6 +87,21 @@ public class VerificationController {
                                             "\"isSuccess\": false," +
                                             "\"code\": 4000," +
                                             "\"message\": \"올바른 이메일 형식이여야 합니다.\"" +
+                                            "}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "이미 가입된 계정입니다.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{" +
+                                            "\"isSuccess\": false," +
+                                            "\"code\": 4000," +
+                                            "\"message\": \"이미 가입된 계정입니다.\"" +
                                             "}"
                             )
                     )
