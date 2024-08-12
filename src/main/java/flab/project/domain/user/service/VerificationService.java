@@ -2,6 +2,7 @@ package flab.project.domain.user.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.exception.ExistedAccountException;
+import flab.project.domain.user.exception.InvalidVerificationCodeException;
 import flab.project.domain.user.mapper.UserMapper;
 import flab.project.utils.RedisUtil;
 import jakarta.mail.MessagingException;
@@ -34,6 +35,7 @@ public class VerificationService {
     // \\.[A-Za-z]{2,4}$ : 도메인의 마지막 부분, 온점 뒤 2 ~ 4개의 영문 대/소문자 포함 가능
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\" +
             ".[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final int VERIFICATION_CODE_LENGTH = 7;
 
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
@@ -56,14 +58,19 @@ public class VerificationService {
         emailSender.send(message);
     }
 
-    public Boolean checkVerificationCode(String email, String verificationCode) {
+    public void checkVerificationCode(String email, String verificationCode) {
+        validateVerificationCodeFormat(verificationCode);
         String validCode = redisUtil.get(email);
 
-        if (validCode == null) {
-            return false;
+        if (validCode == null || validCode.equals(verificationCode)) {
+            throw new InvalidVerificationCodeException();
         }
+    }
 
-        return validCode.equals(verificationCode);
+    private void validateVerificationCodeFormat(String verificationCode) {
+        if (verificationCode.length() != VERIFICATION_CODE_LENGTH) {
+            throw new InvalidVerificationCodeException();
+        }
     }
 
     private void validateEmail(String email) {
@@ -87,9 +94,7 @@ public class VerificationService {
     }
 
     private String createVerificationCode() {
-        String verificationCode = UUID.randomUUID().toString().substring(0, 7);
-
-        return verificationCode;
+        return UUID.randomUUID().toString().substring(0, VERIFICATION_CODE_LENGTH);
     }
 
     private MimeMessage composeEmail(String email, String subject, String content) {

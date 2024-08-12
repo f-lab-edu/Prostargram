@@ -3,9 +3,11 @@ package flab.project.domain.user.controller;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.exception.ExistedAccountException;
+import flab.project.domain.user.exception.InvalidVerificationCodeException;
 import flab.project.domain.user.service.VerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,14 +47,22 @@ public class VerificationController {
 
     @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(ExistedAccountException.class)
-    public FailResponse handleConstraintViolationException(ExistedAccountException exception) {
+    public FailResponse handleExistedAccountException(ExistedAccountException exception) {
+        String exceptionMessage = exception.getMessage();
+
+        return new FailResponse(exceptionMessage, 4000);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidVerificationCodeException.class)
+    public FailResponse handleInvalidVerificationCodeException(InvalidVerificationCodeException exception) {
         String exceptionMessage = exception.getMessage();
 
         return new FailResponse(exceptionMessage, 4000);
     }
 
     @Operation(summary = "인증코드 전송 API", description = "인증코드 전송 API이다.</br>" +
-            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다." +
+            "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다.</br>" +
             "[인증 코드 전송 API 개발 시 유의할점](https://www.notion.so/API-fb466d26300646d3934b9f948f2809ce?pvs=4)을 참고 바란다.")
     @PostMapping(value = "/verification/email")
     @Parameter(
@@ -117,11 +127,94 @@ public class VerificationController {
         return new SuccessResponse<>();
     }
 
-    @Operation(summary = "인증코드 검증 API")
-    @Parameter(name = "code", description = "유저의 이메일에 발송된 인증코드", required = true)
+    @Operation(
+            summary = "인증 코드 검증 API",
+            description = "유저의 이메일에 발송된 인증 코드를 통해 유저의 이메일이 맞는지 확인하는 API이다.</br>" +
+                    "[해당 문서](https://www.notion.so/API-f70abf66b0714a739b8bbb5e822661c3?pvs=4)를 참고바란다."
+    )
+    @Parameters(value = {
+            @Parameter(
+                    name = "code",
+                    description = "유저의 이메일에 발송된 인증 코드이다.</br>" +
+                            "인증 코드는 7자리로 이뤄진다.",
+                    required = true
+            ),
+            @Parameter(
+                    name = "code",
+                    description = "인증 코드가 발송 됐던 유저의 이메일",
+                    required = true
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "인증 코드 검증 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{" +
+                                            "\"isSuccess\": true," +
+                                            "\"code\": 1000," +
+                                            "\"message\": \"요청에 성공하였습니다.\"" +
+                                            "}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "올바른 이메일 형식이여야 합니다.(이메일 형식과 일치하지 않거나 이메일이 전송되지 않은 경우)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{" +
+                                            "\"isSuccess\": false," +
+                                            "\"code\": 4000," +
+                                            "\"message\": \"올바른 이메일 형식이여야 합니다.\"" +
+                                            "}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "인증 코드를 입력해 주세요.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{" +
+                                            "\"isSuccess\": false," +
+                                            "\"code\": 4000," +
+                                            "\"message\": \"인증코드를 입력해 주세요.\"" +
+                                            "}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "인증 코드가 일치하지 않습니다.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{" +
+                                            "\"isSuccess\": false," +
+                                            "\"code\": 4000," +
+                                            "\"message\": \"인증 코드가 일치하지 않습니다.\"" +
+                                            "}"
+                            )
+                    )
+            ),
+    })
     @PostMapping(value = "/verification/email/{address}")
-    public SuccessResponse<Void> checkVerificationCode(@PathVariable("address") @Email @NotBlank String email,
-                                                 @RequestParam("code") @NotBlank String code) {
+    public SuccessResponse<Void> checkVerificationCode(
+            @PathVariable("address")
+            @Email(message = "올바른 이메일 형식이여야 합니다.")
+            @NotBlank(message = "올바른 이메일 형식이여야 합니다.") String email,
+            @RequestParam("code")
+            @NotBlank(message = "인증 코드를 입력해주세요") String code
+    ) {
         verificationService.checkVerificationCode(email, code);
 
         return new SuccessResponse<>();
