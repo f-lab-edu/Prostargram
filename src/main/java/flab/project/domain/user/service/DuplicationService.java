@@ -1,13 +1,13 @@
 package flab.project.domain.user.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.user.exception.ExistedUsernameException;
 import flab.project.domain.user.mapper.DuplicationMapper;
 import flab.project.utils.RedisUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.DuplicateFormatFlagsException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -33,8 +33,8 @@ public class DuplicationService {
 
     private void validateUserName(String userName) {
         validateLengthOfUserName(userName);
-        validateUserNameDuplicationInDB(userName);
         validateUserNamePreemptionInRedis(userName);
+        validateUserNameDuplicationInDB(userName);
     }
 
     private void validateLengthOfUserName(String userName) {
@@ -43,16 +43,16 @@ public class DuplicationService {
         }
     }
 
-    private void validateUserNameDuplicationInDB(String userName) {
-        Integer count = duplicationMapper.countUserName(userName);
-        if (count == null || count == 1) {
-            throw new InvalidUserInputException("Duplicate userName In DB.");
+    private void validateUserNamePreemptionInRedis(String userName) {
+        if (redisUtil.hasKey(userName)) {
+            throw new ExistedUsernameException();
         }
     }
 
-    private void validateUserNamePreemptionInRedis(String userName) {
-        if (redisUtil.hasKey(userName)) {
-            throw new DuplicateFormatFlagsException("Duplicate userName.");
+    private void validateUserNameDuplicationInDB(String userName) {
+        Integer count = duplicationMapper.countUserName(userName);
+        if (count == null || count == 1) {
+            throw new ExistedUsernameException();
         }
     }
 
@@ -61,10 +61,10 @@ public class DuplicationService {
     }
 
     private void reserveUserName(String userName, String verificationToken) {
-        String name = userName + USERNAME_IN_REDIS_SUFFIX;
+        String usernameKey = userName + USERNAME_IN_REDIS_SUFFIX;
 
         redisUtil.setWithDuration(
-                name,
+                usernameKey,
                 verificationToken,
                 SECONDS_FOR_DURATION
         );
