@@ -52,9 +52,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/users", "/send", "/login", "/verification/email/**", "/verify-username",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**").permitAll()
+                authorize.requestMatchers("/users/**", "/send", "/login", "/verification/email/**", "/verify-username",
+                        "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .anyRequest().authenticated()
             )
 

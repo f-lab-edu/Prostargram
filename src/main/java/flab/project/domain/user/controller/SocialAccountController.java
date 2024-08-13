@@ -22,7 +22,9 @@ public class SocialAccountController {
             @PathVariable("userId") @Positive long userId,
             @Validated @RequestBody UpdateSocialAccountRequestDto updateSocialAccount
     ) {
-        return socialAccountFacade.addSocialAccount(updateSocialAccount);
+        socialAccountFacade.addSocialAccount(updateSocialAccount);
+
+        return new SuccessResponse<>();
     }
 
     @DeleteMapping("/users/{userId}/social-accounts")
@@ -30,6 +32,8 @@ public class SocialAccountController {
             @PathVariable("userId") @Positive long userId,
             @Validated @RequestBody UpdateSocialAccountRequestDto updateSocialAccount
     ) {
-        return socialAccountService.deleteSocialAccount(updateSocialAccount);
+        socialAccountService.deleteSocialAccount(updateSocialAccount);
+
+        return new SuccessResponse<>();
     }
 }

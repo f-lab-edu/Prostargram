@@ -13,7 +13,7 @@ public interface HashTagMapper {
 
     Set<HashTag> getHashTagsByHashtagNames(@Param("hashTagNames") Set<String> hashTagNames);
 
-    void save(@Param("hashTag") HashTag hashTagName);
+    void save(@Param("hashTag") HashTag hashTag);
 
     void saveAll(@Param("hashTags") Set<HashTag> notExistHashTagNames);
 }

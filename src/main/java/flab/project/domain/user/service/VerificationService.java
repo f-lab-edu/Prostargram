@@ -62,7 +62,7 @@ public class VerificationService {
         validateVerificationCodeFormat(verificationCode);
         String validCode = redisUtil.get(email);
 
-        if (validCode == null || validCode.equals(verificationCode)) {
+        if (validCode == null || !validCode.equals(verificationCode)) {
             throw new InvalidVerificationCodeException();
         }
     }

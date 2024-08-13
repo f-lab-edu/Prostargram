@@ -19,6 +19,7 @@ import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,8 +46,7 @@ class SocialAccountsControllerTest {
     @Test
     void addSocialAccount() throws Exception {
         // given
-        given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        doNothing().when(socialAccountFacade).addSocialAccount(any(UpdateSocialAccountRequestDto.class));
 
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 

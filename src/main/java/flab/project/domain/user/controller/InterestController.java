@@ -21,15 +21,18 @@ public class InterestController {
             @PathVariable("userId") @Positive long userId,
             @Validated @RequestBody AddInterest addInterestDto
     ) {
-        return interestFacade.addInterest(addInterestDto);
+        interestFacade.addInterest(addInterestDto);
+
+        return new SuccessResponse<>();
     }
 
     @DeleteMapping("/users/{userId}/interests")
     public SuccessResponse deleteInterest(
             @PathVariable("userId") @Positive long userId,
-            @RequestParam @Positive long hashTagId,
-            @NotBlank String name
+            @RequestParam @Positive long hashTagId
     ) {
-        return interestFacade.deleteInterest(userId, hashTagId, name);
+        interestFacade.deleteInterest(userId, hashTagId);
+
+        return new SuccessResponse<>();
     }
 }

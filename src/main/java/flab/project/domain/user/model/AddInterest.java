@@ -35,7 +35,7 @@ public class AddInterest {
             @JsonProperty("interestName") String interestName
     ) {
         this.userId = userId;
-        this.interestName = HtmlUtils.htmlEscape(interestName);
+        this.interestName = HtmlUtils.htmlEscape(interestName.toLowerCase());
     }
 
     private String convertEscapeCharacter() {

@@ -11,8 +11,8 @@
     </select>
 
     <insert id="save">
-        INSERT INTO INTERESTS(user_id, hashtag_id, name)
-            VALUES (#{userId}, #{hashTagId}, #{name});
+        INSERT INTO INTERESTS(user_id, hashtag_id)
+            VALUES (#{userId}, #{hashTagId});
     </insert>
 
     <delete id="delete">

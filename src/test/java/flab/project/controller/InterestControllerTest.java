@@ -20,6 +20,7 @@ import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,8 +48,7 @@ class InterestControllerTest {
         // given
         AddInterest addInterest = new AddInterest(1L, "test-interest");
 
-        given(interestFacade.addInterest(any(AddInterest.class)))
-                .willReturn(new SuccessResponse());
+        doNothing().when(interestFacade).addInterest(any(AddInterest.class));
 
         // when & then
         mockMvc.perform(
@@ -110,8 +110,7 @@ class InterestControllerTest {
         final String STRING_LENGTH_15 = "ABCDEFGHIJKLMNO";
         final String STRING_LENGTH_16 = "ABCDEFGHIJKLMNOP";
 
-        given(interestFacade.addInterest(any(AddInterest.class)))
-                .willReturn(new SuccessResponse());
+        doNothing().when(interestFacade).addInterest(any(AddInterest.class));
 
         // when & then
         assertThat(STRING_LENGTH_15.length()).isEqualTo(15);
@@ -155,15 +154,13 @@ class InterestControllerTest {
     @Test
     void deleteInterest() throws Exception {
         // given
-        given(interestFacade.deleteInterest(anyLong(), anyLong(), anyString()))
-                .willReturn(new SuccessResponse());
+        doNothing().when(interestFacade).addInterest(any(AddInterest.class));
 
         // when & then
         mockMvc.perform(
                         delete(DELETE_INTEREST_API_URL, 1)
                                 .with(csrf())
                                 .param("hashTagId", "1")
-                                .param("name", "java")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
