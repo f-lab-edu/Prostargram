@@ -55,19 +55,16 @@ public class SignUpController {
     public SuccessResponse addSocialAccountAndInterest(@PathVariable("userId") @Positive long userId,
                                                        @RequestBody @Valid CreateUserAdditionalInfoRequestDto createUserAdditionalInfoRequestDto) {
 
-        // List<AddSocialAccountDto> socialAccounts를 하나씩 꺼내서 Facade -> Service -> DB
         createUserAdditionalInfoRequestDto.getSocialAccounts().forEach(socialAccountDto -> {
             socialAccountFacade.addSocialAccount(new UpdateSocialAccountRequestDto(userId, socialAccountDto.getSocialAccountUrl()));
         });
 
-        // List<String> recommendInterests를 하나씩 꺼내서 Facade -> Service -> DB
         createUserAdditionalInfoRequestDto.getRecommendInterests().forEach(interest -> {
             AddInterest addInterest = new AddInterest(userId, interest);
             interestFacade.addInterest(addInterest);
         });
 
-        // List<AddCustomInterestDto> hashTags를 하나씩 꺼내서 Facade -> Service -> DB
-        createUserAdditionalInfoRequestDto.getHashTags().forEach(customInterest -> {
+        createUserAdditionalInfoRequestDto.getCustomInterests().forEach(customInterest -> {
             interestFacade.addInterest(new AddInterest(userId, customInterest.getInterestName()));
         });
 

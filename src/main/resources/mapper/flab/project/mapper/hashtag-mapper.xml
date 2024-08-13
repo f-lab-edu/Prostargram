@@ -22,9 +22,9 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="hashTag" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
+    <insert id="save" parameterType="flab.project.domain.post.model.HashTag" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
         INSERT INTO Hashtags(name)
-        VALUES (#{hashtag.hashTagName})
+        VALUES (#{hashTag.hashTagName})
     </insert>
 
     <insert id="saveAll" useGeneratedKeys="true" keyProperty="hashTagId" keyColumn="hashtag_id">
