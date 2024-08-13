@@ -4,7 +4,7 @@ import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
-import java.util.List;
+
 import java.util.Set;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +21,8 @@ public interface UserMapper {
     int updateProfileImage(@Param("userId") long userId, @Param("profileImgUrl") String profileImgUrl);
 
     Set<Profile> findWhereUserIdIn(@Param("userIds") Set<Long> userIds);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByUsername(String username);
 }
