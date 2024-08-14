@@ -3,6 +3,7 @@ package flab.project.domain.user.service;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.exception.ExistedUsernameException;
 import flab.project.domain.user.mapper.UserMapper;
+import flab.project.domain.user.model.UsernameTokenReturnDto;
 import flab.project.utils.RedisUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,13 @@ public class UsernameDuplicationService {
     private final RedisUtil redisUtil;
     private final UserMapper userMapper;
 
-    public String verifyDuplicateUserName(String username) {
+    public UsernameTokenReturnDto verifyDuplicateUserName(String username) {
         validateUsername(username);
 
         String verificationToken = createVerificationToken();
         reserveUsername(username, verificationToken);
 
-        return verificationToken;
+        return new UsernameTokenReturnDto(verificationToken);
     }
 
     private void validateUsername(String username) {
