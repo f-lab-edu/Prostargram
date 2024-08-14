@@ -66,7 +66,7 @@ public class SignUpController {
                 2. 이메일 인증 코드 확인 요청 API
                 3. 닉네임 중복 확인 요청 API
                                 
-                Reference: [참고 문서](https://www.notion.so/b577233726be48ab9706381c8cbcd7ff?pvs=4)
+                Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)
                 """
     )
     @ApiResponses(value = {

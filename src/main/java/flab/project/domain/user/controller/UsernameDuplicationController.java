@@ -4,6 +4,7 @@ import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.exception.ExistedUsernameException;
+import flab.project.domain.user.model.UsernameTokenReturnDto;
 import flab.project.domain.user.service.UsernameDuplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -69,7 +70,7 @@ public class UsernameDuplicationController {
         summary = "닉네임 중복 검증 API",
         description = "닉네임 중복 여부를 검사한다.</br>"
             + "사용 가능한 닉네임이라는 응답을 받으면 15분간 다른 유저는 해당 닉네임으로 회원가입을 할 수 없다.</br>"
-            + "자세한 내용은 [해당 문서](https://www.notion.so/API-c3d78544b60249d39d524c01d0af2140?pvs=4)를 참고하길 바란다."
+            + "Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%EB%8B%89%EB%84%A4%EC%9E%84-%EC%A4%91%EB%B3%B5-%ED%99%95%EC%9D%B8-API)"
     )
     @ApiResponses(value = {
         @ApiResponse(
@@ -139,14 +140,14 @@ public class UsernameDuplicationController {
         in = ParameterIn.QUERY,
         required = true
     )
-    @PostMapping(value = "/verify-username")
-    public SuccessResponse<String> verifyDuplicateUserName(
+    @PostMapping(value = "/verification/username")
+    public SuccessResponse<UsernameTokenReturnDto> verifyDuplicateUserName(
         @RequestParam("username")
         @NotBlank(message = "닉네임을 입력해주세요.")
         @Size(min = 1, max = 16, message = "닉네임의 최대 길이는 16자입니다.")
         String username
     ) {
-        String usernameToken = usernameDuplicationService.verifyDuplicateUserName(username);
+        UsernameTokenReturnDto usernameToken = usernameDuplicationService.verifyDuplicateUserName(username);
 
         return new SuccessResponse<>(usernameToken);
     }

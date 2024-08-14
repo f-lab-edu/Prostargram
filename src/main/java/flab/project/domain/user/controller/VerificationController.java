@@ -4,6 +4,7 @@ import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.exception.ExistedAccountException;
 import flab.project.domain.user.exception.InvalidVerificationCodeException;
+import flab.project.domain.user.model.EmailTokenReturnDto;
 import flab.project.domain.user.service.VerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.stream.Collectors;
 
 @Tag(name = "회원가입 API", description = "회원가입 과정에서 사용되는 API</br>" +
-        "[회원가입 전체로직](https://www.notion.so/b577233726be48ab9706381c8cbcd7ff?pvs=4)은 링크를 참고하길 바란다.")
+        "[회원가입 전체로직](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)은 링크를 참고하길 바란다.")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -63,7 +64,7 @@ public class VerificationController {
 
     @Operation(summary = "인증코드 전송 API", description = "인증코드 전송 API이다.</br>" +
             "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다.</br>" +
-            "[인증 코드 전송 API 개발 시 유의할점](https://www.notion.so/API-fb466d26300646d3934b9f948f2809ce?pvs=4)을 참고 바란다.")
+            "Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EC%BD%94%EB%93%9C-%EC%A0%84%EC%86%A1-API)")
     @PostMapping(value = "/verification/email")
     @Parameter(
             name = "email",
@@ -130,7 +131,7 @@ public class VerificationController {
     @Operation(
             summary = "인증 코드 검증 API",
             description = "유저의 이메일에 발송된 인증 코드를 통해 유저의 이메일이 맞는지 확인하는 API이다.</br>" +
-                    "[해당 문서](https://www.notion.so/API-f70abf66b0714a739b8bbb5e822661c3?pvs=4)를 참고바란다."
+                    "Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EC%BD%94%EB%93%9C-%EA%B2%80%EC%A6%9D-API)"
     )
     @Parameters(value = {
             @Parameter(
@@ -163,60 +164,51 @@ public class VerificationController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "올바른 이메일 형식이여야 합니다.(이메일 형식과 일치하지 않거나 이메일이 전송되지 않은 경우)",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
+                            examples = {
+                                @ExampleObject(
+                                    name = "올바른 이메일 형식이여야 합니다.",
+                                    description = "올바른 이메일 형식이여야 합니다.(이메일 형식과 일치하지 않거나 이메일이 전송되지 않은 경우)",
                                     value = "{" +
-                                            "\"isSuccess\": false," +
-                                            "\"code\": 4000," +
-                                            "\"message\": \"올바른 이메일 형식이여야 합니다.\"" +
-                                            "}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "인증 코드를 입력해 주세요.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
+                                        "\"isSuccess\": false," +
+                                        "\"code\": 4000," +
+                                        "\"message\": \"올바른 이메일 형식이여야 합니다.\"" +
+                                        "}"
+                                ),
+                                @ExampleObject(
+                                    name = "인증코드를 입력해 주세요.",
+                                    description = "인증 코드를 입력하지 않았거나, 공백 문자열(\"    \"), 빈 문자열(\"\")로 이루어진 경우",
                                     value = "{" +
-                                            "\"isSuccess\": false," +
-                                            "\"code\": 4000," +
-                                            "\"message\": \"인증코드를 입력해 주세요.\"" +
-                                            "}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "인증 코드가 일치하지 않습니다.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
+                                        "\"isSuccess\": false," +
+                                        "\"code\": 4000," +
+                                        "\"message\": \"인증코드를 입력해 주세요.\"" +
+                                        "}"
+                                ),
+                                @ExampleObject(
+                                    name = "인증 코드가 일치하지 않습니다.",
+                                    description = "인증 코드가 일치하지 않는 경우",
                                     value = "{" +
-                                            "\"isSuccess\": false," +
-                                            "\"code\": 4000," +
-                                            "\"message\": \"인증 코드가 일치하지 않습니다.\"" +
-                                            "}"
-                            )
+                                        "\"isSuccess\": false," +
+                                        "\"code\": 4000," +
+                                        "\"message\": \"인증 코드가 일치하지 않습니다.\"" +
+                                        "}"
+                                )
+                            }
                     )
             ),
     })
-    @PostMapping(value = "/verification/email/{address}")
-    public SuccessResponse<Void> checkVerificationCode(
-            @PathVariable("address")
+    @PostMapping(value = "/verification/email/{email}")
+    public SuccessResponse<EmailTokenReturnDto> checkVerificationCode(
+            @PathVariable("email")
             @Email(message = "올바른 이메일 형식이여야 합니다.")
             @NotBlank(message = "올바른 이메일 형식이여야 합니다.") String email,
             @RequestParam("code")
             @NotBlank(message = "인증 코드를 입력해주세요") String code
     ) {
-        verificationService.checkVerificationCode(email, code);
+        EmailTokenReturnDto emailToken = verificationService.checkVerificationCode(email, code);
 
-        return new SuccessResponse<>();
+        return new SuccessResponse<>(emailToken);
     }
 }
