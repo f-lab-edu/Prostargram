@@ -60,7 +60,15 @@ public class AuthService {
     }
 
     private String createRefreshToken(Authentication authentication, String currentRefreshToken, long userId) {
-        redisRepository.saveBlackListToken(currentRefreshToken, userId, new Date());
-        return tokenProvider.createRefreshToken(authentication);
+        Date currentTokenExpiredAt = tokenProvider.extractExpiredAt(currentRefreshToken);
+
+        Date targetDay = new Date(System.currentTimeMillis() + REISSUE_STANDARD_TIME_7_DAYS);
+
+        if (targetDay.after(currentTokenExpiredAt)) {
+            redisRepository.saveBlackListToken(currentRefreshToken, userId, new Date());
+            return tokenProvider.createRefreshToken(authentication);
+        }
+
+        return null;
     }
 }
