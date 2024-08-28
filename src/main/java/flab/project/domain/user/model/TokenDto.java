@@ -1,14 +1,22 @@
 package flab.project.domain.user.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
 public class TokenDto {
+
+    @Schema(
+            description = "유효기간 30분",
+            example = "eyJhbGciOiJIUzUxMiJ9..."
+    )
     private final String accessToken;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(
+            description = "유효기간 14일",
+            example = "eyJhbGciOiJIUzUxMiJ9..."
+    )
     private final String refreshToken;
 }
