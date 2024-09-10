@@ -1,7 +1,7 @@
 package flab.project.domain.user.service;
 
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NumberLimitOfSocialAccountsExceededException;
+import flab.project.domain.user.exception.SocialAccountNotFoundException;
 import flab.project.domain.user.model.UpdateSocialAccountRequestDto;
 import flab.project.domain.user.model.SocialAccount;
 import flab.project.domain.user.mapper.SocialAccountMapper;
@@ -28,10 +28,12 @@ public class SocialAccountService {
         }
     }
 
-    public SuccessResponse deleteSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
+    public void deleteSocialAccount(UpdateSocialAccountRequestDto updateSocialAccount) {
         SocialAccount socialAccount = new SocialAccount(updateSocialAccount);
 
-        socialAccountMapper.remove(socialAccount);
-        return new SuccessResponse();
+        int numberOfDeletedRows = socialAccountMapper.remove(socialAccount);
+        if (numberOfDeletedRows == 0) {
+            throw new SocialAccountNotFoundException();
+        }
     }
 }

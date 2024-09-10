@@ -1,7 +1,7 @@
 package flab.project.domain.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.util.HtmlUtils;
 @AllArgsConstructor
 public class UpdateSocialAccountRequestDto {
 
-    @Positive
+    @JsonIgnore
     private long userId;
 
     @Schema(example = "http://github.com")
@@ -22,5 +22,9 @@ public class UpdateSocialAccountRequestDto {
 
     public void convertEscapeCharacter() {
         this.socialAccountUrl = HtmlUtils.htmlEscape(socialAccountUrl);
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
