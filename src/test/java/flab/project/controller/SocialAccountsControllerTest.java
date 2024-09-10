@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,9 +45,6 @@ class SocialAccountsControllerTest {
     @Test
     void addSocialAccount() throws Exception {
         // given
-        given(socialAccountFacade.addSocialAccount(any(UpdateSocialAccountRequestDto.class)))
-                .willReturn(new SuccessResponse());
-
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 
         // when & then
@@ -62,6 +59,8 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+        then(socialAccountFacade).should().addSocialAccount(any(UpdateSocialAccountRequestDto.class));
     }
 
     @WithMockUser
@@ -106,9 +105,6 @@ class SocialAccountsControllerTest {
     @Test
     void deleteSocialAccount() throws Exception {
         // given
-        given(socialAccountService.deleteSocialAccount(any(UpdateSocialAccountRequestDto.class)))
-                .willReturn(new SuccessResponse());
-
         UpdateSocialAccountRequestDto updateSocialAccountRequestDto = new UpdateSocialAccountRequestDto(1L, "https://github.com");
 
         // when & then
@@ -123,6 +119,8 @@ class SocialAccountsControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+        then(socialAccountService).should().deleteSocialAccount(any(UpdateSocialAccountRequestDto.class));
     }
 
     @WithMockUser

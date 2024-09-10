@@ -22,7 +22,8 @@ import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -57,9 +58,6 @@ class UserControllerTest {
         // given
         long userId = 1;
 
-        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         mockMvc.perform(
                         get(GET_PROFILE_PAGE_INFO_URL, userId)
@@ -69,6 +67,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+        then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
     }
 
     @WithMockUser
@@ -106,9 +105,6 @@ class UserControllerTest {
         // given
         long userId = 1;
 
-        given(userService.getProfileInfo(anyLong(), any(GetProfileRequestType.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         mockMvc.perform(
                         get(GET_PROFILE_UPDATE_PAGE_INFO_URL, userId)
@@ -118,6 +114,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
+
+        then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
     }
 
     @WithMockUser
@@ -153,8 +151,7 @@ class UserControllerTest {
     @Test
     void updateProfile() throws Exception {
         // given
-        given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userService).updateProfile(anyLong(), any(UpdateProfileRequestDto.class));
 
         UpdateProfileRequestDto updateProfileRequestDto
                 = new UpdateProfileRequestDto("정민욱", "카카오", "다닐 예정입니다.");
@@ -178,8 +175,7 @@ class UserControllerTest {
     @Test
     void userIdMustBePositiveWhenUpdateProfile() throws Exception {
         // given
-        given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userService).updateProfile(anyLong(), any(UpdateProfileRequestDto.class));
 
         long negativeUserId = -1;
         long zeroUserId = 0;
@@ -217,15 +213,14 @@ class UserControllerTest {
     @Test
     void userNameMaxLengthIs16() throws Exception {
         // given
-        given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userService).updateProfile(anyLong(), any(UpdateProfileRequestDto.class));
 
         String USER_NAME_16_LENGTH = "가나다라마바사아자차카타파하갸냐";
         UpdateProfileRequestDto updateProfileRequestDtoWith16LengthNickName
                 = new UpdateProfileRequestDto(USER_NAME_16_LENGTH, "카카오", "다닐 예정입니다.");
 
         // when & then
-        assertThat(USER_NAME_16_LENGTH.length()).isEqualTo(16);
+        assertThat(USER_NAME_16_LENGTH).hasSize(16);
 
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
@@ -246,7 +241,7 @@ class UserControllerTest {
                 = new UpdateProfileRequestDto(USER_NAME_17_LENGTH, "카카오", "다닐 예정입니다.");
 
         // when & then
-        assertThat(USER_NAME_17_LENGTH.length()).isEqualTo(17);
+        assertThat(USER_NAME_17_LENGTH).hasSize(17);
 
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
@@ -267,8 +262,7 @@ class UserControllerTest {
     @Test
     void OnlyAFewCharactersAreAllowedInNickName() throws Exception {
         // given
-        given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userService).updateProfile(anyLong(), any(UpdateProfileRequestDto.class));
 
         String validNickName = "aB가1_.";
         UpdateProfileRequestDto updateProfileRequestDtoWithValidNickName
@@ -312,15 +306,14 @@ class UserControllerTest {
     @Test
     void departmentNameMaxLengthIs18() throws Exception {
         // given
-        given(userService.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userService).updateProfile(anyLong(), any(UpdateProfileRequestDto.class));
 
         String DEPARTMENT_NAME_18_LENGTH = "가나다라마바사아자차카타파하갸냐댜랴";
         UpdateProfileRequestDto updateProfileRequestDtoWith18DepartmentName
                 = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_18_LENGTH, "다닐 예정입니다.");
 
         // when & then
-        assertThat(DEPARTMENT_NAME_18_LENGTH.length()).isEqualTo(18);
+        assertThat(DEPARTMENT_NAME_18_LENGTH).hasSize(18);
 
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
@@ -340,7 +333,7 @@ class UserControllerTest {
                 = new UpdateProfileRequestDto("정민욱", DEPARTMENT_NAME_19_LENGTH, "다닐 예정입니다.");
 
         // when & then
-        assertThat(DEPARTMENT_NAME_19_LENGTH.length()).isEqualTo(19);
+        assertThat(DEPARTMENT_NAME_19_LENGTH).hasSize(19);
 
         mockMvc.perform(
                         patch(UPDATE_PROFILE_INFO_URL, 1)
@@ -367,8 +360,7 @@ class UserControllerTest {
                 "test file".getBytes()
         );
 
-        given(userFacade.updateProfileImage(anyLong(), any(MultipartFile.class)))
-                .willReturn(new SuccessResponse());
+        willDoNothing().given(userFacade).updateProfileImage(anyLong(), any(MultipartFile.class));
 
         // when & then
         mockMvc.perform(

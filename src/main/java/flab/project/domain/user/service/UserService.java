@@ -1,6 +1,5 @@
 package flab.project.domain.user.service;
 
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
@@ -24,7 +23,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRedisUtil userRedisUtil;
 
-    public SuccessResponse updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
+    public void updateProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto) {
         checkUserId(userId);
 
         int numberOfAffectedRow = userMapper.updateProfile(userId, updateProfileRequestDto);
@@ -32,18 +31,16 @@ public class UserService {
         if (numberOfAffectedRow == 0) {
             throw new RuntimeException();
         }
-
-        return new SuccessResponse();
     }
 
-    public SuccessResponse<Profile> getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
-        Profile profileInfo = userMapper.getProfileInfo(userId, getProfileRequestType);
+    public Profile getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
+        Profile profile = userMapper.getProfileInfo(userId, getProfileRequestType);
 
-        if (profileInfo == null) {
+        if (profile == null) {
             throw new NotExistUserException();
         }
 
-        return new SuccessResponse<Profile>(profileInfo);
+        return profile;
     }
 
     public boolean updateProfileImage(long userId, String profileImgUrl) {

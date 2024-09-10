@@ -3,7 +3,6 @@ package flab.project.domain.user.facade;
 import flab.project.common.FileStorage.BucketUtils;
 import flab.project.common.FileStorage.FileExtensionFilter;
 import flab.project.common.FileStorage.FileStorage;
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.FailedToUpdateProfileImageToDatabaseException;
 import flab.project.config.exception.NotImageExtensionOrNotSupportedExtensionException;
 import flab.project.domain.user.service.UserService;
@@ -23,7 +22,7 @@ public class UserFacade {
     private final UserService userService;
     private final FileExtensionFilter fileExtensionFilter;
 
-    public SuccessResponse updateProfileImage(long userId, MultipartFile profileImg) {
+    public void updateProfileImage(long userId, MultipartFile profileImg) {
         try {
             fileExtensionFilter.filterImageFileExtension(profileImg);
 
@@ -39,13 +38,11 @@ public class UserFacade {
                 throw new FailedToUpdateProfileImageToDatabaseException();
             }
 
-            if (fileNamesInBucket.size() > 0) {
+            if (!fileNamesInBucket.isEmpty()) {
                 String existingProfileImgFileName = fileNamesInBucket.get(0);
 
                 fileStorage.deleteFile(BucketUtils.getBaseBucketName(PROFILE_IMAGE), existingProfileImgFileName);
             }
-
-            return new SuccessResponse();
         } catch (NotImageExtensionOrNotSupportedExtensionException notImageExtensionOrNotSupportedExtensionException) {
             throw new NotImageExtensionOrNotSupportedExtensionException();
         } catch (Exception e) {

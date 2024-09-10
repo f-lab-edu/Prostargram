@@ -4,20 +4,19 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.GetProfileRequestType;
 
-import flab.project.domain.user.model.Settings;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.facade.UserFacade;
 import flab.project.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(name = "프로필")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -30,10 +29,12 @@ public class UserController {
             summary = "프로필 수정 페이지 정보 확인하기 API"
     )
     @GetMapping(value = "/users/{userId}/profile_update_page")
-    public SuccessResponse getProfileUpdatePageInfo(
+    public SuccessResponse<Profile> getProfileUpdatePageInfo(
             @PathVariable("userId") @Positive long userId
     ) {
-        return userService.getProfileInfo(userId, GetProfileRequestType.UPDATE);
+        Profile profile = userService.getProfileInfo(userId, GetProfileRequestType.UPDATE);
+
+        return new SuccessResponse<>(profile);
     }
 
     @Operation(
@@ -43,56 +44,31 @@ public class UserController {
     public SuccessResponse<Profile> getProfilePageInfo(
             @PathVariable("userId") @Positive long userId
     ) {
-        return userService.getProfileInfo(userId, GetProfileRequestType.GET);
-    }
+        Profile profile = userService.getProfileInfo(userId, GetProfileRequestType.GET);
 
-    @Operation(
-            summary = "개인 설정 상태 확인하기 API"
-    )
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true),
-            }
-    )
-    @GetMapping(value = "/users/{userId}/options")
-    public Settings getPersonalSettings(
-            @PathVariable("userId") Long userId
-    ) {
-        return null;
-    }
-
-    @Operation(
-            summary = "옵션을 수정하는 API"
-    )
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "설정 상태를 변경하고자 하는 유저의 id", required = true),
-            }
-    )
-    @PatchMapping(value = "/users/{userId}/options")
-    public String updatePersonalSettings(
-            @PathVariable("userId") Long userId,
-            Settings updateOptionsRequestDto
-    ) {
-        return "test";
+        return new SuccessResponse<>(profile);
     }
 
     @PatchMapping(value = "/users/{userId}/profile-info")
-    public SuccessResponse updateProfile(
+    public SuccessResponse<Void> updateProfile(
             @PathVariable("userId") @Positive long userId,
             @Validated @RequestBody UpdateProfileRequestDto updateProfileRequestDto
     ) {
-        return userService.updateProfile(userId, updateProfileRequestDto);
+        userService.updateProfile(userId, updateProfileRequestDto);
+
+        return new SuccessResponse<>();
     }
 
     @Operation(
             summary = "프로필 이미지 수정하기 API"
     )
     @PatchMapping(value = "/users/{userId}/profile-image")
-    public SuccessResponse updateProfileImage(
+    public SuccessResponse<Void> updateProfileImage(
             @PathVariable("userId") @Positive long userId,
             @RequestPart(value = "profileImage") MultipartFile profileImg
     ) {
-        return userFacade.updateProfileImage(userId, profileImg);
+        userFacade.updateProfileImage(userId, profileImg);
+
+        return new SuccessResponse<>();
     }
 }
