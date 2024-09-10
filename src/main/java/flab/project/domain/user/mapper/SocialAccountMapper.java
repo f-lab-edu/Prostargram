@@ -11,5 +11,5 @@ public interface SocialAccountMapper {
 
     void save(@Param("socialAccount") SocialAccount socialAccount);
 
-    void remove(@Param("socialAccount") SocialAccount socialAccount);
+    int remove(@Param("socialAccount") SocialAccount socialAccount);
 }
