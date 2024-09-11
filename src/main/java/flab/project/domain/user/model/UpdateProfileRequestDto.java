@@ -15,7 +15,7 @@ public class UpdateProfileRequestDto {
     @Length(max = 16)
     @Pattern(regexp = "^[a-zA-Z가-힣0-9_.]+$")
     @Schema(example = "정민욱")
-    private String userName;
+    private String username;
 
     @Length(max = 18)
     @Schema(example = "카카오 재직 중")
