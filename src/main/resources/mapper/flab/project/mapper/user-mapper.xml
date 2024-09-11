@@ -136,7 +136,7 @@
     UPDATE USERS
     <set>
       <if test="updateProfileRequestDto.userName !=null">
-        user_name=#{updateProfileRequestDto.userName},
+        user_name=#{updateProfileRequestDto.username},
       </if>
       <if test="updateProfileRequestDto.departmentName !=null">
         organization_information=#{updateProfileRequestDto.departmentName},

@@ -1,6 +1,5 @@
 package flab.project.service;
 
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.GetProfileRequestType;
@@ -42,10 +41,10 @@ class UserServiceTest {
                 .willReturn(profile);
 
         // when
-        SuccessResponse<Profile> profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.GET);
+        Profile profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.GET);
 
         // then
-        assertThat(profileInfo.getResult()).isEqualTo(profile);
+        assertThat(profileInfo).isEqualTo(profile);
         then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.GET);
     }
 
@@ -59,10 +58,10 @@ class UserServiceTest {
                 .willReturn(profile);
 
         // when
-        SuccessResponse<Profile> profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.UPDATE);
+        Profile profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.UPDATE);
 
         // then
-        assertThat(profileInfo.getResult()).isEqualTo(profile);
+        assertThat(profileInfo).isEqualTo(profile);
         then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.UPDATE);
     }
 
