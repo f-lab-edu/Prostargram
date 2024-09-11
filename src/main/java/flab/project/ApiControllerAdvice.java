@@ -83,4 +83,10 @@ public class ApiControllerAdvice {
     public FailResponse exceptionResolveToFailedWriteEmail(FailedToWriteEmailException e) {
         return new FailResponse(ResponseEnum.FAILED_WRITE_EMAIL);
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenAccessException.class)
+    public FailResponse exceptionResolveToFailedToVerifyUserIsOwner(ForbiddenAccessException e) {
+        return new FailResponse(ResponseEnum.FAILED_TO_VERIFY_USER_IS_OWNER);
+    }
 }
