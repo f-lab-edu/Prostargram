@@ -81,7 +81,7 @@ public class FollowController {
                                             {
                                                 "isSuccess": false,
                                                 "code": 4006,
-                                                "message": ""
+                                                "message": "로그인이 필요합니다."
                                             }
                                             """
                             )
@@ -178,7 +178,7 @@ public class FollowController {
                                             {
                                                 "isSuccess": false,
                                                 "code": 4006,
-                                                "message": ""
+                                                "message": "로그인이 필요합니다."
                                             }
                                             """
                             )
@@ -327,21 +327,109 @@ public class FollowController {
     @Operation(
             summary = "팔로워/팔로잉 생성 API"
     )
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-            }
-    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = SuccessResponse.class)
+                    description = "팔로워/팔로잉 추가 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
+                                            """
                             )
-                    }
+                    )
             ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "로그인한 유저가 타인의 ID로 팔로워/팔로잉 추가를 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4007,
+                                                "message": "해당 요청에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저가 팔로워/팔로잉 추가를 요청하는/요청받는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4001,
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
+                                            }
+                                            """
+                            )
+                    )
+            )
     })
     @PostMapping(value = "/users/{userId}/follows")
     public SuccessResponse addFollow(
@@ -355,11 +443,110 @@ public class FollowController {
     @Operation(
             summary = "팔로워/팔로잉 삭제 API"
     )
-    @Parameters(
-            value = {
-                    @Parameter(name = "userId", description = "로그인한 유저의 id", required = true),
-            }
-    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "팔로워/팔로잉 삭제 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "로그인한 유저가 타인의 ID로 팔로워/팔로잉 추가를 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4007,
+                                                "message": "해당 요청에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저가 팔로워/팔로잉 추가를 요청하는/요청받는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4001,
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
     @DeleteMapping(value = "/users/{userId}/follows")
     public SuccessResponse deleteFollow(
             @Valid @RequestBody Follows follows
