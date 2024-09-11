@@ -14,6 +14,7 @@ public enum ResponseEnum {
     NUMBER_LIMIT_OF_INTEREST_EXCEEDED(false, 4004, "관심사는 최대 3개까지 설정할 수 있습니다."),
     DUPLICATE_USERNAME(false, 4005, "중복된 닉네임입니다."),
     UNAUTHORIZED_USER(false, 4006, "로그인이 필요합니다. 로그인 후 다시 시도하세요."),
+    FORBIDDEN_ACCESS(false, 4007, "해당 요청에 대한 권한이 없습니다."),
 
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
     DUPLICATE_REQUEST(false, 5001, "서버 오류입니다. 잠시후 다시 시도하세요."),
