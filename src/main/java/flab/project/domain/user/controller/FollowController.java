@@ -283,23 +283,6 @@ public class FollowController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "존재하지 않는 유저의 팔로워 목록을 조회하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4001,
-                                                "message": "존재하지 않는 유저에 대한 요청입니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "500",
                     description = "서버 오류",
                     content = @Content(
@@ -398,7 +381,7 @@ public class FollowController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 유저가 팔로워/팔로잉 추가를 요청하는/요청받는 경우",
+                    description = "존재하지 않는 유저가 팔로워/팔로잉 추가를 요청받는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
@@ -497,7 +480,7 @@ public class FollowController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 팔로워/팔로잉 추가를 요청하는 경우",
+                    description = "로그인한 유저가 타인의 ID로 팔로워/팔로잉 삭제를 요청하는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
@@ -514,7 +497,7 @@ public class FollowController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 유저가 팔로워/팔로잉 추가를 요청하는/요청받는 경우",
+                    description = "존재하지 않는 유저가 팔로워/팔로잉 삭제를 요청받는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
