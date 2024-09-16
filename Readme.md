@@ -3,7 +3,7 @@
 
 # Introduction
 ## 💡 Programming + Instargram
-개발을 뜻하는 `Pro`gramming과 대표적인 SNS 플랫폼 In`stagram`에서 아이디어를 얻어 프로젝트를 기획하였습니다.
+개발을 뜻하는 `Pro`gramming과 대표적인 SNS 플랫폼 In`stagram`에서 아이디어를 얻고 기획하였습니다.
 
 ## 📚 Tech Stack
 ### Backend
