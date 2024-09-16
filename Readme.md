@@ -1,26 +1,43 @@
 # 🌠 Prostargram
-개발자만을 위한 ```SNS(Social Network Services)```입니다.
+개발에 관련된 일상을 공유하는 ```SNS(Social Network Services)```입니다.
 
+# Introduction
 ## 💡 Programming + Instargram
-개발을 뜻하는 ```Pro```gramming과 대표적인 SNS 플랫폼 In```stargram```에서 몇 글자씩 가져와 프로젝트 이름을 기획했습니다.
+개발을 뜻하는 ```Pro```gramming과 대표적인 SNS 플랫폼 In```stagram```에서 아이디어를 얻어 프로젝트를 기획하였습니다.
 
-## 📚 기술 스택
-- Language
-  - JDK 17
-- Spring Framework
-  - Spring 6.0.9
-  - Spring boot 3.1.0
-  - Gradle 7.6.1
-- Database
-  - MySQL 8.0
+## 📚 Tech Stack
+### Backend
+`Java 17`, `Spring boot`, `MySQL`, `RabbitMQ`, `Redis`, `Docker`, `Naver Cloud Platform`
+### [Frontend](https://github.com/f-lab-edu/Prostargram-frontend)
+`Next.js`. `React`, `TypeScript`, `Tanstack-query`
 
-## 🔖 주요 토픽
-### 1️⃣ Push Model (Fan-Out Model)
+## ✏️ Period
+구현 : `2023.07 ~ 2024.01`
+
+리팩토링 : `2024.08` ~
+
+## 🔖 Tech Topic
+### 1️⃣ [Push Model (Fan-Out Model)]()
 #### 피드 발행
 <img width="917" alt="image" src="https://github.com/user-attachments/assets/54bb6428-f3dc-4b55-91ef-de1bc143a89d">
 
 #### 피드 조회
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/7363cedf-4752-40ee-b43a-12b6233b2044">
 
+## 📝 Server Architecture
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/fad5745d-865a-47b3-aedb-af9ba96b6a47">
 
+## 🧾 [ERD(Entity Relationship Diagram)](https://www.erdcloud.com/d/RCprTk7yCrjyE7kWq)
 
+## 🖼️ Prototype
+### Authentication
+<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/dbf56be2-b1e2-4567-9d7a-7fd5f67895c5">
+<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/33ef8fb7-bd99-4999-b50c-dc8cf6de65e9">
+<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/8d3cb2d2-c7b3-4b04-9a30-65df7dcb6d9d">
+<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/df859e14-caa7-4511-b28f-97254f078754">
+
+### Feed
+<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/9170472d-e2cd-4688-899e-afec04b9ef8f">
+<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/b2c100d2-3412-4ee7-b764-d95e4bde2beb">
+<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/9aa12b62-07b4-4dd9-a5b9-f5a5348a3ca9">
+<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/1e80c188-9c17-40bb-94f2-574b1264708e">
