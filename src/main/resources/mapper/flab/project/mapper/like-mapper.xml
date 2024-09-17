@@ -25,4 +25,16 @@
     WHERE post_id = #{postId}
       and user_id = #{userId};
   </select>
+
+  <insert id="addCommentLike">
+    INSERT INTO COMMENT_LIKE(comment_id, user_id)
+    VALUES (#{commentId}, #{userId});
+  </insert>
+
+  <delete id="cancelCommentLike">
+    DELETE
+    FROM COMMENT_LIKE
+    WHERE comment_id = #{commentId}
+      AND user_id = #{userId};
+  </delete>
 </mapper>
