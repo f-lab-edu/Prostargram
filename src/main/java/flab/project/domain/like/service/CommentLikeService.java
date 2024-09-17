@@ -16,6 +16,11 @@ public class CommentLikeService {
         commentLikeMapper.addCommentLike(commentId, userId);
     }
 
+    public void cancelCommentLike(long commentId, Long userId) {
+        checkCommentIdAndUserId(commentId, userId);
+        commentLikeMapper.cancelCommentLike(commentId, userId);
+    }
+
     private void checkCommentIdAndUserId(long commentId, Long userId) {
         if (commentId <= 0 || userId <= 0) {
             throw new InvalidUserInputException("Invalid commentId or userId");

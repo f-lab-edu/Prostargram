@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CommentLikeMapper {
 
     void addCommentLike(@Param("commentId") long commentId, @Param("userId") Long userId);
+
+    void cancelCommentLike(@Param("commentId") long commentId, @Param("userId") Long userId);
 }
