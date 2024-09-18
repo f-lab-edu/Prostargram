@@ -15,7 +15,7 @@ public class SwaggerConfig {
                 return new OpenAPI()
                         .info(new Info()
                         .title("Prostargram API 문서")
-                        .description("개발자의 SNS를 컨셉으로한 프로젝트입니다.(은비님 성진님 여기다가 뭐 적을지 멘트 추천점여)")
+                        .description("개발과 관련된 일상을 공유하는 소셜 네트워크 서비스입니다.")
                         .version("1.0.0"))
                 .components(new Components()
                         .addSecuritySchemes("bearer-key", new SecurityScheme()
