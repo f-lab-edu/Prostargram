@@ -30,10 +30,4 @@
 ## 🧾 [ERD(Entity Relationship Diagram)](https://www.erdcloud.com/d/RCprTk7yCrjyE7kWq)
 
 ## 🖼️ [Prototype](https://www.figma.com/design/5sskEbduPRM483B86tabRy/Prostagram?node-id=330-190&t=afdzsi5ib1yal9Fo-1)
-### Authentication
-<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/dbf56be2-b1e2-4567-9d7a-7fd5f67895c5">
-<img width="462" height="300" alt="image" src="https://github.com/user-attachments/assets/8d3cb2d2-c7b3-4b04-9a30-65df7dcb6d9d">
-
-### Feed
-<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/b2c100d2-3412-4ee7-b764-d95e4bde2beb">
-<img width="462" height="600" alt="image" src="https://github.com/user-attachments/assets/9aa12b62-07b4-4dd9-a5b9-f5a5348a3ca9">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/5d2e60ca-8a01-43c8-8db8-16ae8e3f6e4c">
