@@ -1,5 +1,7 @@
-# 🌠 Prostargram
+![image](https://github.com/user-attachments/assets/d28fdf42-c817-4f54-82dc-7f790747514c)# 🌠 Prostargram
 개발에 관련된 일상을 공유하는 `SNS(Social Network Services)`입니다.
+
+※ 프로젝트에 대해 더 자세히 알고 싶으시다면 [Wiki](https://github.com/f-lab-edu/Prostargram/wiki)를 참고해주시길 바랍니다.
 
 # Introduction
 ## 💡 Programming + Instargram
@@ -17,12 +19,20 @@
 리팩토링 : `2024.08` ~
 
 ## 🔖 Tech Topic
-### 1️⃣ [Push Model (Fan-Out Model)]()
+프로젝트에 대한 간략한 소개는 다음 링크를 참고해주시길 바랍니다. ([링크](https://docs.google.com/presentation/d/1SL7JEb8aAzBXU16tI7uoVpilk27ZLOj70KdnUQ9USdE/edit?usp=sharing))
+### 1️⃣ Push Model (FanOut-On-Write)
 #### 피드 발행
 <img width="917" alt="image" src="https://github.com/user-attachments/assets/54bb6428-f3dc-4b55-91ef-de1bc143a89d">
 
 #### 피드 조회
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/7363cedf-4752-40ee-b43a-12b6233b2044">
+
+### 2️⃣ [Pull Model (FanOut-On-Read)
+#### 피드 발행
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/179dde34-2b44-4f79-b4cc-88d43a769b77">
+
+#### 피드 조회
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/a32c452c-57e6-4aa7-97e2-16592ed39070">
 
 ## 📝 Server Architecture
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/fad5745d-865a-47b3-aedb-af9ba96b6a47">
