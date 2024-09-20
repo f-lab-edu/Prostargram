@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/d28fdf42-c817-4f54-82dc-7f790747514c)# 🌠 Prostargram
+# 🌠 Prostargram
 개발에 관련된 일상을 공유하는 `SNS(Social Network Services)`입니다.
 
 ※ 프로젝트에 대해 더 자세히 알고 싶으시다면 [Wiki](https://github.com/f-lab-edu/Prostargram/wiki)를 참고해주시길 바랍니다.
