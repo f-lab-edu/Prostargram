@@ -9,7 +9,7 @@
 
 ## 📚 Tech Stack
 ### Backend
-`Java 17`, `Spring boot`, `MySQL`, `RabbitMQ`, `Redis`, `Docker`, `Naver Cloud Platform`
+`Java 17`, `Spring boot`, `MySQL`, `RabbitMQ`, `Redis`, `Docker`, `Naver Cloud Platform`, `Grafana`, `Prometheus`
 ### [Frontend](https://github.com/f-lab-edu/Prostargram-frontend)
 `Next.js`. `React`, `TypeScript`, `Tanstack-query`
 
