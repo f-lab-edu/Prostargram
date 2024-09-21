@@ -27,7 +27,7 @@
 #### 피드 조회
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/7363cedf-4752-40ee-b43a-12b6233b2044">
 
-### 2️⃣ [Pull Model (FanOut-On-Read)
+### 2️⃣ Pull Model (FanOut-On-Read)
 #### 피드 발행
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/179dde34-2b44-4f79-b4cc-88d43a769b77">
 
