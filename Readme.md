@@ -4,7 +4,7 @@
 ※ 프로젝트에 대해 더 자세히 알고 싶으시다면 [Wiki](https://github.com/f-lab-edu/Prostargram/wiki)를 참고해주시길 바랍니다.
 
 # Introduction
-## 💡 Programming + Instargram
+## 💡 Planning 
 개발을 뜻하는 `Pro`gramming과 대표적인 SNS 플랫폼 In`stagram`에서 아이디어를 얻고 기획하였습니다.
 
 ## 📚 Tech Stack
