@@ -22,7 +22,7 @@
 프로젝트에 대한 간략한 소개는 다음 링크를 참고해주시길 바랍니다. ([링크](https://docs.google.com/presentation/d/1SL7JEb8aAzBXU16tI7uoVpilk27ZLOj70KdnUQ9USdE/edit?usp=sharing))
 ### 1️⃣ Push Model (FanOut-On-Write)
 #### 피드 발행
-<img width="917" alt="image" src="https://github.com/user-attachments/assets/54bb6428-f3dc-4b55-91ef-de1bc143a89d">
+<img width="917" alt="image" src="https://github.com/user-attachments/assets/3d038f94-a62b-45a6-b869-8fd95e34e54d">
 
 #### 피드 조회
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/7363cedf-4752-40ee-b43a-12b6233b2044">
@@ -35,7 +35,7 @@
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/a32c452c-57e6-4aa7-97e2-16592ed39070">
 
 ## 📝 Server Architecture
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/fad5745d-865a-47b3-aedb-af9ba96b6a47">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/10e3b21d-30ec-42d4-9b92-37b9d3b30de2">
 
 ## 🧾 [ERD(Entity Relationship Diagram)](https://www.erdcloud.com/d/RCprTk7yCrjyE7kWq)
 
