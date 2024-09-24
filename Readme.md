@@ -35,10 +35,11 @@
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/a32c452c-57e6-4aa7-97e2-16592ed39070">
 
 ## 📝 Server Architecture
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/58a656c9-8a92-4f67-a50d-90739d3dc724">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/5acc9215-19d5-45a0-9edd-d735e8a37874">
 
 ## 🧾 [ERD(Entity Relationship Diagram)](https://www.erdcloud.com/d/RCprTk7yCrjyE7kWq)
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/acaec79b-0beb-4a83-93f3-769a7f5975b9">
 
 ## 🖼️ [Prototype](https://www.figma.com/design/5sskEbduPRM483B86tabRy/Prostagram?node-id=330-190&t=afdzsi5ib1yal9Fo-1)
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/5d2e60ca-8a01-43c8-8db8-16ae8e3f6e4c">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/bd901a1d-6d9e-4324-9b4b-83c62b8df842">
+
