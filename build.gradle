@@ -87,3 +87,11 @@ jacocoTestCoverageVerification {
         }
     }
 }
+
+가task copyPrivate(type: Copy) {
+    from './submodule-data'
+    include "*.yml"
+    into 'src/main/resources'
+}
+
+build.dependsOn(copyPrivate)
