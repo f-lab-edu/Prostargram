@@ -1,0 +1,3 @@
+[submodule "submodules/Prostargram_submodule-data"]
+	path = submodules/Prostargram_submodule-data
+	url = https://github.com/eunbileeme/Prostargram_submodule-data.git
