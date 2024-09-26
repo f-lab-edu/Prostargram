@@ -6,6 +6,7 @@ import flab.project.domain.post.enums.PostType;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +20,12 @@ public class AddBasicPostRequest extends AddPostRequest {
 
     private static final PostType postType = BASIC;
 
+    @Schema(hidden = true)
     @Setter
     private List<MultipartFile> contentImages;
+
+    @Schema(hidden = true)
+    private long postId;
 
     @Override
     protected PostType getPostType() {
