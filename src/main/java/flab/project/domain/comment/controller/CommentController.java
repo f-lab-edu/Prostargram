@@ -1,5 +1,6 @@
 package flab.project.domain.comment.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.model.CommentWithUser;
@@ -30,10 +31,12 @@ public class CommentController {
             @Parameter(name = "content", description = "게시물의 내용", in = ParameterIn.QUERY, required = true),
             @Parameter(name = "parentId", description = "부모 댓글의 id", in = ParameterIn.QUERY)})
     @PostMapping(value = "/posts/{postId}/comments")
-    public SuccessResponse<Comment> addComment(@PathVariable("postId") @Positive long postId,
-                                               @RequestParam("userId") @Positive long userId,
-                                               @RequestParam(required = false) @Positive Long parentId,
-                                               @RequestBody @NotBlank @Size(min = 1, max = 1000) String content) {
+    public SuccessResponse<Comment> addComment(
+            @PathVariable("postId") @Positive long postId,
+            @LoggedInUserId Long userId,
+            @RequestParam(required = false) @Positive Long parentId,
+            @RequestBody @NotBlank @Size(min = 1, max = 1000) String content
+    ) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
 
         return new SuccessResponse<>(comment);
@@ -45,11 +48,13 @@ public class CommentController {
             @Parameter(name = "userId", description = "유저의 id", in = ParameterIn.QUERY, required = true),
             @Parameter(name = "lastCommentId", description = "가장 마지막으로 받아온 댓글의 id", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "limit", description = "한 번에 조회할 댓글의 개수", in = ParameterIn.QUERY, required = true)})
-    @GetMapping(value = "posts/{postId}/comments")
-    public SuccessResponse<List<CommentWithUser>> getComments(@PathVariable("postId") @Positive long postId,
-                                                              @RequestParam("userId") @Positive long userId,
-                                                              @RequestParam(required = false) @Positive Long lastCommentId,
-                                                              @RequestParam(defaultValue = "10") @Positive @Max(10) long limit) {
+    @GetMapping(value = "/posts/{postId}/comments")
+    public SuccessResponse<List<CommentWithUser>> getComments(
+            @PathVariable("postId") @Positive long postId,
+            @LoggedInUserId Long userId,
+            @RequestParam(required = false) @Positive Long lastCommentId,
+            @RequestParam(defaultValue = "10") @Positive @Max(10) long limit
+    ) {
         List<CommentWithUser> comments = commentService.getComments(postId, userId, lastCommentId, limit);
 
         return new SuccessResponse<>(comments);
