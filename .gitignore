@@ -9,8 +9,8 @@ schema.sql
 .dockerignore
 Dockerfile
 
-redis/
-log/
+docker_volume/
+logs/
 
 ### STS ###
 .apt_generated
