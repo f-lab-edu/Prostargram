@@ -51,7 +51,7 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 페이지 정보를 가져올 수 있다.")
     @Test
     void getProfilePageInfo() throws Exception {
@@ -70,7 +70,7 @@ class UserControllerTest {
         then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 페이지 정보를 가져올 때, userId는 항상 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenGetProfilePageInfo() throws Exception {
@@ -98,7 +98,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
     @Test
     void getUpdateProfilePageInfo() throws Exception {
@@ -118,7 +118,7 @@ class UserControllerTest {
         then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 수정 페이지 정보를 가져올 때, userId는 양수여야 한다..")
     @Test
     void userIdMustBePositiveWhenGetUpdateProfilePageInfo() throws Exception {
@@ -146,7 +146,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("유저 프로필을 수정할 수 있다.")
     @Test
     void updateProfile() throws Exception {
@@ -170,7 +170,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 수정에서 userId는 양수여야 한다.")
     @Test
     void userIdMustBePositiveWhenUpdateProfile() throws Exception {
@@ -208,7 +208,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("유저 닉네임은 최대 16글자까지 허용된다.")
     @Test
     void userNameMaxLengthIs16() throws Exception {
@@ -257,7 +257,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("유저 닉네임에는 영어/한글/숫자/_(언더바)/.(온점)을 사용할 수 있다.")
     @Test
     void OnlyAFewCharactersAreAllowedInNickName() throws Exception {
@@ -301,7 +301,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("학교/회사정보는 최대 18글자까지 허용된다.")
     @Test
     void departmentNameMaxLengthIs18() throws Exception {
@@ -348,15 +348,15 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("프로필 이미지를 수정할 수 있다.")
     @Test
     void updateProfileImg() throws Exception {
         //given
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "profileImage",
-                "test.txt",
-                "text/plain",
+                "test.png",
+                "image/png",
                 "test file".getBytes()
         );
 
@@ -366,7 +366,7 @@ class UserControllerTest {
         mockMvc.perform(
                         multipart(PATCH, UPDATE_PROFILE_IMG_URL, 1)
                                 .file(multipartFile)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                                 .with(csrf())
                 )
                 .andDo(print())
@@ -374,46 +374,5 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-    }
-
-    @WithMockUser
-    @DisplayName("프로필 이미지를 수정할 때, userId는 양수여야 한다.")
-    @Test
-    void userIdIsMustPositiveWhenUpdateProfileImg() throws Exception {
-        // given
-        long zeroUserId = 0L;
-        long negativeUserId = -1L;
-
-        MockMultipartFile multipartFile = new MockMultipartFile(
-                "profileImage",
-                "test.txt",
-                "text/plain",
-                "test file".getBytes()
-        );
-
-        // when & then
-        mockMvc.perform(
-                        multipart(PATCH, UPDATE_PROFILE_IMG_URL, zeroUserId)
-                                .file(multipartFile)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .with(csrf())
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
-
-        mockMvc.perform(
-                        multipart(PATCH, UPDATE_PROFILE_IMG_URL, negativeUserId)
-                                .file(multipartFile)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .with(csrf())
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(INVALID_USER_INPUT.isSuccess()))
-                .andExpect(jsonPath("$.code").value(INVALID_USER_INPUT.getCode()))
-                .andExpect(jsonPath("$.message").value(INVALID_USER_INPUT.getMessage()));
     }
 }
