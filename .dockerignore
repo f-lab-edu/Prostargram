@@ -1,0 +1,14 @@
+# 모든 파일과 폴더 제외
+*
+
+# Dockerfile을 포함 (필수)
+!Dockerfile
+
+# 필요한 소스 코드 및 설정 파일만 포함
+!src/
+!build.gradle
+!settings.gradle
+
+# Gradle wrapper 포함
+!gradlew
+!gradle/wrapper/

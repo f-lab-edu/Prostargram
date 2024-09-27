@@ -6,6 +6,11 @@ build/
 !**/src/test/**/build/
 **.yml
 schema.sql
+.dockerignore
+Dockerfile
+
+redis/
+log/
 
 ### STS ###
 .apt_generated
