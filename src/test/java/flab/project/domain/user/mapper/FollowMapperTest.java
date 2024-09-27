@@ -128,33 +128,4 @@ class FollowMapperTest {
         List<User> followings = followMapper.findAll(1L, GetFollowsType.FOLLOWINGS);
         assertThat(followings).extracting(BasicUser::getUserId).isEmpty();
     }
-
-    @DisplayName("팔로워들의 아이디 목록을 가져온다.")
-    @Test
-    void findAllFollowerIds() {
-        // given
-        Follows follows1 = Follows.builder()
-            .fromUserId(2L)
-            .toUserId(1L)
-            .build();
-
-        Follows follows2 = Follows.builder()
-            .fromUserId(3L)
-            .toUserId(1L)
-            .build();
-
-        Follows follows3 = Follows.builder()
-            .fromUserId(4L)
-            .toUserId(1L)
-            .build();
-
-        // when
-        followMapper.addFollow(follows1);
-        followMapper.addFollow(follows2);
-        followMapper.addFollow(follows3);
-
-        // then
-        List<Long> followers = followMapper.findAllFollowerIds(1L);
-        assertThat(followers).hasSize(3).containsExactly(2L, 3L, 4L);
-    }
 }

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class FollowService {
 
     private final FollowMapper followMapper;
-    private final FollowerRedisUtil followerRedisUtil;
 
     public SuccessResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
         validateUserIdPositive(userId);
@@ -27,17 +26,6 @@ public class FollowService {
         List<User> result = followMapper.findAll(userId, requestType);
 
         return new SuccessResponse<>(result);
-    }
-
-    public List<Long> getFollowerIds(Long userId) {
-        validateUserIdPositive(userId);
-
-        List<Long> followerIds = followerRedisUtil.getFollowerIds(userId);
-        if (followerIds.isEmpty()) {
-            followerIds = followMapper.findAllFollowerIds(userId);
-        }
-
-        return followerIds;
     }
 
     public SuccessResponse addFollow(Follows follows) {
