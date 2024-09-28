@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -47,12 +46,13 @@ class BasicPostFacadeTest {
     @Test
     void addPost() {
         // given
+        int imageCount = 1;
         long userId = 1L;
-        List<MultipartFile> multiPartFiles = List.of((MultipartFile) createMockMultiPartFile(), (MultipartFile) createMockMultiPartFile());
+        List<String> fileNames = List.of("fileName");
         AddBasicPostRequest validBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .contentImages(multiPartFiles)
+                .imageCount(imageCount)
                 .build();
 
         // when
@@ -62,7 +62,7 @@ class BasicPostFacadeTest {
         then(postService).should().addPost(userId, validBasicPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validBasicPostRequest.getHashTagNames()));
         then(fanOutService).should().fanOut(userId, validBasicPostRequest.getPostId());
-        then(fileStorage).should().uploadFiles(userId, validBasicPostRequest.getContentImages(), FileType.POST_IMAGE);
+        then(fileStorage).should().generatePreSignedUrls(userId, imageCount, FileType.POST_IMAGE);
         then(postImageService).should().saveAll(anyLong(), anySet());
     }
 

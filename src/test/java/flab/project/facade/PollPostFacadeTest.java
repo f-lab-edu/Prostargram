@@ -83,11 +83,12 @@ class PollPostFacadeTest {
     @Test
     void addPost_withAddBasicPostRequest() {
         long userId = 1L;
-        List<MultipartFile> multiPartFiles = List.of((MultipartFile) createMockMultiPartFile(), (MultipartFile) createMockMultiPartFile());
+        int imageCount=1;
+
         AddBasicPostRequest basicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .contentImages(multiPartFiles)
+                .imageCount(imageCount)
                 .build();
 
         assertThatThrownBy(() -> pollPostFacade.addPost(userId, basicPostRequest))

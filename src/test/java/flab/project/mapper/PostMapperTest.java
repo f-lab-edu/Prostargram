@@ -81,6 +81,7 @@ class PostMapperTest {
         // given
         long postId = 1L;
         long writerId = 1L;
+        int imageCount = 1;
         String content = "content";
 
         AddBasicPostRequest basicPost = AddBasicPostRequest.builder()
@@ -88,7 +89,7 @@ class PostMapperTest {
             .content(content)
             .createdAt(Timestamp.valueOf(LocalDateTime.now()))
             .hashTagNames(Set.of("hashTagName1"))
-            .contentImages(List.of(new MockMultipartFile("testImage", (byte[]) null)))
+            .imageCount(imageCount)
             .build();
 
         postMapper.save(writerId, basicPost);
@@ -241,7 +242,7 @@ class PostMapperTest {
             .content("dummy")
             .createdAt(Timestamp.valueOf(LocalDateTime.now()))
             .hashTagNames(Set.of("test1"))
-            .contentImages(List.of(new MockMultipartFile("testImage", (byte[]) null)))
+            .imageCount(1)
             .build();
     }
 }
