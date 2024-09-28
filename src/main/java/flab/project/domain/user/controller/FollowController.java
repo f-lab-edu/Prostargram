@@ -276,7 +276,7 @@ public class FollowController {
                                             {
                                                 "isSuccess": false,
                                                 "code": 4006,
-                                                "message": ""
+                                                "message": "로그인이 필요합니다."
                                             }
                                             """
                             )
