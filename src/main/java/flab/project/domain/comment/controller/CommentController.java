@@ -7,9 +7,6 @@ import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.model.CommentWithUser;
 import flab.project.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -169,7 +166,7 @@ public class CommentController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 4000,
-                                                "message": "올바르지 않은 요청입니다." 
+                                                "message": "올바르지 않은 요청입니다."
                                             }
                                             """
                             )
