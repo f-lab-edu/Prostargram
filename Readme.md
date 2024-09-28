@@ -22,6 +22,7 @@
 프로젝트에 대한 간략한 소개는 다음 링크를 참고해주시길 바랍니다. ([링크](https://docs.google.com/presentation/d/1SL7JEb8aAzBXU16tI7uoVpilk27ZLOj70KdnUQ9USdE/edit?usp=sharing))
 ### 1️⃣ Push Model (FanOut-On-Write)
 #### 피드 발행
+- RabbitMQ를 활용한 FanOut Server(Consumer) 코드는 이곳을 참조해주시길 바랍니다. ([링크](https://github.com/eunbileeme/Prostargram-Consumer))
 <img width="917" alt="image" src="https://github.com/user-attachments/assets/3d038f94-a62b-45a6-b869-8fd95e34e54d">
 
 #### 피드 조회
