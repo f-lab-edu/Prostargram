@@ -1,6 +1,7 @@
 package flab.project.domain.post.facade;
 
 import flab.project.common.FileStorage.FileStorage;
+import flab.project.common.FileStorage.UploadedFileUrls;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.BasePost;
@@ -11,8 +12,6 @@ import flab.project.domain.post.service.PostHashTagService;
 import flab.project.domain.post.service.PostImageService;
 import flab.project.domain.post.service.PostService;
 import flab.project.domain.post.template.PostFacadeTemplate;
-
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -45,9 +44,9 @@ public class BasicPostFacade extends PostFacadeTemplate {
     protected BasePost handlePostMetadata(long userId, AddPostRequest post) {
         AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
 
-        Set<String> uploadedFileUrls
-            = fileStorage.uploadFiles(userId, basicPostRequest.getContentImages(), FileType.POST_IMAGE);
-        postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls);
+        UploadedFileUrls uploadedFileUrls
+            = fileStorage.generatePreSignedUrls(userId, basicPostRequest.getImageCount(), FileType.POST_IMAGE);
+        postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls.getContentUrls());
 
         return new BasicPost(basicPostRequest, userId, uploadedFileUrls);
     }

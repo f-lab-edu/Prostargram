@@ -177,8 +177,8 @@
     <collection property="hashTagNames" ofType="String">
       <result property="hashTagNames" column="name"/>
     </collection>
-    <collection property="contentImgUrls" ofType="String">
-      <result property="contentImgUrls" column="img_url"/>
+    <collection property="contentImageUrls" ofType="String">
+      <result property="contentImageUrls" column="img_url"/>
     </collection>
   </resultMap>
 

@@ -14,11 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -78,24 +75,16 @@ class DebatePostFacadeTest {
     @DisplayName("AddBasicPostRequest가 매개변수로 들어올 경우 RuntimeException을 던진다.")
     @Test
     void addPost_withAddBasicPostRequest() {
+        int imageCount = 1;
         long userId = 1L;
-        List<MultipartFile> multiPartFiles = List.of((MultipartFile) createMockMultiPartFile(), (MultipartFile) createMockMultiPartFile());
+
         AddBasicPostRequest basicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .contentImages(multiPartFiles)
+                .imageCount(imageCount)
                 .build();
 
         assertThatThrownBy(() -> debatePostFacade.addPost(userId, basicPostRequest))
                 .isInstanceOf(RuntimeException.class);
-    }
-
-    private static MockMultipartFile createMockMultiPartFile() {
-        return new MockMultipartFile(
-                "contentImages",
-                "test.jpg",
-                "text/plain",
-                "test file".getBytes()
-        );
     }
 }
