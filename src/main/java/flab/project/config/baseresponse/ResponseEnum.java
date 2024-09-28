@@ -15,6 +15,7 @@ public enum ResponseEnum {
     DUPLICATE_USERNAME(false, 4005, "중복된 닉네임입니다."),
     UNAUTHORIZED_USER(false, 4006, "로그인이 필요합니다. 로그인 후 다시 시도하세요."),
     FORBIDDEN_ACCESS(false, 4007, "해당 요청에 대한 권한이 없습니다."),
+    NON_EXIST_COMMENT(false, 4008, "존재하지 않는 댓글입니다."),
 
     FAILED_TO_VERIFY_USER_IS_OWNER(false,403,"권한이 없습니다."),
     SERVER_ERROR(false, 5000, "서버 오류입니다. 잠시후 다시 시도하세요."),
