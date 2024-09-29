@@ -1,7 +1,7 @@
 package flab.project.domain.post.facade;
 
-import flab.project.common.FileStorage.FileStorage;
-import flab.project.common.FileStorage.UploadedFileUrls;
+import flab.project.common.fileStorage.FileStorage;
+import flab.project.common.fileStorage.UploadedFileUrls;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.BasePost;

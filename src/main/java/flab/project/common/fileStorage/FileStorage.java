@@ -1,4 +1,4 @@
-package flab.project.common.FileStorage;
+package flab.project.common.fileStorage;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;

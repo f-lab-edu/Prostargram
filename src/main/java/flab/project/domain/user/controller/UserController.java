@@ -2,7 +2,7 @@ package flab.project.domain.user.controller;
 
 import static flab.project.utils.AccessManagementUtil.assertUserIdOwner;
 
-import flab.project.common.FileStorage.UploadedFileUrl;
+import flab.project.common.fileStorage.UploadedFileUrl;
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;

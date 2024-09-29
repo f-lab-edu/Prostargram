@@ -1,7 +1,7 @@
 package flab.project.domain.user.facade;
 
-import flab.project.common.FileStorage.FileStorage;
-import flab.project.common.FileStorage.UploadedFileUrl;
+import flab.project.common.fileStorage.FileStorage;
+import flab.project.common.fileStorage.UploadedFileUrl;
 import flab.project.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

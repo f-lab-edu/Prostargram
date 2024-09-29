@@ -1,8 +1,8 @@
 package flab.project.facade;
 
-import flab.project.common.FileStorage.FileStorage;
-import flab.project.common.FileStorage.UploadedFileUrl;
-import flab.project.common.FileStorage.UploadedFileUrls;
+import flab.project.common.fileStorage.FileStorage;
+import flab.project.common.fileStorage.UploadedFileUrl;
+import flab.project.common.fileStorage.UploadedFileUrls;
 import flab.project.domain.feed.service.FanOutService;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddDebatePostRequest;

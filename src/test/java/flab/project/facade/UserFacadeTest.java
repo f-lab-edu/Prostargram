@@ -1,7 +1,7 @@
 package flab.project.facade;
 
-import flab.project.common.FileStorage.FileStorage;
-import flab.project.common.FileStorage.UploadedFileUrl;
+import flab.project.common.fileStorage.FileStorage;
+import flab.project.common.fileStorage.UploadedFileUrl;
 import flab.project.domain.file.enums.FileType;
 import flab.project.domain.user.facade.UserFacade;
 import flab.project.domain.user.service.UserService;
