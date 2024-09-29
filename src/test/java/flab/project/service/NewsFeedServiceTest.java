@@ -103,7 +103,7 @@ class NewsFeedServiceTest {
             .content("dummy")
             .createdAt(Timestamp.valueOf(LocalDateTime.now()))
             .hashTagNames(Set.of("test1"))
-            .contentImgUrls(Set.of("imageUrl"))
+            .contentImageUrls(Set.of("imageUrl"))
             .postType(BASIC)
             .isLike(true)
             .isFollow(true)
