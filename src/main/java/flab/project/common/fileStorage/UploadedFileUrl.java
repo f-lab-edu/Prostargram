@@ -1,4 +1,4 @@
-package flab.project.common.FileStorage;
+package flab.project.common.fileStorage;
 
 import java.net.URL;
 

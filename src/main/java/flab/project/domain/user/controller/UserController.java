@@ -2,6 +2,7 @@ package flab.project.domain.user.controller;
 
 import static flab.project.utils.AccessManagementUtil.assertUserIdOwner;
 
+import flab.project.common.fileStorage.UploadedFileUrl;
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;
@@ -24,7 +25,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "프로필")
 @Validated
@@ -195,20 +195,15 @@ public class UserController {
                     )
             )
     })
-    @PatchMapping(
-            value = "/users/{userId}/profile-image",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public SuccessResponse<Void> updateProfileImage(
+    @PatchMapping(value = "/users/{userId}/profile-image")
+    public SuccessResponse<UploadedFileUrl> updateProfileImage(
             @LoggedInUserId Long loggedInUserId,
-            @PathVariable("userId") @Positive long userIdFromPathVariable,
-            @RequestPart(value = "profileImage") MultipartFile profileImg
+            @PathVariable("userId") @Positive long userIdFromPathVariable
     ) {
         AccessManagementUtil.assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
 
-        userFacade.updateProfileImage(loggedInUserId, profileImg);
+        UploadedFileUrl uploadedFileUrl = userFacade.updateProfileImage(loggedInUserId);
 
-        return new SuccessResponse<>();
+        return new SuccessResponse<>(uploadedFileUrl);
     }
 }
