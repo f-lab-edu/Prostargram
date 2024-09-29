@@ -1,32 +1,30 @@
 package flab.project.controller;
 
-import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.common.FileStorage.UploadedFileUrl;
 import flab.project.domain.user.controller.UserController;
 import flab.project.domain.user.facade.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.service.UserService;
+import java.net.URL;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 
 import static flab.project.config.baseresponse.ResponseEnum.INVALID_USER_INPUT;
 import static flab.project.config.baseresponse.ResponseEnum.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -352,21 +350,15 @@ class UserControllerTest {
     @DisplayName("프로필 이미지를 수정할 수 있다.")
     @Test
     void updateProfileImg() throws Exception {
-        //given
-        MockMultipartFile multipartFile = new MockMultipartFile(
-                "profileImage",
-                "test.png",
-                "image/png",
-                "test file".getBytes()
-        );
-
-        willDoNothing().given(userFacade).updateProfileImage(anyLong(), any(MultipartFile.class));
+        long userId = 1L;
+        URL url = new URL("http", "host.domain", "file/path");
+        UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
+        given(userFacade.updateProfileImage(userId)).willReturn(uploadedFileUrl);
 
         // when & then
         mockMvc.perform(
-                        multipart(PATCH, UPDATE_PROFILE_IMG_URL, 1)
-                                .file(multipartFile)
-                                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        patch(UPDATE_PROFILE_IMG_URL, userId)
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .with(csrf())
                 )
                 .andDo(print())
