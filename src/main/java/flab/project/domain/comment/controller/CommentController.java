@@ -89,13 +89,14 @@ public class CommentController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 게시물에 댓글을 작성할 때",
+                    description = "존재하지 않는 게시물에 댓글을 작성 또는 존재하지 않는 댓글에 대댓글을 작성할 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "존재하지 않는 게시물입니다.",
+                                            name = "존재하지 않는 게시물에 댓글을 작성할 경우",
+                                            description = "존재하지 않는 게시물입니다.",
                                             value = """
                                             {
                                                 "isSucces": false,
@@ -105,7 +106,8 @@ public class CommentController {
                                             """
                                     ),
                                     @ExampleObject(
-                                            name = "존재하지 않는 댓글입니다.",
+                                            name = "존재하지 않는 댓글에 대댓글을 작성할 경우",
+                                            description = "존재하지 않는 댓글입니다.",
                                             value = """
                                             {
                                                 "isSucces": false,
@@ -204,19 +206,34 @@ public class CommentController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 게시물의 댓글을 조회하는 경우",
+                    description = "존재하지 않는 게시물의 댓글을 조회 또는 존재하지 않는 댓글의 대댓글을 조회할 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
+                            examples = {
+                                    @ExampleObject(
+                                            name = "존재하지 않는 게시물의 댓글을 조회할 경우",
+                                            description = "존재하지 않는 게시물입니다.",
+                                            value = """
                                             {
                                                 "isSuccess": false,
                                                 "code": 4002,
                                                 "message": "존재하지 않는 게시물입니다."
                                             }
                                             """
-                            )
+                                    ),
+                                    @ExampleObject(
+                                            name = "존재하지 않는 댓글의 대댓글을 조회할 경우",
+                                            description = "존재하지 않는 댓글입니다.",
+                                            value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4008,
+                                                "message": "존재하지 않는 댓글입니다."
+                                            }
+                                            """
+                                    )
+                            }
                     )
             ),
             @ApiResponse(
