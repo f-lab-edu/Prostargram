@@ -1,5 +1,6 @@
 package flab.project.domain.user.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Follows;
@@ -21,6 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static flab.project.utils.AccessManagementUtil.assertUserIdOwner;
 
 @Tag(name = "팔로워 / 팔로잉 API")
 @Validated
@@ -122,9 +125,12 @@ public class FollowController {
     })
     @GetMapping(value = "/users/{userId}/followers")
     public SuccessResponse<List<User>> getFollowers(
-            @PathVariable("userId") @Positive Long userId
+            @LoggedInUserId Long loggedInUserId,
+            @PathVariable("userId") @Positive Long userIdFromPathVariable
     ) {
-        return followService.getFollows(userId, GetFollowsType.FOLLOWERS);
+        assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
+        List<User> followerList = followService.getFollows(loggedInUserId, GetFollowsType.FOLLOWERS);
+        return new SuccessResponse<>(followerList);
     }
 
     @Operation(
@@ -219,9 +225,14 @@ public class FollowController {
     })
     @GetMapping(value = "/users/{userId}/followings")
     public SuccessResponse<List<User>> getFollowings(
-            @PathVariable("userId") @Positive Long userId
+            @LoggedInUserId Long loggedInUserId,
+            @PathVariable("userId") @Positive long userIdFromPathVariable
     ) {
-        return followService.getFollows(userId, GetFollowsType.FOLLOWINGS);
+        assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
+
+        List<User> followingList = followService.getFollows(loggedInUserId, GetFollowsType.FOLLOWINGS);
+
+        return new SuccessResponse<>(followingList);
     }
 
     @Operation(
@@ -281,6 +292,23 @@ public class FollowController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "로그인한 유저가 타인의 ID로 팔로워/팔로잉 목록을 조회하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4007,
+                                                "message": "해당 요청에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "서버 오류",
                     content = @Content(
@@ -300,9 +328,14 @@ public class FollowController {
     })
     @GetMapping(value = "/users/{userId}/follows/all")
     public SuccessResponse<List<User>> getAllFollows(
-            @PathVariable("userId") @Positive Long userId
+            @LoggedInUserId Long loggedInUserId,
+            @PathVariable("userId") @Positive long userInFromPathVariable
     ) {
-        return followService.getFollows(userId, GetFollowsType.ALL);
+        assertUserIdOwner(loggedInUserId, userInFromPathVariable);
+
+        List<User> allList = followService.getFollows(loggedInUserId, GetFollowsType.ALL);
+
+        return new SuccessResponse<>(allList);
     }
 
     @Operation(
@@ -414,10 +447,15 @@ public class FollowController {
     })
     @PostMapping(value = "/users/{userId}/follows")
     public SuccessResponse addFollow(
-            @PathVariable("userId") long userId,
+            @LoggedInUserId Long loggedInUserId,
+            @PathVariable("userId") long userIdFromPathVariable,
             @Valid @RequestBody Follows follows
     ) {
-        return followService.addFollow(follows);
+        assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
+
+        followService.addFollow(follows);
+
+        return new SuccessResponse<>();
     }
 
 
@@ -530,8 +568,14 @@ public class FollowController {
     })
     @DeleteMapping(value = "/users/{userId}/follows")
     public SuccessResponse deleteFollow(
+            @LoggedInUserId Long loggedUserId,
+            @PathVariable("userId") @Positive long userIdPathVariable,
             @Valid @RequestBody Follows follows
     ) {
-        return followService.deleteFollow(follows);
+        assertUserIdOwner(loggedUserId, userIdPathVariable);
+
+        followService.deleteFollow(follows);
+
+        return new SuccessResponse<>();
     }
 }

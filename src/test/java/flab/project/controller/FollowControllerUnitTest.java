@@ -11,9 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Follows;
 import flab.project.domain.user.controller.FollowController;
+import flab.project.domain.user.model.User;
 import flab.project.domain.user.service.FollowService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 @WebMvcTest(controllers = FollowController.class)
 class FollowControllerUnitTest {
@@ -40,13 +42,15 @@ class FollowControllerUnitTest {
     private static final String ADD_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
     private static final String DELETE_FOLLOWS_REQUEST_URL = "/users/{userId}/follows";
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워를 가져올 수 있다.")
     @Test
     void getFollowers() throws Exception {
-        long userId = 1;
-        given(followService.getFollows(userId, FOLLOWERS))
-                .willReturn(new SuccessResponse<>());
+        List<User> followerList = List.of(
+                new User(1L, "이은비", "https://example.com", "네이버"));
+
+        given(followService.getFollows(1L, FOLLOWERS))
+                .willReturn(followerList);
 
         mockMvc.perform(
                         get(GET_FOLLOWERS_REQUEST_URL, 1)
@@ -58,7 +62,7 @@ class FollowControllerUnitTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워를 가져올 때, userId는 양수여야 한다.")
     @Test
     void getFollowersWithNonPositiveId() throws Exception {
@@ -81,7 +85,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워를 가져올 때, userId는 정수가 보내줘야 하며 타입 변환이 불가능할 경우 INVALID_USER_INPUT을 반환한다.")
     @Test
     void getFollowersWithNotLongId() throws Exception {
@@ -95,13 +99,15 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로잉을 가져올 수 있다.")
     @Test
     void getFollowings() throws Exception {
-        long userId = 1;
-        given(followService.getFollows(userId, FOLLOWINGS))
-                .willReturn(new SuccessResponse<>());
+        List<User> followingList = List.of(
+                new User(1L, "이은비", "https://example.com", "네이버"));
+
+        given(followService.getFollows(1L, FOLLOWINGS))
+                .willReturn(followingList);
 
         mockMvc.perform(
                         get(GET_FOLLOWINGS_REQUEST_URL, 1)
@@ -114,7 +120,7 @@ class FollowControllerUnitTest {
 
     }
 
-    @WithMockUser
+    @WithMockUser(username = "-1")
     @DisplayName("팔로잉을 가져올 때, userId는 양수여야 한다.")
     @Test
     void getFollowingsWithNonPositiveId() throws Exception {
@@ -137,7 +143,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로잉을 가져올 때, userId는 정수가 보내줘야 하며 타입 변환이 불가능할 경우 INVALID_USER_INPUT을 반환한다.")
     @Test
     void getFollowingsWithNotLongId() throws Exception {
@@ -151,13 +157,15 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉을 한번에 가져올 수 있다.")
     @Test
     void getFollowersAndFollowings() throws Exception {
-        long userId = 1;
-        given(followService.getFollows(userId, ALL))
-                .willReturn(new SuccessResponse<>());
+        List<User> allList = List.of(
+                new User(1L, "이은비", "https://example.com", "네이버" ));
+
+        given(followService.getFollows(1L, ALL))
+                .willReturn(allList);
 
         mockMvc.perform(
                         get(GET_FOLLOWERS_AND_FOLLOWINGS_REQUEST_URL, 1)
@@ -169,7 +177,7 @@ class FollowControllerUnitTest {
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "-1")
     @DisplayName("팔로워/팔로잉 모두를 가져올 때, userId는 양수여야한다.")
     @Test
     void getAllFollowsWithNonPositiveId() throws Exception {
@@ -192,7 +200,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉 모두를 가져올 때, userId는 정수가 보내줘야 하며 타입 변환이 불가능할 경우 INVALID_USER_INPUT을 반환한다.")
     @Test
     void getAllFollowsWithNotLongId() throws Exception {
@@ -206,7 +214,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
     @Test
     void parameterOfAddFollowRequestDtoIsPositive() throws Exception {
@@ -274,7 +282,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉을 생성할 때, fromUserId와 toUserId는 필수 값이다.")
     @Test
     void AllParameterOfAddFollowRequestDtoIsRequired() throws Exception {
@@ -301,7 +309,7 @@ class FollowControllerUnitTest {
             .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉을 삭제할 때, fromUserId와 toUserId에는 양수만 올 수 있다.")
     @Test
     void parameterOfDeleteFollowRequestDtoIsPositive() throws Exception {
@@ -369,7 +377,7 @@ class FollowControllerUnitTest {
                 .andExpect(jsonPath("$.message").value(ResponseEnum.INVALID_USER_INPUT.getMessage()));
     }
 
-    @WithMockUser
+    @WithMockUser(username = "1")
     @DisplayName("팔로워/팔로잉을 삭제할 때, fromUserId와 toUserId는 필수 값이다.")
     @Test
     void AllParameterOfDeleteFollowRequestDtoIsRequired() throws Exception {
