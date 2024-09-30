@@ -36,7 +36,7 @@
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/a32c452c-57e6-4aa7-97e2-16592ed39070">
 
 ## 📝 Server Architecture
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/5acc9215-19d5-45a0-9edd-d735e8a37874">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/d233b76f-27fa-456a-bbe7-5b6f17866e3b">
 
 ## 🧾 [ERD(Entity Relationship Diagram)](https://www.erdcloud.com/d/RCprTk7yCrjyE7kWq)
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/acaec79b-0beb-4a83-93f3-769a7f5975b9">
