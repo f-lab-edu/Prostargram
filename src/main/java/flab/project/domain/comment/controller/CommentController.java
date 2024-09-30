@@ -100,7 +100,7 @@ public class CommentController {
                                             value = """
                                             {
                                                 "isSucces": false,
-                                                "code": 4001,
+                                                "code": 4002,
                                                 "message": "존재하지 않는 게시물입니다."
                                             }
                                             """
