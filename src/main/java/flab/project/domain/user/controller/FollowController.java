@@ -7,8 +7,6 @@ import flab.project.domain.user.model.User;
 import flab.project.domain.user.enums.GetFollowsType;
 import flab.project.domain.user.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -276,7 +274,7 @@ public class FollowController {
                                             {
                                                 "isSuccess": false,
                                                 "code": 4006,
-                                                "message": ""
+                                                "message": "로그인이 필요합니다."
                                             }
                                             """
                             )
