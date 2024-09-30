@@ -20,28 +20,22 @@ public class FollowService {
 
     private final FollowMapper followMapper;
 
-    public SuccessResponse<List<User>> getFollows(Long userId, GetFollowsType requestType) {
+    public List<User> getFollows(Long userId, GetFollowsType requestType) {
         validateUserIdPositive(userId);
 
-        List<User> result = followMapper.findAll(userId, requestType);
-
-        return new SuccessResponse<>(result);
+        return followMapper.findAll(userId, requestType);
     }
 
-    public SuccessResponse addFollow(Follows follows) {
+    public int addFollow(Follows follows) {
         validateFromUserIdAndToUserIdSame(follows);
 
-        followMapper.addFollow(follows);
-
-        return new SuccessResponse();
+        return followMapper.addFollow(follows);
     }
 
-    public SuccessResponse deleteFollow(Follows follows) {
+    public void deleteFollow(Follows follows) {
         validateFromUserIdAndToUserIdSame(follows);
 
         followMapper.deleteFollow(follows);
-
-        return new SuccessResponse<>();
     }
 
     private void validateUserIdPositive(Long userId) {
