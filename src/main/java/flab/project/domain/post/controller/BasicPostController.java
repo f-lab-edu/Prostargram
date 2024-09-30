@@ -1,6 +1,7 @@
 package flab.project.domain.post.controller;
 
 import flab.project.common.annotation.LoggedInUserId;
+import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.BasicPost;
@@ -30,7 +31,7 @@ public class BasicPostController {
     private final PostFacadeTemplate basicPostFacade;
 
     @Operation(
-            summary = "게시물 작성 API",
+            summary = "일반 게시물 작성 API",
             security = @SecurityRequirement(name = "bearer-key") // Bearer 인증 적용
     )
     @ApiResponses(value = {
@@ -52,22 +53,57 @@ public class BasicPostController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "권한이 없는 경우",
+                    responseCode = "400",
+                    description = "잘못된 요청",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SuccessResponse.class),
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "isSuccess": true,
-                                                "code": 403,
-                                                "message": "권한이 없습니다."
+                                                "isSucces": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
                                             }
                                             """
                             )
                     )
-
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     @PostMapping(value = "/posts/basic")
