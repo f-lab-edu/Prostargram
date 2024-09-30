@@ -1,6 +1,5 @@
 package flab.project.domain.user.service;
 
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.model.Follows;
 import flab.project.domain.user.model.User;
@@ -9,7 +8,6 @@ import flab.project.domain.user.mapper.FollowMapper;
 
 import java.util.List;
 
-import flab.project.utils.FollowerRedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +24,10 @@ public class FollowService {
         return followMapper.findAll(userId, requestType);
     }
 
-    public int addFollow(Follows follows) {
+    public void addFollow(Follows follows) {
         validateFromUserIdAndToUserIdSame(follows);
 
-        return followMapper.addFollow(follows);
+        followMapper.addFollow(follows);
     }
 
     public void deleteFollow(Follows follows) {

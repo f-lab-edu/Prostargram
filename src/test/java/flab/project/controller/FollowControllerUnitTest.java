@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.config.baseresponse.ResponseEnum;
-import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Follows;
 import flab.project.domain.user.controller.FollowController;
 import flab.project.domain.user.model.User;
