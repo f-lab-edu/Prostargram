@@ -10,6 +10,13 @@ public class User extends BasicUser {
     @Schema(example = "카카오")
     private String departmentName;
 
+    public User(long userId, String userName, String profileImgUrl, String departmentName) {
+        super(userId, userName, profileImgUrl);
+        this.departmentName = departmentName;
+    }
+    public User() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
