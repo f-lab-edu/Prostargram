@@ -11,6 +11,7 @@ import flab.project.utils.UserRedisUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class UserService {
         return NumberOfAffectedRow == 1;
     }
 
-    public List<BasicUser> getUsersByUserIds(List<Long> userIds) {
+    public Set<BasicUser> getUsersByUserIds(List<Long> userIds) {
         Set<BasicUser> users = getUsersFromRedis(userIds);
 
         Set<Long> userIdsNotInRedis = extractUserIdsNotInRedis(new ArrayList<>(users), userIds);
@@ -60,14 +61,14 @@ public class UserService {
             users.addAll(usersNotInRedis);
         }
 
-        return new ArrayList<>(users);
+        return users.stream().filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     private Set<BasicUser> getUsersFromRedis(List<Long> userIds) {
         return userRedisUtil.getUsers(userIds)
-            .stream()
-            .map(BasicUser.class::cast)
-            .collect(Collectors.toSet());
+                .stream()
+                .map(BasicUser.class::cast)
+                .collect(Collectors.toSet());
     }
 
     private Set<Long> extractUserIdsNotInRedis(List<BasicUser> users, List<Long> userIds) {

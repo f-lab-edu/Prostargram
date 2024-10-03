@@ -9,6 +9,7 @@ import flab.project.utils.NewsFeedRedisUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +41,12 @@ public class NewsFeedService {
     }
 
     private Map<Long, BasicUser> generateProfileMap(List<Long> writerIds) {
-        List<BasicUser> users = userService.getUsersByUserIds(writerIds);
+        Set<BasicUser> users = userService.getUsersByUserIds(writerIds);
 
         return convertToProfileMap(users);
     }
 
-    private Map<Long, BasicUser> convertToProfileMap(List<BasicUser> profiles) {
+    private Map<Long, BasicUser> convertToProfileMap(Set<BasicUser> profiles) {
         return profiles.stream()
             .collect(Collectors.toMap(
                 BasicUser::getUserId,
