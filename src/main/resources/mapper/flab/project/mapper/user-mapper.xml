@@ -51,7 +51,7 @@
     <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
     <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
     S.social_account_id,
-    S.social_account_url,
+    S.link,
     L.icon_url,
     H.hashtag_id,
     H.name
