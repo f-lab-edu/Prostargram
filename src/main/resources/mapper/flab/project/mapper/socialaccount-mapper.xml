@@ -5,7 +5,7 @@
 <mapper namespace="flab.project.domain.user.mapper.SocialAccountMapper">
 
     <insert id="save" parameterType="socialAccount">
-        INSERT INTO SOCIAL_ACCOUNTS(icon_id, user_id, social_account_url)
+        INSERT INTO SOCIAL_ACCOUNTS(icon_id, user_id, link)
             VALUES (#{socialAccount.iconId},#{socialAccount.userId},#{socialAccount.socialAccountUrl});
     </insert>
 
@@ -19,7 +19,7 @@
         DELETE
         FROM SOCIAL_ACCOUNTS
         WHERE user_id = #{socialAccount.userId}
-          AND social_account_url = #{socialAccount.socialAccountUrl};
+          AND link = #{socialAccount.socialAccountUrl};
     </delete>
 
 </mapper>
