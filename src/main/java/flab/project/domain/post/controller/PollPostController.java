@@ -45,7 +45,7 @@ public class PollPostController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": 요청에 성공하였습니다.
+                                                "message": "요청에 성공하였습니다."
                                             }
                                             """
                             )
