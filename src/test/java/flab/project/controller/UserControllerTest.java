@@ -1,6 +1,6 @@
 package flab.project.controller;
 
-import flab.project.common.fileStorage.UploadedFileUrl;
+import flab.project.common.file_storage.UploadedFileUrl;
 import flab.project.domain.user.controller.UserController;
 import flab.project.domain.user.facade.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;

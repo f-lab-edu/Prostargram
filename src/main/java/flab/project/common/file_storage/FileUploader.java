@@ -1,4 +1,4 @@
-package flab.project.common.fileStorage;
+package flab.project.common.file_storage;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class FileStorage {
+public class FileUploader {
 
     public static final int EXPIRATION_TIME = 1000 * 60 * 15;
     private final AmazonS3 amazonS3;

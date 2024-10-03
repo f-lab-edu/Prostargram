@@ -80,8 +80,8 @@
     U.post_count,
     U.follower_count,
     U.following_count,
-    S.social_account_id,
-    S.social_account_url,
+    S.link_id,
+    S.link,
     L.icon_url,
     H.hashtag_id,
     H.name

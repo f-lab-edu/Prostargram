@@ -1,7 +1,7 @@
 package flab.project.domain.post.facade;
 
-import flab.project.common.fileStorage.FileStorage;
-import flab.project.common.fileStorage.UploadedFileUrls;
+import flab.project.common.file_storage.FileUploader;
+import flab.project.common.file_storage.UploadedFileUrls;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.BasePost;
@@ -18,18 +18,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class BasicPostFacade extends PostFacadeTemplate {
 
-    private final FileStorage fileStorage;
+    private final FileUploader fileUploader;
     private final PostImageService postImageService;
 
     public BasicPostFacade(
         PostService postService,
         PostHashTagService postHashTagService,
         FanOutService fanOutService,
-        FileStorage fileStorage,
+        FileUploader fileUploader,
         PostImageService postImageService
     ) {
         super(postService, postHashTagService, fanOutService);
-        this.fileStorage = fileStorage;
+        this.fileUploader = fileUploader;
         this.postImageService = postImageService;
     }
 
@@ -45,7 +45,7 @@ public class BasicPostFacade extends PostFacadeTemplate {
         AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
 
         UploadedFileUrls uploadedFileUrls
-            = fileStorage.generatePreSignedUrls(userId, basicPostRequest.getImageCount(), FileType.POST_IMAGE);
+            = fileUploader.generatePreSignedUrls(userId, basicPostRequest.getImageCount(), FileType.POST_IMAGE);
         postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls.getContentUrls());
 
         return new BasicPost(basicPostRequest, userId, uploadedFileUrls);
