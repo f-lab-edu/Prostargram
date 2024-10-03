@@ -31,7 +31,7 @@ public class VoteService {
             PostType postType
     ) {
         if (postType == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("post not found.");
         }
 
         validateVote(postId, optionIds, userId, postType);

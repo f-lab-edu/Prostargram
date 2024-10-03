@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -122,8 +121,7 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/basic-post")
-    public SuccessResponse<PostWithUser> getBasicPostDetail(@PathVariable("postId") @Positive long postId)
-            throws NotFoundException {
+    public SuccessResponse<PostWithUser> getBasicPostDetail(@PathVariable("postId") @Positive long postId) {
         long userId = 1L;
 
         return postService.getPostDetail(postId, userId, PostType.BASIC);
@@ -221,8 +219,7 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/debate-post")
-    public SuccessResponse<PostWithUser> getDebatePostDetail(@PathVariable("postId") @Positive long postId)
-            throws NotFoundException {
+    public SuccessResponse<PostWithUser> getDebatePostDetail(@PathVariable("postId") @Positive long postId) {
         long userId = 1L;
 
         return postService.getPostDetail(postId, userId, PostType.DEBATE);
@@ -320,8 +317,7 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/poll-post")
-    public SuccessResponse<PostWithUser> getPollPostDetail(@PathVariable("postId") @Positive long postId)
-            throws NotFoundException {
+    public SuccessResponse<PostWithUser> getPollPostDetail(@PathVariable("postId") @Positive long postId) {
         long userId = 1L;
 
         return postService.getPostDetail(postId, userId, PostType.POLL);

@@ -1,6 +1,7 @@
 package flab.project.domain.post.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.config.exception.NotFoundException;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.*;
 import flab.project.domain.post.mapper.PostMapper;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.post.enums.PostType;
 import flab.project.domain.user.mapper.UserMapper;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -33,15 +33,14 @@ public class PostService {
         postMapper.save(userId, post);
     }
 
-    public SuccessResponse<PostWithUser> getPostDetail(long postId, long userId, PostType postType)
-        throws NotFoundException {
+    public SuccessResponse<PostWithUser> getPostDetail(long postId, long userId, PostType postType) {
         validateGetPostDetail(postId, userId);
 
         BasicUser basicUser = userMapper.getBasicUser(userId);
         BasePost post = getPostDetailUsingPostType(postId, userId, postType);
 
         if (post == null) {
-            throw new NotFoundException("post not found");
+            throw new NotFoundException("post not found.");
         }
 
         PostWithUser postWithUser = new PostWithUser(post, basicUser);
