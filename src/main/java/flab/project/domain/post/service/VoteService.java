@@ -88,8 +88,11 @@ public class VoteService {
     }
 
     private boolean getAllowMultipleVotes(long postId, PostType postType) {
-        return postType == PostType.POLL ? pollMetadataMapper.findAllowMultipleVotes(postId)
-                : false;
+        if(postType != PostType.POLL){
+            return false;
+        }
+
+        return pollMetadataMapper.findAllowMultipleVotes(postId);
     }
 
     private void validatePollPostPeriod(long postId) {
