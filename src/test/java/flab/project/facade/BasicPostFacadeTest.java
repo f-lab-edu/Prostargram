@@ -1,8 +1,8 @@
 package flab.project.facade;
 
-import flab.project.common.fileStorage.FileStorage;
-import flab.project.common.fileStorage.UploadedFileUrl;
-import flab.project.common.fileStorage.UploadedFileUrls;
+import flab.project.common.file_storage.FileUploader;
+import flab.project.common.file_storage.UploadedFileUrl;
+import flab.project.common.file_storage.UploadedFileUrls;
 import flab.project.domain.feed.service.FanOutService;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.post.model.AddDebatePostRequest;
@@ -39,7 +39,7 @@ class BasicPostFacadeTest {
     @Mock
     PostHashTagService postHashTagService;
     @Mock
-    FileStorage fileStorage;
+    FileUploader fileUploader;
     @Mock
     PostImageService postImageService;
     @Mock
@@ -60,7 +60,7 @@ class BasicPostFacadeTest {
         URL url = new URL("http", "host.domain", "file/path");
         UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
         UploadedFileUrls uploadedFileUrls = new UploadedFileUrls(Set.of(uploadedFileUrl));
-        given(fileStorage.generatePreSignedUrls(userId, imageCount, POST_IMAGE)).willReturn(uploadedFileUrls);
+        given(fileUploader.generatePreSignedUrls(userId, imageCount, POST_IMAGE)).willReturn(uploadedFileUrls);
 
         // when
         basicPostFacade.addPost(userId, validBasicPostRequest);
@@ -69,7 +69,7 @@ class BasicPostFacadeTest {
         then(postService).should().addPost(userId, validBasicPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validBasicPostRequest.getHashTagNames()));
         then(fanOutService).should().fanOut(userId, validBasicPostRequest.getPostId());
-        then(fileStorage).should().generatePreSignedUrls(userId, imageCount, POST_IMAGE);
+        then(fileUploader).should().generatePreSignedUrls(userId, imageCount, POST_IMAGE);
         then(postImageService).should().saveAll(anyLong(), anySet());
     }
 

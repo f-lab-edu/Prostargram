@@ -1,7 +1,7 @@
 package flab.project.domain.post.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import flab.project.common.fileStorage.UploadedFileUrls;
+import flab.project.common.file_storage.UploadedFileUrls;
 import flab.project.domain.post.enums.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;

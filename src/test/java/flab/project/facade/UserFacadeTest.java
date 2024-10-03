@@ -1,7 +1,7 @@
 package flab.project.facade;
 
-import flab.project.common.fileStorage.FileStorage;
-import flab.project.common.fileStorage.UploadedFileUrl;
+import flab.project.common.file_storage.FileUploader;
+import flab.project.common.file_storage.UploadedFileUrl;
 import flab.project.domain.file.enums.FileType;
 import flab.project.domain.user.facade.UserFacade;
 import flab.project.domain.user.service.UserService;
@@ -25,7 +25,7 @@ class UserFacadeTest {
     @InjectMocks
     private UserFacade userFacade;
     @Mock
-    private FileStorage fileStorage;
+    private FileUploader fileUploader;
     @Mock
     private UserService userService;
 
@@ -37,7 +37,7 @@ class UserFacadeTest {
         URL url = new URL("https", "kr.ncp.com", "/file/path");
         UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
 
-        given(fileStorage.generatePreSignedUrl(anyLong(), any(FileType.class)))
+        given(fileUploader.generatePreSignedUrl(anyLong(), any(FileType.class)))
                 .willReturn(uploadedFileUrl);
         given(userService.updateProfileImage(anyLong(), anyString()))
                 .willReturn(true);
@@ -46,7 +46,7 @@ class UserFacadeTest {
         userFacade.updateProfileImage(userId);
 
         // then
-        then(fileStorage).should().generatePreSignedUrl(userId, PROFILE_IMAGE);
+        then(fileUploader).should().generatePreSignedUrl(userId, PROFILE_IMAGE);
         then(userService).should().updateProfileImage(userId, "https://kr.ncp.com/file/path");
     }
 }
