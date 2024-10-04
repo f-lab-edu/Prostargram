@@ -23,17 +23,17 @@
 ### 1️⃣ Push Model (FanOut-On-Write)
 #### 피드 발행
 - RabbitMQ를 활용한 FanOut Server(Consumer) 코드는 이곳을 참조해주시길 바랍니다. ([링크](https://github.com/eunbileeme/Prostargram-Consumer))
-<img width="917" alt="image" src="https://github.com/user-attachments/assets/3d038f94-a62b-45a6-b869-8fd95e34e54d">
+<img width="917" alt="image" src="https://github.com/user-attachments/assets/f14020d6-4f9c-4a66-9b40-0d067e8593de">
 
 #### 피드 조회
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/7363cedf-4752-40ee-b43a-12b6233b2044">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/78855571-612c-436b-94c9-f909b91d2155">
 
 ### 2️⃣ Pull Model (FanOut-On-Read)
 #### 피드 발행
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/179dde34-2b44-4f79-b4cc-88d43a769b77">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/0f77c654-d6b2-46e2-aa6b-41416b1b79a3">
 
 #### 피드 조회
-<img width="924" alt="image" src="https://github.com/user-attachments/assets/a32c452c-57e6-4aa7-97e2-16592ed39070">
+<img width="924" alt="image" src="https://github.com/user-attachments/assets/59cf655a-1197-4344-a666-ab3426ec28e0">
 
 ## 📝 Server Architecture
 <img width="924" alt="image" src="https://github.com/user-attachments/assets/d233b76f-27fa-456a-bbe7-5b6f17866e3b">
