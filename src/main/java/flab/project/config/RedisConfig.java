@@ -9,6 +9,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -53,21 +54,30 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<Long, Long> followRedisTemplate() {
         RedisTemplate<Long, Long> template = new RedisTemplate<>();
+
+        template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
         template.setConnectionFactory(redisConnectionFactory(1));
+
         return template;
     }
 
     @Bean
     public RedisTemplate<Long, Long> newsFeedRedisTemplate() {
         RedisTemplate<Long, Long> template = new RedisTemplate<>();
+
+        template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
         template.setConnectionFactory(redisConnectionFactory(2));
+
         return template;
     }
 
-    // todo 해당 캐시가 피드에서만 쓰이는건 아님. 게시물 테이블 정보를 저장하는 캐시일 뿐임.
     @Bean
     public RedisTemplate<Long, BasePost> postRedisTemplate() {
         RedisTemplate<Long, BasePost> template = new RedisTemplate<>();
+
+        template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(BasePost.class));
         template.setConnectionFactory(redisConnectionFactory(2));
 
@@ -77,6 +87,8 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<Long, Profile> userRedisTemplate() {
         RedisTemplate<Long, Profile> template = new RedisTemplate<>();
+
+        template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Profile.class));
         template.setConnectionFactory(redisConnectionFactory(2));
 
