@@ -79,7 +79,7 @@ public class RedisConfig {
 
         template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(BasePost.class));
-        template.setConnectionFactory(redisConnectionFactory(2));
+        template.setConnectionFactory(redisConnectionFactory(3));
 
         return template;
     }
@@ -90,7 +90,7 @@ public class RedisConfig {
 
         template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Profile.class));
-        template.setConnectionFactory(redisConnectionFactory(2));
+        template.setConnectionFactory(redisConnectionFactory(4));
 
         return template;
     }
