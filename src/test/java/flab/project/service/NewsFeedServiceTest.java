@@ -56,7 +56,7 @@ class NewsFeedServiceTest {
 
             BasicUser user1 = createUser(1L);
             BasicUser user2 = createUser(2L);
-            List<BasicUser> users = List.of(user1, user2);
+            Set<BasicUser> users = Set.of(user1, user2);
 
             given(newsFeedRedisUtil.getPostIds(userId)).willReturn(postIds);
             given(postService.lookAsidePosts(postIds, userId)).willReturn(posts);
