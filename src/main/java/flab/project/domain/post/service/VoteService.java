@@ -31,7 +31,7 @@ public class VoteService {
             PostType postType
     ) {
         if (postType == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("post not found.");
         }
 
         validateVote(postId, optionIds, userId, postType);
@@ -88,8 +88,11 @@ public class VoteService {
     }
 
     private boolean getAllowMultipleVotes(long postId, PostType postType) {
-        return postType == PostType.POLL ? pollMetadataMapper.findAllowMultipleVotes(postId)
-                : false;
+        if(postType != PostType.POLL){
+            return false;
+        }
+
+        return pollMetadataMapper.findAllowMultipleVotes(postId);
     }
 
     private void validatePollPostPeriod(long postId) {
