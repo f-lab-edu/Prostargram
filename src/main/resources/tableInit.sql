@@ -82,7 +82,6 @@ create table interests
 create table social_accounts
 (
     social_account_id int  not null auto_increment,
-    link_id           int  not null,
     icon_id           int  not null,
     user_id           int  not null,
     link              text not null,
