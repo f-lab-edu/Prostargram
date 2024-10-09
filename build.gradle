@@ -63,6 +63,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+tasks.named('processResources') {
+    dependsOn(copyPrivate)
+}
+
 jacocoTestReport {
     reports {
         html.enabled true
