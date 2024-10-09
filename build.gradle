@@ -89,7 +89,7 @@ jacocoTestCoverageVerification {
 }
 
 task copyPrivate(type: Copy) {
-    from './submodule-data'
+    from './submodules/Prostargram_submodule-data'
     include "*.yml"
     into 'src/main/resources'
 }
