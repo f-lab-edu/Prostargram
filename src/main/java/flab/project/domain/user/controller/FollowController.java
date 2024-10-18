@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -34,7 +35,8 @@ public class FollowController {
     private final FollowService followService;
 
     @Operation(
-            summary = "팔로워 목록 확인하기 API"
+            summary = "팔로워 목록 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -48,7 +50,21 @@ public class FollowController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": "요청에 성공하였습니다."
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": [
+                                                    {
+                                                        "userId": 1,
+                                                        "userName": "이은비",
+                                                        "profileImgUrl": "https://profileImg1.url",
+                                                        "departmentName": "네이버"
+                                                    },
+                                                    {
+                                                        "userId": 2,
+                                                        "userName": "정민욱",
+                                                        "profileImgUrl": "https://profileImg2.url",
+                                                        "departmentName": "카카오"
+                                                    }
+                                                ]
                                             }
                                             """
                             )
@@ -73,7 +89,7 @@ public class FollowController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    description = "로그인 하지 않은 유저가 요청을 보낸 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
@@ -134,7 +150,8 @@ public class FollowController {
     }
 
     @Operation(
-            summary = "팔로잉 목록 확인하기 API"
+            summary = "팔로잉 목록 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -148,7 +165,21 @@ public class FollowController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": 요청에 성공하였습니다."
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": [
+                                                    {
+                                                        "userId": 1,
+                                                        "userName": "이은비",
+                                                        "profileImgUrl": "https://profileImg1.url",
+                                                        "departmentName": "네이버"
+                                                    },
+                                                    {
+                                                        "userId": 2,
+                                                        "userName": "정민욱",
+                                                        "profileImgUrl": "https://profileImg2.url",
+                                                        "departmentName": "카카오"
+                                                    }
+                                                ]
                                             }
                                             """
                             )
@@ -236,7 +267,8 @@ public class FollowController {
     }
 
     @Operation(
-            summary = "팔로워/팔로잉 한번에 불러오는 API",
+            summary = "팔로워/팔로잉 조회 API",
+            security = @SecurityRequirement(name = "bearer-key"),
             description = "메인 페이지의 피드의 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
     )
     @ApiResponses(value = {
@@ -339,7 +371,8 @@ public class FollowController {
     }
 
     @Operation(
-            summary = "팔로워/팔로잉 생성 API"
+            summary = "팔로워/팔로잉 생성 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -460,7 +493,8 @@ public class FollowController {
 
 
     @Operation(
-            summary = "팔로워/팔로잉 삭제 API"
+            summary = "팔로워/팔로잉 삭제 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
