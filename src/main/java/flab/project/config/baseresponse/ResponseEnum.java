@@ -17,6 +17,7 @@ public enum ResponseEnum {
     UNAUTHORIZED_USER(false, 4006, "로그인이 필요합니다. 로그인 후 다시 시도하세요."),
     FORBIDDEN_ACCESS(false, 4007, "해당 요청에 대한 권한이 없습니다."),
     NON_EXIST_COMMENT(false, 4008, "존재하지 않는 댓글입니다."),
+    NON_EXIST_INTEREST(false, 4009, "존재하지 않는 관심사입니다."),
 
     // TODO FAILED_TO_VERIFY_USER_IS_OWNER는 추후 삭제 예정
     FAILED_TO_VERIFY_USER_IS_OWNER(false,403,"권한이 없습니다."),

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @Operation(
-            summary = "댓글 좋아요 추가 API"
+            summary = "댓글 좋아요 추가 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -147,7 +149,8 @@ public class CommentLikeController {
     }
 
     @Operation(
-            summary = "댓글 좋아요 취소 API"
+            summary = "댓글 좋아요 취소 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -228,7 +231,7 @@ public class CommentLikeController {
                                     value = """
                                             {
                                                 "isSuccess": false,
-                                                "code": 4001,
+                                                "code": 4008,
                                                 "message": "존재하지 않는 댓글에 대한 좋아요 취소 요청입니다."
                                             }
                                             """

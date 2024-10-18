@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +34,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(
-            summary = "댓글 작성 API"
+            summary = "댓글 작성 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -150,110 +152,9 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 조회 API"
+            summary = "댓글 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "댓글 조회 성공",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SuccessResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": true,
-                                                "code": 1000,
-                                                "message": "요청에 성공하였습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "잘못된 요청",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": true,
-                                                "code": 4000,
-                                                "message": "올바르지 않은 요청입니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4006,
-                                                "message": "로그인이 필요합니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "존재하지 않는 게시물의 댓글을 조회 또는 존재하지 않는 댓글의 대댓글을 조회할 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "존재하지 않는 게시물의 댓글을 조회할 경우",
-                                            description = "존재하지 않는 게시물입니다.",
-                                            value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4002,
-                                                "message": "존재하지 않는 게시물입니다."
-                                            }
-                                            """
-                                    ),
-                                    @ExampleObject(
-                                            name = "존재하지 않는 댓글의 대댓글을 조회할 경우",
-                                            description = "존재하지 않는 댓글입니다.",
-                                            value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4008,
-                                                "message": "존재하지 않는 댓글입니다."
-                                            }
-                                            """
-                                    )
-                            }
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "서버 오류",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSucces": false,
-                                                "code": 5000,
-                                                "message": "서버 오류입니다."
-                                            }
-                                            """
-                            )
-                    )
-            )
-    })
     // Todo 토론 게시물의 경우, 진영을 의미하는 enum 추가 예정
     @GetMapping(value = "/posts/{postId}/comments")
     public SuccessResponse<List<CommentWithUser>> getComments(

@@ -4,6 +4,7 @@ import static flab.project.utils.AccessManagementUtil.assertUserIdOwner;
 
 import flab.project.common.file_storage.UploadedFileUrl;
 import flab.project.common.annotation.LoggedInUserId;
+import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.GetProfileRequestType;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "프로필")
+@Tag(name = "프로필 API")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -36,12 +38,13 @@ public class UserController {
     private final UserFacade userFacade;
 
     @Operation(
-            summary = "프로필 수정 페이지 정보 확인하기 API"
+            summary = "프로필 수정 페이지 정보 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인된 유저와 pathVariable로 전달받은 userId가 다른 경우",
+                    responseCode = "200",
+                    description = "프로필 수정 페이지 정보 조회 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -49,8 +52,93 @@ public class UserController {
                                     value = """
                                             {
                                                 "isSuccess": true,
-                                                "code": 403,
-                                                "message": "권한이 없습니다."
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인 하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "로그인한 유저가 타인의 ID로 프로필 수정 페이지 조회를 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 4007,
+                                                "message": "해당 요청에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저의 프로필 수정 페이지 조회를 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 4001,
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
                                             }
                                             """
                             )
@@ -70,12 +158,64 @@ public class UserController {
     }
 
     @Operation(
-            summary = "프로필 페이지 정보 확인하기 API"
+            summary = "프로필 페이지 정보 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
+                    responseCode = "200",
+                    description = "프로필 페이지 조회 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인 하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
-                    description = "PathVariable의 userId가 존재하지 않는 유저인 경우",
+                    description = "존재하지 않는 유저의 프로필 조회를 요청하는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -84,7 +224,24 @@ public class UserController {
                                             {
                                                 "isSuccess": false,
                                                 "code": 4001,
-                                                "message": "존재하지 않는 유저입니다."
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
                                             }
                                             """
                             )
@@ -101,12 +258,13 @@ public class UserController {
     }
 
     @Operation(
-            description = "프로필 수정하기 API"
+            summary = "프로필 수정 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "프로필 수정 하기",
+                    description = "프로필 수정 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -122,8 +280,25 @@ public class UserController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "403",
-                    description = "로그인된 유저와 pathVariable로 전달받은 userId가 다른 경우",
+                    description = "로그인한 유저가 타인의 ID로 프로필 수정을 요청하는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -131,8 +306,42 @@ public class UserController {
                                     value = """
                                             {
                                                 "isSuccess": true,
-                                                "code": 403,
+                                                "code": 4007,
                                                 "message": "권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저가 프로필 수정을 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4001,
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
                                             }
                                             """
                             )
@@ -153,7 +362,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "프로필 이미지 수정하기 API",
+            summary = "프로필 이미지 수정 API",
             description = "1. 해당 API는 <b>수정 예정</b>입니다. 추후, 서버에 직접 이미지를 올리는 것이 아닌"
                     + " preassignedURL방식으로 API를 수정할 예정입니다.\n"
                     + "2. 현재 허용되는 이미지 확장자는 png, jpg, jpeg입니다. 추후 프론트,백간의 논의 후 어떤 확장자를"
@@ -162,7 +371,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "프로필 수정 하기",
+                    description = "프로필 이미지 수정 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -178,8 +387,42 @@ public class UserController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 4006,
+                                                "message": "올바르지 않은 요청입니다."
+                                             }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "403",
-                    description = "로그인된 유저와 pathVariable로 전달받은 userId가 다른 경우",
+                    description = "로그인한 유저가 타인의 ID로 프로필 이미지 수정을 요청하는 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -187,8 +430,42 @@ public class UserController {
                                     value = """
                                             {
                                                 "isSuccess": true,
-                                                "code": 403,
-                                                "message": "권한이 없습니다."
+                                                "code": 4007,
+                                                "message": "해당 요청에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저가 프로필 이미지 수정을 요청하는 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4001,
+                                                "message": "존재하지 않는 유저에 대한 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "code": 4001,
+                                                "message": "서버 오류입니다."
                                             }
                                             """
                             )
