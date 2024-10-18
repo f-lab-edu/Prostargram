@@ -28,7 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.stream.Collectors;
 
 @Tag(name = "회원가입 API", description = "회원가입 과정에서 사용되는 API</br>" +
-        "[회원가입 전체로직](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)은 링크를 참고하길 바란다.")
+        "[회원가입 전체로직](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)은 링크를 참고하시길 바랍니다.")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -69,7 +69,7 @@ public class VerificationController {
     @Parameter(
             name = "email",
             required = true,
-            description = "해당 email로 인증 코드가 보내진다."
+            description = "인증 코드가 보내질 이메일"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -135,14 +135,13 @@ public class VerificationController {
     )
     @Parameters(value = {
             @Parameter(
-                    name = "code",
-                    description = "유저의 이메일에 발송된 인증 코드이다.</br>" +
-                            "인증 코드는 7자리로 이뤄진다.",
+                    name = "email",
+                    description = "인증 코드가 발송된 유저의 이메일",
                     required = true
             ),
             @Parameter(
                     name = "code",
-                    description = "인증 코드가 발송 됐던 유저의 이메일",
+                    description = "유저의 이메일에 발송된 인증 코드",
                     required = true
             )
     })
