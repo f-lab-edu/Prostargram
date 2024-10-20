@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "소셜 계정")
+@Tag(name = "소셜 계정 API")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -49,11 +50,12 @@ public class SocialAccountController {
     }
 
     @Operation(
-            summary = "소셜 계정 추가"
+            summary = "소셜 계정 추가 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "201",
+                    responseCode = "200",
                     description = "소셜 계정 추가 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -85,6 +87,23 @@ public class SocialAccountController {
                                             """
                             )
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     @PostMapping("/social-accounts")
@@ -101,7 +120,8 @@ public class SocialAccountController {
     }
 
     @Operation(
-            summary = "소셜 계정 삭제"
+            summary = "소셜 계정 삭제 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -133,6 +153,23 @@ public class SocialAccountController {
                                                 "isSuccess": false,
                                                 "code": 4000,
                                                 "message": "존재하지 않는 소셜 계정입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
                                             }
                                             """
                             )

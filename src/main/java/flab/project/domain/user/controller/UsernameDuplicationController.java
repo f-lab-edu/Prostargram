@@ -120,7 +120,7 @@ public class UsernameDuplicationController {
         ),
         @ApiResponse(
             responseCode = "409",
-            description = "이미 존재하는 닉네임 입니다.",
+            description = "이미 동일한 닉네임이 존재할 경우",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
                 schema = @Schema(implementation = FailResponse.class),
