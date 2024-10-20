@@ -10,6 +10,15 @@
     VALUES (#{userId}, #{post.content}, #{post.postType});
   </insert>
 
+  <select id="existsById" resultType="boolean">
+      SELECT CASE
+               WHEN COUNT(*) = 1 THEN 1
+               ELSE 0
+               END as has_post
+      FROM POST
+      WHERE post_id = #{postId};
+  </select>
+
   <select id="getBasicPostDetail" resultMap="BasicPost">
     SELECT post.post_id,
            post.user_id,
