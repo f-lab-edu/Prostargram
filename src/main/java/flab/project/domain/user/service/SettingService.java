@@ -18,7 +18,7 @@ public class SettingService {
     private final SettingMapper settingMapper;
 
     // Available maximum days are 400 days - ${https://developer.chrome.com/blog/cookie-max-age-expires/}
-    public SuccessResponse updateScreenMode(long userId, ScreenMode screenMode, HttpServletResponse httpServletResponse) {
+    public void updateScreenMode(long userId, ScreenMode screenMode, HttpServletResponse httpServletResponse) {
         final int COOKIE_MAX_AGE_400_DAYS = 60 * 60 * 24 * 400;
 
         Cookie cookie = new Cookie("screen-mode", screenMode.name());
@@ -27,27 +27,23 @@ public class SettingService {
         cookie.setHttpOnly(false);
 
         httpServletResponse.addCookie(cookie);
-
-        return new SuccessResponse();
     }
 
-    public SuccessResponse getPersonalSettings(long userId) {
+    public Settings getPersonalSettings(long userId) {
         Settings personalSettings = settingMapper.getPersonalSettingsByUserId(userId);
 
         if (personalSettings == null) {
             throw new NotExistUserException();
         }
 
-        return new SuccessResponse(personalSettings);
+        return personalSettings;
     }
 
-    public SuccessResponse updateUserPublicScope(long userId, PublicScope publicScope) {
+    public void updateUserPublicScope(long userId, PublicScope publicScope) {
         int numberOfAffectedRow = settingMapper.updateUserPublicScope(userId, publicScope);
 
         if (numberOfAffectedRow == 0) {
             throw new RuntimeException();
         }
-
-        return new SuccessResponse();
     }
 }
