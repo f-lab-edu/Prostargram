@@ -1,5 +1,6 @@
 package flab.project.domain.post.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.post.model.PostWithUser;
@@ -45,7 +46,27 @@ public class PostController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": "요청에 성공하였습니다."
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": {
+                                                    "post": {
+                                                      "postType": "BASIC",
+                                                      "postId": 100,
+                                                      "userId": 388187,
+                                                      "content": "test post content100",
+                                                      "hashTagNames": ["testHashTag","testHashTag2"],
+                                                      "likeCount": 0,
+                                                      "commentCount": 0,
+                                                      "createdAt": "2024-10-10T05:47:22.000+00:00",
+                                                      "contentImageUrls": ["https://~"],
+                                                      "isLike": false,
+                                                      "isFollow": false
+                                                    },
+                                                    "basicUser": {
+                                                      "userId": 1,
+                                                      "userName": "test1",
+                                                      "profileImgUrl": null
+                                                    }
+                                                  }
                                             }
                                             """
                             )
@@ -58,7 +79,7 @@ public class PostController {
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
                             examples = @ExampleObject(
-                                            value = """
+                                    value = """
                                             {
                                                 "isSuccess": false,
                                                 "code": 4000,
@@ -121,16 +142,14 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/basic-post")
-    public SuccessResponse<PostWithUser> getBasicPostDetail(@PathVariable("postId") @Positive long postId) {
-        long userId = 1L;
-
+    public SuccessResponse<PostWithUser> getBasicPostDetail(
+            @LoggedInUserId Long userId,
+            @PathVariable("postId") @Positive long postId
+    ) {
         return postService.getPostDetail(postId, userId, PostType.BASIC);
     }
 
-    @Operation(
-            summary = "토론 게시물 상세 보기 API",
-            security = @SecurityRequirement(name = "bearer-key")
-    )
+    @Operation(summary = "토론 게시물 상세 보기 API")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -219,9 +238,10 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/debate-post")
-    public SuccessResponse<PostWithUser> getDebatePostDetail(@PathVariable("postId") @Positive long postId) {
-        long userId = 1L;
-
+    public SuccessResponse<PostWithUser> getDebatePostDetail(
+            @LoggedInUserId Long userId,
+            @PathVariable("postId") @Positive long postId
+    ) {
         return postService.getPostDetail(postId, userId, PostType.DEBATE);
     }
 
@@ -317,9 +337,10 @@ public class PostController {
             )
     })
     @GetMapping("/posts/{postId}/poll-post")
-    public SuccessResponse<PostWithUser> getPollPostDetail(@PathVariable("postId") @Positive long postId) {
-        long userId = 1L;
-
+    public SuccessResponse<PostWithUser> getPollPostDetail(
+            @LoggedInUserId Long userId,
+            @PathVariable("postId") @Positive long postId
+    ) {
         return postService.getPostDetail(postId, userId, PostType.POLL);
     }
 }

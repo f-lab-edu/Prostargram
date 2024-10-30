@@ -1,7 +1,9 @@
 package flab.project.domain.user.controller;
 
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.enums.ScreenMode;
+import flab.project.domain.user.model.Settings;
 import flab.project.domain.user.service.SettingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,28 +30,42 @@ public class SettingController {
     @Operation(summary = "라이트/다크 모드 수정 하기 API")
     @Parameter(name = "userId", description = "설정 상태를 확인 하고자 하는 유저의 id", required = true)
     @PatchMapping("/users/{userId}/settings")
-    public SuccessResponse updateScreenMode(@PathVariable("userId") @Positive long userId,
+    public SuccessResponse<Void> updateScreenMode(
+            @PathVariable("userId") @Positive long userId,
             @RequestParam("screen-mode") ScreenMode screenMode,
-            HttpServletResponse httpServletResponse) {
-        return settingService.updateScreenMode(userId, screenMode, httpServletResponse);
+            HttpServletResponse httpServletResponse
+    ) {
+        settingService.updateScreenMode(userId, screenMode, httpServletResponse);
+
+        return new SuccessResponse<>();
     }
 
     @Operation(summary = "개인 설정 상태 확인하기 API")
     @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true)
-    @GetMapping("/users/{userId}/settings")
-    public SuccessResponse getPersonalSettings(@PathVariable("userId") @Positive long userId) {
-        return settingService.getPersonalSettings(userId);
+    @GetMapping("/users/settings")
+    public SuccessResponse<Settings> getPersonalSettings(
+            @LoggedInUserId Long userId
+    ) {
+        Settings personalSettings = settingService.getPersonalSettings(userId);
+
+        return new SuccessResponse<>(personalSettings);
     }
 
     @PatchMapping("/users/{userId}/settings/public-scope/public")
-    public SuccessResponse updateUserPublicScopeToPublic(
-            @PathVariable("userId") @Positive long userId) {
-        return settingService.updateUserPublicScope(userId, PUBLIC);
+    public SuccessResponse<Void> updateUserPublicScopeToPublic(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        settingService.updateUserPublicScope(userId, PUBLIC);
+
+        return new SuccessResponse<>();
     }
 
     @PatchMapping("/users/{userId}/settings/public-scope/private")
-    public SuccessResponse updateUserPublicScopeToPrivate(
-            @PathVariable("userId") @Positive long userId) {
-        return settingService.updateUserPublicScope(userId, PRIVATE);
+    public SuccessResponse<Void> updateUserPublicScopeToPrivate(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        settingService.updateUserPublicScope(userId, PRIVATE);
+
+        return new SuccessResponse<>();
     }
 }
