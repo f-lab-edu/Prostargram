@@ -46,40 +46,6 @@ public class DebatePostController {
                                             "isSuccess": true,
                                               "code": 1000,
                                               "message": "요청에 성공하였습니다.",
-                                              "result": {
-                                                "post": {
-                                                  "postType": "DEBATE",
-                                                  "postId": 100000001,
-                                                  "userId": 100000,
-                                                  "content": "이것이 콘텐츠다!",
-                                                  "hashTagNames": [
-                                                    "#test1"
-                                                  ],
-                                                  "likeCount": 0,
-                                                  "commentCount": 0,
-                                                  "createdAt": "2024-10-30T09:58:09.000+00:00",
-                                                  "options": [
-                                                    {
-                                                      "optionId": 2,
-                                                      "optionContent": "나는 바보다",
-                                                      "voteCount": 0
-                                                    },
-                                                    {
-                                                      "optionId": 1,
-                                                      "optionContent": "나는 천재다",
-                                                      "voteCount": 0
-                                                    }
-                                                  ],
-                                                  "selectedOptionId": 0,
-                                                  "isLike": false,
-                                                  "isFollow": false
-                                                },
-                                                "basicUser": {
-                                                  "userId": 100000,
-                                                  "userName": "test100000",
-                                                  "profileImgUrl": "https://~"
-                                                }
-                                              }
                                             """
                             )
                     )
