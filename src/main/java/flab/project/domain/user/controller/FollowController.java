@@ -54,13 +54,13 @@ public class FollowController {
                                                 "result": [
                                                     {
                                                         "userId": 1,
-                                                        "userName": "이은비",
+                                                        "userName": "정민욱",
                                                         "profileImgUrl": "https://profileImg1.url",
                                                         "departmentName": "네이버"
                                                     },
                                                     {
                                                         "userId": 2,
-                                                        "userName": "정민욱",
+                                                        "userName": "제이슨",
                                                         "profileImgUrl": "https://profileImg2.url",
                                                         "departmentName": "카카오"
                                                     }
@@ -169,15 +169,21 @@ public class FollowController {
                                                 "result": [
                                                     {
                                                         "userId": 1,
-                                                        "userName": "이은비",
+                                                        "userName": "정민욱",
                                                         "profileImgUrl": "https://profileImg1.url",
                                                         "departmentName": "네이버"
                                                     },
                                                     {
                                                         "userId": 2,
-                                                        "userName": "정민욱",
+                                                        "userName": "제이슨",
                                                         "profileImgUrl": "https://profileImg2.url",
                                                         "departmentName": "카카오"
+                                                    },
+                                                    {
+                                                        "userId": 3,
+                                                        "userName": "진성진",
+                                                        "profileImgUrl": "https://profileImg3.url",
+                                                        "departmentName": "우아한형제들"
                                                     }
                                                 ]
                                             }
@@ -283,7 +289,27 @@ public class FollowController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": "요청에 성공하였습니다."
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": [
+                                                    {
+                                                        "userId": 1,
+                                                        "userName": "정민욱",
+                                                        "profileImgUrl": "https://profileImg1.url",
+                                                        "departmentName": "네이버"
+                                                    },
+                                                    {
+                                                        "userId": 2,
+                                                        "userName": "제이슨",
+                                                        "profileImgUrl": "https://profileImg2.url",
+                                                        "departmentName": "카카오"
+                                                    },
+                                                    {
+                                                        "userId": 3,
+                                                        "userName": "진성진",
+                                                        "profileImgUrl": "https://profileImg3.url",
+                                                        "departmentName": "우아한형제들"
+                                                    }
+                                                ]
                                             }
                                             """
                             )
