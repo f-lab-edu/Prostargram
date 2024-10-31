@@ -100,23 +100,23 @@ public class CommentController {
                                             name = "존재하지 않는 게시물에 댓글을 작성할 경우",
                                             description = "존재하지 않는 게시물입니다.",
                                             value = """
-                                            {
-                                                "isSucces": false,
-                                                "code": 4002,
-                                                "message": "존재하지 않는 게시물입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4002,
+                                                        "message": "존재하지 않는 게시물입니다."
+                                                    }
+                                                    """
                                     ),
                                     @ExampleObject(
                                             name = "존재하지 않는 댓글에 대댓글을 작성할 경우",
                                             description = "존재하지 않는 댓글입니다.",
                                             value = """
-                                            {
-                                                "isSucces": false,
-                                                "code": 4008,
-                                                "message": "존재하지 않는 댓글입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4008,
+                                                        "message": "존재하지 않는 댓글입니다."
+                                                    }
+                                                    """
                                     )
                             }
                     )
@@ -155,6 +155,79 @@ public class CommentController {
             summary = "댓글 조회 API",
             security = @SecurityRequirement(name = "bearer-key")
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "댓글 조회 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": [
+                                                    {
+                                                        "comment": {
+                                                            "commentId": 1,
+                                                            "postId": 1,
+                                                            "userId": 1,
+                                                            "parentId": 1,
+                                                            "content": "화이팅합시다!",
+                                                            "createdAt": "2024-10-31T14:29:59.215Z",
+                                                            "likeCount": 1400,
+                                                            "childrenCount": 14,
+                                                            "isLike": false
+                                                        },
+                                                        "basicUser": {
+                                                            "userId": 1,
+                                                            "userName": "정민욱",
+                                                            "profileImgUrl": "https://profileImg.url"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
     // Todo 토론 게시물의 경우, 진영을 의미하는 enum 추가 예정
     @GetMapping(value = "/posts/{postId}/comments")
     public SuccessResponse<List<CommentWithUser>> getComments(
