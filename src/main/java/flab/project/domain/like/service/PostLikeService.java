@@ -5,6 +5,7 @@ import flab.project.domain.like.mapper.PostLikeMapper;
 import flab.project.domain.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -13,6 +14,7 @@ public class PostLikeService {
     private final PostLikeMapper postLikeMapper;
     private final PostMapper postMapper;
 
+    @Transactional
     public void addPostLike(long postId, long userId) {
         validateExistsPost(postId);
 
@@ -25,6 +27,7 @@ public class PostLikeService {
         postMapper.like(postId);
     }
 
+    @Transactional
     public void cancelPostLike(long postId, Long userId) {
         validateExistsPost(postId);
 
