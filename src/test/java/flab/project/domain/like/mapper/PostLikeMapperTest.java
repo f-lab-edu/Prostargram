@@ -44,7 +44,7 @@ class PostLikeMapperTest {
         postMapper.save(postId, basicPost);
 
         // when
-        postLikeMapper.addPostLike(postId, userId);
+        postLikeMapper.like(postId, userId);
 
         // then
         boolean hasLike = postLikeMapper.hasLike(postId, userId);
@@ -67,7 +67,7 @@ class PostLikeMapperTest {
             .build();
         postMapper.save(postId, basicPost);
 
-        postLikeMapper.addPostLike(postId, userId);
+        postLikeMapper.like(postId, userId);
 
         // when
         postLikeMapper.cancelLike(postId, userId);

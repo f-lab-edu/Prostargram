@@ -27,7 +27,9 @@ public class PostLikeController {
         @PathVariable("postId") @Positive long postId,
         @LoggedInUserId Long userId
     ) {
-        return postLikeService.addPostLike(postId, userId);
+        postLikeService.addPostLike(postId, userId);
+
+        return new SuccessResponse<>();
     }
 
     @Operation(summary = "게시물 좋아요 취소 API")
@@ -37,6 +39,8 @@ public class PostLikeController {
         @PathVariable("postId") @Positive long postId,
         @LoggedInUserId Long userId
     ) {
-        return postLikeService.cancelPostLike(postId, userId);
+        postLikeService.cancelPostLike(postId, userId);
+
+        return new SuccessResponse<>();
     }
 }

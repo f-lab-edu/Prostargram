@@ -10,6 +10,18 @@
     VALUES (#{userId}, #{post.content}, #{post.postType});
   </insert>
 
+  <update id="like">
+    UPDATE POST
+    SET like_count = like_count + 1
+    WHERE post_id = #{postId};
+  </update>
+
+  <update id="cancelLike">
+    UPDATE POST
+    SET like_count = like_count - 1
+    WHERE like_count = #{like_count};
+  </update>
+
   <select id="existsById" resultType="boolean">
       SELECT CASE
                WHEN COUNT(*) = 1 THEN 1

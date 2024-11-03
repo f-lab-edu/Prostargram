@@ -23,9 +23,14 @@ public interface PostMapper {
 
     List<BasicPost> getBasicPostsWhereIn(@Param("basicPostIds") List<Long> basicPostIds, @Param("userId") long userId);
 
-    List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds, @Param("userId") long userId);
+    List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds,
+            @Param("userId") long userId);
 
     List<PostTypeModel> findTypeByPostIds(@Param("postIds") List<Long> postIds);
 
     boolean existsById(long postId);
+
+    void like(@Param("postId") long postId);
+
+    void cancelLike(@Param("postId") long postId);
 }
