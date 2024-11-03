@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @Operation(
-            summary = "댓글 좋아요 추가 API"
+            summary = "댓글 좋아요 추가 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -85,23 +87,6 @@ public class CommentLikeController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 댓글 좋아요를 요청하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4007,
-                                                "message": "해당 요청에 대한 권한이 없습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않는 댓글에 좋아요를 요청한 경우",
                     content = @Content(
@@ -147,7 +132,8 @@ public class CommentLikeController {
     }
 
     @Operation(
-            summary = "댓글 좋아요 취소 API"
+            summary = "댓글 좋아요 취소 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -202,23 +188,6 @@ public class CommentLikeController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 댓글 좋아요 삭제를 요청하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4007,
-                                                "message": "해당 요청에 대한 권한이 없습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않는 댓글에 좋아요 취소를 요청한 경우",
                     content = @Content(
@@ -228,7 +197,7 @@ public class CommentLikeController {
                                     value = """
                                             {
                                                 "isSuccess": false,
-                                                "code": 4001,
+                                                "code": 4008,
                                                 "message": "존재하지 않는 댓글에 대한 좋아요 취소 요청입니다."
                                             }
                                             """

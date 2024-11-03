@@ -32,7 +32,7 @@ public class BasicPostController {
 
     @Operation(
             summary = "일반 게시물 작성 API",
-            security = @SecurityRequirement(name = "bearer-key") // Bearer 인증 적용
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(

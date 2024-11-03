@@ -100,6 +100,9 @@ public class AuthController {
         return new SuccessResponse<>(tokenDto);
     }
 
+    @Operation(
+            summary = "로그아웃 API"
+    )
     @GetMapping("/logout/success")
     public SuccessResponse<Void> returnLogoutResponse() {
         return new SuccessResponse<>();

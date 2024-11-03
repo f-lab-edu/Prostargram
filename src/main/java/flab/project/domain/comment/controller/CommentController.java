@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +34,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(
-            summary = "댓글 작성 API"
+            summary = "댓글 작성 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -98,23 +100,23 @@ public class CommentController {
                                             name = "존재하지 않는 게시물에 댓글을 작성할 경우",
                                             description = "존재하지 않는 게시물입니다.",
                                             value = """
-                                            {
-                                                "isSucces": false,
-                                                "code": 4002,
-                                                "message": "존재하지 않는 게시물입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4002,
+                                                        "message": "존재하지 않는 게시물입니다."
+                                                    }
+                                                    """
                                     ),
                                     @ExampleObject(
                                             name = "존재하지 않는 댓글에 대댓글을 작성할 경우",
                                             description = "존재하지 않는 댓글입니다.",
                                             value = """
-                                            {
-                                                "isSucces": false,
-                                                "code": 4008,
-                                                "message": "존재하지 않는 댓글입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4008,
+                                                        "message": "존재하지 않는 댓글입니다."
+                                                    }
+                                                    """
                                     )
                             }
                     )
@@ -150,7 +152,8 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 조회 API"
+            summary = "댓글 조회 API",
+            security = @SecurityRequirement(name = "bearer-key")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -164,7 +167,27 @@ public class CommentController {
                                             {
                                                 "isSuccess": true,
                                                 "code": 1000,
-                                                "message": "요청에 성공하였습니다."
+                                                "message": "요청에 성공하였습니다.",
+                                                "result": [
+                                                    {
+                                                        "comment": {
+                                                            "commentId": 1,
+                                                            "postId": 1,
+                                                            "userId": 1,
+                                                            "parentId": 1,
+                                                            "content": "화이팅합시다!",
+                                                            "createdAt": "2024-10-31T14:29:59.215Z",
+                                                            "likeCount": 1400,
+                                                            "childrenCount": 14,
+                                                            "isLike": false
+                                                        },
+                                                        "basicUser": {
+                                                            "userId": 1,
+                                                            "userName": "정민욱",
+                                                            "profileImgUrl": "https://profileImg.url"
+                                                        }
+                                                    }
+                                                ]
                                             }
                                             """
                             )
@@ -179,7 +202,7 @@ public class CommentController {
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "isSuccess": true,
+                                                "isSucces": false,
                                                 "code": 4000,
                                                 "message": "올바르지 않은 요청입니다."
                                             }
@@ -196,7 +219,7 @@ public class CommentController {
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "isSuccess": false,
+                                                "isSucces": false,
                                                 "code": 4006,
                                                 "message": "로그인이 필요합니다."
                                             }
@@ -206,7 +229,7 @@ public class CommentController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 게시물의 댓글을 조회 또는 존재하지 않는 댓글의 대댓글을 조회할 경우",
+                    description = "존재하지 않는 게시물에 댓글 조회 또는 존재하지 않는 댓글의 대댓글을 조회할 경우",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
@@ -215,23 +238,23 @@ public class CommentController {
                                             name = "존재하지 않는 게시물의 댓글을 조회할 경우",
                                             description = "존재하지 않는 게시물입니다.",
                                             value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4002,
-                                                "message": "존재하지 않는 게시물입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4002,
+                                                        "message": "존재하지 않는 게시물입니다."
+                                                    }
+                                                    """
                                     ),
                                     @ExampleObject(
                                             name = "존재하지 않는 댓글의 대댓글을 조회할 경우",
                                             description = "존재하지 않는 댓글입니다.",
                                             value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4008,
-                                                "message": "존재하지 않는 댓글입니다."
-                                            }
-                                            """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4008,
+                                                        "message": "존재하지 않는 댓글입니다."
+                                                    }
+                                                    """
                                     )
                             }
                     )
@@ -245,7 +268,7 @@ public class CommentController {
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "isSucces": false,
+                                                "isSuccess": false,
                                                 "code": 5000,
                                                 "message": "서버 오류입니다."
                                             }
