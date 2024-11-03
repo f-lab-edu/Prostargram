@@ -1,8 +1,9 @@
 package flab.project.domain.user.controller;
 
-import flab.project.config.baseresponse.FailResponse;
+import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.enums.ScreenMode;
+import flab.project.domain.user.model.Settings;
 import flab.project.domain.user.service.SettingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -143,123 +144,25 @@ public class SettingController {
             )
     })
     @PatchMapping("/users/{userId}/settings")
-    public SuccessResponse updateScreenMode(@PathVariable("userId") @Positive long userId,
+    public SuccessResponse<Void> updateScreenMode(
+            @PathVariable("userId") @Positive long userId,
             @RequestParam("screen-mode") ScreenMode screenMode,
-            HttpServletResponse httpServletResponse) {
-        return settingService.updateScreenMode(userId, screenMode, httpServletResponse);
+            HttpServletResponse httpServletResponse
+    ) {
+        settingService.updateScreenMode(userId, screenMode, httpServletResponse);
+
+        return new SuccessResponse<>();
     }
 
-    @Operation(
-            summary = "개인 설정 상태 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "개인 설정 상태 조회 성공",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SuccessResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": true,
-                                                "code": 1000,
-                                                "message": "요청에 성공하였습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "잘못된 요청",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4000,
-                                                "message": "올바르지 않은 요청입니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4006,
-                                                "message": "로그인이 필요합니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 설정 상태를 조회할 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4007,
-                                                "message": "해당 요청에 대한 권한이 없습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "존재하지 않은 유저에 대해 요청하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4001,
-                                                "message": "존재하지 않는 유저입니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "서버 오류",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 5000,
-                                                "message": "서버 오류입니다."
-                                            }
-                                            """
-                            )
-                    )
-            )
-    })
-    @GetMapping("/users/{userId}/settings")
-    public SuccessResponse getPersonalSettings(@PathVariable("userId") @Positive long userId) {
-        return settingService.getPersonalSettings(userId);
+    @Operation(summary = "개인 설정 상태 확인하기 API")
+    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true)
+    @GetMapping("/users/settings")
+    public SuccessResponse<Settings> getPersonalSettings(
+            @LoggedInUserId Long userId
+    ) {
+        Settings personalSettings = settingService.getPersonalSettings(userId);
+
+        return new SuccessResponse<>(personalSettings);
     }
 
     @Operation(
@@ -371,9 +274,12 @@ public class SettingController {
             )
     })
     @PatchMapping("/users/{userId}/settings/public-scope/public")
-    public SuccessResponse updateUserPublicScopeToPublic(
-            @PathVariable("userId") @Positive long userId) {
-        return settingService.updateUserPublicScope(userId, PUBLIC);
+    public SuccessResponse<Void> updateUserPublicScopeToPublic(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        settingService.updateUserPublicScope(userId, PUBLIC);
+
+        return new SuccessResponse<>();
     }
 
     @Operation(
@@ -485,8 +391,11 @@ public class SettingController {
             )
     })
     @PatchMapping("/users/{userId}/settings/public-scope/private")
-    public SuccessResponse updateUserPublicScopeToPrivate(
-            @PathVariable("userId") @Positive long userId) {
-        return settingService.updateUserPublicScope(userId, PRIVATE);
+    public SuccessResponse<Void> updateUserPublicScopeToPrivate(
+            @PathVariable("userId") @Positive long userId
+    ) {
+        settingService.updateUserPublicScope(userId, PRIVATE);
+
+        return new SuccessResponse<>();
     }
 }

@@ -30,13 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DebatePostController {
 
     private final PostFacadeTemplate debatePostFacade;
-    private final FanOutService fanOutService;
 
     @Operation(
-            summary = "토론 게시물 작성 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "토론 게시물 작성 API"
     )
-
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -46,11 +43,9 @@ public class DebatePostController {
                             schema = @Schema(implementation = SuccessResponse.class),
                             examples = @ExampleObject(
                                     value = """
-                                            {
-                                                "isSucces": true,
-                                                "code": 1000,
-                                                "message": "요청에 성공하였습니다."
-                                            }
+                                            "isSuccess": true,
+                                              "code": 1000,
+                                              "message": "요청에 성공하였습니다."
                                             """
                             )
                     )

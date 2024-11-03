@@ -80,7 +80,7 @@
     U.post_count,
     U.follower_count,
     U.following_count,
-    S.link_id,
+    S.social_account_id,
     S.link,
     L.icon_url,
     H.hashtag_id,
@@ -122,7 +122,7 @@
   </resultMap>
 
   <resultMap id="socialAccountResult" type="SocialAccountResponse">
-    <id property="socialAccountId" column="link_id"/>
+    <id property="socialAccountId" column="social_account_id"/>
     <result property="iconUrl" column="icon_url"/>
     <result property="socialAccountUrl" column="link"/>
   </resultMap>
