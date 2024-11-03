@@ -87,23 +87,6 @@ public class CommentLikeController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 댓글 좋아요를 요청하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4007,
-                                                "message": "해당 요청에 대한 권한이 없습니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않는 댓글에 좋아요를 요청한 경우",
                     content = @Content(
@@ -199,23 +182,6 @@ public class CommentLikeController {
                                                 "isSuccess": false,
                                                 "code": 4006,
                                                 "message": "로그인이 필요합니다."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "로그인한 유저가 타인의 ID로 댓글 좋아요 삭제를 요청하는 경우",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = FailResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                                "isSuccess": false,
-                                                "code": 4007,
-                                                "message": "해당 요청에 대한 권한이 없습니다."
                                             }
                                             """
                             )
