@@ -1,11 +1,13 @@
 package flab.project.domain.user.controller;
 
+import flab.project.config.baseresponse.FailResponse;
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.enums.ScreenMode;
 import flab.project.domain.user.model.Settings;
 import flab.project.domain.user.service.SettingService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -150,7 +152,6 @@ public class SettingController {
             HttpServletResponse httpServletResponse
     ) {
         settingService.updateScreenMode(userId, screenMode, httpServletResponse);
-
         return new SuccessResponse<>();
     }
 
@@ -161,7 +162,6 @@ public class SettingController {
             @LoggedInUserId Long userId
     ) {
         Settings personalSettings = settingService.getPersonalSettings(userId);
-
         return new SuccessResponse<>(personalSettings);
     }
 
@@ -278,7 +278,6 @@ public class SettingController {
             @PathVariable("userId") @Positive long userId
     ) {
         settingService.updateUserPublicScope(userId, PUBLIC);
-
         return new SuccessResponse<>();
     }
 
@@ -395,7 +394,6 @@ public class SettingController {
             @PathVariable("userId") @Positive long userId
     ) {
         settingService.updateUserPublicScope(userId, PRIVATE);
-
         return new SuccessResponse<>();
     }
 }
