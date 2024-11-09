@@ -27,14 +27,15 @@ public class NewsFeedService {
         // Todo 비활성화 유저 같은 경우는, NewsFeedCache에 데이터가 없을수도 있어요.
         // Todo 막 가입한 유저.
         try {
-            List<Long> postIds = newsFeedRedisUtil.getPostIds(userId);
+//            List<Long> postIds = newsFeedRedisUtil.getPostIds(userId);
+            List<Long> postIds = List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 100000001L);
             List<BasePost> posts = postService.lookAsidePosts(postIds, userId);
             List<Long> writerIds = extractWriterIds(posts);
             Map<Long, BasicUser> profileMap = generateProfileMap(writerIds);
 
             return posts.stream()
-                .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
-                .toList();
+                    .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
+                    .toList();
         } catch (Exception e) {
             return Collections.emptyList();
         }
@@ -48,10 +49,10 @@ public class NewsFeedService {
 
     private Map<Long, BasicUser> convertToProfileMap(Set<BasicUser> profiles) {
         return profiles.stream()
-            .collect(Collectors.toMap(
-                BasicUser::getUserId,
-                Function.identity()
-            ));
+                .collect(Collectors.toMap(
+                        BasicUser::getUserId,
+                        Function.identity()
+                ));
     }
 
     private List<Long> extractWriterIds(List<BasePost> feeds) {
