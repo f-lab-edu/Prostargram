@@ -142,7 +142,7 @@ public class CommentController {
             @PathVariable("postId") @Positive long postId,
             @LoggedInUserId Long userId,
             @RequestParam(required = false) @Positive Long parentId,
-            @RequestBody @NotBlank @Size(min = 1, max = 1000) String content
+            @RequestBody @NotBlank @Size(min = 1, max = 1000) @Schema(example = "예시 댓글입니다.") String content
     ) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
 
