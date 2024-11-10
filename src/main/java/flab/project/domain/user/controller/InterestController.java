@@ -31,7 +31,7 @@ public class InterestController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "관심사 추가 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
