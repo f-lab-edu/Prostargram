@@ -142,7 +142,7 @@ public class CommentController {
             @PathVariable("postId") @Positive long postId,
             @LoggedInUserId Long userId,
             @RequestParam(required = false) @Positive Long parentId,
-            @RequestBody @NotBlank @Size(min = 1, max = 1000) String content
+            @RequestBody @NotBlank @Size(min = 1, max = 1000) @Schema(example = "예시 댓글입니다.") String content
     ) {
         Comment comment = commentService.addComment(postId, userId, parentId, content);
 
@@ -150,7 +150,8 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 조회 API"
+            summary = "댓글 조회 API",
+            description = "(2024.11.10) 현재 대댓글 조회는 구현이 되어 있지 않습니다. 차후 추가할 예정입니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -280,7 +281,7 @@ public class CommentController {
             @PathVariable("postId") @Positive long postId,
             @LoggedInUserId Long userId,
             @RequestParam(required = false) @Positive Long lastCommentId,
-            @RequestParam(defaultValue = "10") @Positive @Max(10) long limit
+            @RequestParam(defaultValue = "10") @Positive @Max(10) @Schema(description = "한 페이지에 노출될 데이터 개수") long limit
     ) {
         List<CommentWithUser> comments = commentService.getComments(postId, userId, lastCommentId, limit);
 
