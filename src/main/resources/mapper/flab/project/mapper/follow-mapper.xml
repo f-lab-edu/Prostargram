@@ -45,12 +45,6 @@
         </choose>
     </select>
 
-    <select id="findAllFollowerIds" resultType="Long">
-        SELECT from_user_id
-        FROM FOLLOWS
-        WHERE to_user_id = #{userId};
-    </select>
-
     <insert id="addFollow" parameterType="Follows">
         INSERT INTO FOLLOWS(from_user_id, to_user_id)
         VALUES (#{followRequestDto.fromUserId}, #{followRequestDto.toUserId});
