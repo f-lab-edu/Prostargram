@@ -34,7 +34,7 @@ public class BasicPostController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "게시물 작성 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,

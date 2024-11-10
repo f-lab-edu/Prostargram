@@ -33,16 +33,18 @@ public class DebatePostController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "게시물 작성 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SuccessResponse.class),
                             examples = @ExampleObject(
                                     value = """
-                                            "isSuccess": true,
-                                              "code": 1000,
-                                              "message": "요청에 성공하였습니다."
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
                                             """
                             )
                     )

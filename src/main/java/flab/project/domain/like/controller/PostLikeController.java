@@ -33,7 +33,7 @@ public class PostLikeController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "게시물 좋아요 추가 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,

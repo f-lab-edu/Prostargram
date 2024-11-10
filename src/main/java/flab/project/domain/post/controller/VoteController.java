@@ -35,7 +35,7 @@ public class VoteController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "토론 게시물 투표 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -130,7 +130,7 @@ public class VoteController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "통계 게시물 투표 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
