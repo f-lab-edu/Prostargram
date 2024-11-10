@@ -3,7 +3,6 @@ package flab.project.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +26,7 @@ public class SwaggerConfig {
                                 .bearerFormat(HttpHeaders.AUTHORIZATION)
                                 .in(In.HEADER)
                                 .name(HttpHeaders.AUTHORIZATION)
-                        ))
-                        .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION));
+                        ));
         }
 
 }
