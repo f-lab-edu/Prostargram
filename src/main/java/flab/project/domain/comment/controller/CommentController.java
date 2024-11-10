@@ -281,7 +281,7 @@ public class CommentController {
             @PathVariable("postId") @Positive long postId,
             @LoggedInUserId Long userId,
             @RequestParam(required = false) @Positive Long lastCommentId,
-            @RequestParam(defaultValue = "10") @Positive @Max(10) long limit
+            @RequestParam(defaultValue = "10") @Positive @Max(10) @Schema(description = "한 페이지에 노출될 데이터 개수") long limit
     ) {
         List<CommentWithUser> comments = commentService.getComments(postId, userId, lastCommentId, limit);
 
