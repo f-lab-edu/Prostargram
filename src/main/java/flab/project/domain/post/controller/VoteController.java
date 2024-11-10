@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +31,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @Operation(
-            summary = "토론 게시물 투표하기 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "토론 게시물 투표하기 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -128,8 +126,7 @@ public class VoteController {
     }
 
     @Operation(
-            summary = "통계 게시물 투표 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "통계 게시물 투표 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -220,7 +217,11 @@ public class VoteController {
     }
     )
     @PostMapping(value = "/posts/{postId}/votes/poll")
-    public SuccessResponse addPollPostVote(@PathVariable("postId") @Positive long postId, @RequestParam("optionIds") Set<@Positive Long> optionIds, @RequestParam("userId") @Positive long userId) {
+    public SuccessResponse addPollPostVote(
+            @PathVariable("postId") @Positive long postId,
+            @RequestParam("optionIds") Set<@Positive Long> optionIds,
+            @RequestParam("userId") @Positive long userId
+    ) {
         return voteService.addPostVote(postId, optionIds, userId, PostType.POLL);
     }
 }
