@@ -28,5 +28,4 @@ public class SwaggerConfig {
                                 .name(HttpHeaders.AUTHORIZATION)
                         ));
         }
-
 }
