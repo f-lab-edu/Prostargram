@@ -150,7 +150,8 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 조회 API"
+            summary = "댓글 조회 API",
+            description = "(2024.11.10) 현재 대댓글 조회는 구현이 되어 있지 않습니다. 차후 추가할 예정입니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
