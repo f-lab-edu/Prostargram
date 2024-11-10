@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,8 +49,7 @@ public class SocialAccountController {
     }
 
     @Operation(
-            summary = "소셜 계정 추가 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "소셜 계정 추가 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -120,8 +118,7 @@ public class SocialAccountController {
     }
 
     @Operation(
-            summary = "소셜 계정 삭제 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "소셜 계정 삭제 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -35,8 +34,7 @@ public class FollowController {
     private final FollowService followService;
 
     @Operation(
-            summary = "팔로워 목록 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "팔로워 목록 조회 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -150,8 +148,7 @@ public class FollowController {
     }
 
     @Operation(
-            summary = "팔로잉 목록 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "팔로잉 목록 조회 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -274,7 +271,6 @@ public class FollowController {
 
     @Operation(
             summary = "팔로워/팔로잉 조회 API",
-            security = @SecurityRequirement(name = "bearer-key"),
             description = "메인 페이지의 피드의 스토리 위치에 표시되는 팔로워/팔로잉 목록을 위해 사용된다."
     )
     @ApiResponses(value = {
@@ -397,8 +393,7 @@ public class FollowController {
     }
 
     @Operation(
-            summary = "팔로워/팔로잉 생성 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "팔로워/팔로잉 생성 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -519,8 +514,7 @@ public class FollowController {
 
 
     @Operation(
-            summary = "팔로워/팔로잉 삭제 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "팔로워/팔로잉 삭제 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

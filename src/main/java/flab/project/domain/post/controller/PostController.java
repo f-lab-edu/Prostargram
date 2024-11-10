@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,7 @@ public class PostController {
     private final PostService postService;
 
     @Operation(
-            summary = "일반 게시물 상세 보기 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "일반 게시물 상세 보기 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -149,7 +147,9 @@ public class PostController {
         return postService.getPostDetail(postId, userId, PostType.BASIC);
     }
 
-    @Operation(summary = "토론 게시물 상세 보기 API")
+    @Operation(
+            summary = "토론 게시물 상세 보기 API"
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -281,8 +281,7 @@ public class PostController {
     }
 
     @Operation(
-            summary = "통계 게시물 상세 보기 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "통계 게시물 상세 보기 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

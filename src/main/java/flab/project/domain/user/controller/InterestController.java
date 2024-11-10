@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -28,8 +27,7 @@ public class InterestController {
     private final InterestFacade interestFacade;
 
     @Operation(
-            summary = "관심사 추가 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "관심사 추가 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -110,8 +108,7 @@ public class InterestController {
     }
 
     @Operation(
-            summary = "관심사 삭제 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "관심사 삭제 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,7 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @Operation(
-            summary = "댓글 좋아요 추가 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "댓글 좋아요 추가 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -132,8 +130,7 @@ public class CommentLikeController {
     }
 
     @Operation(
-            summary = "댓글 좋아요 취소 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "댓글 좋아요 취소 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

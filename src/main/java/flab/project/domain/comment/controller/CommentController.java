@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -34,8 +33,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(
-            summary = "댓글 작성 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "댓글 작성 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -152,8 +150,7 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "댓글 조회 API"
     )
     @ApiResponses(value = {
             @ApiResponse(

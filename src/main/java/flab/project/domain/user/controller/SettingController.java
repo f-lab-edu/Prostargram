@@ -7,13 +7,11 @@ import flab.project.domain.user.enums.ScreenMode;
 import flab.project.domain.user.model.Settings;
 import flab.project.domain.user.service.SettingService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Positive;
@@ -38,8 +36,7 @@ public class SettingController {
     private final SettingService settingService;
 
     @Operation(
-            summary = "라이트/다크 모드 변경 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "라이트/다크 모드 변경 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -155,8 +152,9 @@ public class SettingController {
         return new SuccessResponse<>();
     }
 
-    @Operation(summary = "개인 설정 상태 확인하기 API")
-    @Parameter(name = "userId", description = "설정 상태를 확인하고자 하는 유저의 id", required = true)
+    @Operation(
+            summary = "개인 설정 상태 확인하기 API"
+    )
     @GetMapping("/users/settings")
     public SuccessResponse<Settings> getPersonalSettings(
             @LoggedInUserId Long userId
@@ -166,8 +164,7 @@ public class SettingController {
     }
 
     @Operation(
-            summary = "계정 공개 범위(Public) 변경 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "계정 공개 범위(Public) 변경 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -282,8 +279,7 @@ public class SettingController {
     }
 
     @Operation(
-            summary = "계정 공개 범위(Private) 변경 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "계정 공개 범위(Private) 변경 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
