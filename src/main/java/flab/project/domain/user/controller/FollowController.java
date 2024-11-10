@@ -397,7 +397,7 @@ public class FollowController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "팔로워/팔로잉 추가 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
