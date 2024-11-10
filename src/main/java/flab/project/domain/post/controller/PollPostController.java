@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -30,8 +29,7 @@ public class PollPostController {
     private final PostFacadeTemplate pollPostFacade;
 
     @Operation(
-            summary = "통계 게시물 작성 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "통계 게시물 작성 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
