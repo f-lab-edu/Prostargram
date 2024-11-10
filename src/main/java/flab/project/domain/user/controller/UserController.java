@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +37,7 @@ public class UserController {
     private final UserFacade userFacade;
 
     @Operation(
-            summary = "프로필 수정 페이지 정보 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "프로필 수정 페이지 정보 조회 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -158,8 +156,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "프로필 페이지 정보 조회 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "프로필 페이지 정보 조회 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -258,8 +255,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "프로필 수정 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "프로필 수정 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
