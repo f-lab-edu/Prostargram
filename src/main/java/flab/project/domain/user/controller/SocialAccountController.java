@@ -53,7 +53,7 @@ public class SocialAccountController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "소셜 계정 추가 성공",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
