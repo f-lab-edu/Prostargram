@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,7 @@ public class PostLikeController {
     private final PostLikeService postLikeService;
 
     @Operation(
-            summary = "게시물 좋아요 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "게시물 좋아요 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -129,8 +127,7 @@ public class PostLikeController {
     }
 
     @Operation(
-            summary = "게시물 좋아요 취소 API",
-            security = @SecurityRequirement(name = "bearer-key")
+            summary = "게시물 좋아요 취소 API"
     )
     @ApiResponses(value = {
             @ApiResponse(
