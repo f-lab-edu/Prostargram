@@ -27,8 +27,11 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.stream.Collectors;
 
-@Tag(name = "회원가입 API", description = "회원가입 과정에서 사용되는 API</br>" +
-        "[회원가입 전체로직](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)은 링크를 참고하시길 바랍니다.")
+@Tag(
+        name = "회원가입 API",
+        description = "회원가입 과정에서 사용되는 API</br>" +
+                "[회원가입 전체로직](https://github.com/f-lab-edu/Prostargram/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%A0%84%EC%B2%B4-%EB%A1%9C%EC%A7%81)은 링크를 참고하시길 바랍니다."
+)
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -62,14 +65,11 @@ public class VerificationController {
         return new FailResponse(exceptionMessage, 4000);
     }
 
-    @Operation(summary = "인증코드 전송 API", description = "인증코드 전송 API이다.</br>" +
+    @Operation(
+            summary = "인증코드 전송 API",
+            description = "인증코드 전송 API이다.</br>" +
             "유저가 전달한 email로 이메일 인증코드가 전달되며 해당 인증코드는 **인증코드 검증 API**에서 사용된다.</br>" +
-            "Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EC%BD%94%EB%93%9C-%EC%A0%84%EC%86%A1-API)")
-    @PostMapping(value = "/verification/email")
-    @Parameter(
-            name = "email",
-            required = true,
-            description = "인증 코드가 보내질 이메일"
+                    "Reference: [참고 문서](https://github.com/f-lab-edu/Prostargram/wiki/%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EC%BD%94%EB%93%9C-%EC%A0%84%EC%86%A1-API)"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -118,6 +118,7 @@ public class VerificationController {
                     )
             ),
     })
+    @PostMapping(value = "/verification/email")
     public SuccessResponse<Void> sendVerificationCode(
             @RequestParam("email")
             @Email(message = "올바른 이메일 형식이여야 합니다.")
