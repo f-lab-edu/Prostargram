@@ -1,5 +1,7 @@
 package flab.project.domain.feed.service;
 
+import flab.project.common.model.PaginationModel;
+import flab.project.domain.feed.model.PostIdsAndHasNext;
 import flab.project.domain.post.model.PostWithUser;
 import flab.project.domain.post.model.BasePost;
 import flab.project.domain.user.model.BasicUser;
@@ -23,20 +25,22 @@ public class NewsFeedService {
     private final PostService postService;
     private final NewsFeedRedisUtil newsFeedRedisUtil;
 
-    public List<PostWithUser> getFeeds(long userId) {
+    public PaginationModel<List<PostWithUser>> getFeeds(long userId) {
         // Todo 비활성화 유저 같은 경우는, NewsFeedCache에 데이터가 없을수도 있어요.
         // Todo 막 가입한 유저.
         try {
-            List<Long> postIds = newsFeedRedisUtil.getPostIds(userId);
-            List<BasePost> posts = postService.lookAsidePosts(postIds, userId);
+            PostIdsAndHasNext postIdsAndHasNext = newsFeedRedisUtil.getPostIds(userId);
+
+            List<BasePost> posts = postService.lookAsidePosts(postIdsAndHasNext.getPostIds(), userId);
             List<Long> writerIds = extractWriterIds(posts);
             Map<Long, BasicUser> profileMap = generateProfileMap(writerIds);
+            List<PostWithUser> feeds = posts.stream()
+                    .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
+                    .toList();
 
-            return posts.stream()
-                .map(post -> new PostWithUser(post, profileMap.get(post.getUserId())))
-                .toList();
+            return new PaginationModel<>(feeds, postIdsAndHasNext.hasNext());
         } catch (Exception e) {
-            return Collections.emptyList();
+            return new PaginationModel<>(Collections.emptyList(), false);
         }
     }
 
@@ -48,10 +52,10 @@ public class NewsFeedService {
 
     private Map<Long, BasicUser> convertToProfileMap(Set<BasicUser> profiles) {
         return profiles.stream()
-            .collect(Collectors.toMap(
-                BasicUser::getUserId,
-                Function.identity()
-            ));
+                .collect(Collectors.toMap(
+                        BasicUser::getUserId,
+                        Function.identity()
+                ));
     }
 
     private List<Long> extractWriterIds(List<BasePost> feeds) {

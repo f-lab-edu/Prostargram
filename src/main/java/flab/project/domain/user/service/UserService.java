@@ -11,8 +11,10 @@ import flab.project.utils.UserRedisUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,7 @@ public class UserService {
     public Set<BasicUser> getUsersByUserIds(List<Long> userIds) {
         Set<BasicUser> users = getUsersFromRedis(userIds);
 
-        Set<Long> userIdsNotInRedis = extractUserIdsNotInRedis(new ArrayList<>(users), userIds);
+        Set<Long> userIdsNotInRedis = extractUserIdsNotInRedis(users, userIds);
         if (!userIdsNotInRedis.isEmpty()) {
             List<Profile> usersNotInRedis = new ArrayList<>(userMapper.findWhereUserIdIn(userIdsNotInRedis));
 
@@ -71,13 +73,20 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Long> extractUserIdsNotInRedis(List<BasicUser> users, List<Long> userIds) {
+    private Set<Long> extractUserIdsNotInRedis(Set<BasicUser> users, List<Long> userIds) {
+        Map<Long, BasicUser> usersMap = users.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(
+                        BasicUser::getUserId,
+                        Function.identity()
+                ));
+
         Set<Long> userIdsNotInRedis = new HashSet<>();
 
-        for (int index = 0; index < users.size(); index++) {
-            BasicUser profile = users.get(index);
-            if (profile == null) {
-                userIdsNotInRedis.add(userIds.get(index));
+        for (Long userId : userIds) {
+            boolean isInRedis = usersMap.containsKey(userId);
+            if (!isInRedis) {
+                userIdsNotInRedis.add(userId);
             }
         }
 
