@@ -24,4 +24,32 @@
     WHERE post_id = #{postId}
       and user_id = #{userId};
   </select>
+
+  <select id="getPostsHavingLike" resultType="java.lang.Long">
+    SELECT
+        post_id
+    FROM POST_LIKE
+    WHERE post_id in
+    <foreach item="postId" collection="postIds" open="(" separator="," close=")">
+      #{postId}
+    </foreach>
+    and user_id = #{userId}
+  </select>
+
+  <select id="getPostLikeCount" resultMap="PostLike">
+    SELECT
+        post_id,
+        like_count
+    FROM post
+    WHERE post_id IN
+    <foreach collection="postIds" item="postId" open="(" separator="," close=")">
+      #{postId}
+    </foreach>
+  </select>
+
+  <resultMap id="PostLike" type="PostLike">
+    <id property="postId" column="post_id"/>
+    <result property="likeCount" column="like_count"/>
+  </resultMap>
+
 </mapper>

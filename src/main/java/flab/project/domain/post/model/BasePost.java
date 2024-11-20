@@ -72,4 +72,16 @@ public abstract class BasePost {
         this.isLike = isLike;
         this.isFollow = isFollow;
     }
+
+    public void setLike(boolean isLike) {
+        this.isLike = isLike;
+    }
+
+    public void setFollow(boolean isFollow){
+        this.isFollow = isFollow;
+    }
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
 }

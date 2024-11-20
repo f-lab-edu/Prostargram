@@ -128,4 +128,23 @@ class FollowMapperTest {
         List<User> followings = followMapper.findAll(1L, GetFollowsType.FOLLOWINGS);
         assertThat(followings).extracting(BasicUser::getUserId).isEmpty();
     }
+
+    @DisplayName("팔로우된 게시물 목록을 가져온다.")
+    @Test
+    void getPostsHavingFollow() {
+        // given
+        Follows follows = Follows.builder()
+                .fromUserId(1L)
+                .toUserId(2L)
+                .build();
+
+        followMapper.addFollow(follows);
+
+        // when
+        followMapper.deleteFollow(follows);
+
+        // then
+        List<User> followings = followMapper.findAll(1L, GetFollowsType.FOLLOWINGS);
+        assertThat(followings).extracting(BasicUser::getUserId).isEmpty();
+    }
 }

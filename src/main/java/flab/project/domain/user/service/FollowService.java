@@ -8,6 +8,9 @@ import flab.project.domain.user.mapper.FollowMapper;
 
 import java.util.List;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +49,15 @@ public class FollowService {
         if (follows.getFromUserId() == follows.getToUserId()) {
             throw new InvalidUserInputException("fromUserId와 toUserId는 같을 수 없습니다.");
         }
+    }
+
+    public Map<Long, Boolean> isFollows(List<Long> postIds, long userId) {
+        Set<Long> postsHavingLike = followMapper.getPostsHavingFollow(postIds, userId);
+
+        return postIds.stream()
+                .collect(Collectors.toMap(
+                        postId -> postId,
+                        postsHavingLike::contains
+                ));
     }
 }

@@ -2,10 +2,13 @@ package flab.project.domain.post.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
+import flab.project.domain.like.model.PostLike;
+import flab.project.domain.like.service.PostLikeService;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.*;
 import flab.project.domain.post.mapper.PostMapper;
 import flab.project.domain.user.model.BasicUser;
+import flab.project.domain.user.service.FollowService;
 import flab.project.utils.PostRedisUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,8 @@ public class PostService {
 
     private final PostMapper postMapper;
     private final UserMapper userMapper;
+    private final PostLikeService postLikeService;
+    private final FollowService followService;
     private final PostRedisUtil postRedisUtil;
 
     public void addPost(long userId, AddPostRequest post) {
@@ -59,7 +64,39 @@ public class PostService {
             posts.addAll(postsNotInRedis);
         }
 
-        return posts.stream().filter(Objects::nonNull).toList();
+        posts = posts.stream().filter(Objects::nonNull).toList();
+
+        setPostLike(postIds, userId, posts);
+        setIsFollow(postIds, userId, posts);
+        setPostLikeCount(postIds, posts);
+
+        return posts;
+    }
+
+    private void setIsFollow(List<Long> postIds, long userId, List<BasePost> posts) {
+        Map<Long, Boolean> postIdFollowMap = followService.isFollows(postIds, userId);
+
+        for (BasePost post : posts) {
+            Boolean isFollow = postIdFollowMap.get(post.getPostId());
+            post.setFollow(isFollow);
+        }
+    }
+
+    private void setPostLike(List<Long> postIds, long userId, List<BasePost> posts) {
+        Map<Long, Boolean> postIdLikeMap = postLikeService.hasPostLike(postIds, userId);
+        for (BasePost post : posts) {
+            Boolean isLike = postIdLikeMap.get(post.getPostId());
+            post.setLike(isLike);
+        }
+    }
+
+    private void setPostLikeCount(List<Long> postIds, List<BasePost> posts) {
+        Map<Long,Long> postLikeCountMap = postLikeService.getPostLikeCount(postIds);
+
+        for (BasePost post : posts) {
+            Long likeCount = postLikeCountMap.get(post.getPostId());
+            post.setLikeCount(likeCount);
+        }
     }
 
     private List<Long> extractPostIdsNotInRedis(List<BasePost> feeds, List<Long> postIds) {
@@ -75,29 +112,29 @@ public class PostService {
         return postIdsNotInRedis;
     }
 
-    private List<BasePost> getPostsFromDb(long userId,  List<Long> postIdsNotInRedis) {
+    private List<BasePost> getPostsFromDb(long userId, List<Long> postIdsNotInRedis) {
         Map<Long, PostType> postIdPostTypeMap = generatePostIdPostTypeMap(postIdsNotInRedis);
 
         List<BasicPost> basicPosts = getBasicPostsFromDb(userId, postIdPostTypeMap);
         List<DebatePost> debatePosts = getDebatePostsFromDb(userId, postIdPostTypeMap);
 
         return Stream.concat(basicPosts.stream(), debatePosts.stream())
-            .toList();
+                .toList();
     }
 
     private Map<Long, PostType> generatePostIdPostTypeMap(List<Long> postIdsNotInRedis) {
         List<PostTypeModel> postTypeModels = postMapper.findTypeByPostIds(postIdsNotInRedis);
 
         return postTypeModels.stream()
-            .collect(Collectors.toMap(
-                PostTypeModel::getPostId,
-                PostTypeModel::getPostType
-            ));
+                .collect(Collectors.toMap(
+                        PostTypeModel::getPostId,
+                        PostTypeModel::getPostType
+                ));
     }
 
     private List<BasicPost> getBasicPostsFromDb(long userId, Map<Long, PostType> postIdPostTypeMap) {
         List<Long> basicPostIds = extractBasicPostIds(postIdPostTypeMap);
-        if(basicPostIds.isEmpty()){
+        if (basicPostIds.isEmpty()) {
             return List.of();
         }
 
@@ -106,7 +143,7 @@ public class PostService {
 
     private List<DebatePost> getDebatePostsFromDb(long userId, Map<Long, PostType> postIdPostTypeMap) {
         List<Long> debatePostIds = extractDebatePostIds(postIdPostTypeMap);
-        if(debatePostIds.isEmpty()){
+        if (debatePostIds.isEmpty()) {
             return List.of();
         }
 
@@ -115,18 +152,18 @@ public class PostService {
 
     private List<Long> extractDebatePostIds(Map<Long, PostType> postIdPostTypeMap) {
         return postIdPostTypeMap
-            .keySet()
-            .stream()
-            .filter(postId -> postIdPostTypeMap.get(postId) == PostType.DEBATE)
-            .toList();
+                .keySet()
+                .stream()
+                .filter(postId -> postIdPostTypeMap.get(postId) == PostType.DEBATE)
+                .toList();
     }
 
     private List<Long> extractBasicPostIds(Map<Long, PostType> postIdPostTypeMap) {
         return postIdPostTypeMap
-            .keySet()
-            .stream()
-            .filter(postId -> postIdPostTypeMap.get(postId) == PostType.BASIC)
-            .toList();
+                .keySet()
+                .stream()
+                .filter(postId -> postIdPostTypeMap.get(postId) == PostType.BASIC)
+                .toList();
     }
 
     private void validateGetPostDetail(long postId, long userId) {

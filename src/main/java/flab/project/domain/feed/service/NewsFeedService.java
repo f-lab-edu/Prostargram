@@ -2,10 +2,12 @@ package flab.project.domain.feed.service;
 
 import flab.project.common.model.PaginationModel;
 import flab.project.domain.feed.model.PostIdsAndHasNext;
+import flab.project.domain.like.service.PostLikeService;
 import flab.project.domain.post.model.PostWithUser;
 import flab.project.domain.post.model.BasePost;
 import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.post.service.PostService;
+import flab.project.domain.user.service.FollowService;
 import flab.project.domain.user.service.UserService;
 import flab.project.utils.NewsFeedRedisUtil;
 import java.util.Collections;
@@ -23,6 +25,8 @@ public class NewsFeedService {
 
     private final UserService userService;
     private final PostService postService;
+    private final PostLikeService postLikeService;
+    private final FollowService followService;
     private final NewsFeedRedisUtil newsFeedRedisUtil;
 
     public PaginationModel<List<PostWithUser>> getFeeds(long userId) {
@@ -30,8 +34,8 @@ public class NewsFeedService {
         // Todo 막 가입한 유저.
         try {
             PostIdsAndHasNext postIdsAndHasNext = newsFeedRedisUtil.getPostIds(userId);
-
             List<BasePost> posts = postService.lookAsidePosts(postIdsAndHasNext.getPostIds(), userId);
+
             List<Long> writerIds = extractWriterIds(posts);
             Map<Long, BasicUser> profileMap = generateProfileMap(writerIds);
             List<PostWithUser> feeds = posts.stream()
