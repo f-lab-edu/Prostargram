@@ -25,6 +25,7 @@ public class PostLikeService {
     public SuccessResponse<Void> addPostLike(long postId, long userId) {
         checkPostIdAndUserId(postId, userId);
         postLikeMapper.addPostLike(postId, userId);
+        postMapper.addPostLike(postId);
 
         return new SuccessResponse<>();
     }
@@ -42,6 +43,8 @@ public class PostLikeService {
         }
 
         postLikeMapper.cancelLike(postId, userId);
+        postMapper.cancelLike(postId);
+
         return new SuccessResponse<>();
     }
 
