@@ -2,6 +2,7 @@ package flab.project.domain.user.controller;
 
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.domain.user.exception.ExistedAccountException;
 import flab.project.domain.user.exception.InvalidEmailTokenException;
 import flab.project.domain.user.exception.InvalidUsernameTokenException;
 import flab.project.domain.user.model.SignUp;
@@ -42,6 +43,14 @@ public class SignUpController {
             .stream()
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .collect(Collectors.joining());
+
+        return new FailResponse(exceptionMessage, 4000);
+    }
+
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(ExistedAccountException.class)
+    public FailResponse handleExistedAccountException(ExistedAccountException exception) {
+        String exceptionMessage = exception.getMessage();
 
         return new FailResponse(exceptionMessage, 4000);
     }

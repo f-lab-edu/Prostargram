@@ -1,7 +1,9 @@
 package flab.project.domain.user.service;
 
+import flab.project.domain.user.exception.ExistedAccountException;
 import flab.project.domain.user.exception.InvalidEmailTokenException;
 import flab.project.domain.user.exception.InvalidUsernameTokenException;
+import flab.project.domain.user.mapper.UserMapper;
 import flab.project.domain.user.model.SignUp;
 import flab.project.domain.user.enums.LoginType;
 import flab.project.domain.user.mapper.SignUpMapper;
@@ -17,6 +19,7 @@ public class SignUpService {
 
     public static final int TOKEN_LENGTH = 7;
     private final SignUpMapper signUpMapper;
+    private final UserMapper userMapper;
     private final SignUpRedisUtil signUpRedisUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -29,6 +32,7 @@ public class SignUpService {
         String encodedPassword = passwordEncoder.encode(password);
 
         validateToken(email, emailToken, userName, usernameToken);
+        validateRegisteredEmail(email);
 
         signUpMapper.addUser(email, userName, encodedPassword, LoginType.NORMAL);
     }
@@ -37,6 +41,14 @@ public class SignUpService {
         validateTokenSize(emailToken, usernameToken);
         validateEmailToken(email, emailToken);
         validateUsernameToken(userName, usernameToken);
+    }
+
+    private void validateRegisteredEmail(String email) {
+        boolean existsEmail = userMapper.existsByEmail(email);
+
+        if (existsEmail) {
+            throw new ExistedAccountException();
+        }
     }
 
     private void validateTokenSize(String emailToken, String usernameToken) {
