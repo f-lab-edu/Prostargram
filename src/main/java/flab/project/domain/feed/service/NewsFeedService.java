@@ -43,7 +43,6 @@ public class NewsFeedService {
 
             return new PaginationModel<>(feeds, postIdsAndHasNext.hasNext());
         } catch (Exception e) {
-            e.printStackTrace();
             return new PaginationModel<>(Collections.emptyList(), false);
         }
     }
