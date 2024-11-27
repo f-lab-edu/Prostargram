@@ -15,4 +15,8 @@ public class PostIdsAndHasNext {
     public boolean hasNext() {
         return hasNext;
     }
+
+    public boolean isEmpty(){
+        return postIds.isEmpty();
+    }
 }
