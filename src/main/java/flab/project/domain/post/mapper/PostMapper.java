@@ -28,4 +28,8 @@ public interface PostMapper {
     List<PostTypeModel> findTypeByPostIds(@Param("postIds") List<Long> postIds);
 
     boolean existsById(long postId);
+
+    void addPostLike(@Param("postId") long postId);
+
+    void cancelLike(@Param("postId") long postId);
 }

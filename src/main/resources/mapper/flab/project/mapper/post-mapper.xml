@@ -168,6 +168,18 @@
     </foreach>
   </select>
 
+  <update id="addPostLike">
+    UPDATE post
+    SET like_count = like_count + 1
+    WHERE post_id = #{postId}
+  </update>
+
+  <update id="cancelLike">
+    UPDATE post
+    SET like_count = like_count - 1
+    WHERE post_id = #{postId}
+  </update>
+
   <resultMap id="PostTypeModel" type="PostTypeModel">
     <id property="postId" column="post_id"/>
     <result property="postType" column="postType"/>

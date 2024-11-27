@@ -52,9 +52,6 @@ class SettingControllerTest {
         long userId = 1L;
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
-        given(settingService.updateScreenMode(anyLong(), any(ScreenMode.class), any(HttpServletResponse.class)))
-                .willReturn(new SuccessResponse());
-
         // when & then
         mockMvc.perform(
                         patch(UPDATE_SCREEN_MODE_URL, userId)
@@ -133,9 +130,6 @@ class SettingControllerTest {
         // given
         long userId = 1L;
 
-        given(settingService.getPersonalSettings(userId))
-                .willReturn(new SuccessResponse());
-
         // when & then
         mockMvc.perform(
                         get(GET_PERSONAL_SETTINGS_URL, userId)
@@ -184,9 +178,6 @@ class SettingControllerTest {
     void updateUserPublicScopeToPublic() throws Exception {
         // given
         long userId = 1;
-
-        given(settingService.updateUserPublicScope(userId, PUBLIC))
-                .willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(
@@ -241,9 +232,6 @@ class SettingControllerTest {
     void updateUserPublicScopeToPrivate() throws Exception {
         // given
         long userId = 1;
-
-        given(settingService.updateUserPublicScope(userId, PRIVATE))
-                .willReturn(new SuccessResponse());
 
         // when & then
         mockMvc.perform(
