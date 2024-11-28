@@ -168,6 +168,13 @@
     </foreach>
   </select>
 
+  <select id="getWriter" resultType="long">
+    SELECT user_id
+    FROM POST
+    WHERE post_id = #{postId}
+  </select>
+
+
   <update id="addPostLike">
     UPDATE post
     SET like_count = like_count + 1
@@ -179,6 +186,11 @@
     SET like_count = like_count - 1
     WHERE post_id = #{postId}
   </update>
+
+  <delete id="delete">
+    DELETE FROM post
+    WHERE post_id = #{postId}
+  </delete>
 
   <resultMap id="PostTypeModel" type="PostTypeModel">
     <id property="postId" column="post_id"/>

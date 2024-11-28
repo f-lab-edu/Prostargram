@@ -1,8 +1,8 @@
 package flab.project.domain.post.service;
 
+import flab.project.config.exception.ForbiddenAccessException;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
-import flab.project.domain.like.model.PostLike;
 import flab.project.domain.like.service.PostLikeService;
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.*;
@@ -189,5 +189,15 @@ public class PostService {
             case POLL -> postMapper.getPollPostDetail(postId, userId);
             case DEBATE -> postMapper.getDebatePostDetail(postId, userId);
         };
+    }
+
+    public void deletePost(long userId, long postId) {
+        long writerId = postMapper.getWriter(postId);
+        if (writerId != userId) {
+            throw new ForbiddenAccessException();
+        }
+
+        postMapper.delete(postId);
+        postRedisUtil.delete(postId);
     }
 }

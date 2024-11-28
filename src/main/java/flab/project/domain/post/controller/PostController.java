@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -376,5 +377,15 @@ public class PostController {
             @PathVariable("postId") @Positive long postId
     ) {
         return postService.getPostDetail(postId, userId, PostType.POLL);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public SuccessResponse<Void> deletePost(
+            @LoggedInUserId Long userId,
+            @PathVariable("postId") @Positive long postId
+    ) {
+        postService.deletePost(userId, postId);
+
+        return new SuccessResponse<>();
     }
 }

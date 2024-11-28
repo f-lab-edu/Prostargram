@@ -32,4 +32,8 @@ public interface PostMapper {
     void addPostLike(@Param("postId") long postId);
 
     void cancelLike(@Param("postId") long postId);
+
+    long getWriter(@Param("postId") long postId);
+
+    void delete(@Param("postId") long postId);
 }
