@@ -35,4 +35,8 @@ public class PostRedisUtil {
             return null;
         });
     }
+
+    public void delete(long postId) {
+        postRedisTemplate.delete(postId);
+    }
 }
