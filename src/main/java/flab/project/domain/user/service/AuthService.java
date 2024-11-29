@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,8 +31,10 @@ public class AuthService {
     }
 
     private Authentication saveSecurityContext(FormLoginRequest formLoginRequest) {
-        final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(formLoginRequest.getEmail(), formLoginRequest.getPassword());
-        final Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                formLoginRequest.getEmail(), formLoginRequest.getPassword());
+        final Authentication authentication = authenticationManagerBuilder.getObject()
+                .authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return authentication;
@@ -40,11 +43,18 @@ public class AuthService {
     private TokenDto createLoginResponse(Authentication authentication) {
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
+        long userId = extractUserId(authentication);
 
         return TokenDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .userId(userId)
                 .build();
+    }
+
+    private long extractUserId(Authentication authentication) {
+        User principal = (User) authentication.getPrincipal();
+        return Long.parseLong(principal.getUsername());
     }
 
     public TokenDto reissue(Long userId, Authentication authentication) {
@@ -56,6 +66,7 @@ public class AuthService {
         return TokenDto.builder()
                 .accessToken(createdAccessToken)
                 .refreshToken(createdRefreshToken)
+                .userId(userId)
                 .build();
     }
 
