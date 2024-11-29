@@ -19,4 +19,10 @@ public class TokenDto {
             example = "eyJhbGciOiJIUzUxMiJ9..."
     )
     private final String refreshToken;
+
+    @Schema(
+            description = "유저 아이디",
+            example = "1"
+    )
+    private final long userId;
 }
