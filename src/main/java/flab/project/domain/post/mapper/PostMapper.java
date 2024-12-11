@@ -2,11 +2,13 @@ package flab.project.domain.post.mapper;
 
 import flab.project.domain.post.model.AddPostRequest;
 import flab.project.domain.post.model.BasicPost;
+import flab.project.domain.post.model.CommentCount;
 import flab.project.domain.post.model.DebatePost;
 import flab.project.domain.post.model.PollPost;
 import flab.project.domain.post.model.PostTypeModel;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +25,8 @@ public interface PostMapper {
 
     List<BasicPost> getBasicPostsWhereIn(@Param("basicPostIds") List<Long> basicPostIds, @Param("userId") long userId);
 
-    List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds, @Param("userId") long userId);
+    List<DebatePost> getDebatePostsWhereIn(@Param("debatePostIds") List<Long> debatePostIds,
+            @Param("userId") long userId);
 
     List<PostTypeModel> findTypeByPostIds(@Param("postIds") List<Long> postIds);
 
@@ -36,4 +39,8 @@ public interface PostMapper {
     long getWriter(@Param("postId") long postId);
 
     void delete(@Param("postId") long postId);
+
+    List<CommentCount> getCommentCount(@Param("postIds") List<Long> postIds);
+
+    void addComment(@Param("postId") long postId);
 }

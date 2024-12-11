@@ -4,11 +4,13 @@ import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.mapper.CommentMapper;
 import flab.project.domain.comment.model.CommentWithUser;
+import flab.project.domain.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +19,9 @@ public class CommentService {
     private static final int MAX_LIMIT = 10;
 
     private final CommentMapper commentMapper;
+    private final PostMapper postMapper;
 
+    @Transactional
     public Comment addComment(long postId, long userId, Long parentId, String content) {
         validateComment(postId, parentId, content);
 
@@ -29,6 +33,7 @@ public class CommentService {
                 .build();
 
         commentMapper.addComment(comment);
+        postMapper.addComment(postId);
 
         return comment;
     }
