@@ -18,4 +18,6 @@ public interface FollowMapper {
     void deleteFollow(@Param("followRequestDto") Follows follows);
 
     Set<Long> getPostsHavingFollow(List<Long> postIds, long userId);
+
+    boolean findByFromUserIdAndToUserId(@Param("follows") Follows follows);
 }

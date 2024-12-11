@@ -3,6 +3,8 @@ package flab.project.domain.user.controller;
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.domain.user.exception.AlreadyFollowException;
+import flab.project.domain.user.exception.NotFollowException;
 import flab.project.domain.user.model.Follows;
 import flab.project.domain.user.model.User;
 import flab.project.domain.user.enums.GetFollowsType;
@@ -16,9 +18,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +38,15 @@ import static flab.project.utils.AccessManagementUtil.assertUserIdOwner;
 public class FollowController {
 
     private final FollowService followService;
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            AlreadyFollowException.class,
+            NotFollowException.class
+    })
+    public FailResponse handleConstraintViolationException(Exception exception) {
+        return new FailResponse(exception.getMessage(), 4000);
+    }
 
     @Operation(
             summary = "팔로워 목록 조회 API"
@@ -558,6 +573,7 @@ public class FollowController {
             @PathVariable("userId") @Positive long userIdPathVariable,
             @Valid @RequestBody Follows follows
     ) {
+        System.out.println("무저ㅣ??");
         assertUserIdOwner(loggedUserId, userIdPathVariable);
 
         followService.deleteFollow(follows);
