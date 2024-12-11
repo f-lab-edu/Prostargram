@@ -44,7 +44,7 @@
         <result property="postId" column="post_id"/>
         <result property="userId" column="user_id"/>
         <result property="parentId" column="parent_id"/>
-        <result property="content" column="comment_id"/>
+        <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
         <result property="likeCount" column="like_count"/>
         <result property="childrenCount" column="children_count"/>
