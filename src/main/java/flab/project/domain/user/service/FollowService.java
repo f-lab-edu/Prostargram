@@ -1,6 +1,7 @@
 package flab.project.domain.user.service;
 
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.user.exception.AlreadyFollowException;
 import flab.project.domain.user.model.Follows;
 import flab.project.domain.user.model.User;
 import flab.project.domain.user.enums.GetFollowsType;
@@ -12,7 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -27,14 +30,26 @@ public class FollowService {
         return followMapper.findAll(userId, requestType);
     }
 
+    @Transactional
     public void addFollow(Follows follows) {
         validateFromUserIdAndToUserIdSame(follows);
+
+        boolean isFollow = followMapper.findByFromUserIdAndToUserId(follows);
+        if (isFollow) {
+            throw new AlreadyFollowException("이미 팔로우한 상태입니다.");
+        }
 
         followMapper.addFollow(follows);
     }
 
+    @Transactional
     public void deleteFollow(Follows follows) {
         validateFromUserIdAndToUserIdSame(follows);
+
+        boolean isFollow = followMapper.findByFromUserIdAndToUserId(follows);
+        if (!isFollow) {
+            throw new AlreadyFollowException("팔로우 되어있지 않은 상대입니다.");
+        }
 
         followMapper.deleteFollow(follows);
     }
