@@ -41,8 +41,8 @@ public class PostService {
     public SuccessResponse<PostWithUser> getPostDetail(long postId, long userId, PostType postType) {
         validateGetPostDetail(postId, userId);
 
-        BasicUser basicUser = userMapper.getBasicUser(userId);
         BasePost post = getPostDetailUsingPostType(postId, userId, postType);
+        BasicUser basicUser = userMapper.getBasicUser(post.getUserId());
 
         if (post == null) {
             throw new NotFoundException("post not found.");
