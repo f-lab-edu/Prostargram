@@ -45,7 +45,7 @@ public class PostService {
         if (post == null) {
             throw new NotFoundException("post not found.");
         }
-
+      
         BasicUser basicUser = userMapper.getBasicUser(post.getUserId());
         PostWithUser postWithUser = new PostWithUser(post, basicUser);
 
