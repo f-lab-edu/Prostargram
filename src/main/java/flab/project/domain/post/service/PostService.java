@@ -42,12 +42,11 @@ public class PostService {
         validateGetPostDetail(postId, userId);
 
         BasePost post = getPostDetailUsingPostType(postId, userId, postType);
-        BasicUser basicUser = userMapper.getBasicUser(post.getUserId());
-
         if (post == null) {
             throw new NotFoundException("post not found.");
         }
-
+      
+        BasicUser basicUser = userMapper.getBasicUser(post.getUserId());
         PostWithUser postWithUser = new PostWithUser(post, basicUser);
 
         return new SuccessResponse<>(postWithUser);
@@ -69,8 +68,28 @@ public class PostService {
         setPostLike(postIds, userId, posts);
         setIsFollow(postIds, userId, posts);
         setPostLikeCount(postIds, posts);
+        setCommentCount(postIds, posts);
 
         return posts;
+    }
+
+    private void setCommentCount(List<Long> postIds, List<BasePost> posts) {
+        Map<Long,Long> postIdCommentCountMap = getCommentCount(postIds);
+
+        for (BasePost post : posts) {
+            Long commentCount = postIdCommentCountMap.get(post.getPostId());
+            post.setCommentCount(commentCount);
+        }
+    }
+
+    private Map<Long, Long> getCommentCount(List<Long> postIds) {
+        List<CommentCount> postLikeCount = postMapper.getCommentCount(postIds);
+
+        return postLikeCount.stream()
+                .collect(Collectors.toMap(
+                        CommentCount::getPostId,
+                        CommentCount::getCommentCount
+                ));
     }
 
     private void setIsFollow(List<Long> postIds, long userId, List<BasePost> posts) {

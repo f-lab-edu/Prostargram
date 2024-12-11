@@ -84,4 +84,8 @@ public abstract class BasePost {
     public void setLikeCount(long likeCount) {
         this.likeCount = likeCount;
     }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
 }

@@ -63,7 +63,7 @@
       AND to_user_id = #{follows.toUserId};
   </select>
 
-  <insert id="addFollow" parameterType="Follows">
+  <insert id="adgetPostsHavingFollowdFollow" parameterType="Follows">
     INSERT INTO FOLLOWS(from_user_id, to_user_id)
     VALUES (#{followRequestDto.fromUserId}, #{followRequestDto.toUserId});
   </insert>
