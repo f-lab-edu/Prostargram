@@ -11,4 +11,6 @@ public interface InterestMapper {
     void save(@Param("userId") long userId, @Param("hashTagId") long hashTagId, @Param("name") String name);
 
     int delete(@Param("userId") long userId, @Param("hashTagId") long hashTagId, @Param("name") String name);
+
+    boolean exists(@Param("userId") long userId, @Param("hashTagId") long hashTagId);
 }

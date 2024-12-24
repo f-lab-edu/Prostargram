@@ -26,4 +26,8 @@ public class InterestService {
             throw new InvalidUserInputException();
         }
     }
+
+    public boolean exists(long userId, long hashTagId) {
+        return interestMapper.exists(userId, hashTagId);
+    }
 }
