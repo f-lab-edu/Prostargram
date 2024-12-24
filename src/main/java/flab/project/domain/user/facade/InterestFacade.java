@@ -4,6 +4,7 @@ import flab.project.common.BadWordChecker;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NumberLimitOfInterestExceededException;
+import flab.project.domain.user.exception.AlreadyExistsInterestException;
 import flab.project.domain.user.model.AddInterest;
 import flab.project.domain.post.model.HashTag;
 import flab.project.domain.post.service.HashTagService;
@@ -25,13 +26,22 @@ public class InterestFacade {
     @Transactional
     public SuccessResponse addInterest(AddInterest addInterestDto) {
         //TODO 추후 해당 로직들을 AOP로 삽입 예정.
-        badWordChecker.hasBadWord(addInterestDto.getStringFields());
+//        badWordChecker.hasBadWord(addInterestDto.getStringFields());
         validateNumberLimitOfInterest(addInterestDto);
 
-        Long hashTagId = getHashTagIdByHashTagName(addInterestDto);
+        long hashTagId = getHashTagIdByHashTagName(addInterestDto);
+        validateExistsInterest(addInterestDto.getUserId(), hashTagId);
 
         interestService.addInterest(addInterestDto.getUserId(), hashTagId, addInterestDto.getInterestName());
         return new SuccessResponse();
+    }
+
+    private void validateExistsInterest(long userId, long hashTagId) {
+        boolean exists = interestService.exists(userId, hashTagId);
+
+        if (exists) {
+            throw new AlreadyExistsInterestException("이미 추가된 관심사입니다.");
+        }
     }
 
     public SuccessResponse deleteInterest(long userId, long hashTagId, String name) {

@@ -3,6 +3,7 @@ package flab.project;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.ResponseEnum;
 import flab.project.config.exception.*;
+import flab.project.domain.user.exception.AlreadyExistsInterestException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -46,6 +47,14 @@ public class ApiControllerAdvice {
     })
     public FailResponse exceptionResolveToNotImageExtensionOrNotSupportedExtension(NotImageExtensionOrNotSupportedExtensionException e) {
         return new FailResponse(ResponseEnum.NOT_IMAGE_EXTENSION_OR_NOT_SUPPORTED_EXTENSION);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            AlreadyExistsInterestException.class
+    })
+    public FailResponse exceptionResolveToAlreadyExistsInterestException(AlreadyExistsInterestException e) {
+        return new FailResponse(ResponseEnum.ALREADY_EXIST_INTEREST);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

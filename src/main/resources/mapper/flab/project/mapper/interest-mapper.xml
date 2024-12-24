@@ -22,4 +22,10 @@
           AND hashtag_id = #{hashTagId};
     </delete>
 
+    <select id="exists" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM INTERESTS
+        WHERE user_id = #{userId}
+          AND hashtag_id = #{hashTagId}
+    </select>
 </mapper>

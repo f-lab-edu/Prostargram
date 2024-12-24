@@ -201,7 +201,7 @@ public class InterestController {
     public SuccessResponse deleteInterest(
             @PathVariable("userId") @Positive long userId,
             @RequestParam @Positive long hashTagId,
-            @NotBlank String name
+            @RequestParam @NotBlank String name
     ) {
         return interestFacade.deleteInterest(userId, hashTagId, name);
     }
