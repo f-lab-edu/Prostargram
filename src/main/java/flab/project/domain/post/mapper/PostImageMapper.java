@@ -9,4 +9,8 @@ import java.util.Set;
 public interface PostImageMapper {
 
     void saveAll(@Param("postId") long postId, @Param("contentImgUrls") Set<String> contentImgUrls);
+
+    Set<String> findAllByPostId(@Param("postId") long postId);
+
+    void removeAll(@Param("postId") long postId, @Param("contentImgUrls") Set<String> shouldRemoveImageUrls);
 }

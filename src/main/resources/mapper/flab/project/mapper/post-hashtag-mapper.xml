@@ -12,4 +12,19 @@
         </foreach>
     </insert>
 
+    <select id="findAllByPostId" resultType="java.lang.Long">
+        SELECT hashtag_id
+        FROM POST_HASHTAG_MAPPING
+        WHERE post_id = #{postId}
+    </select>
+
+    <delete id="removeAll">
+        DELETE FROM POST_HASHTAG_MAPPING
+        WHERE post_id = #{postId} AND
+        hashtag_id in
+        <foreach collection="hashTagIds" item="hashTagId" separator="," open="(" close=")">
+            #{hashTagId}
+        </foreach>
+    </delete>
+
 </mapper>

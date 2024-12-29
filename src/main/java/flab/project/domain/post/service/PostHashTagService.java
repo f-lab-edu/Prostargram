@@ -2,6 +2,8 @@ package flab.project.domain.post.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.post.mapper.PostHashTagMapper;
+import flab.project.domain.post.model.UpdateBasicPostRequest;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -31,5 +33,27 @@ public class PostHashTagService {
         if (postId <= 0) {
             throw new InvalidUserInputException();
         }
+    }
+
+    public void update(long postId, Set<String> newPostHashTagNames) {
+        Set<Long> currentHashTagIds = postHashTagMapper.findAllByPostId(postId);
+        Set<Long> newHashTagIds = hashTagService.findHashTagIdsByHashTagNames(newPostHashTagNames);
+
+        Set<Long> shouldRemoveHashTagIds = currentHashTagIds.stream()
+                .filter(id -> !newHashTagIds.contains(id))
+                .collect(Collectors.toSet());
+
+        if (!shouldRemoveHashTagIds.isEmpty()) {
+            postHashTagMapper.removeAll(postId, shouldRemoveHashTagIds);
+        }
+
+        Set<Long> shouldSaveHashTagIds = newHashTagIds.stream()
+                .filter(id -> !currentHashTagIds.contains(id))
+                .collect(Collectors.toSet());
+
+        if (!shouldSaveHashTagIds.isEmpty()) {
+            postHashTagMapper.saveAll(postId, shouldSaveHashTagIds);
+        }
+
     }
 }

@@ -51,7 +51,7 @@ class BasicPostFacadeTest {
         // given
         int imageCount = 1;
         long userId = 1L;
-        AddBasicPostRequest validBasicPostRequest = AddBasicPostRequest.builder()
+        AddBasicPostRequest validAddBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
                 .imageCount(imageCount)
@@ -63,12 +63,12 @@ class BasicPostFacadeTest {
         given(fileUploader.generatePreSignedUrls(userId, imageCount, POST_IMAGE)).willReturn(uploadedFileUrls);
 
         // when
-        basicPostFacade.addPost(userId, validBasicPostRequest);
+        basicPostFacade.addPost(userId, validAddBasicPostRequest);
 
         // then
-        then(postService).should().addPost(userId, validBasicPostRequest);
-        then(postHashTagService).should().saveAll(anyLong(), eq(validBasicPostRequest.getHashTagNames()));
-        then(fanOutService).should().fanOut(userId, validBasicPostRequest.getPostId());
+        then(postService).should().addPost(userId, validAddBasicPostRequest);
+        then(postHashTagService).should().saveAll(anyLong(), eq(validAddBasicPostRequest.getHashTagNames()));
+        then(fanOutService).should().fanOut(userId, validAddBasicPostRequest.getPostId());
         then(fileUploader).should().generatePreSignedUrls(userId, imageCount, POST_IMAGE);
         then(postImageService).should().saveAll(anyLong(), anySet());
     }

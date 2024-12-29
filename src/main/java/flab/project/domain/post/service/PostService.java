@@ -21,6 +21,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.post.enums.PostType;
 import flab.project.domain.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +30,8 @@ public class PostService {
     private final PostMapper postMapper;
     private final UserMapper userMapper;
     private final PostLikeService postLikeService;
+    private final PostHashTagService postHashTagService;
+    private final PostImageService postImageService;
     private final FollowService followService;
     private final PostRedisUtil postRedisUtil;
 
@@ -45,7 +48,7 @@ public class PostService {
         if (post == null) {
             throw new NotFoundException("post not found.");
         }
-      
+
         BasicUser basicUser = userMapper.getBasicUser(post.getUserId());
         PostWithUser postWithUser = new PostWithUser(post, basicUser);
 
@@ -74,7 +77,7 @@ public class PostService {
     }
 
     private void setCommentCount(List<Long> postIds, List<BasePost> posts) {
-        Map<Long,Long> postIdCommentCountMap = getCommentCount(postIds);
+        Map<Long, Long> postIdCommentCountMap = getCommentCount(postIds);
 
         for (BasePost post : posts) {
             Long commentCount = postIdCommentCountMap.get(post.getPostId());
@@ -110,7 +113,7 @@ public class PostService {
     }
 
     private void setPostLikeCount(List<Long> postIds, List<BasePost> posts) {
-        Map<Long,Long> postLikeCountMap = postLikeService.getPostLikeCount(postIds);
+        Map<Long, Long> postLikeCountMap = postLikeService.getPostLikeCount(postIds);
 
         for (BasePost post : posts) {
             Long likeCount = postLikeCountMap.get(post.getPostId());
@@ -211,12 +214,29 @@ public class PostService {
     }
 
     public void deletePost(long userId, long postId) {
+        validatePostAuthor(postId, userId);
+
+        postMapper.delete(postId);
+        postRedisUtil.delete(postId);
+    }
+
+    @Transactional
+    public void update(long userId, UpdateBasicPostRequest basicPost) {
+        validatePostAuthor(basicPost.getPostId(), userId);
+
+        BasicPost basicPostDetail = postMapper.getBasicPostDetail(basicPost.getPostId(), userId);
+        postMapper.update(basicPost);
+        postHashTagService.update(basicPost.getPostId(), basicPost.getHashTagNames());
+        postImageService.update(basicPost.getPostId(), basicPost.getContentImageUrls());
+
+        BasePost basicPostRedisEntity = basicPost.toEntity(userId, basicPostDetail.getCreatedAt());
+        postRedisUtil.save(basicPostRedisEntity);
+    }
+
+    private void validatePostAuthor(long postId, long userId) {
         long writerId = postMapper.getWriter(postId);
         if (writerId != userId) {
             throw new ForbiddenAccessException();
         }
-
-        postMapper.delete(postId);
-        postRedisUtil.delete(postId);
     }
 }

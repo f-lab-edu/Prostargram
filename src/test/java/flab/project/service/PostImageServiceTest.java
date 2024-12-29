@@ -6,6 +6,7 @@ import flab.project.domain.post.mapper.PostImageMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,8 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PostImageServiceTest {
@@ -94,5 +98,32 @@ class PostImageServiceTest {
         // when
         assertThatCode(() -> postImageService.saveAll(postId, uploadedFileUrlsWithOnlyBlank))
                 .isExactlyInstanceOf(InvalidUserInputException.class);
+    }
+
+    @DisplayName("이미지 주소를 수정할 수 있다.")
+    @Test
+    void updatePostImageUrls() {
+        // given
+        long postId = 1L;
+        Set<String> currentPostImageUrls = Set.of("https://test1.com","https://test2.com");
+        Set<String> newPostImageUrls = Set.of("https://test2.com","https://test3.com");
+        Set<String> shouldRemoveImageUrls = Set.of("https://test1.com");
+        Set<String> shouldSaveImageUrls = Set.of("https://test3.com");
+
+        given(postImageMapper.findAllByPostId(postId))
+                .willReturn(currentPostImageUrls);
+
+        ArgumentCaptor<Long> postIdCaptor = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<Set<String>> imageUrlsCaptor = ArgumentCaptor.forClass(Set.class);
+
+        // when
+        postImageService.update(postId, newPostImageUrls);
+
+        // then
+        verify(postImageMapper).removeAll(postIdCaptor.capture(), imageUrlsCaptor.capture());
+        assertThat(imageUrlsCaptor.getValue()).isEqualTo(shouldRemoveImageUrls);
+
+        verify(postImageMapper).saveAll(postIdCaptor.capture(), imageUrlsCaptor.capture());
+        assertThat(imageUrlsCaptor.getValue()).isEqualTo(shouldSaveImageUrls);
     }
 }

@@ -1,9 +1,7 @@
 package flab.project.domain.like.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
-import flab.project.domain.like.model.PostLike;
 import flab.project.domain.post.mapper.PostMapper;
 import flab.project.domain.post.model.AddBasicPostRequest;
 import flab.project.domain.user.enums.LoginType;

@@ -15,10 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -85,13 +83,13 @@ class PollPostFacadeTest {
         long userId = 1L;
         int imageCount=1;
 
-        AddBasicPostRequest basicPostRequest = AddBasicPostRequest.builder()
+        AddBasicPostRequest addBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
                 .imageCount(imageCount)
                 .build();
 
-        assertThatThrownBy(() -> pollPostFacade.addPost(userId, basicPostRequest))
+        assertThatThrownBy(() -> pollPostFacade.addPost(userId, addBasicPostRequest))
                 .isInstanceOf(RuntimeException.class);
     }
 

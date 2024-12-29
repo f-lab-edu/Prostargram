@@ -9,4 +9,8 @@ import java.util.Set;
 public interface PostHashTagMapper {
 
     void saveAll(@Param("postId") long postId, @Param("hashTagIds") Set<Long> hashTagIds);
+
+    Set<Long> findAllByPostId(@Param("postId") long postId);
+
+    void removeAll(@Param("postId") long postId, @Param("hashTagIds") Set<Long> hashTagIds);
 }
