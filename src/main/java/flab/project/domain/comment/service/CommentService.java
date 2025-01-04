@@ -1,10 +1,13 @@
 package flab.project.domain.comment.service;
 
+import flab.project.common.model.PaginationModel;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.mapper.CommentMapper;
 import flab.project.domain.comment.model.CommentWithUser;
 import flab.project.domain.post.mapper.PostMapper;
+import java.util.Optional;
+import java.util.OptionalLong;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -38,11 +41,27 @@ public class CommentService {
         return comment;
     }
 
-    public List<CommentWithUser> getComments(long postId, long userId, Long lastCommentId, long limit) {
-            validatePostId(postId);
-            validatePagingData(lastCommentId, limit);
+    public PaginationModel<List<CommentWithUser>> getComments(
+            long postId,
+            long userId,
+            Optional<Long> parentId,
+            Long lastCommentId,
+            long limit
+    ) {
+        validatePostId(postId);
+        validatePagingData(lastCommentId, limit);
 
-            return commentMapper.getComments(postId, userId, lastCommentId, limit);
+        List<CommentWithUser> comments;
+
+        if (parentId.isEmpty()) {
+            comments = commentMapper.getComments(postId, userId, lastCommentId, limit + 1);
+        } else {
+            comments = commentMapper.getChildComments(postId, userId, parentId.get(), lastCommentId, limit + 1);
+        }
+
+        boolean hasNext = comments.size() > limit;
+        int subListEndIndex = Math.min(comments.size(), (int) limit);
+        return new PaginationModel<>(comments.subList(0, subListEndIndex), hasNext);
     }
 
     private void validateComment(long postId, Long parentId, String content) {
