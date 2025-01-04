@@ -42,13 +42,13 @@ public class BasicPostFacade extends PostFacadeTemplate {
 
     @Override
     protected BasePost handlePostMetadata(long userId, AddPostRequest post) {
-        AddBasicPostRequest basicPostRequest = (AddBasicPostRequest) post;
+        AddBasicPostRequest addBasicPostRequest = (AddBasicPostRequest) post;
 
         UploadedFileUrls uploadedFileUrls
-            = fileUploader.generatePreSignedUrls(userId, basicPostRequest.getImageCount(), FileType.POST_IMAGE);
-        postImageService.saveAll(basicPostRequest.getPostId(), uploadedFileUrls.getContentUrls());
+            = fileUploader.generatePreSignedUrls(userId, addBasicPostRequest.getImageCount(), FileType.POST_IMAGE);
+        postImageService.saveAll(addBasicPostRequest.getPostId(), uploadedFileUrls.getContentUrls());
 
-        return new BasicPost(basicPostRequest, userId, uploadedFileUrls);
+        return new BasicPost(addBasicPostRequest, userId, uploadedFileUrls);
     }
 
     @Override

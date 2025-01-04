@@ -2,6 +2,7 @@ package flab.project.domain.post.service;
 
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.post.mapper.PostImageMapper;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,26 @@ public class PostImageService {
 
         if (hasBlank) {
             throw new InvalidUserInputException();
+        }
+    }
+
+    public void update(long postId, Set<String> newContentImageUrls) {
+        Set<String> currentContentImageUrls = postImageMapper.findAllByPostId(postId);
+
+        Set<String> shouldRemoveImageUrls = currentContentImageUrls.stream()
+                .filter(url -> !newContentImageUrls.contains(url))
+                .collect(Collectors.toSet());
+
+        if (!shouldRemoveImageUrls.isEmpty()) {
+            postImageMapper.removeAll(postId, shouldRemoveImageUrls);
+        }
+
+        Set<String> shouldSaveImageUrls = newContentImageUrls.stream()
+                .filter(url -> !currentContentImageUrls.contains(url))
+                .collect(Collectors.toSet());
+
+        if (!shouldSaveImageUrls.isEmpty()) {
+            postImageMapper.saveAll(postId, shouldSaveImageUrls);
         }
     }
 }

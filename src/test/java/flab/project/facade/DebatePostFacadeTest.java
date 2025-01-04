@@ -78,13 +78,13 @@ class DebatePostFacadeTest {
         int imageCount = 1;
         long userId = 1L;
 
-        AddBasicPostRequest basicPostRequest = AddBasicPostRequest.builder()
+        AddBasicPostRequest addBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
                 .imageCount(imageCount)
                 .build();
 
-        assertThatThrownBy(() -> debatePostFacade.addPost(userId, basicPostRequest))
+        assertThatThrownBy(() -> debatePostFacade.addPost(userId, addBasicPostRequest))
                 .isInstanceOf(RuntimeException.class);
     }
 }

@@ -18,6 +18,7 @@ import flab.project.domain.post.model.DebatePost;
 import flab.project.domain.post.model.PollPost;
 import flab.project.domain.post.model.PostTypeModel;
 import flab.project.domain.post.enums.PostType;
+import flab.project.domain.post.model.UpdateBasicPostRequest;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +30,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -85,12 +85,12 @@ class PostMapperTest {
         String content = "content";
 
         AddBasicPostRequest basicPost = AddBasicPostRequest.builder()
-            .postId(postId)
-            .content(content)
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("hashTagName1"))
-            .imageCount(imageCount)
-            .build();
+                .postId(postId)
+                .content(content)
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("hashTagName1"))
+                .imageCount(imageCount)
+                .build();
 
         postMapper.save(writerId, basicPost);
 
@@ -113,11 +113,11 @@ class PostMapperTest {
         String content = "content";
 
         AddDebatePostRequest debatePost = AddDebatePostRequest.builder()
-            .postId(postId)
-            .content(content)
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("hashTagName1"))
-            .build();
+                .postId(postId)
+                .content(content)
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("hashTagName1"))
+                .build();
 
         postMapper.save(writerId, debatePost);
         postOptionMapper.saveAll(postId, Set.of("option1", "option2"));
@@ -142,16 +142,16 @@ class PostMapperTest {
         Set<String> options = Set.of("option1", "option2");
 
         AddPollPostRequest pollPost = AddPollPostRequest.builder()
-            .postId(postId)
-            .content(content)
-            .subject("통계 subject")
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(1))
-            .optionContents(options)
-            .allowMultipleVotes(true)
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("hashTagName1"))
-            .build();
+                .postId(postId)
+                .content(content)
+                .subject("통계 subject")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(1))
+                .optionContents(options)
+                .allowMultipleVotes(true)
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("hashTagName1"))
+                .build();
 
         postMapper.save(writerId, pollPost);
         pollMetadataMapper.save(pollPost);
@@ -205,44 +205,76 @@ class PostMapperTest {
         assertThat(retrievedPostIds).contains(1, 2, 3);
     }
 
+    @DisplayName("Basic Post 내용을 수정한다.")
+    @Test
+    void updateBasicPost() {
+        // given
+        long postId = 1L;
+        long userId = 1L;
+
+        String currentContent = "currentContent";
+        String newContent = "newContent";
+
+        AddBasicPostRequest basicPost = createBasicPost(postId, currentContent);
+        UpdateBasicPostRequest updateInfo = UpdateBasicPostRequest.builder()
+                .postId(postId)
+                .content(newContent)
+                .contentImageUrls(Set.of())
+                .hashTagNames(Set.of())
+                .build();
+
+        postMapper.save(userId, basicPost);
+
+        // when
+        postMapper.update(updateInfo);
+
+        // then
+        BasicPost basicPostDetail = postMapper.getBasicPostDetail(postId, userId);
+        assertThat(basicPostDetail.getContent()).isEqualTo(newContent);
+    }
+
     private Optional<PostType> extractPostTypeByPostId(List<PostTypeModel> postTypes, int postId) {
         return postTypes.stream()
-            .filter(postTypeModel -> postTypeModel.getPostId() == postId)
-            .map(PostTypeModel::getPostType)
-            .findFirst();
+                .filter(postTypeModel -> postTypeModel.getPostId() == postId)
+                .map(PostTypeModel::getPostType)
+                .findFirst();
     }
 
     private AddDebatePostRequest createDebatePost(long postId) {
         return AddDebatePostRequest.builder()
-            .postId(postId)
-            .content("dd")
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("test1"))
-            .optionContents(Set.of("option1", "option2"))
-            .build();
+                .postId(postId)
+                .content("dd")
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("test1"))
+                .optionContents(Set.of("option1", "option2"))
+                .build();
     }
 
     private AddPollPostRequest createPollPost(long postId) {
         return AddPollPostRequest.builder()
-            .postId(postId)
-            .content("dummy")
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("test1"))
-            .allowMultipleVotes(true)
-            .endDate(LocalDate.now())
-            .startDate(LocalDate.now())
-            .subject("subject")
-            .optionContents(Set.of("option1", "option2"))
-            .build();
+                .postId(postId)
+                .content("dummy")
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("test1"))
+                .allowMultipleVotes(true)
+                .endDate(LocalDate.now())
+                .startDate(LocalDate.now())
+                .subject("subject")
+                .optionContents(Set.of("option1", "option2"))
+                .build();
+    }
+
+    private AddBasicPostRequest createBasicPost(long postId, String content) {
+        return AddBasicPostRequest.builder()
+                .postId(postId)
+                .content(content)
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .hashTagNames(Set.of("test1"))
+                .imageCount(1)
+                .build();
     }
 
     private AddBasicPostRequest createBasicPost(long postId) {
-        return AddBasicPostRequest.builder()
-            .postId(postId)
-            .content("dummy")
-            .createdAt(Timestamp.valueOf(LocalDateTime.now()))
-            .hashTagNames(Set.of("test1"))
-            .imageCount(1)
-            .build();
+        return createBasicPost(postId, "dummy");
     }
 }

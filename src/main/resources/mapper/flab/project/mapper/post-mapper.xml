@@ -10,13 +10,20 @@
     VALUES (#{userId}, #{post.content}, #{post.postType});
   </insert>
 
+  <update id="update" parameterType="UpdateBasicPostRequest">
+    UPDATE POST
+    SET content = #{post.content}
+    WHERE post_id = #{post.postId}
+      AND type = #{post.postType}
+  </update>
+
   <select id="existsById" resultType="boolean">
-      SELECT CASE
-               WHEN COUNT(*) = 1 THEN 1
-               ELSE 0
-               END as has_post
-      FROM POST
-      WHERE post_id = #{postId};
+    SELECT CASE
+             WHEN COUNT(*) = 1 THEN 1
+             ELSE 0
+             END as has_post
+    FROM POST
+    WHERE post_id = #{postId};
   </select>
 
   <select id="getBasicPostDetail" resultMap="BasicPost">
@@ -209,7 +216,8 @@
   </update>
 
   <delete id="delete">
-    DELETE FROM post
+    DELETE
+    FROM post
     WHERE post_id = #{postId}
   </delete>
 

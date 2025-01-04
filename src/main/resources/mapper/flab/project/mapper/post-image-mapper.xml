@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="flab.project.domain.post.mapper.PostImageMapper">
 
-    <insert id="saveAll">
-        INSERT INTO POST_IMAGES(post_id, img_url)
-        VALUES
-        <foreach collection="contentImgUrls" item="contentImgUrl" separator=",">
-            (#{postId}, #{contentImgUrl})
-        </foreach>
-    </insert>
+  <select id="findAllByPostId" resultType="java.lang.String">
+    SELECT img_url
+    FROM POST_IMAGES
+    WHERE post_id = #{postId}
+  </select>
+
+  <insert id="saveAll">
+    INSERT INTO POST_IMAGES(post_id, img_url)
+    VALUES
+    <foreach collection="contentImgUrls" item="contentImgUrl" separator=",">
+      (#{postId}, #{contentImgUrl})
+    </foreach>
+  </insert>
+
+
+  <delete id="removeAll">
+    DELETE FROM POST_IMAGES
+    WHERE post_id = #{postId} AND
+    img_url in
+    <foreach collection="contentImgUrls" item="contentImgUrl" separator="," open="(" close=")">
+      #{contentImgUrl}
+    </foreach>
+  </delete>
 
 </mapper>

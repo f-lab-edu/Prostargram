@@ -70,10 +70,10 @@ class BasicPostControllerTest {
     void addBasicPost_withEmptyPostContent() throws Exception {
         // given
         String emptyPostContent = "";
-        AddBasicPostRequest invalidBasicPostRequest = createAddBasicPostRequest(emptyPostContent, validHashTagNames);
+        AddBasicPostRequest invalidAddBasicPostRequest = createAddBasicPostRequest(emptyPostContent, validHashTagNames);
 
         // when & then
-        validateAddBasicPost(invalidBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(invalidAddBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @WithMockUser(username = "1")
@@ -82,11 +82,11 @@ class BasicPostControllerTest {
     void addBasicPost_withOnlyBlankPostContent() throws Exception {
         // given
         String onlyBlankPostContent = "   ";
-        AddBasicPostRequest invalidBasicPostRequest
+        AddBasicPostRequest invalidAddBasicPostRequest
                 = createAddBasicPostRequest(onlyBlankPostContent, validHashTagNames);
 
         // when & then
-        validateAddBasicPost(invalidBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(invalidAddBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @WithMockUser(username = "1")
@@ -95,11 +95,11 @@ class BasicPostControllerTest {
     void addBasicPost_withExceedMaxLengthOfPostContent() throws Exception {
         // given
         String postContentExceededMaxLength = RandomStringUtils.randomAlphanumeric(MAX_LENGTH_OF_POST_CONTENTS + 1);
-        AddBasicPostRequest invalidBasicPostRequest
+        AddBasicPostRequest invalidAddBasicPostRequest
                 = createAddBasicPostRequest(postContentExceededMaxLength, validHashTagNames);
 
         // when & then
-        validateAddBasicPost(invalidBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(invalidAddBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @WithMockUser(username = "1")
@@ -108,11 +108,11 @@ class BasicPostControllerTest {
     void addBasicPost_withEmptyHashTagNames() throws Exception {
         // given
         Set<String> hashTagNamesWithEmpty = Set.of("#test1", "");
-        AddBasicPostRequest invalidBasicPostRequest
+        AddBasicPostRequest invalidAddBasicPostRequest
                 = createAddBasicPostRequest(validPostContent, hashTagNamesWithEmpty);
 
         // when & then
-        validateAddBasicPost(invalidBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
+        validateAddBasicPost(invalidAddBasicPostRequest, status().isBadRequest(), INVALID_USER_INPUT);
     }
 
     @WithMockUser(username = "1")
