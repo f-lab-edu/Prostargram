@@ -62,6 +62,14 @@
     LIMIT #{limit}
   </select>
 
+  <select id="exists" resultType="boolean">
+    SELECT EXISTS (
+             SELECT 1
+             FROM COMMENT
+             WHERE parent_id = #{parentId}
+             )
+  </select>
+
   <resultMap id="commentWithUserResultMap" type="CommentWithUser">
     <association property="comment" resultMap="commentResultMap"/>
     <association property="basicUser" resultMap="basicUserResultMap"/>

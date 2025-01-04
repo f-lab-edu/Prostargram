@@ -23,4 +23,5 @@ public interface CommentMapper {
             @Param("limit") long limit
     );
 
+    boolean exists(@Param("parentId") Long parentId);
 }

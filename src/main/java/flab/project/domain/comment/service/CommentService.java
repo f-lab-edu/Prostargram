@@ -2,12 +2,13 @@ package flab.project.domain.comment.service;
 
 import flab.project.common.model.PaginationModel;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.comment.exception.CommentNotFoundException;
+import flab.project.domain.comment.exception.PostNotFoundException;
 import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.mapper.CommentMapper;
 import flab.project.domain.comment.model.CommentWithUser;
 import flab.project.domain.post.mapper.PostMapper;
 import java.util.Optional;
-import java.util.OptionalLong;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class CommentService {
             long limit
     ) {
         validatePostId(postId);
+        validateParentId(parentId);
         validatePagingData(lastCommentId, limit);
 
         List<CommentWithUser> comments;
@@ -75,11 +77,36 @@ public class CommentService {
         if (postId <= 0) {
             throw new InvalidUserInputException("Invalid postId.");
         }
+
+        boolean existsPost = postMapper.existsById(postId);
+        if (!existsPost) {
+            throw new PostNotFoundException();
+        }
     }
 
     private void validateParentId(Long parentId) {
         if (parentId != null && parentId <= 0) {
             throw new InvalidUserInputException("Invalid parentId.");
+        }
+
+        boolean existsParent = commentMapper.exists(parentId);
+        if (!existsParent) {
+            throw new CommentNotFoundException();
+        }
+    }
+
+    private void validateParentId(Optional<Long> parentId){
+        if (parentId.isEmpty()) {
+            return;
+        }
+
+        if (parentId.get() <= 0) {
+            throw new InvalidUserInputException("Invalid parentId.");
+        }
+
+        boolean existsParent = commentMapper.exists(parentId.get());
+        if (!existsParent) {
+            throw new CommentNotFoundException();
         }
     }
 
