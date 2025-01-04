@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.then;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceTest {
+class CommentServiceTest {
 
     @InjectMocks
     private CommentService commentService;
@@ -51,10 +51,10 @@ public class CommentServiceTest {
         Comment captorValue = commentCaptor.getValue();
 
         assertThat(comment)
-            .extracting(Comment::getPostId, Comment::getUserId,
-                Comment::getParentId, Comment::getContent)
-            .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
-                captorValue.getParentId(), captorValue.getContent());
+                .extracting(Comment::getPostId, Comment::getUserId,
+                        Comment::getParentId, Comment::getContent)
+                .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
+                        captorValue.getParentId(), captorValue.getContent());
     }
 
     @DisplayName("대댓글을 작성할 수 있다.")
@@ -79,10 +79,10 @@ public class CommentServiceTest {
         Comment captorValue = commentCaptor.getValue();
 
         assertThat(comment)
-            .extracting(Comment::getPostId, Comment::getUserId,
-                Comment::getParentId, Comment::getContent)
-            .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
-                captorValue.getParentId(), captorValue.getContent());
+                .extracting(Comment::getPostId, Comment::getUserId,
+                        Comment::getParentId, Comment::getContent)
+                .containsExactly(captorValue.getPostId(), captorValue.getUserId(),
+                        captorValue.getParentId(), captorValue.getContent());
     }
 
     @DisplayName("댓글을 작성할 때, postId가 양수가 아니라면 InvalidUserInputException을 반환한다.")
@@ -165,7 +165,7 @@ public class CommentServiceTest {
         long limit = 1L;
 
         // when
-        commentService.getComments(postId, userId, lastCommentId, limit);
+        commentService.getComments(postId, userId, null, lastCommentId, limit);
 
         // then
         then(commentMapper).should().getComments(postId, userId, lastCommentId, limit);
@@ -181,7 +181,7 @@ public class CommentServiceTest {
         long limit = 1L;
 
         // when
-        commentService.getComments(postId, userId, lastCommentId, limit);
+        commentService.getComments(postId, userId, null, lastCommentId, limit);
 
         // then
         then(commentMapper).should().getComments(postId, userId, lastCommentId, limit);
@@ -197,7 +197,7 @@ public class CommentServiceTest {
         long limit = 1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(invalidPostId, userId, lastCommentId, limit))
+        assertThatThrownBy(() -> commentService.getComments(invalidPostId, userId, null, lastCommentId, limit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -211,7 +211,7 @@ public class CommentServiceTest {
         long limit = 1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, userId, invalidLastCommentId, limit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, null, invalidLastCommentId, limit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -225,7 +225,7 @@ public class CommentServiceTest {
         long negativeLimit = -1L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, userId, lastCommentId, negativeLimit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, null, lastCommentId, negativeLimit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 
@@ -239,7 +239,7 @@ public class CommentServiceTest {
         Long invalidLimit = 11L;
 
         // when & then
-        assertThatThrownBy(() -> commentService.getComments(postId, userId, lastCommentId, invalidLimit))
+        assertThatThrownBy(() -> commentService.getComments(postId, userId, null, lastCommentId, invalidLimit))
                 .isInstanceOf(InvalidUserInputException.class);
     }
 }

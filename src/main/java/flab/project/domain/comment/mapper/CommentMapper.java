@@ -12,5 +12,16 @@ public interface CommentMapper {
 
     void addComment(@Param("comment") Comment comment);
 
-    List<CommentWithUser> getComments(@Param("postId") long postId, @Param("userId") long userId, @Param("lastCommentId") Long lastCommentId, @Param("limit") long limit);
+    List<CommentWithUser> getComments(@Param("postId") long postId, @Param("userId") long userId,
+            @Param("lastCommentId") Long lastCommentId, @Param("limit") long limit);
+
+    List<CommentWithUser> getChildComments(
+            @Param("postId") long postId,
+            @Param("userId") long userId,
+            @Param("parentId") long parentId,
+            @Param("lastCommentId") Long lastCommentId,
+            @Param("limit") long limit
+    );
+
+    boolean exists(@Param("parentId") Long parentId);
 }

@@ -1,8 +1,11 @@
 package flab.project.domain.comment.controller;
 
 import flab.project.common.annotation.LoggedInUserId;
+import flab.project.common.model.PaginationModel;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.domain.comment.exception.CommentNotFoundException;
+import flab.project.domain.comment.exception.PostNotFoundException;
 import flab.project.domain.comment.model.Comment;
 import flab.project.domain.comment.model.CommentWithUser;
 import flab.project.domain.comment.service.CommentService;
@@ -17,7 +20,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +36,22 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({
+            CommentNotFoundException.class,
+    })
+    public FailResponse handleCommentNotFoundException(Exception exception) {
+        return new FailResponse(exception.getMessage(), 4008);
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({
+            PostNotFoundException.class,
+    })
+    public FailResponse handlePostNotFoundException(Exception exception) {
+        return new FailResponse(exception.getMessage(), 4002);
+    }
 
     @Operation(
             summary = "댓글 작성 API"
@@ -151,7 +172,8 @@ public class CommentController {
 
     @Operation(
             summary = "댓글 조회 API",
-            description = "(2024.11.10) 현재 대댓글 조회는 구현이 되어 있지 않습니다. 차후 추가할 예정입니다."
+            description = "최상위 댓글만 조회하는 경우 parentId를 보내지 않으면 된다."
+                    + "대댓글을 조회하는 경우, parentId를 포함하여 보내면 된다."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -277,13 +299,15 @@ public class CommentController {
     })
     // Todo 토론 게시물의 경우, 진영을 의미하는 enum 추가 예정
     @GetMapping(value = "/posts/{postId}/comments")
-    public SuccessResponse<List<CommentWithUser>> getComments(
+    public SuccessResponse<PaginationModel<List<CommentWithUser>>> getComments(
             @PathVariable("postId") @Positive long postId,
             @LoggedInUserId Long userId,
+            @RequestParam Optional<Long> parentId,
             @RequestParam(required = false) @Positive Long lastCommentId,
             @RequestParam(defaultValue = "10") @Positive @Max(10) @Schema(description = "한 페이지에 노출될 데이터 개수") long limit
     ) {
-        List<CommentWithUser> comments = commentService.getComments(postId, userId, lastCommentId, limit);
+        PaginationModel<List<CommentWithUser>> comments = commentService.getComments(postId, userId, parentId,
+                lastCommentId, limit);
 
         return new SuccessResponse<>(comments);
     }
