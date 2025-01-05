@@ -52,11 +52,15 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/login", "/users",
-                                "/send", "/verification/email/**", "/verification/username",
-                                "/swagger-ui/**", "/v3/api-docs/**",
-                                "/actuator/**",
-                                "/posts/**"
+                authorize.requestMatchers(
+                        "/login",
+                                "/users",
+                                "/send",
+                                "/verification/email/**",
+                                "/verification/username",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/actuator/**"
                         ).permitAll()
                     .anyRequest().authenticated()
             )
