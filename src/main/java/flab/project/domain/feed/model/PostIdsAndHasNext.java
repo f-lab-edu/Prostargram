@@ -9,7 +9,11 @@ public class PostIdsAndHasNext {
     boolean hasNext;
 
     public List<Long> getPostIds() {
-        return postIds;
+        if(postIds.size()<=10){
+            return postIds;
+        }
+
+        return postIds.subList(0, 10);
     }
 
     public boolean hasNext() {

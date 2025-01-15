@@ -22,8 +22,6 @@ public class NewsFeedController {
             summary = "피드 조회 API (구현중)",
             description = """
                     page만 query string으로 전송하면 된다.\n
-                    현재 프론트의 구현 편의성을 위해 고정된 값을 반환하고 있다.\n
-                    따라서, **page를 변경하더라도 반환되는 값은 같다.**
                     </br></br>
                     post는 example value에서 보는 것과 형태가 다를 수 있다.\n 
                     post는 **basic post와 debate post 두가지 형태로** 반환될 수 있기 때문인데
@@ -38,7 +36,7 @@ public class NewsFeedController {
             @LoggedInUserId Long userId,
             @RequestParam long page
     ) {
-        PaginationModel<List<PostWithUser>> feeds = newsFeedService.getFeeds(userId);
+        PaginationModel<List<PostWithUser>> feeds = newsFeedService.getFeeds(userId,page);
 
         return new SuccessResponse<>(feeds);
     }

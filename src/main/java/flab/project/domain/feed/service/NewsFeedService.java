@@ -25,11 +25,11 @@ public class NewsFeedService {
     private final PostService postService;
     private final NewsFeedRedisUtil newsFeedRedisUtil;
 
-    public PaginationModel<List<PostWithUser>> getFeeds(long userId) {
+    public PaginationModel<List<PostWithUser>> getFeeds(long userId, long page) {
         // Todo 비활성화 유저 같은 경우는, NewsFeedCache에 데이터가 없을수도 있어요.
         // Todo 막 가입한 유저.
         try {
-            PostIdsAndHasNext postIdsAndHasNext = newsFeedRedisUtil.getPostIds(userId);
+            PostIdsAndHasNext postIdsAndHasNext = newsFeedRedisUtil.getPostIds(userId, page);
             if (postIdsAndHasNext.isEmpty()) {
                 return new PaginationModel<>(Collections.emptyList(), false);
             }

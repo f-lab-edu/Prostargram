@@ -15,12 +15,12 @@ public class NewsFeedRedisUtil {
     private final RedisTemplate<Long, Long> newsFeedRedisTemplate;
 
     // todo: valueOperations.
-    public PostIdsAndHasNext getPostIds(Long key) {
+    public PostIdsAndHasNext getPostIds(Long key, Long page) {
         ListOperations<Long, Long> listOperations = newsFeedRedisTemplate.opsForList();
-        List<Long> postIds = listOperations.range(key, 0, 11L);
+        List<Long> postIds = listOperations.range(key, page * 10, page * 10 + 11);
 
-        if(postIds.size()<10){
-            return new PostIdsAndHasNext(postIds,false);
+        if (postIds.size() < 10) {
+            return new PostIdsAndHasNext(postIds, false);
         }
 
         postIds.remove(postIds.size() - 1);
