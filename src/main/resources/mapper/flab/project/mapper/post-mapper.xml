@@ -49,6 +49,17 @@
     WHERE post.post_id = #{postId};
   </select>
 
+  <select id="getProfileFeedIds" resultType="long">
+    SELECT post_id
+    FROM POST
+    WHERE user_id = #{userId}
+    <if test="lastPostId != null">
+      <![CDATA[ AND post_id < #{lastPostId} ]]>
+    </if>
+    ORDER BY post_id DESC
+    LIMIT #{limitSize};
+  </select>
+
   <select id="getBasicPostsWhereIn" resultMap="BasicPost">
     SELECT post.post_id,
     post.user_id,

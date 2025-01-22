@@ -21,4 +21,8 @@ public class PostWithUser {
             .profileImgUrl(profile.getProfileImgUrl())
             .build();
     }
+
+    public long getPostId() {
+        return post.getPostId();
+    }
 }
