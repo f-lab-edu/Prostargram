@@ -26,4 +26,6 @@ public interface UserMapper {
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);
+
+    void incrementPostCount(long userId);
 }

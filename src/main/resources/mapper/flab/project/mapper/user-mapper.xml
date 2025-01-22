@@ -39,6 +39,12 @@
     WHERE user_id = #{userId};
   </insert>
 
+  <update id="incrementPostCount">
+    UPDATE USERS
+    SET post_count = post_count + 1
+    WHERE user_id = #{userId};
+  </update>
+
   <select id="getProfileUpdatePageInfo" resultMap="profileUpdatePageResult">
     SELECT U.user_id,
     U.user_name,
