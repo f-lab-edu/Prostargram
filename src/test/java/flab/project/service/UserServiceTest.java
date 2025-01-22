@@ -3,6 +3,7 @@ package flab.project.service;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.domain.user.model.Profile;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.user.model.ProfilePage;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.service.UserService;
 import flab.project.domain.user.mapper.UserMapper;
@@ -34,17 +35,17 @@ class UserServiceTest {
     @Test
     void getProfilePageInfo() {
         // given
-        Profile profile = new Profile();
+        ProfilePage profile = new ProfilePage();
 
-        given(userMapper.getProfilePageInfo(1L))
+        given(userMapper.getProfilePageInfo(1L, 2L))
                 .willReturn(profile);
 
         // when
-        Profile profileInfo = userService.getProfilePageInfo(1L);
+        ProfilePage profileInfo = userService.getProfilePageInfo(1L, 2L);
 
         // then
         assertThat(profileInfo).isEqualTo(profile);
-        then(userMapper).should().getProfilePageInfo(1L);
+        then(userMapper).should().getProfilePageInfo(1L, 2L);
     }
 
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
@@ -70,11 +71,11 @@ class UserServiceTest {
         // given
         long notExistUserId = 99L;
 
-        given(userMapper.getProfilePageInfo(notExistUserId))
+        given(userMapper.getProfilePageInfo(notExistUserId, 1L))
                 .willReturn(null);
 
         // when & then
-        assertThatThrownBy(() -> userService.getProfilePageInfo(notExistUserId))
+        assertThatThrownBy(() -> userService.getProfilePageInfo(notExistUserId, 1L))
                 .isInstanceOf(NotExistUserException.class);
     }
 
@@ -82,7 +83,8 @@ class UserServiceTest {
     @Test
     void updateProfile() {
         // given
-        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중", "조금씩 조금씩 성장합시다");
+        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중",
+                "조금씩 조금씩 성장합시다");
         long userId = 1;
 
         given(userMapper.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
@@ -99,7 +101,8 @@ class UserServiceTest {
     @Test
     void userIdMustBePositiveWhenUpdateProfile() {
         // given
-        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중", "조금씩 조금씩 성장합시다");
+        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중",
+                "조금씩 조금씩 성장합시다");
         long zeroUserId = 0;
         long negativeUserId = -1;
 
@@ -115,7 +118,8 @@ class UserServiceTest {
     @Test
     void ifUpdateProfileReturnZeroThrowRuntimeException() {
         // given
-        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중", "조금씩 조금씩 성장합시다");
+        UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto("정민욱", "카카오 재직 중",
+                "조금씩 조금씩 성장합시다");
         long userId = 1;
 
         given(userMapper.updateProfile(anyLong(), any(UpdateProfileRequestDto.class)))
@@ -128,7 +132,7 @@ class UserServiceTest {
 
     @DisplayName("프로필 이미지 수정이 데이터 베이스에 반영되었을 때(mapper가 1이상을 반환했을 때), true를 반환한다.")
     @Test
-    void reflectedRowNumIsBiggerThanZeroThenReturnTrue(){
+    void reflectedRowNumIsBiggerThanZeroThenReturnTrue() {
         // given
         given(userMapper.updateProfileImage(anyLong(), anyString()))
                 .willReturn(1);

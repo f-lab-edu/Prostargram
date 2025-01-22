@@ -64,7 +64,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-        then(userService).should().getProfilePageInfo(anyLong());
+        then(userService).should().getProfilePageInfo(anyLong(), anyLong());
     }
 
     @WithMockUser(username = "1")

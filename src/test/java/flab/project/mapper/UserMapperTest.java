@@ -53,16 +53,16 @@ class UserMapperTest {
         String updatedDepartmentName = "updatedDepartmentName";
         String updatedSelfIntroduction = "updatedSelfIntroduction";
         UpdateProfileRequestDto updateProfileRequestDto = new UpdateProfileRequestDto(
-            updatedUsername,
-            updatedDepartmentName,
-            updatedSelfIntroduction
+                updatedUsername,
+                updatedDepartmentName,
+                updatedSelfIntroduction
         );
 
         // when
         userMapper.updateProfile(1L, updateProfileRequestDto);
 
         // then
-        Profile profile = userMapper.getProfilePageInfo(1L);
+        Profile profile = userMapper.getProfilePageInfo(1L, 2L);
         assertThat(profile.getUserName()).isEqualTo(updatedUsername);
         assertThat(profile.getDepartmentName()).isEqualTo(updatedDepartmentName);
         assertThat(profile.getSelfIntroduction()).isEqualTo(updatedSelfIntroduction);
