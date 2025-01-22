@@ -4,7 +4,6 @@ import flab.project.common.file_storage.UploadedFileUrl;
 import flab.project.domain.user.controller.UserController;
 import flab.project.domain.user.facade.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.service.UserService;
 import java.net.URL;
@@ -65,7 +64,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(SUCCESS.isSuccess()))
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
-        then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
+        then(userService).should().getProfilePageInfo(anyLong());
     }
 
     @WithMockUser(username = "1")
@@ -113,7 +112,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.code").value(SUCCESS.getCode()))
                 .andExpect(jsonPath("$.message").value(SUCCESS.getMessage()));
 
-        then(userService).should().getProfileInfo(anyLong(), any(GetProfileRequestType.class));
+        then(userService).should().getProfileUpdatePageInfo(anyLong());
     }
 
     @WithMockUser(username = "1")

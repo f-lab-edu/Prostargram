@@ -3,7 +3,6 @@ package flab.project.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
 import flab.project.domain.user.enums.LoginType;
@@ -63,7 +62,7 @@ class UserMapperTest {
         userMapper.updateProfile(1L, updateProfileRequestDto);
 
         // then
-        Profile profile = userMapper.getProfileInfo(1L, GetProfileRequestType.GET);
+        Profile profile = userMapper.getProfilePageInfo(1L);
         assertThat(profile.getUserName()).isEqualTo(updatedUsername);
         assertThat(profile.getDepartmentName()).isEqualTo(updatedDepartmentName);
         assertThat(profile.getSelfIntroduction()).isEqualTo(updatedSelfIntroduction);

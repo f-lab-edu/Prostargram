@@ -2,7 +2,6 @@ package flab.project.service;
 
 import flab.project.config.exception.NotExistUserException;
 import flab.project.domain.user.model.Profile;
-import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.service.UserService;
@@ -37,15 +36,15 @@ class UserServiceTest {
         // given
         Profile profile = new Profile();
 
-        given(userMapper.getProfileInfo(1L, GetProfileRequestType.GET))
+        given(userMapper.getProfilePageInfo(1L))
                 .willReturn(profile);
 
         // when
-        Profile profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.GET);
+        Profile profileInfo = userService.getProfilePageInfo(1L);
 
         // then
         assertThat(profileInfo).isEqualTo(profile);
-        then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.GET);
+        then(userMapper).should().getProfilePageInfo(1L);
     }
 
     @DisplayName("프로필 수정 페이지 정보를 가져올 수 있다.")
@@ -54,15 +53,15 @@ class UserServiceTest {
         // given
         Profile profile = new Profile();
 
-        given(userMapper.getProfileInfo(1L, GetProfileRequestType.UPDATE))
+        given(userMapper.getProfileUpdatePageInfo(1L))
                 .willReturn(profile);
 
         // when
-        Profile profileInfo = userService.getProfileInfo(1L, GetProfileRequestType.UPDATE);
+        Profile profileInfo = userService.getProfileUpdatePageInfo(1L);
 
         // then
         assertThat(profileInfo).isEqualTo(profile);
-        then(userMapper).should().getProfileInfo(1L, GetProfileRequestType.UPDATE);
+        then(userMapper).should().getProfileUpdatePageInfo(1L);
     }
 
     @DisplayName("프로필 정보를 가져올 때, 존재하지 않는 유저인 경우 NotExistUserException을 던진다.")
@@ -71,12 +70,11 @@ class UserServiceTest {
         // given
         long notExistUserId = 99L;
 
-        given(userMapper.getProfileInfo(notExistUserId, GetProfileRequestType.GET))
+        given(userMapper.getProfilePageInfo(notExistUserId))
                 .willReturn(null);
 
         // when & then
-        assertThatThrownBy(
-                () -> userService.getProfileInfo(notExistUserId, GetProfileRequestType.GET))
+        assertThatThrownBy(() -> userService.getProfilePageInfo(notExistUserId))
                 .isInstanceOf(NotExistUserException.class);
     }
 

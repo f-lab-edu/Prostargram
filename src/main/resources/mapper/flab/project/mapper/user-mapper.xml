@@ -39,17 +39,13 @@
     WHERE user_id = #{userId};
   </insert>
 
-  <select id="getProfileInfo"
-    parameterType="flab.project.domain.user.enums.GetProfileRequestType"
-    resultMap="profileResult">
+  <select id="getProfileUpdatePageInfo" resultMap="profileUpdatePageResult">
     SELECT U.user_id,
     U.user_name,
     U.profile_img_url,
     U.organization_information,
     U.self_introduction,
-    <if test="getProfileRequestType.name().equals('GET')">U.post_count,</if>
-    <if test="getProfileRequestType.name().equals('GET')">U.follower_count,</if>
-    <if test="getProfileRequestType.name().equals('GET')">U.following_count,</if>
+    U.post_count,
     S.social_account_id,
     S.link,
     L.icon_url,
@@ -61,6 +57,31 @@
     LEFT JOIN INTERESTS I on u.user_id = I.user_id
     LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
     WHERE U.user_id = #{userId};
+  </select>
+
+  <select id="getProfilePageInfo" resultMap="profilePageResult">
+    SELECT U.user_id,
+    U.user_name,
+    U.profile_img_url,
+    U.organization_information,
+    U.self_introduction,
+    U.post_count,
+    U.follower_count,
+    U.following_count,
+    IFNULL(follow.to_user_id, FALSE) as is_follow,
+    S.social_account_id,
+    S.link,
+    L.icon_url,
+    H.hashtag_id,
+    H.name
+    FROM USERS U
+    LEFT JOIN SOCIAL_ACCOUNTS S on U.user_id = S.user_id
+    LEFT JOIN LINK_ICON L on S.icon_id = L.icon_id
+    LEFT JOIN INTERESTS I on u.user_id = I.user_id
+    LEFT JOIN HASHTAGS H on I.hashtag_id = H.hashtag_id
+    LEFT JOIN FOLLOWS follow
+              on follow.from_user_id = #{myUserId} and follow.to_user_id = #{targetUserId}
+    WHERE U.user_id = #{targetUserId};
   </select>
 
   <select id="getBasicUser" resultType="BasicUser">
@@ -108,15 +129,27 @@
     WHERE user_name = #{username}
   </select>
 
-  <resultMap id="profileResult" type="Profile">
+  <resultMap id="profilePageResult" type="ProfilePage">
+    <id property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <result property="profileImgUrl" column="profile_img_url"/>
+    <result property="departmentName" column="organization_information"/>
+    <result property="selfIntroduction" column="self_introduction"/>
+    <result property="follow" column="is_follow"/>
+    <result property="postCount" column="post_count"/>
+    <result property="followerCount" column="follower_count"/>
+    <result property="followingCount" column="following_count"/>
+    <association property="socialAccounts" resultMap="socialAccountResult"/>
+    <association property="interests" resultMap="hashtagResult"/>
+  </resultMap>
+
+  <resultMap id="profileUpdatePageResult" type="Profile">
     <id property="userId" column="user_id"/>
     <result property="userName" column="user_name"/>
     <result property="profileImgUrl" column="profile_img_url"/>
     <result property="departmentName" column="organization_information"/>
     <result property="selfIntroduction" column="self_introduction"/>
     <result property="postCount" column="post_count"/>
-    <result property="followerCount" column="follower_count"/>
-    <result property="followingCount" column="following_count"/>
     <association property="socialAccounts" resultMap="socialAccountResult"/>
     <association property="interests" resultMap="hashtagResult"/>
   </resultMap>
