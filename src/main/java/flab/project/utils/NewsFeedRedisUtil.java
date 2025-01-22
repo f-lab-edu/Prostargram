@@ -24,12 +24,7 @@ public class NewsFeedRedisUtil implements FeedIdsReader {
         ListOperations<Long, Long> listOperations = newsFeedRedisTemplate.opsForList();
         List<Long> postIds = listOperations.range(key, page * PAGE_SIZE, page * (PAGE_SIZE) + (PAGE_SIZE + 1));
 
-        if (postIds.size() < PAGE_SIZE) {
-            return new PostIdsAndHasNext(postIds, false);
-        }
-
-        postIds.remove(postIds.size() - 1);
-        return new PostIdsAndHasNext(postIds, true);
+        return new PostIdsAndHasNext(postIds, PAGE_SIZE);
     }
 
     public boolean exists(Long key) {

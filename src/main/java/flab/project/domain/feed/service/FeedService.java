@@ -23,16 +23,13 @@ public abstract class FeedService {
     private final UserService userService;
     private final PostService postService;
 
-    public PaginationModel<List<PostWithUser>> getFeeds(long userId, Long page) {
-        // Todo 비활성화 유저 같은 경우는, NewsFeedCache에 데이터가 없을수도 있어요.
-        // Todo 막 가입한 유저.
+    protected PaginationModel<List<PostWithUser>> getFeeds(PostIdsAndHasNext postIdsAndHasNext, long myUserId) {
         try {
-            PostIdsAndHasNext postIdsAndHasNext = feedIdsReader.getPostIds(userId, page);
             if (postIdsAndHasNext.isEmpty()) {
                 return new PaginationModel<>(Collections.emptyList(), false);
             }
 
-            List<BasePost> posts = postService.lookAsidePosts(postIdsAndHasNext.getPostIds(), userId);
+            List<BasePost> posts = postService.lookAsidePosts(postIdsAndHasNext.getPostIds(), myUserId);
             List<Long> writerIds = extractWriterIds(posts);
             Map<Long, BasicUser> profileMap = generateProfileMap(writerIds);
             List<PostWithUser> feeds = posts.stream()
@@ -44,6 +41,10 @@ public abstract class FeedService {
         } catch (Exception e) {
             return new PaginationModel<>(Collections.emptyList(), false);
         }
+    }
+
+    protected PostIdsAndHasNext getPostIds(long userId, Long paginationKey){
+        return feedIdsReader.getPostIds(userId, paginationKey);
     }
 
     private static Comparator<PostWithUser> sortByPostIdDesc() {

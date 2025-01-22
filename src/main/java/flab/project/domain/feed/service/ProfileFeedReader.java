@@ -13,14 +13,9 @@ public class ProfileFeedReader implements FeedIdsReader {
     private final PostMapper postMapper;
 
     @Override
-    public PostIdsAndHasNext getPostIds(Long userId, Long lastPostId) {
-        List<Long> postIds = postMapper.getProfileFeedIds(userId, lastPostId, PAGE_SIZE + 1);
+    public PostIdsAndHasNext getPostIds(Long targetUserId, Long lastPostId) {
+        List<Long> postIds = postMapper.getProfileFeedIds(targetUserId, lastPostId, PAGE_SIZE + 1);
 
-        if (postIds.size() < PAGE_SIZE) {
-            return new PostIdsAndHasNext(postIds, false);
-        }
-
-        postIds.remove(postIds.size() - 1);
-        return new PostIdsAndHasNext(postIds, true);
+        return new PostIdsAndHasNext(postIds, PAGE_SIZE);
     }
 }

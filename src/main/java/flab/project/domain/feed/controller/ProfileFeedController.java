@@ -74,10 +74,10 @@ public class ProfileFeedController {
     @GetMapping(value = "/users/{userId}/profile-feeds")
     public SuccessResponse<PaginationModel<List<PostWithUser>>> getProfileFeed(
             @LoggedInUserId Long myUserId,
-            @PathVariable("userId") @Positive long userId,
+            @PathVariable("userId") @Positive long targetUserId,
             @RequestParam(required = false) @Positive Long lastPostId
     ) {
-        PaginationModel<List<PostWithUser>> profileFeeds = profileFeedService.getFeeds(myUserId, lastPostId);
+        PaginationModel<List<PostWithUser>> profileFeeds = profileFeedService.getFeeds(myUserId, targetUserId, lastPostId);
 
         return new SuccessResponse<>(profileFeeds);
     }
