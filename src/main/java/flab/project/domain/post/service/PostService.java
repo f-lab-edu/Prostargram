@@ -39,6 +39,7 @@ public class PostService {
         validateUserId(userId);
 
         postMapper.save(userId, post);
+        userMapper.incrementPostCount(userId);
     }
 
     public SuccessResponse<PostWithUser> getPostDetail(long postId, long userId, PostType postType) {

@@ -50,7 +50,7 @@ class PostControllerTest {
         long userId = 1L;
 
         given(postService.getPostDetail(postId, userId, BASIC))
-                .willReturn(new SuccessResponse(new PostWithUser(new BasicPost(), new BasicUser())));
+                .willReturn(new SuccessResponse<>(new PostWithUser(new BasicPost(), new BasicUser())));
 
         validateGetPostDetail(postId, GET_BASIC_POST_DETAIL_REQUEST_URL, status().isOk(), SUCCESS);
     }

@@ -7,8 +7,8 @@ import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;
-import flab.project.domain.user.enums.GetProfileRequestType;
 
+import flab.project.domain.user.model.ProfilePage;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.facade.UserFacade;
 import flab.project.domain.user.service.UserService;
@@ -150,7 +150,7 @@ public class UserController {
     ) {
         assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
 
-        Profile profile = userService.getProfileInfo(loggedInUserId, GetProfileRequestType.UPDATE);
+        Profile profile = userService.getProfileUpdatePageInfo(loggedInUserId);
 
         return new SuccessResponse<>(profile);
     }
@@ -180,7 +180,7 @@ public class UserController {
                     responseCode = "400",
                     description = "잘못된 요청",
                     content = @Content(
-                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = FailResponse.class),
                             examples = @ExampleObject(
                                     value = """
@@ -246,10 +246,11 @@ public class UserController {
             )
     })
     @GetMapping(value = "/users/{userId}/profile_page")
-    public SuccessResponse<Profile> getProfilePageInfo(
-            @PathVariable("userId") @Positive long userId
+    public SuccessResponse<ProfilePage> getProfilePageInfo(
+            @LoggedInUserId Long myUserId,
+            @PathVariable("userId") @Positive long targetUserId
     ) {
-        Profile profile = userService.getProfileInfo(userId, GetProfileRequestType.GET);
+        ProfilePage profile = userService.getProfilePageInfo(myUserId, targetUserId);
 
         return new SuccessResponse<>(profile);
     }

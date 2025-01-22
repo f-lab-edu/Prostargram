@@ -2,7 +2,7 @@ package flab.project.domain.user.mapper;
 
 import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
-import flab.project.domain.user.enums.GetProfileRequestType;
+import flab.project.domain.user.model.ProfilePage;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 
 import java.util.Set;
@@ -12,7 +12,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-    Profile getProfileInfo(@Param("userId") long userId, @Param("getProfileRequestType") GetProfileRequestType getProfileRequestType);
+    ProfilePage getProfilePageInfo(@Param("myUserId") long myUserId, @Param("targetUserId") long targetUserId);
+    Profile getProfileUpdatePageInfo(@Param("userId") long userId);
 
     BasicUser getBasicUser(@Param("userId") long userId);
 
@@ -25,4 +26,6 @@ public interface UserMapper {
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);
+
+    void incrementPostCount(long userId);
 }

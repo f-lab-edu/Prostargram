@@ -3,8 +3,8 @@ package flab.project.domain.user.service;
 import flab.project.config.exception.NotExistUserException;
 import flab.project.domain.user.model.BasicUser;
 import flab.project.domain.user.model.Profile;
-import flab.project.domain.user.enums.GetProfileRequestType;
 import flab.project.config.exception.InvalidUserInputException;
+import flab.project.domain.user.model.ProfilePage;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.mapper.UserMapper;
 import flab.project.utils.UserRedisUtil;
@@ -36,8 +36,18 @@ public class UserService {
         }
     }
 
-    public Profile getProfileInfo(long userId, GetProfileRequestType getProfileRequestType) {
-        Profile profile = userMapper.getProfileInfo(userId, getProfileRequestType);
+    public ProfilePage getProfilePageInfo(long myUserId, long targetUserId) {
+        ProfilePage profile = userMapper.getProfilePageInfo(myUserId, targetUserId);
+
+        if (profile == null) {
+            throw new NotExistUserException();
+        }
+
+        return profile;
+    }
+
+    public Profile getProfileUpdatePageInfo(long userId) {
+        Profile profile = userMapper.getProfileUpdatePageInfo(userId);
 
         if (profile == null) {
             throw new NotExistUserException();
