@@ -5,13 +5,13 @@ import flab.project.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NewsFeedService extends FeedService {
+public class ProfileFeedService extends FeedService {
 
-    public NewsFeedService(
-            FeedIdsReader newsFeedRedisUtil,
+    public ProfileFeedService(
+            FeedIdsReader profileFeedReader,
             UserService userService,
             PostService postService
     ) {
-        super(newsFeedRedisUtil, userService, postService);
+        super(profileFeedReader, userService, postService);
     }
 }
