@@ -3,6 +3,8 @@ package flab.project.domain.like.controller;
 import flab.project.common.annotation.LoggedInUserId;
 import flab.project.config.baseresponse.FailResponse;
 import flab.project.config.baseresponse.SuccessResponse;
+import flab.project.domain.like.exception.AlreadyLikeException;
+import flab.project.domain.like.exception.NotLikeException;
 import flab.project.domain.like.service.PostLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,11 +15,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "게시물 좋아요 API")
@@ -27,6 +32,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostLikeController {
 
     private final PostLikeService postLikeService;
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            AlreadyLikeException.class,
+            NotLikeException.class
+    })
+    public FailResponse handleConstraintViolationException(Exception exception) {
+        return new FailResponse(exception.getMessage(), 4000);
+    }
 
     @Operation(
             summary = "게시물 좋아요 API"
