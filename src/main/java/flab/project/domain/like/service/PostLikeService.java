@@ -3,6 +3,8 @@ package flab.project.domain.like.service;
 import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.config.exception.InvalidUserInputException;
 import flab.project.config.exception.NotFoundException;
+import flab.project.domain.like.exception.AlreadyLikeException;
+import flab.project.domain.like.exception.NotLikeException;
 import flab.project.domain.like.mapper.PostLikeMapper;
 import flab.project.domain.like.model.PostLike;
 import flab.project.domain.post.mapper.PostMapper;
@@ -24,6 +26,16 @@ public class PostLikeService {
 
     public SuccessResponse<Void> addPostLike(long postId, long userId) {
         checkPostIdAndUserId(postId, userId);
+        boolean hasPost = postMapper.existsById(postId);
+        if (!hasPost) {
+            throw new NotFoundException("존재하지 않는 게시물입니다.");
+        }
+
+        boolean hasLike = postLikeMapper.hasLike(postId, userId);
+        if (hasLike) {
+            throw new AlreadyLikeException("이미 좋아요한 게시물입니다.");
+        }
+
         postLikeMapper.addPostLike(postId, userId);
         postMapper.addPostLike(postId);
 
@@ -39,7 +51,7 @@ public class PostLikeService {
 
         boolean hasLike = postLikeMapper.hasLike(postId, userId);
         if (!hasLike) {
-            throw new NotFoundException("좋아요를 하지 않은 게시물입니다.");
+            throw new NotLikeException("좋아요를 하지 않은 게시물입니다.");
         }
 
         postLikeMapper.cancelLike(postId, userId);
