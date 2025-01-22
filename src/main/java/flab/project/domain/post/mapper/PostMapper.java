@@ -9,7 +9,6 @@ import flab.project.domain.post.model.PostTypeModel;
 
 import flab.project.domain.post.model.UpdateBasicPostRequest;
 import java.util.List;
-import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -45,5 +44,11 @@ public interface PostMapper {
 
     void addComment(@Param("postId") long postId);
 
-    void update(@Param("post") UpdateBasicPostRequest  post);
+    void update(@Param("post") UpdateBasicPostRequest post);
+
+    List<Long> getProfileFeedIds(
+            @Param("userId") Long userId,
+            @Param("lastPostId") Long lastPostId,
+            @Param("limitSize") int limitSize
+    );
 }
