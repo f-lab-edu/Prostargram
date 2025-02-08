@@ -9,6 +9,7 @@ import flab.project.config.baseresponse.SuccessResponse;
 import flab.project.domain.user.model.Profile;
 
 import flab.project.domain.user.model.ProfilePage;
+import flab.project.domain.user.model.UpdateProfileImageRequest;
 import flab.project.domain.user.model.UpdateProfileRequestDto;
 import flab.project.domain.user.facade.UserFacade;
 import flab.project.domain.user.service.UserService;
@@ -472,12 +473,13 @@ public class UserController {
     @PatchMapping(value = "/users/{userId}/profile-image")
     public SuccessResponse<UploadedFileUrl> updateProfileImage(
             @LoggedInUserId Long loggedInUserId,
-            @PathVariable("userId") @Positive long userIdFromPathVariable
+            @PathVariable("userId") @Positive long userIdFromPathVariable,
+            @RequestBody UpdateProfileImageRequest updateProfileImageRequest
     ) {
         AccessManagementUtil.assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
 
-        UploadedFileUrl uploadedFileUrl = userFacade.updateProfileImage(loggedInUserId);
+        userFacade.updateProfileImage(loggedInUserId,updateProfileImageRequest.getContentUrl());
 
-        return new SuccessResponse<>(uploadedFileUrl);
+        return new SuccessResponse<>();
     }
 }
