@@ -352,7 +352,7 @@ class UserControllerTest {
         long userId = 1L;
         URL url = new URL("http", "host.domain", "file/path");
         UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
-        given(userFacade.updateProfileImage(userId)).willReturn(uploadedFileUrl);
+//        given(userFacade.updateProfileImage(userId)).willReturn(uploadedFileUrl);
 
         // when & then
         mockMvc.perform(

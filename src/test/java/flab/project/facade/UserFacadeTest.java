@@ -34,19 +34,15 @@ class UserFacadeTest {
     void updateProfileImage() throws MalformedURLException {
         // given
         long userId = 1L;
-        URL url = new URL("https", "kr.ncp.com", "/file/path");
-        UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
+        String contentUrl = "www.content.url";
 
-        given(fileUploader.generatePreSignedUrl(anyLong(), any(FileType.class)))
-                .willReturn(uploadedFileUrl);
         given(userService.updateProfileImage(anyLong(), anyString()))
                 .willReturn(true);
 
         // when
-        userFacade.updateProfileImage(userId);
+        userFacade.updateProfileImage(userId, contentUrl);
 
         // then
-        then(fileUploader).should().generatePreSignedUrl(userId, PROFILE_IMAGE);
-        then(userService).should().updateProfileImage(userId, "https://kr.ncp.com/file/path");
+        then(userService).should().updateProfileImage(userId, "www.content.url");
     }
 }
