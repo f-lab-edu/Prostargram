@@ -23,14 +23,6 @@ public class FileUploader {
     public static final int EXPIRATION_TIME = 1000 * 60 * 15;
     private final AmazonS3 amazonS3;
 
-    public UploadedFileUrls generatePreSignedUrls(long userId, int imageCount, FileType type) {
-        Set<UploadedFileUrl> uploadedFileUrls = IntStream.range(0, imageCount)
-                .mapToObj(i -> generatePreSignedUrl(userId, type))
-                .collect(Collectors.toSet());
-
-        return new UploadedFileUrls(uploadedFileUrls);
-    }
-
     public UploadedFileUrls generatePreSignedUrls(long userId, ImageUploadRequest imageUploadRequest) {
         Set<UploadedFileUrl> uploadedFileUrls = IntStream.range(0, imageUploadRequest.getImageCount())
                 .mapToObj(i -> generatePreSignedUrl(userId, imageUploadRequest.getFileType()))
