@@ -81,7 +81,6 @@ class DebatePostFacadeTest {
         AddBasicPostRequest addBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .imageCount(imageCount)
                 .build();
 
         assertThatThrownBy(() -> debatePostFacade.addPost(userId, addBasicPostRequest))

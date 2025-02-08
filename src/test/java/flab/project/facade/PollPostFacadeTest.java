@@ -81,12 +81,10 @@ class PollPostFacadeTest {
     @Test
     void addPost_withAddBasicPostRequest() {
         long userId = 1L;
-        int imageCount=1;
 
         AddBasicPostRequest addBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .imageCount(imageCount)
                 .build();
 
         assertThatThrownBy(() -> pollPostFacade.addPost(userId, addBasicPostRequest))

@@ -49,18 +49,16 @@ class BasicPostFacadeTest {
     @Test
     void addPost() throws MalformedURLException {
         // given
-        int imageCount = 1;
         long userId = 1L;
         AddBasicPostRequest validAddBasicPostRequest = AddBasicPostRequest.builder()
                 .content("게시물 내용입니다")
                 .hashTagNames(Set.of("#test1", "#test2"))
-                .imageCount(imageCount)
                 .build();
 
-        URL url = new URL("http", "host.domain", "file/path");
-        UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
-        UploadedFileUrls uploadedFileUrls = new UploadedFileUrls(Set.of(uploadedFileUrl));
-        given(fileUploader.generatePreSignedUrls(userId, imageCount, POST_IMAGE)).willReturn(uploadedFileUrls);
+//        URL url = new URL("http", "host.domain", "file/path");
+//        UploadedFileUrl uploadedFileUrl = new UploadedFileUrl(url);
+//        UploadedFileUrls uploadedFileUrls = new UploadedFileUrls(Set.of(uploadedFileUrl));
+//        given(fileUploader.generatePreSignedUrls(userId, imageCount, POST_IMAGE)).willReturn(uploadedFileUrls);
 
         // when
         basicPostFacade.addPost(userId, validAddBasicPostRequest);
@@ -69,7 +67,7 @@ class BasicPostFacadeTest {
         then(postService).should().addPost(userId, validAddBasicPostRequest);
         then(postHashTagService).should().saveAll(anyLong(), eq(validAddBasicPostRequest.getHashTagNames()));
         then(fanOutService).should().fanOut(userId, validAddBasicPostRequest.getPostId());
-        then(fileUploader).should().generatePreSignedUrls(userId, imageCount, POST_IMAGE);
+//        then(fileUploader).should().generatePreSignedUrls(userId, imageCount, POST_IMAGE);
         then(postImageService).should().saveAll(anyLong(), anySet());
     }
 

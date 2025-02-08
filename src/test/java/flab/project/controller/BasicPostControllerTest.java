@@ -169,7 +169,6 @@ class BasicPostControllerTest {
         return AddBasicPostRequest.builder()
                 .content(postContent)
                 .hashTagNames(hashTagNames)
-                .imageCount(1)
                 .build();
     }
 
