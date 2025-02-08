@@ -27,29 +27,14 @@ public class BasicPost extends BasePost {
     @Schema(example = "https://kr.object.ncloudstorage.com/postimage/~")
     private Set<String> preSignedImageUrls;
 
-    public BasicPost(AddBasicPostRequest addBasicPostRequest, long userId, Set<String> contentImageUrls) {
+    public BasicPost(AddBasicPostRequest addBasicPostRequest, long userId) {
         this.postId = addBasicPostRequest.getPostId();
         this.userId = userId;
         this.content = addBasicPostRequest.getContent();
         this.hashTagNames = addBasicPostRequest.getHashTagNames();
         this.postType = addBasicPostRequest.getPostType();
         this.createdAt = addBasicPostRequest.getCreatedAt();
-        this.contentImageUrls = contentImageUrls;
-        this.likeCount = 0;
-        this.commentCount = 0;
-        this.isLike = false;
-        this.isFollow = false;
-    }
-
-    public BasicPost(AddBasicPostRequest addBasicPostRequest, long userId, UploadedFileUrls uploadedFileUrls) {
-        this.postId = addBasicPostRequest.getPostId();
-        this.userId = userId;
-        this.content = addBasicPostRequest.getContent();
-        this.hashTagNames = addBasicPostRequest.getHashTagNames();
-        this.postType = addBasicPostRequest.getPostType();
-        this.createdAt = addBasicPostRequest.getCreatedAt();
-        this.contentImageUrls = uploadedFileUrls.getContentUrls();
-        this.preSignedImageUrls = uploadedFileUrls.getPreSignedUrls();
+        this.contentImageUrls = addBasicPostRequest.getContentUrls();
         this.likeCount = 0;
         this.commentCount = 0;
         this.isLike = false;
