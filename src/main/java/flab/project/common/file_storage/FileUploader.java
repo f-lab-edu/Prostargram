@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.*;
 import flab.project.domain.file.enums.FileType;
+import flab.project.domain.file.model.ImageUploadRequest;
 import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
@@ -22,9 +23,17 @@ public class FileUploader {
     public static final int EXPIRATION_TIME = 1000 * 60 * 15;
     private final AmazonS3 amazonS3;
 
-    public UploadedFileUrls generatePreSignedUrls(long userId, int fileCount, FileType fileType) {
-        Set<UploadedFileUrl> uploadedFileUrls = IntStream.range(0, fileCount)
-                .mapToObj(i -> generatePreSignedUrl(userId, fileType))
+    public UploadedFileUrls generatePreSignedUrls(long userId, int imageCount, FileType type) {
+        Set<UploadedFileUrl> uploadedFileUrls = IntStream.range(0, imageCount)
+                .mapToObj(i -> generatePreSignedUrl(userId, type))
+                .collect(Collectors.toSet());
+
+        return new UploadedFileUrls(uploadedFileUrls);
+    }
+
+    public UploadedFileUrls generatePreSignedUrls(long userId, ImageUploadRequest imageUploadRequest) {
+        Set<UploadedFileUrl> uploadedFileUrls = IntStream.range(0, imageUploadRequest.getImageCount())
+                .mapToObj(i -> generatePreSignedUrl(userId, imageUploadRequest.getFileType()))
                 .collect(Collectors.toSet());
 
         return new UploadedFileUrls(uploadedFileUrls);
