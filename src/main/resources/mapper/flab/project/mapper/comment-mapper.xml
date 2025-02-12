@@ -66,7 +66,7 @@
     SELECT EXISTS (
              SELECT 1
              FROM COMMENT
-             WHERE parent_id = #{parentId}
+             WHERE comment_id = #{parentId}
              )
   </select>
 
