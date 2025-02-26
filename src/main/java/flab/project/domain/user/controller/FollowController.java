@@ -18,13 +18,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -140,8 +137,7 @@ public class FollowController {
             @LoggedInUserId Long loggedInUserId,
             @PathVariable("userId") @Positive Long userIdFromPathVariable
     ) {
-        assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
-        List<User> followerList = followService.getFollows(loggedInUserId, GetFollowsType.FOLLOWERS);
+        List<User> followerList = followService.getFollows(userIdFromPathVariable, GetFollowsType.FOLLOWERS);
         return new SuccessResponse<>(followerList);
     }
 
@@ -243,9 +239,7 @@ public class FollowController {
             @LoggedInUserId Long loggedInUserId,
             @PathVariable("userId") @Positive long userIdFromPathVariable
     ) {
-        assertUserIdOwner(loggedInUserId, userIdFromPathVariable);
-
-        List<User> followingList = followService.getFollows(loggedInUserId, GetFollowsType.FOLLOWINGS);
+        List<User> followingList = followService.getFollows(userIdFromPathVariable, GetFollowsType.FOLLOWINGS);
 
         return new SuccessResponse<>(followingList);
     }
@@ -464,7 +458,7 @@ public class FollowController {
             )
     })
     @PostMapping(value = "/users/{userId}/follows")
-    public SuccessResponse addFollow(
+    public SuccessResponse<Void> addFollow(
             @LoggedInUserId Long loggedInUserId,
             @PathVariable("userId") long userIdFromPathVariable,
             @Valid @RequestBody Follows follows
@@ -568,12 +562,11 @@ public class FollowController {
             )
     })
     @DeleteMapping(value = "/users/{userId}/follows")
-    public SuccessResponse deleteFollow(
+    public SuccessResponse<Void> deleteFollow(
             @LoggedInUserId Long loggedUserId,
             @PathVariable("userId") @Positive long userIdPathVariable,
             @Valid @RequestBody Follows follows
     ) {
-        System.out.println("무저ㅣ??");
         assertUserIdOwner(loggedUserId, userIdPathVariable);
 
         followService.deleteFollow(follows);
