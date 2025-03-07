@@ -54,6 +54,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize ->
                 authorize.requestMatchers(
                         "/login",
+                                "/login/test",
                                 "/users",
                                 "/send",
                                 "/verification/email/**",
