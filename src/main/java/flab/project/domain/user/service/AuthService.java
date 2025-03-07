@@ -30,6 +30,26 @@ public class AuthService {
         return createLoginResponse(authentication);
     }
 
+    public TokenDto formLoginTest(FormLoginRequest formLoginRequest) {
+        final Authentication authentication = saveSecurityContext(formLoginRequest);
+
+        return createLoginResponseTest(authentication);
+    }
+
+    private TokenDto createLoginResponseTest(Authentication authentication) {
+        Date accessTokenValidity = new Date(System.currentTimeMillis() + 1_000 * 30);
+        Date refreshTokenValidity = new Date(System.currentTimeMillis() + 1_000 * 60);
+        String accessToken = tokenProvider.createAccessToken(authentication, accessTokenValidity);
+        String refreshToken = tokenProvider.createRefreshToken(authentication, refreshTokenValidity);
+        long userId = extractUserId(authentication);
+
+        return TokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .userId(userId)
+                .build();
+    }
+
     private Authentication saveSecurityContext(FormLoginRequest formLoginRequest) {
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 formLoginRequest.getEmail(), formLoginRequest.getPassword());
@@ -66,6 +86,19 @@ public class AuthService {
         return TokenDto.builder()
                 .accessToken(createdAccessToken)
                 .refreshToken(createdRefreshToken)
+                .userId(userId)
+                .build();
+    }
+
+    public TokenDto reissueTest(Long userId, Authentication authentication) {
+        Date accessTokenValidity = new Date(System.currentTimeMillis() + 1_000 * 60);
+        Date refreshTokenValidity = new Date(System.currentTimeMillis() + 1_000 * 90);
+        String accessToken = tokenProvider.createAccessToken(authentication, accessTokenValidity);
+        String refreshToken = tokenProvider.createRefreshToken(authentication, refreshTokenValidity);
+
+        return TokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .userId(userId)
                 .build();
     }

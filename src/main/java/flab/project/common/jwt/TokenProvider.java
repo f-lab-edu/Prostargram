@@ -58,6 +58,18 @@ public class TokenProvider implements InitializingBean {
         return null;
     }
 
+    public String createAccessToken(Authentication authentication, Date validity) {
+        HashMap<String, String> extraClaims = createExtraClaims(authentication, TokenType.ACCESS_TOKEN);
+
+        return createToken(authentication, extraClaims, validity);
+    }
+
+    public String createRefreshToken(Authentication authentication, Date validity) {
+        HashMap<String, String> extraClaims = createExtraClaims(authentication, TokenType.REFRESH_TOKEN);
+
+        return createToken(authentication, extraClaims, validity);
+    }
+
     public String createAccessToken(Authentication authentication) {
         HashMap<String, String> extraClaims = createExtraClaims(authentication, TokenType.ACCESS_TOKEN);
 

@@ -87,6 +87,13 @@ public class AuthController {
         return new SuccessResponse<>(tokenDto);
     }
 
+    @PostMapping("/login/test")
+    public SuccessResponse<TokenDto> formLoginTest(@Validated @RequestBody FormLoginRequest formLoginRequest) {
+        TokenDto tokenDto = authService.formLoginTest(formLoginRequest);
+
+        return new SuccessResponse<>(tokenDto);
+    }
+
     @Operation(
             summary = "토큰 재발행 API"
     )
@@ -95,7 +102,7 @@ public class AuthController {
             @LoggedInUserId Long userId,
             Authentication authentication
     ) {
-        TokenDto tokenDto = authService.reissue(userId, authentication);
+        TokenDto tokenDto = authService.reissueTest(userId, authentication);
 
         return new SuccessResponse<>(tokenDto);
     }
