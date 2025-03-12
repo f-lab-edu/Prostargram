@@ -171,6 +171,124 @@ public class CommentController {
     }
 
     @Operation(
+            summary = "댓글 작성 API"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "댓글 작성 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "code": 1000,
+                                                "message": "요청에 성공하였습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 4000,
+                                                "message": "올바르지 않은 요청입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "로그인하지 않은 유저가 요청을 보낸 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 4006,
+                                                "message": "로그인이 필요합니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 게시물에 댓글을 작성 또는 존재하지 않는 댓글에 대댓글을 작성할 경우",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "존재하지 않는 게시물에 댓글을 작성할 경우",
+                                            description = "존재하지 않는 게시물입니다.",
+                                            value = """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4002,
+                                                        "message": "존재하지 않는 게시물입니다."
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "존재하지 않는 댓글에 대댓글을 작성할 경우",
+                                            description = "존재하지 않는 댓글입니다.",
+                                            value = """
+                                                    {
+                                                        "isSucces": false,
+                                                        "code": 4008,
+                                                        "message": "존재하지 않는 댓글입니다."
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FailResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSucces": false,
+                                                "code": 5000,
+                                                "message": "서버 오류입니다."
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PostMapping(value = "/posts/{postId}/options/{optionId}/comments")
+    public SuccessResponse<Comment> addDebateComment(
+            @PathVariable("postId") @Positive long postId,
+            @PathVariable("optionId") @Positive long optionId,
+            @LoggedInUserId Long userId,
+            @RequestParam(required = false) @Positive Long parentId,
+            @RequestBody @NotBlank @Size(min = 1, max = 1000) @Schema(example = "예시 댓글입니다.") String content
+    ) {
+        Comment comment = commentService.addDebateComment(postId, optionId, userId, parentId, content);
+
+        return new SuccessResponse<>(comment);
+    }
+
+    @Operation(
             summary = "댓글 조회 API",
             description = "최상위 댓글만 조회하는 경우 parentId를 보내지 않으면 된다."
                     + "대댓글을 조회하는 경우, parentId를 포함하여 보내면 된다."
@@ -306,8 +424,7 @@ public class CommentController {
             @RequestParam(required = false) @Positive Long lastCommentId,
             @RequestParam(defaultValue = "10") @Positive @Max(10) @Schema(description = "한 페이지에 노출될 데이터 개수") long limit
     ) {
-        PaginationModel<List<CommentWithUser>> comments = commentService.getComments(postId, userId, parentId,
-                lastCommentId, limit);
+        PaginationModel<List<CommentWithUser>> comments = commentService.getComments(postId, userId, parentId,lastCommentId, limit);
 
         return new SuccessResponse<>(comments);
     }

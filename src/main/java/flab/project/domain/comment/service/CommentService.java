@@ -42,6 +42,24 @@ public class CommentService {
         return comment;
     }
 
+    @Transactional
+    public Comment addDebateComment(long postId, long optionId, long userId, Long parentId, String content) {
+        validateComment(postId, parentId, content);
+
+        Comment comment = Comment.builder()
+                .postId(postId)
+                .optionId(optionId)
+                .userId(userId)
+                .parentId(parentId)
+                .content(content)
+                .build();
+
+        commentMapper.addComment(comment);
+        postMapper.addComment(postId);
+
+        return comment;
+    }
+
     public PaginationModel<List<CommentWithUser>> getComments(
             long postId,
             long userId,
@@ -58,7 +76,7 @@ public class CommentService {
         if (parentId.isEmpty()) {
             comments = commentMapper.getComments(postId, userId, lastCommentId, limit + 1);
         } else {
-            comments = commentMapper.getChildComments(postId, userId, parentId.get(), lastCommentId, limit + 1);
+            comments = commentMapper.getChildComments(postId,  userId, parentId.get(), lastCommentId, limit + 1);
         }
 
         boolean hasNext = comments.size() > limit;

@@ -18,6 +18,9 @@ public class Comment {
     @Schema(example = "1")
     private long postId;
 
+    @Schema(example = "1", description = "토론 게시물에서 사용되는 칼럼", nullable = true)
+    private Long optionId;
+
     @Schema(example = "1")
     private long userId;
 
@@ -42,8 +45,9 @@ public class Comment {
     private long childrenCount;
 
     @Builder
-    public Comment(long postId, long userId, Long parentId, String content) {
+    public Comment(long postId, long optionId, long userId, Long parentId, String content) {
         this.postId = postId;
+        this.optionId = optionId;
         this.userId = userId;
         this.parentId = parentId;
         this.content = content;
