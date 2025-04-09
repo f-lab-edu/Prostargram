@@ -76,7 +76,33 @@ public class CommentService {
         if (parentId.isEmpty()) {
             comments = commentMapper.getComments(postId, userId, lastCommentId, limit + 1);
         } else {
-            comments = commentMapper.getChildComments(postId,  userId, parentId.get(), lastCommentId, limit + 1);
+            comments = commentMapper.getChildComments(postId, userId, parentId.get(), lastCommentId, limit + 1);
+        }
+
+        boolean hasNext = comments.size() > limit;
+        int subListEndIndex = Math.min(comments.size(), (int) limit);
+        return new PaginationModel<>(comments.subList(0, subListEndIndex), hasNext);
+    }
+
+    public PaginationModel<List<CommentWithUser>> getDebateComments(
+            long postId,
+            long optionId,
+            Long userId,
+            Optional<Long> parentId,
+            Long lastCommentId,
+            long limit
+    ) {
+        validatePostId(postId);
+        validateParentId(parentId);
+        validatePagingData(lastCommentId, limit);
+
+        List<CommentWithUser> comments;
+
+        if (parentId.isEmpty()) {
+            comments = commentMapper.getDebateComments(postId, optionId, userId, lastCommentId, limit + 1);
+        } else {
+            comments = commentMapper.getChildDebateComments(postId, optionId, userId, parentId.get(), lastCommentId,
+                    limit + 1);
         }
 
         boolean hasNext = comments.size() > limit;

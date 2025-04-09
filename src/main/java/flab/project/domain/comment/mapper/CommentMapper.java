@@ -19,8 +19,25 @@ public interface CommentMapper {
             @Param("limit") long limit
     );
 
+    List<CommentWithUser> getDebateComments(
+            @Param("postId") long postId,
+            @Param("optionId") long optionId,
+            @Param("userId") long userId,
+            @Param("lastCommentId") Long lastCommentId,
+            @Param("limit") long limit
+    );
+
     List<CommentWithUser> getChildComments(
             @Param("postId") long postId,
+            @Param("userId") long userId,
+            @Param("parentId") long parentId,
+            @Param("lastCommentId") Long lastCommentId,
+            @Param("limit") long limit
+    );
+
+    List<CommentWithUser> getChildDebateComments(
+            @Param("postId") long postId,
+            @Param("optionId") long optionId,
             @Param("userId") long userId,
             @Param("parentId") long parentId,
             @Param("lastCommentId") Long lastCommentId,
